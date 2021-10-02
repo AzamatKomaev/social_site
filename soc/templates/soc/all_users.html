@@ -1,0 +1,21 @@
+{% extends "soc/base.html" %}
+
+{% block title %}Все пользователи{% endblock %}
+
+{% block content %}
+
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <th scope="col">id</th> <th scope="col">Почта</th> <th>Имя пользователя</th> <th>Последний раз был в сети</th><th>Дата регистраций</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for user in users %}
+            <tr>
+                <th scope="row">{{ user.id }}</th> <td>{{ user.email }}</td> <td>{{ user }}</td> <td>{{ user.last_login }}</td> <td>{{ user.date_joined }}</td>
+            </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}

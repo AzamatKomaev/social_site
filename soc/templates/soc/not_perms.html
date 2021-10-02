@@ -1,0 +1,19 @@
+{% extends 'soc/base.html' %}
+
+{% block title %}Недостаточно прав{% endblock %}
+
+{% block content %}
+<center>
+    <div class="not_perms" style="width: 80%; height:100%; background: PaleVioletRed;">
+        <center style="margin-top: 2%;">
+            <p style="font-size:15pt;">
+                <br>
+                <b>{{ user }}</b>, вы зарегистрированны как гость и поэтому не можете оставлять комментарий или посты.<br>
+                Для подтверждения аккаунта вам необходимо подтвердить его в профиле<br>
+                <a href="{% url 'profile' username=user %}">Перейти в профиль для подтвеждения</a>
+                <p><br></p>
+            </p>
+        </center>
+    </div>
+</center>
+{% endblock %}

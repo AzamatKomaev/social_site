@@ -1,0 +1,17 @@
+{% extends 'profile/base_profile.html' %}
+
+{% block title %}Сменить права{% endblock %}
+
+
+{% block profile_content %}
+<div class="change_perms">
+    <p>{{ user }}, мы отправили вам на почту 6-значное число, введите его  в поле ниже для подтверждения.</p>
+    <br>
+    <form method="POST">
+        {% csrf_token %}
+        <!--<input type="text" name="pin-code" style="height:30px; font-size:25px; width:5%;">-->
+        {{ form.as_p }}
+        <button type="sumbit"></button>
+    </form>
+</div>
+{% endblock %}

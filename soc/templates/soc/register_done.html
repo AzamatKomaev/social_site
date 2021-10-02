@@ -1,0 +1,10 @@
+{% extends 'soc/base.html' %}
+
+{% block title %}Успешная регистрация{% endblock %}
+
+{% block content %}
+<div>
+    <h2>Поздравляем!</h2>
+    <p>Вы успешно зарегистрировались! <a href="{% url 'login' %}">Нажмите чтобы войти</a></p>
+</div>
+{% endblock %}

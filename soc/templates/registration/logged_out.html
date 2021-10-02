@@ -1,0 +1,15 @@
+{% extends 'soc/base.html' %}
+
+{% block title %}Успешный выход{% endblock %}
+
+{% block content %}
+<br>
+<div class="container">
+	<div class="jumbotron">
+		<h1>Вы успешно вышли</h1>
+		<p class="lead">
+			<a href="{% url 'login' %}" style="font-size:17pt;">Хотите войти?</a>
+		</p>
+	</div>
+</div>
+{% endblock %}

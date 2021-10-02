@@ -1,0 +1,62 @@
+{% extends 'soc/base.html' %}
+{% load static %}
+
+{% block title %}InTheGame{% endblock %}
+
+{% block content %}
+<br>
+
+<div class="container">
+	<div class="jumbotron">
+		{% if user.is_authenticated %}
+			<h1>Здраствуйте!</h1>
+			<p class="lead" style="font-size:18pt;">
+				{{ user }}, добро пожаловать в InTheGame. <a href="{% url 'profile' username=request.user %}">Перейти в ваш профиль?</a>
+				<h2 align="center" style="font-size:20pt;">Статус аккаунта: {{ group_active_user }}</h2>
+			</p>
+			<hr>
+			<a class="btn btn-lg btn-danger" href="{% url 'logout' %}" role="button">Выйти</a>
+			<a class="btn btn-lg btn-primary" href="{% url 'profile' username=request.user %}" role="button">Перейти в профиль</a>
+			<a class="btn btn-lg btn-success" href="{% url 'create_post' %}" role="button">Добавить пост</a>
+		{% else %}
+			<h1 style="font-size:23pt;">Внимание!</h1>
+			<hr>
+			<h2 style="font-size:20pt;">Вы не вошли в свой аккаунт, <a href="{% url 'login' %}">хотите войти?</a></h2>
+		{% endif %}
+	</div>
+</div>
+
+<h1 align="center" style="font-size:35pt;">ЛЕНТА</h1>
+<br>
+<div class="main">
+	<div class="all_posts" style="width:80%; margin: 0 10% 0 10%;">
+		{% for post in posts %}
+		<div class="card border-secondary">
+			<div class="card-header bg-secondary text-white">
+				<img src="{% static 'img/me.png' %}" class="rounded float-left" alt="avatar" style="width:65px;"><br><br><br>
+				<a href="{% url 'profile' username=post.user %}" class="text-white" style="font-size:17pt;">{{ post.user }}</a><br>
+				<p class="text-info">{{ post.user.groups.get }}</p>
+			</div>
+
+			<div class="card-body">
+				<a href="{% url 'post' id=post.id %}" class="text-dark" style="text-decoration: none;">
+					<h4>{{ post.title }}</h4>
+					{{ post.text|linebreaksbr }}
+					{% with post.attachment_set.all as attachs %}
+						{% for attach in attachs %}
+							{% if attach.photo %}
+								<br><br><br>
+								<p style="text-align: center;"><img class="img-fluid" src="media/{{ attach.photo }}" alt="image"></p>
+							{% endif %}
+						{% endfor %}
+					{% endwith %}
+				</a>
+			</div>
+			<div class="card-footer">{{ post.created_at }}</div>
+		</div>
+		<br><br>
+
+		{% endfor %}
+	</div>
+</div>
+{% endblock %}
