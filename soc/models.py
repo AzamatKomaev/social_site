@@ -2,6 +2,15 @@ from django.db import models
 from django.contrib.auth.models import User
 
 
+class Avatar(models.Model):
+	user = models.ForeignKey(User, on_delete=models.CASCADE)
+	image = models.ImageField(db_column="Аватарка", default="/static/img/me.png", upload_to="user_images")
+
+	class Meta:
+		verbose_name = "Аватар"
+		verbose_name_plural = "Аватарки"
+
+
 class Post(models.Model):
 	"""Таблица для хранения поста"""
 	user = models.ForeignKey(User, on_delete=models.CASCADE)
@@ -15,16 +24,6 @@ class Post(models.Model):
 
 	def __str__(self):
 		return self.title
-
-class Token(models.Model):
-	"""Таблица для хранения токенов регистраий."""
-	user = models.OneToOneField(User, on_delete=models.CASCADE, unique=True)
-	token = models.TextField(db_column="Токен", max_length=30)
-	created_at = models.DateTimeField(db_column="Дата создания", auto_now=True)
-
-	class Meta:
-		verbose_name = "Токен"
-		verbose_name_plural = "Токены"
 
 
 class Comment(models.Model):
@@ -52,3 +51,14 @@ class Attachment(models.Model):
 	class Meta:
 		verbose_name = "Файл"
 		verbose_name_plural = "Файлы"
+
+
+class Token(models.Model):
+	"""Таблица для хранения токенов регистраий."""
+	user = models.OneToOneField(User, on_delete=models.CASCADE, unique=True)
+	token = models.TextField(db_column="Токен", max_length=30)
+	created_at = models.DateTimeField(db_column="Дата создания", auto_now=True)
+
+	class Meta:
+		verbose_name = "Токен"
+		verbose_name_plural = "Токены"

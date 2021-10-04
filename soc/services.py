@@ -111,6 +111,8 @@ class CreationUser:
                                         password=self.password,
                                         is_active=False
                                         )
+
+        self.user.avatar_set.create()
         self.user.groups.add(1)
         self._insert_token_in_table()
 
@@ -121,7 +123,7 @@ def accept_password_to_reg(token):
     user = User.objects.get(id=token_from_db.user_id)
     user.is_active = True
     user.save()
-    token.delete()
+    token_from_db.delete()
 
 
 def create_cron_task(name, time):

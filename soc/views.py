@@ -65,6 +65,8 @@ def create_post(request):
         if form.is_valid():
             if request.user.is_authenticated:
                 post_data = form.cleaned_data
+                if (post_data['image']) and (".png" not in post_data['image'] or '.jpg' not in post_data['image']):
+                    return HttpResponse("Download image file")
                 post_values = get_post_data(request, post_data)
             try:
                 insert_into_post_table(**post_values)
@@ -96,10 +98,9 @@ def register(request):
                     error_key: True
                 })
 
-            else:
-                register_user = CreationUser(form.cleaned_data)
-                register_user.send_message_with_code()
-                return redirect('password_is_sent')
+            register_user = CreationUser(form.cleaned_data)
+            register_user.send_message_with_code()
+            return redirect('password_is_sent')
 
         else:
             error_key = "username_error"
@@ -118,7 +119,7 @@ def register(request):
 def accept_password(request, token: str):
     """Функция для проверки токена на валидность"""
     try:
-        accept_password_to_reg(token=token_from_db)
+        accept_password_to_reg(token=token)
         return redirect("register_done")
     except (NameError, ObjectDoesNotExist) as e:
         print(e)

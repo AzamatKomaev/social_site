@@ -12,9 +12,11 @@
     </thead>
     <tbody>
         {% for user in users %}
-            <tr>
-                <th scope="row">{{ user.id }}</th> <td>{{ user.email }}</td> <td>{{ user }}</td> <td>{{ user.last_login }}</td> <td>{{ user.date_joined }}</td>
-            </tr>
+            {% if user.is_active %}
+                <tr>
+                    <th scope="row">{{ user.id }}</th> <td>{{ user.email }}</td> <td>{{ user }}</td> <td>{{ user.last_login }}</td> <td>{{ user.date_joined }}</td>
+                </tr>
+            {% endif %}
         {% endfor %}
     </tbody>
 </table>

@@ -44,34 +44,32 @@
 		</nav>
 		<br>
 		<div class="tab-content">
-			<div class="tab-content">
-				<div class="tab-pane fade show active" id="home">
-					<div class="row">
-						<div class="col-8" style="margin-left:15%;">
+			<div class="tab-pane fade show active" id="home">
+				<div class="row">
+					<div class="col-1"></div>
+					<div class="col-10">
+						<div class="card border-secondary">
 							<h1>ПРОФИЛЬ</h1><br>
-							<div class="profile">
-								<p>{{ registred_user }}</p>
-								<p>{{ registred_user.email }}</p>
-								{% if request.user == registred_user %}
-									<p>Це ваш профиль</p>
-								{% else %}
-									<p>Це не ваш профиль</p>
-								{% endif %}
-							</div>
+							<p>{{ registred_user }}</p>
+							<p>{{ registred_user.email }}</p>
+							{% if request.user == registred_user %}
+								<p>Це ваш профиль</p>
+							{% else %}
+								<p>Це не ваш профиль</p>
+							{% endif %}
 						</div>
-						<div class="col-3"></div>
 					</div>
+					<div class="col-1"></div>
 				</div>
+			</div>
 
-				<div class="tab-pane" id="settings">
-					<div class="row">
-						<div class="col-8" style="margin-left:15%;">
-							Тут будут настройки
-						</div>
-						<div class="col-3"></div>
+			<div class="tab-pane" id="settings">
+				<div class="row">
+					<div class="col-8" style="margin-left:15%;">
+						Тут будут настройки
 					</div>
+					<div class="col-3"></div>
 				</div>
-
 			</div>
 		</div>
 	<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
