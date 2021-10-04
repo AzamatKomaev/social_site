@@ -115,8 +115,23 @@ class CreationUser:
         self._insert_token_in_table()
 
 
-def accept_password_to_reg(user, token):
+def accept_password_to_reg(token):
     """Функция для установки пользователя активным и удаления токена из таблицы"""
+    token_from_db = Token.objects.get(token=token)
+    user = User.objects.get(id=token_from_db.user_id)
     user.is_active = True
     user.save()
     token.delete()
+
+
+def create_cron_task(name, time):
+    pass
+
+
+def get_post_and_comments(id):
+    post = Post.objects.get(id=id)
+    comments = post.comment_set.all().order_by('-pk') if post.comment_set.all() else None
+    return {
+        'post': post,
+        'comments': comments
+    }

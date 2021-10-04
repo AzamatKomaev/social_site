@@ -17,11 +17,13 @@ from .services import (
     check_user_form_on_errors,
     CreationUser,
     return_user_group,
-    accept_password_to_reg
+    accept_password_to_reg,
+    get_post_and_comments
 )
 
 
 def show_all_post(request):
+    """Функция для отображения всех постов"""
     posts = Post.objects.order_by('-pk')
 
     if request.user.is_authenticated:
@@ -39,27 +41,17 @@ def show_all_post(request):
 
 def show_post(request, id: int): 
     """Вьюшка для отображения полного поста"""
-
     try:
-        post = Post.objects.get(id=id)
-        comments = post.comment_set.all().order_by('-pk') if post.comment_set.all() else None
-
+        json_data = get_post_and_comments(id)
         if request.method == "POST":
-            if not request.user.is_authenticated:
-                return redirect("login")
-
-            elif return_user_group(request.user) == "Гость":
-                return redirect("not_perms")
-
-            else:
-                form = get_form_and_create_comment(request, post)
+            form = get_form_and_create_comment(request, json_data['post'])
         else:
             form = CommentForm()
             
         return render(request, "soc/show_post.html",{
-            "post": post,
+            "post": json_data['post'],
             "form": form,
-            "comments": comments
+            "comments": json_data['comments']
         })
 
     except ObjectDoesNotExist:
@@ -71,21 +63,12 @@ def create_post(request):
     if request.method == "POST":
         form = PostForm(request.POST, request.FILES)
         if form.is_valid():
-            print(request.user)
             if request.user.is_authenticated:
                 post_data = form.cleaned_data
                 post_values = get_post_data(request, post_data)
-            
             try:
-                if not request.user.is_authenticated:
-                    return redirect('login')
-
-                elif return_user_group(request.user) == "Гость":
-                    return redirect("not_perms")
-
-                else:
-                    insert_into_post_table(**post_values)
-                    return redirect("main")
+                insert_into_post_table(**post_values)
+                return redirect("main")
             except Exception as error:
                 form.add_error(None, error)
 
@@ -135,13 +118,11 @@ def register(request):
 def accept_password(request, token: str):
     """Функция для проверки токена на валидность"""
     try:
-        token_from_db = Token.objects.get(token=token)
-        user = User.objects.get(id=token_from_db.user_id)
-        accept_password_to_reg(user=user, token=token_from_db)
+        accept_password_to_reg(token=token_from_db)
         return redirect("register_done")
-    except (NameError, ObjectDoesNotExist):
+    except (NameError, ObjectDoesNotExist) as e:
+        print(e)
         return redirect("error404")
-
 
 
 def register_done(request):
@@ -150,17 +131,18 @@ def register_done(request):
 
 
 def show_profile(request, username: str):
+    template_name = "profile/base_profile.html"
     try:
         user = User.objects.get(username=username)
         print(user)
-        return render(request, "profile/profile_user.html", {
-            'user': user
+        return render(request, template_name, {
+            'registred_user': user
         })
     except ObjectDoesNotExist:
         return redirect("error404")
 
 
-def password_is_send_succes(request):
+def password_is_send_success(request):
     template_name = "soc/password_is_send.html"
     return render(request, template_name)
 
