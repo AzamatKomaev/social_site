@@ -33,7 +33,7 @@
 		{% for post in posts %}
 		<div class="card border-secondary">
 			<div class="card-header bg-secondary text-white">
-				<img src="media/{{ post.user.avatar_set.get.image }}" class="rounded float-left" alt="avatar" style="width:65px;"><br><br><br>
+				<img src="{{ post.user.avatar_set.get.image }}" class="rounded float-left" alt="avatar" style="width:65px;"><br><br><br>
 				<a href="{% url 'profile' username=post.user %}" class="text-white" style="font-size:17pt;">{{ post.user }}</a><br>
 				<p class="text-info">{{ post.user.groups.get }}</p>
 			</div>
@@ -46,6 +46,7 @@
 						{% for attach in attachs %}
 							{% if attach.photo %}
 								<br><br><br>
+								<h1>{{ attach.photo }}</h1>
 								<p style="text-align: center;"><img class="img-fluid" src="media/{{ attach.photo }}" alt="image"></p>
 							{% endif %}
 						{% endfor %}
@@ -55,7 +56,6 @@
 			<div class="card-footer">{{ post.created_at }}</div>
 		</div>
 		<br><br>
-
 		{% endfor %}
 	</div>
 </div>

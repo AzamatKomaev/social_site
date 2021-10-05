@@ -65,8 +65,6 @@ def create_post(request):
         if form.is_valid():
             if request.user.is_authenticated:
                 post_data = form.cleaned_data
-                if (post_data['image']) and (".png" not in post_data['image'] or '.jpg' not in post_data['image']):
-                    return HttpResponse("Download image file")
                 post_values = get_post_data(request, post_data)
             try:
                 insert_into_post_table(**post_values)
