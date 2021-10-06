@@ -10,14 +10,17 @@ from .forms import (
     RegisterForm,
 )
 
+from service.user_service import (
+    CreationUser,
+    return_user_group,
+    accept_password_to_reg
+)
+
 from .services import (
     get_form_and_create_comment,
     get_post_data,
     insert_into_post_table,
     check_user_form_on_errors,
-    CreationUser,
-    return_user_group,
-    accept_password_to_reg,
     get_post_and_comments
 )
 
@@ -48,7 +51,7 @@ def show_post(request, id: int):
         else:
             form = CommentForm()
             
-        return render(request, "soc/show_post.html",{
+        return render(request, "soc/show_post.html", {
             "post": json_data['post'],
             "form": form,
             "comments": json_data['comments']
