@@ -1,27 +1,21 @@
-from django.http import HttpResponse
 from django.shortcuts import render, redirect
 from django.contrib.auth.models import User
 from django.core.exceptions import ObjectDoesNotExist
 
-from .models import Post, Token
-from .forms import (
-    PostForm,
-    CommentForm,
-    RegisterForm,
-)
-
-from service.user_service import (
-    CreationUser,
-    return_user_group,
-    accept_password_to_reg
-)
-
-from .services import (
+from .service.user_service import CreationUser, return_user_group, accept_password_to_reg
+from .service.content_service import (
     get_form_and_create_comment,
     get_post_data,
     insert_into_post_table,
     check_user_form_on_errors,
     get_post_and_comments
+)
+
+from .models import Post
+from .forms import (
+    PostForm,
+    CommentForm,
+    RegisterForm,
 )
 
 
