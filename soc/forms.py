@@ -4,9 +4,9 @@ from django.contrib.auth.models import User
 
 class PostForm(forms.Form):
     """Форма для создания поста"""
-    title = forms.CharField(max_length=30, label="Заголовок", widget=forms.TextInput())
-    post = forms.CharField(label="Статья", widget=forms.Textarea())
-    image = forms.FileField(label="Фотография", required=False, widget=forms.FileInput())
+    title = forms.CharField(max_length=30, label="Заголовок", widget=forms.TextInput)
+    post = forms.CharField(label="Статья", widget=forms.Textarea)
+    image = forms.FileField(label="Фотография", required=False, widget=forms.FileInput)
 
 
 class CommentForm(forms.Form):
@@ -22,3 +22,8 @@ class RegisterForm(forms.ModelForm):
     class Meta:
         model = User
         fields = ('username', 'email')
+
+
+class ChangeUsernameForm(forms.Form):
+    first_name = forms.CharField(max_length=100, label="Ваше имя", widget=forms.TextInput)
+    last_name = forms.CharField(max_length=100, label="Ваша фамилия", widget=forms.Textarea)
