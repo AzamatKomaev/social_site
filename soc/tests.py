@@ -5,21 +5,26 @@ from .service.user_service import CreationUser
 from .models import Token
 
 
-
 class SocialTest(TestCase):
     """Данные для регистраций тестового пользователя."""
+    user = ""
+
     data_for_reg_user = {
         'username': "Test_User",
         'email': "testusermail@gmail.com",
-        'password1': "testpassword2"
+        'password1': "test_password2"
     }
 
     def setUp(self):
-        user = CreationUser(self.data_for_reg_user)
-        user.send_message_with_code()
+        """Создаем тестового пользователя и группу."""
+        self.user = CreationUser(self.data_for_reg_user)
+        self.user.send_message_with_code()
+        Group.objects.create(name="test_group")
 
     def test_token_on_valid(self):
-        """Тестим токен на валидность."""
+        """Тестируем токен на валидность"""
         test_user = User.objects.get()
-        test_user.groups.all()
-        self.assertEqual(test_user.username, "Test_User")
+        token = Token.objects.get(user_id=test_user.id).token
+
+        self.assertEqual(len(token), 50) #test token on size
+        self.assertEqual(token, self.user.token) #test token on valid
