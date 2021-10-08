@@ -5,7 +5,7 @@ from django.contrib.auth.models import User
 class PostForm(forms.Form):
     """Форма для создания поста"""
     title = forms.CharField(max_length=30, label="Заголовок", widget=forms.TextInput)
-    post = forms.CharField(label="Статья", widget=forms.Textarea)
+    text = forms.CharField(label="Статья", widget=forms.Textarea)
     image = forms.FileField(label="Фотография", required=False, widget=forms.FileInput)
 
 

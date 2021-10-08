@@ -3,11 +3,40 @@
 {% block title %}Вход{% endblock %}
 
 {% block content %}
-<h2 align="center">Вход</h2>
-<br>
-<form method="post" action="{% url 'login' %}">
-{% csrf_token %}
-    <div class="container">
+<div class="container">
+   <div id="login" style="margin:auto; border: 1px solid #9C9C9C; background-color: #EAEAEA; max-width: 500px; heigt: 320px;">
+      <div id="login-row" class="row justify-content-center align-items-center">
+          <div id="login-column" class="col-md-6">
+              <div id="login-box" class="col-md-12">
+
+                  <form id="login-form" class="form" method="post">
+                      {% csrf_token %}
+                      <h3 class="text-center text-info">Вход</h3>
+                      <div class="form-group">
+                          <label for="id_username" class="text-info">Логин</label><br>
+                          <input type="text" name="username" class="form-control" id="id_username" maxlength="150" placeholder="My name is *******.">
+                      </div>
+                      <div class="form-group">
+                          <label for="id_password" class="text-info">Пароль</label><br>
+                            <input type="password" name="password" class="form-control" id="id_password" maxlength="150" placeholder="I've password *****.">
+                      </div>
+                      {% if form.errors %}
+                          <p class="text-danger">Вы неправильно ввели логин или пароль. Попробуйте снова.</p>
+                      {% endif %}
+                      <a href="#" class="text-right">Register here</a>
+                      <br><br>
+                      <div class="form-group">
+                          <button type="submit" class="btn btn-primary">Войти</button>
+                      </div>
+                  </form>
+
+              </div>
+          </div>
+      </div>
+</div>
+{% endblock %}
+
+      <!--
         <div class="form-group row">
             <label for="id_username" class="col-sm-1 col-form-label">Логин</label>
             <div class="col-sm-10">
@@ -33,35 +62,4 @@
                 <br>
                 <button type="submit" class="btn btn-primary">Войти</button>
             </div>
-        </div>
-    </div>
-</form>
-
-
-    <!--
-        <label for="username" style="font-size:14pt;">{{ form.username.label_tag }}</label>
-        <br>
-        <input id="id_username" name="username" type="text" required="" maxlength="150" autocomplete="username" autocapitalize="none">
-        <br><br>
-        <label for="password" style="font-size:14pt;">{{ form.password.label_tag }}</label>
-        <br>
-        <input type="password" name="password" autocomplete="current-password" required="" id="id_password">
-
-        <p>
-            <a href="{% url 'password_reset' %}" style="font-size: 14pt;">Забыли пароль?</a>
-            <br>
-            <a href="{% url 'registration' %}" style="font-size: 14pt;">У меня нет аккаунта</a>
-            {% if form.errors %}
-                <br>
-                <b style="font-size: 12pt; color: red;">Вы неправильно ввели логин или пароль. Попробуйте снова.</b>
-                <br>
-                {% if user_isnt_login %}
-                    <b style="font-size: 12pt; color: red;">Вы не можете оставлять комментарий
-                    и посты, т.к вы не вошли в свой аккаунт!</b>
-                {% endif %}
-            {% endif %}
-            <button type="submit" style="margin-left:55%;" class="aqua_button">Войти</button>
-        </p>
-        <br>
-        -->
-{% endblock %}
+        </div>-->

@@ -18,10 +18,10 @@ def get_form_and_create_comment(request, post):
 def get_post_data(request, post_data: dict) -> dict:
     """Функция для получения данных из формы"""
     title = post_data["title"]
-    post = post_data["post"]
+    post = post_data["text"]
     image = post_data["image"]
     user_id = request.user.id
-    return {"title": title, "post": post, "image": image, "user_id": user_id}
+    return {"title": title, "text": post, "image": image, "user_id": user_id}
 
 
 def insert_into_post_table(title, post, image, user_id) -> None:
