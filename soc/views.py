@@ -1,3 +1,5 @@
+import logging
+
 from django.shortcuts import render, redirect
 from django.contrib.auth.models import User
 from django.core.exceptions import ObjectDoesNotExist
@@ -5,7 +7,8 @@ from django.core.exceptions import ObjectDoesNotExist
 from .service.user_service import (
     CreationUser,
     return_user_group,
-    accept_password_to_reg
+    accept_password_to_reg,
+    get_client_ip
 )
 
 from .service.content_service import (
@@ -23,10 +26,14 @@ from .forms import (
 from .models import Post
 
 
+#add loger
+logger = logging.getLogger(__name__)
+
+
 def show_all_post(request):
     """Функция для отображения всех постов"""
+    logger.info("Someone watch all posts")
     posts = Post.objects.order_by('-pk')
-
     if request.user.is_authenticated:
         group = return_user_group(request.user)
         return render(request, "soc/post.html", {

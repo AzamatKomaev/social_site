@@ -1,0 +1,4 @@
+2021-10-10 15:23:33,326 django.utils.autoreload INFO     Watching for file changes with StatReloader
+2021-10-10 15:24:22,064 django.utils.autoreload INFO     /home/azamat/Рабочий стол/Django/social/soc/views.py changed, reloading.
+2021-10-10 15:24:22,404 django.utils.autoreload INFO     Watching for file changes with StatReloader
+2021-10-10 15:24:24,925 soc.views    INFO     Someone watch all posts

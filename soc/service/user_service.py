@@ -87,3 +87,13 @@ def accept_password_to_reg(token):
     user.is_active = True
     user.save()
     token_from_db.delete()
+
+
+def get_client_ip(request):
+    """Получаем ip адрес пользователя."""
+    x_forwarded_for = request.META.get('HTTP_X_FORWARDED_FOR')
+    if x_forwarded_for:
+        ip = x_forwarded_for.split(',')[-1].strip()
+    else:
+        ip = request.META.get('REMOTE_ADDR')
+    return ip
