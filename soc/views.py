@@ -2,7 +2,12 @@ from django.shortcuts import render, redirect
 from django.contrib.auth.models import User
 from django.core.exceptions import ObjectDoesNotExist
 
-from .service.user_service import CreationUser, return_user_group, accept_password_to_reg
+from .service.user_service import (
+    CreationUser,
+    return_user_group,
+    accept_password_to_reg
+)
+
 from .service.content_service import (
     get_form_and_create_comment,
     get_post_data,
@@ -10,12 +15,12 @@ from .service.content_service import (
     get_post_and_comments
 )
 
-from .models import Post
 from .forms import (
     PostForm,
     CommentForm,
     RegisterForm,
 )
+from .models import Post
 
 
 def show_all_post(request):
@@ -81,24 +86,25 @@ def exit_and_login(request):
 
 
 def register(request):
-    """Вьюшка и функция для отображения формы для регистраций и создание формы соответсвенно"""
+    """Вьюшка и функция для отображения формы для регистраций и создание формы соответственно."""
+    template_name = "soc/register_form.html"
     if request.method == 'POST':
         form = RegisterForm(request.POST)
         if form.is_valid():
             register_user = CreationUser(form.cleaned_data)
+            errors = register_user.check_form_on_uniqueness()
+            if any(errors) == True:
+                return render(request, template_name, {
+                    'form': form,
+                    'errors': errors
+                })
+
             register_user.send_message_with_code()
             return redirect('password_is_sent')
 
-        else:
-            error_key = "username_error"
-            return render(request, "soc/register_form.html", {
-                'form': form,
-                error_key: True
-            })
-
     else:
         form = RegisterForm()
-        return render(request, 'soc/register_form.html', {
+        return render(request, template_name, {
             'form': form
         })
 

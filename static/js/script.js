@@ -20,25 +20,24 @@ $('#register_form').validate({
     },
     messages: {
         username: {
-            required: 'Данное поле не может быть пустым!',
-            minlength: jQuery.validator.format("Слишком короткий логин!")
+            required: '<p class="text-danger">Данное поле не может быть пустым!</p>',
+            minlength: jQuery.validator.format('<p class="text-danger">Слишком короткий логин!</h1>')
         },
         email: {
-            required: 'Данное поле не может быть пустым!',
-            email: 'Введите корректный адрес почты!'
+            required: '<p class="text-danger">Данное поле не может быть пустым!</p>',
+            email: '<p class="text-danger">Введите корректный адрес почты!</p>'
         },
 
         password1: {
-            required: 'Данное поле не может быть пустым!',
-            minlength: 'Пароль должен содержать не меньше 8 символов!'
+            required: '<p class="text-danger">Данное поле не может быть пустым!</p>',
+            minlength: '<p class="text-danger">Пароль должен содержать не меньше 8 символов!</p>'
         },
         password2: {
-            required: 'Данное поле не может быть пустым!',
-            equalTo: 'Пароли должны совпадать!'
+            required: '<p class="text-danger">Данное поле не может быть пустым!</p>',
+            equalTo: '<p class="text-danger">Пароли должны совпадать!</p>'
         }
     },
     submitHandler: function(form) {
-        form.submit();
+        form.submit()
     }
 });
-

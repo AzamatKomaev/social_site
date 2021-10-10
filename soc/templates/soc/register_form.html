@@ -13,7 +13,10 @@
             <div class="form-group row">
                 <label for="id_email" class="col-sm-2 col-form-label">Адрес электронной почты</label>
                 <div class="col-sm-10">
-                    <input type="email" class="form-control" id="id_email" name="email" maxlength="150" placeholder="********@/gmail.com/mail.ru/yandex.ru"><br>
+                    <input type="email" class="form-control" id="id_email" name="email" maxlength="150" placeholder="********@/gmail.com/mail.ru/yandex.ru">
+                    {% if errors.1 %}
+                        <p class="text-danger">Данная почта уже занята!</p>
+                    {% endif %}
                     <p class="text-info">
                         Почта должна быть корректной.<br>
                         Почта должна быть уникальной для регистраций.<br>
@@ -25,7 +28,10 @@
             <div class="form-group row">
                 <label for="id_username" class="col-sm-2 col-form-label">Логин</label>
                 <div class="col-sm-10">
-                    <input type="text" class="form-control" id="id_username" name="username" maxlength="150" placeholder="Hello! I am ********."><br>
+                    <input type="text" class="form-control" id="id_username" name="username" maxlength="150" placeholder="Hello! I am ********.">
+                    {% if errors.0 %}
+                        <p class="text-danger">Данный логин уже занят!</p>
+                    {% endif %}
                     <p class="text-info">
                         Логин должен быть уникальным.<br>
                         Логин не должен содержать оскорбительных слов/выражений.
@@ -36,14 +42,14 @@
             <div class="form-group row">
                 <label for="id_password1" class="col-sm-2 col-form-label">Придумайте пароль</label>
                 <div class="col-sm-10">
-                    <input type="password" class="form-control" id="id_password1" name="password1" placeholder="It's my defence."><br>
+                    <input type="password" class="form-control" id="id_password1" name="password1" placeholder="It's my password."><br>
                 </div>
             </div>
 
             <div class="form-group row">
                 <label for="id_password2" class="col-sm-2 col-form-label">Повторите пароль</label>
                 <div class="col-sm-10">
-                    <input type="password" class="form-control" id="id_password2" name="password2" placeholder="It's my defence again."><br>
+                    <input type="password" class="form-control" id="id_password2" name="password2" placeholder="It's my password again.">
                     <p class="text-info">
                         Пароль должен содержать не меньше 8 символов.<br>
                     </p>
@@ -58,6 +64,7 @@
         </div>
     </form>
 </div>
-
+<h1>{{ errors.0 }}</h1>
+<h1>{{ errors.1 }}</h1>
 
 {% endblock %}

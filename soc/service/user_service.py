@@ -8,6 +8,8 @@ from social.settings import EMAIL_HOST_USER
 from ..models import Token
 
 
+
+
 def return_user_group(user) -> str:
     """Функция для определения в какой группе находиться пользователь."""
     if user.is_authenticated:
@@ -35,6 +37,13 @@ class CreationUser:
     def _insert_token_in_table(self) -> None:
         """Добавляем токен в таблицу"""
         Token.objects.create(token=self.token, user_id=self.user.id)
+
+    def check_form_on_uniqueness(self) -> list:
+        """Проверяем почту и логин на уникальность"""
+        errors = [None, None]
+        errors[0] = True if User.objects.filter(username=self.username).exists() else False
+        errors[1] = True if User.objects.filter(email=self.email).exists() else False
+        return errors
 
     def send_message_with_code(self) -> None:
         """Отправляем токен на почту"""
