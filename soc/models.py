@@ -54,7 +54,7 @@ class Attachment(models.Model):
 
 
 class Token(models.Model):
-	"""Таблица для хранения токенов регистраий."""
+	"""Таблица для хранения токенов регистраций."""
 	user = models.OneToOneField(User, on_delete=models.CASCADE, unique=True)
 	token = models.TextField(db_column="Токен", max_length=30)
 	created_at = models.DateTimeField(db_column="Дата создания", auto_now=True)

@@ -30,21 +30,6 @@ def insert_into_post_table(title, post, image, user_id) -> None:
     add_post.attachment_set.create(photo=image) if image else None
 
 
-def check_user_form_on_errors(form) -> str:
-    """Функция для проверки данных из формы на правильность ввода"""
-    data_form = form.cleaned_data
-    if data_form['password1'] != data_form['password2']:
-        return "both_password_error"
-
-    elif len(data_form['password1']) < 8:
-        return "password_error"
-
-    elif User.objects.filter(email=data_form['email']).exists():
-        return "email_error"
-
-    else:
-        return "not errors"
-
 
 def get_post_and_comments(id: int) -> dict:
     post = Post.objects.get(id=id)

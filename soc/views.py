@@ -7,7 +7,6 @@ from .service.content_service import (
     get_form_and_create_comment,
     get_post_data,
     insert_into_post_table,
-    check_user_form_on_errors,
     get_post_and_comments
 )
 
@@ -86,13 +85,6 @@ def register(request):
     if request.method == 'POST':
         form = RegisterForm(request.POST)
         if form.is_valid():
-            error_key = check_user_form_on_errors(form)
-            if error_key != "not errors":
-                return render(request, 'soc/register_form.html', {
-                    'form': form,
-                    error_key: True
-                })
-
             register_user = CreationUser(form.cleaned_data)
             register_user.send_message_with_code()
             return redirect('password_is_sent')
