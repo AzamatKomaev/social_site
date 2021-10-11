@@ -7,8 +7,7 @@
 <div class="container">
 	<form method="POST", enctype="multipart/form-data">
 		{% csrf_token %}
-		{{ form.as_p }}
-		<!--
+
 		<h2 style="margin: 0 35%; font-size:35px;">Добавить пост</h2><br>
 
 		<div class="form-group">
@@ -18,8 +17,8 @@
 		</div>
 		<br>
 		<div class="form-group">
-			<label for="id_post">{{ form.post.label }}</label><br>
-			<textarea name="post" rows="10" required="" id="id_post" class="form-control" spellcheck="false" placeholder="Мечта - особый вид воображения, представляющий собой самостоятельное создание новых образов, направленный на будущее и выражающий желания человека."></textarea>
+			<label for="id_text">{{ form.post.label }}</label><br>
+			<textarea name="text" rows="10" required="" id="id_text" class="form-control" spellcheck="false" placeholder="Мечта - особый вид воображения, представляющий собой самостоятельное создание новых образов, направленный на будущее и выражающий желания человека."></textarea>
 			<p class="form-text text-muted" style="font-size:10pt;">А теперь полностью излейте свою душу.</p>
 		</div>
 		<br>
@@ -45,8 +44,8 @@
             <div class="col-sm-10">
                 <button type="submit" class="btn btn-primary">Добавить</button>
             </div>
-        </div>-->
-		<input type="submit">
+        </div>
+
 	</form>
 </div>
 {% endblock %}

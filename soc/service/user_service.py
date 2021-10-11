@@ -74,7 +74,7 @@ class CreationUser:
                                         )
 
         self.user.avatar_set.create()
-        self.user.groups.add(1)
+        self.user.groups.add(3)
         self._insert_token_in_table()
 
 
