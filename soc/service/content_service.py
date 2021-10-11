@@ -1,7 +1,12 @@
+import logging
+
 from django.contrib.auth.models import User
 
 from ..models import Post
 from ..forms import CommentForm
+
+
+logger = logging.getLogger(__name__)
 
 
 def get_form_and_create_comment(request, post):
@@ -10,7 +15,11 @@ def get_form_and_create_comment(request, post):
     if form.is_valid():
         user_id = request.user.id
         comment_text = form.cleaned_data["text"]
-        post.comment_set.create(text=comment_text, user_id=user_id)
+        comment = post.comment_set.create(text=comment_text, user_id=user_id)
+        if comment:
+            logger.info(f"Комментарий  {comment.id}|{comment_text} был оставлен под постом {post.id}|{post.title} пользователем {request.user.id}|{request.user.username}")
+        else:
+            logger.error(f"Произошла ошибка с добавлением комментария пользователем {request.user.id}|{request.user.username} комментария {comment_text}")
 
     return form
 
@@ -24,11 +33,15 @@ def get_post_data(request, post_data: dict) -> dict:
     return {"title": title, "text": post, "image": image, "user_id": user_id}
 
 
-def insert_into_post_table(title, post, image, user_id) -> None:
+def insert_into_post_table(title, text, image, user_id) -> None:
     """Функция для создания поста"""
-    add_post = Post.objects.create(title=title, text=post, user_id=user_id)
-    add_post.attachment_set.create(photo=image) if image else None
-
+    user = User.objects.get(id=user_id)
+    added_post = Post.objects.create(title=title, text=text, user_id=user_id)
+    added_post.attachment_set.create(photo=image) if image else None
+    if added_post:
+        logger.info(f"Пост  {added_post.id}|{added_post.title} был добавлен пользователем {user_id}|{user.username}")
+    else:
+        logger.error(f"Произошла ошибка с добавлением поста {added_post.id}|{added_post.title} пользователем {user.id}|{user.username}")
 
 
 def get_post_and_comments(id: int) -> dict:

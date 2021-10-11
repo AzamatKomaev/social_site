@@ -1,5 +1,6 @@
 import logging
 
+from django.http import HttpResponse
 from django.shortcuts import render, redirect
 from django.contrib.auth.models import User
 from django.core.exceptions import ObjectDoesNotExist
@@ -25,30 +26,30 @@ from .forms import (
 )
 from .models import Post
 
-
-#add loger
+#add logger
 logger = logging.getLogger(__name__)
 
 
 def show_all_post(request):
     """Функция для отображения всех постов"""
-    logger.info("Someone watch all posts")
+    template_name = "soc/post.html"
     posts = Post.objects.order_by('-pk')
     if request.user.is_authenticated:
         group = return_user_group(request.user)
-        return render(request, "soc/post.html", {
+        return render(request, template_name, {
             'posts': posts,
             'group_active_user': group
         })
 
     else:
-        return render(request, "soc/post.html", {
+        return render(request, template_name, {
             'posts': posts
         })
 
 
 def show_post(request, id: int): 
     """Вьюшка для отображения полного поста"""
+    template_name = "soc/show_post.html"
     try:
         json_data = get_post_and_comments(id)
         if request.method == "POST":
@@ -56,7 +57,7 @@ def show_post(request, id: int):
         else:
             form = CommentForm()
             
-        return render(request, "soc/show_post.html", {
+        return render(request, template_name, {
             "post": json_data['post'],
             "form": form,
             "comments": json_data['comments']
@@ -68,21 +69,23 @@ def show_post(request, id: int):
 
 def create_post(request):
     """Функция для создания поста"""
+    template_name = "soc/create_post.html"
     if request.method == "POST":
         form = PostForm(request.POST, request.FILES)
         if form.is_valid():
             if request.user.is_authenticated:
                 post_data = form.cleaned_data
                 post_values = get_post_data(request, post_data)
-            try:
+                logger.info(f"Post values: {post_values}")
                 insert_into_post_table(**post_values)
                 return redirect("main")
-            except Exception as error:
-                form.add_error(None, error)
-
+            else:
+                redirect("login")
+        else:
+            return HttpResponse("Error in valid of token.")
     else:
         form = PostForm()
-    return render(request, "soc/create_post.html", {
+    return render(request,  template_name, {
                            "form": form
                             })
 

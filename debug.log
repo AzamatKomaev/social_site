@@ -1,4 +1,110 @@
-2021-10-10 15:23:33,326 django.utils.autoreload INFO     Watching for file changes with StatReloader
-2021-10-10 15:24:22,064 django.utils.autoreload INFO     /home/azamat/Рабочий стол/Django/social/soc/views.py changed, reloading.
-2021-10-10 15:24:22,404 django.utils.autoreload INFO     Watching for file changes with StatReloader
-2021-10-10 15:24:24,925 soc.views    INFO     Someone watch all posts
+2021-10-10 20:33:34,685 soc.service.content_service INFO     Комментарий  13|ку как деееллааа был оставлен под постом 15|hello everyone пользователем 1|Azamatik
+2021-10-10 20:34:26,185 soc.service.content_service INFO     Комментарий  14|привв це 2 комент уже был оставлен под постом 15|hello everyone пользователем 1|Azamatik
+2021-10-10 20:42:46,874 django.utils.autoreload INFO     /home/azamat/Рабочий стол/Django/social/soc/service/content_service.py changed, reloading.
+2021-10-10 20:42:47,353 django.utils.autoreload INFO     Watching for file changes with StatReloader
+2021-10-10 20:45:24,987 django.utils.autoreload INFO     /home/azamat/Рабочий стол/Django/social/soc/views.py changed, reloading.
+2021-10-10 20:45:25,514 django.utils.autoreload INFO     Watching for file changes with StatReloader
+2021-10-10 20:46:46,731 django.utils.autoreload INFO     /home/azamat/Рабочий стол/Django/social/soc/views.py changed, reloading.
+2021-10-10 20:46:47,069 django.utils.autoreload INFO     Watching for file changes with StatReloader
+2021-10-10 20:46:50,892 soc.views    INFO     Form for registration is False
+2021-10-10 20:47:09,327 soc.views    INFO     Form for registration is False
+2021-10-10 20:55:36,416 django.utils.autoreload INFO     /home/azamat/Рабочий стол/Django/social/soc/views.py changed, reloading.
+2021-10-10 20:55:36,774 django.utils.autoreload INFO     Watching for file changes with StatReloader
+2021-10-10 20:55:39,324 soc.views    INFO     Form for registration is False | <tr><th><label for="id_title">Заголовок:</label></th><td><input type="text" name="title" value="ef" maxlength="30" required id="id_title"></td></tr>
+<tr><th><label for="id_text">Статья:</label></th><td><ul class="errorlist"><li>Обязательное поле.</li></ul><textarea name="text" cols="40" rows="10" required id="id_text">
+</textarea></td></tr>
+<tr><th><label for="id_image">Фотография:</label></th><td><input type="file" name="image" id="id_image"></td></tr>
+2021-10-10 20:59:08,148 django.utils.autoreload INFO     /home/azamat/Рабочий стол/Django/social/soc/views.py changed, reloading.
+2021-10-10 20:59:08,488 django.utils.autoreload INFO     Watching for file changes with StatReloader
+2021-10-10 20:59:09,363 soc.views    INFO     Form for registration is False | <tr><th><label for="id_title">Заголовок:</label></th><td><input type="text" name="title" value="wdwdw" maxlength="30" required id="id_title"></td></tr>
+<tr><th><label for="id_text">Статья:</label></th><td><ul class="errorlist"><li>Обязательное поле.</li></ul><textarea name="text" cols="40" rows="10" required id="id_text">
+</textarea></td></tr>
+<tr><th><label for="id_image">Фотография:</label></th><td><input type="file" name="image" id="id_image"></td></tr>
+2021-10-10 21:01:39,227 django.utils.autoreload INFO     /home/azamat/Рабочий стол/Django/social/soc/forms.py changed, reloading.
+2021-10-10 21:01:39,550 django.utils.autoreload INFO     Watching for file changes with StatReloader
+2021-10-10 21:04:00,046 soc.views    INFO     Form for registration is False | <tr><th><label for="id_title">Заголовок:</label></th><td><input type="text" name="title" value="wdwdw" maxlength="30" required id="id_title"></td></tr>
+<tr><th><label for="id_text">Статья:</label></th><td><ul class="errorlist"><li>Обязательное поле.</li></ul><textarea name="text" cols="40" rows="10" required id="id_text">
+</textarea></td></tr>
+<tr><th><label for="id_image">Фотография:</label></th><td><input type="file" name="image" id="id_image"></td></tr>
+2021-10-10 21:05:36,660 soc.views    INFO     Form for registration is True | <tr><th><label for="id_title">Заголовок:</label></th><td><input type="text" name="title" value="fefe" maxlength="30" required id="id_title"></td></tr>
+<tr><th><label for="id_text">Статья:</label></th><td><textarea name="text" cols="40" rows="10" required id="id_text">
+fefef</textarea></td></tr>
+<tr><th><label for="id_image">Фотография:</label></th><td><input type="file" name="image" id="id_image"></td></tr>
+2021-10-10 21:05:36,706 django.request ERROR    Internal Server Error: /main/create_post
+Traceback (most recent call last):
+  File "/home/azamat/.var/app/com.jetbrains.PyCharm-Community/data/python/lib/python3.9/site-packages/django/core/handlers/exception.py", line 47, in inner
+    response = get_response(request)
+  File "/home/azamat/.var/app/com.jetbrains.PyCharm-Community/data/python/lib/python3.9/site-packages/django/core/handlers/base.py", line 181, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/home/azamat/Рабочий стол/Django/social/soc/views.py", line 80, in create_post
+    insert_into_post_table(**post_values)
+TypeError: insert_into_post_table() got an unexpected keyword argument 'text'
+2021-10-10 21:06:05,701 soc.views    INFO     Form for registration is True | <tr><th><label for="id_title">Заголовок:</label></th><td><input type="text" name="title" value="fefe" maxlength="30" required id="id_title"></td></tr>
+<tr><th><label for="id_text">Статья:</label></th><td><textarea name="text" cols="40" rows="10" required id="id_text">
+fefef</textarea></td></tr>
+<tr><th><label for="id_image">Фотография:</label></th><td><input type="file" name="image" id="id_image"></td></tr>
+2021-10-10 21:06:05,735 django.request ERROR    Internal Server Error: /main/create_post
+Traceback (most recent call last):
+  File "/home/azamat/.var/app/com.jetbrains.PyCharm-Community/data/python/lib/python3.9/site-packages/django/core/handlers/exception.py", line 47, in inner
+    response = get_response(request)
+  File "/home/azamat/.var/app/com.jetbrains.PyCharm-Community/data/python/lib/python3.9/site-packages/django/core/handlers/base.py", line 181, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/home/azamat/Рабочий стол/Django/social/soc/views.py", line 80, in create_post
+    insert_into_post_table(**post_values)
+TypeError: insert_into_post_table() got an unexpected keyword argument 'text'
+2021-10-10 21:06:35,555 soc.views    INFO     Form for registration is True | <tr><th><label for="id_title">Заголовок:</label></th><td><input type="text" name="title" value="fefe" maxlength="30" required id="id_title"></td></tr>
+<tr><th><label for="id_text">Статья:</label></th><td><textarea name="text" cols="40" rows="10" required id="id_text">
+fefef</textarea></td></tr>
+<tr><th><label for="id_image">Фотография:</label></th><td><input type="file" name="image" id="id_image"></td></tr>
+2021-10-10 21:06:35,588 django.request ERROR    Internal Server Error: /main/create_post
+Traceback (most recent call last):
+  File "/home/azamat/.var/app/com.jetbrains.PyCharm-Community/data/python/lib/python3.9/site-packages/django/core/handlers/exception.py", line 47, in inner
+    response = get_response(request)
+  File "/home/azamat/.var/app/com.jetbrains.PyCharm-Community/data/python/lib/python3.9/site-packages/django/core/handlers/base.py", line 181, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/home/azamat/Рабочий стол/Django/social/soc/views.py", line 80, in create_post
+    insert_into_post_table(**post_values)
+TypeError: insert_into_post_table() got an unexpected keyword argument 'text'
+2021-10-10 21:07:36,372 django.utils.autoreload INFO     /home/azamat/Рабочий стол/Django/social/soc/forms.py changed, reloading.
+2021-10-10 21:07:36,690 django.utils.autoreload INFO     Watching for file changes with StatReloader
+2021-10-10 21:07:40,644 soc.views    INFO     Form for registration is True | <tr><th><label for="id_title">Заголовок:</label></th><td><input type="text" name="title" value="fefe" maxlength="30" required id="id_title"></td></tr>
+<tr><th><label for="id_text">Статья:</label></th><td><textarea name="text" cols="40" rows="10" required id="id_text">
+fefef</textarea></td></tr>
+<tr><th><label for="id_image">Фотография:</label></th><td><input type="file" name="image" id="id_image"></td></tr>
+2021-10-10 21:07:40,690 django.request ERROR    Internal Server Error: /main/create_post
+Traceback (most recent call last):
+  File "/home/azamat/.var/app/com.jetbrains.PyCharm-Community/data/python/lib/python3.9/site-packages/django/core/handlers/exception.py", line 47, in inner
+    response = get_response(request)
+  File "/home/azamat/.var/app/com.jetbrains.PyCharm-Community/data/python/lib/python3.9/site-packages/django/core/handlers/base.py", line 181, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/home/azamat/Рабочий стол/Django/social/soc/views.py", line 80, in create_post
+    insert_into_post_table(**post_values)
+TypeError: insert_into_post_table() got an unexpected keyword argument 'text'
+2021-10-10 21:08:20,364 django.utils.autoreload INFO     /home/azamat/Рабочий стол/Django/social/soc/views.py changed, reloading.
+2021-10-10 21:08:20,688 django.utils.autoreload INFO     Watching for file changes with StatReloader
+2021-10-10 21:08:22,829 soc.views    INFO     Form for registration is True | <tr><th><label for="id_title">Заголовок:</label></th><td><input type="text" name="title" value="fefe" maxlength="30" required id="id_title"></td></tr>
+<tr><th><label for="id_text">Статья:</label></th><td><textarea name="text" cols="40" rows="10" required id="id_text">
+fefef</textarea></td></tr>
+<tr><th><label for="id_image">Фотография:</label></th><td><input type="file" name="image" id="id_image"></td></tr>
+2021-10-10 21:08:22,829 soc.views    INFO     Post values: {'title': 'fefe', 'text': 'fefef', 'image': None, 'user_id': 1}
+2021-10-10 21:08:22,875 django.request ERROR    Internal Server Error: /main/create_post
+Traceback (most recent call last):
+  File "/home/azamat/.var/app/com.jetbrains.PyCharm-Community/data/python/lib/python3.9/site-packages/django/core/handlers/exception.py", line 47, in inner
+    response = get_response(request)
+  File "/home/azamat/.var/app/com.jetbrains.PyCharm-Community/data/python/lib/python3.9/site-packages/django/core/handlers/base.py", line 181, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/home/azamat/Рабочий стол/Django/social/soc/views.py", line 81, in create_post
+    insert_into_post_table(**post_values)
+TypeError: insert_into_post_table() got an unexpected keyword argument 'text'
+2021-10-10 21:08:56,332 django.utils.autoreload INFO     /home/azamat/Рабочий стол/Django/social/soc/views.py changed, reloading.
+2021-10-10 21:08:56,637 django.utils.autoreload INFO     Watching for file changes with StatReloader
+2021-10-10 21:11:32,357 django.utils.autoreload INFO     /home/azamat/Рабочий стол/Django/social/soc/service/content_service.py changed, reloading.
+2021-10-10 21:11:32,736 django.utils.autoreload INFO     Watching for file changes with StatReloader
+2021-10-10 21:21:51,238 soc.views    INFO     Post values: {'title': 'fefe', 'text': 'fefef', 'image': None, 'user_id': 1}
+2021-10-10 21:21:51,292 soc.service.content_service INFO     Пост  18|fefe был добавлен пользователем 1|Azamatik
+2021-10-10 21:27:11,740 django.utils.autoreload INFO     /home/azamat/Рабочий стол/Django/social/soc/views.py changed, reloading.
+2021-10-10 21:27:12,120 django.utils.autoreload INFO     Watching for file changes with StatReloader
+2021-10-11 16:45:58,147 django.utils.autoreload INFO     Watching for file changes with StatReloader
+2021-10-11 16:46:06,346 django.request WARNING  Not Found: /favicon.ico
+2021-10-11 16:51:47,257 django.utils.autoreload INFO     /home/azamat/Рабочий стол/Django/social/soc/views.py changed, reloading.
+2021-10-11 16:51:47,717 django.utils.autoreload INFO     Watching for file changes with StatReloader

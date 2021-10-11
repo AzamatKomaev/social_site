@@ -22,7 +22,6 @@ class RegisterForm(forms.Form):
     password2 = forms.CharField(label='Повторите пароль', widget=forms.PasswordInput)
 
 
-
 class ChangeUsernameForm(forms.Form):
     first_name = forms.CharField(max_length=100, label="Ваше имя", widget=forms.TextInput)
     last_name = forms.CharField(max_length=100, label="Ваша фамилия", widget=forms.Textarea)

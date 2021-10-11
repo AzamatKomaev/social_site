@@ -4,15 +4,16 @@
 
 {% block content %}
 <br>
-<p>{{ form.non_field_errors }}</p>
 <div class="container">
 	<form method="POST", enctype="multipart/form-data">
 		{% csrf_token %}
+		{{ form.as_p }}
+		<!--
 		<h2 style="margin: 0 35%; font-size:35px;">Добавить пост</h2><br>
 
 		<div class="form-group">
 			<label for="id_title">{{ form.title.label }}</label><br>
-			<input type="text" name="title" maxlength="199" required="" id="id_title", class="form-control" placeholder="У меня есть мечта...">
+			<input type="text" name="title" maxlength="199" required="" id="id_title" class="form-control" placeholder="У меня есть мечта...">
 			<p class="form-text text-muted" style="font-size:10pt;">Опишите основной смысл поста в двух словах.</p>
 		</div>
 		<br>
@@ -37,14 +38,15 @@
 
 
 		{% if not_perm %}
-			<b style="color:red; font-size: 21px;">У вас недостаточно прав чтобы создать пост.</b>
+			<b style="color:red; font-size: 21px;">У вас недостаточно прав, чтобы создать пост.</b>
 		{% endif %}
 		<br>
 		<div class="form-group row">
             <div class="col-sm-10">
                 <button type="submit" class="btn btn-primary">Добавить</button>
             </div>
-        </div>
+        </div>-->
+		<input type="submit">
 	</form>
 </div>
 {% endblock %}
