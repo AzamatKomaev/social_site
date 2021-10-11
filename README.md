@@ -12,7 +12,10 @@
   <b>python manage.py migrate</b><br><br>
   4. Также присутствуют unit тесты (пока на стадий разработки и изучения). Чтобы ими воспользоваться используйте команду<br><br>
   <img src="screens_for_gitrep/tests.jpg" alt="test"><br>
-  <b>python manage.py test</b>
+  <b>python manage.py test</b><br><br>
+  5. Не забудьте добавить настройку SMPT для подтверждения аккаунтов и восстановление паролей на сайте.<br><br>
+  <img src="screens_for_gitrep/mail1.jpg" alt="mail1"><br>
+  <img src="screens_for_gitrep/mail2.jpg" alt="mail2"><br>
 </p>
 <h2>Внешний вид</h2>
 
