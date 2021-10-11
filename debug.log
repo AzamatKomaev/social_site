@@ -108,3 +108,5 @@ TypeError: insert_into_post_table() got an unexpected keyword argument 'text'
 2021-10-11 16:46:06,346 django.request WARNING  Not Found: /favicon.ico
 2021-10-11 16:51:47,257 django.utils.autoreload INFO     /home/azamat/Рабочий стол/Django/social/soc/views.py changed, reloading.
 2021-10-11 16:51:47,717 django.utils.autoreload INFO     Watching for file changes with StatReloader
+2021-10-11 17:06:22,057 django.utils.autoreload INFO     /home/azamat/Рабочий стол/Django/social/soc/service/user_service.py changed, reloading.
+2021-10-11 17:06:22,364 django.utils.autoreload INFO     Watching for file changes with StatReloader

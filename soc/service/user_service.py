@@ -8,8 +8,6 @@ from social.settings import EMAIL_HOST_USER
 from ..models import Token
 
 
-
-
 def return_user_group(user) -> str:
     """Функция для определения в какой группе находиться пользователь."""
     if user.is_authenticated:
