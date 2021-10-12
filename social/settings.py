@@ -45,13 +45,16 @@ LOGGING = {
 
 
 INSTALLED_APPS = [
-    'soc',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+
+    'soc',
+    'soc_api',
+    'rest_framework',
 ]
 
 MIDDLEWARE = [
