@@ -11,6 +11,20 @@
   3. Сайт использует базу данных по умолчанию: sqlite3. Я не стал заносить её в git-репзиторий, поэтому, чтобы создать базу данных, пропишите в командной строке следующее:<br><br>
   <b>python manage.py migrate</b><br><br>
   4. Также присутствуют unit тесты (пока на стадий разработки и изучения). Чтобы ими воспользоваться используйте команду<br><br>
-  <b>python manage.py test</b>
+  <img src="screens_for_gitrep/tests.jpg" alt="test"><br>
+  <b>python manage.py test</b><br><br>
+  5. Не забудьте добавить настройку SMPT для подтверждения аккаунтов и восстановление паролей на сайте.<br><br>
+  <img src="screens_for_gitrep/mail2.jpg" alt="mail2"><br>
 </p>
-
+<h2>Внешний вид</h2>
+<p>
+  А вот сама вертска:<br><br>
+  <img src="screens_for_gitrep/disain1.jpg" alt="disain1">
+  <img src="screens_for_gitrep/disain2.jpg" alt="disain2">
+  <img src="screens_for_gitrep/disain3.jpg" alt="disain3">
+  <img src="screens_for_gitrep/disain4.jpg" alt="disain4">
+  <img src="screens_for_gitrep/disain5.jpg" alt="disain5">
+  <img src="screens_for_gitrep/disain6.jpg" alt="disain6">
+  <img src="screens_for_gitrep/disain7.jpg" alt="disain7">
+  <img src="screens_for_gitrep/disain8.jpg" alt="disain8">
+</p>
