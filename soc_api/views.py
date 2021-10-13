@@ -1,27 +1,60 @@
-from django.contrib.auth.models import User, Group
-from rest_framework.viewsets import ModelViewSet
-from rest_framework import permissions
+from django.http import HttpResponse, JsonResponse
+from django.contrib.auth.models import User
+from rest_framework.decorators import api_view
+from rest_framework.status import HTTP_200_OK, HTTP_201_CREATED, HTTP_400_BAD_REQUEST, HTTP_404_NOT_FOUND
+from rest_framework.parsers import JSONParser
 
-from soc_api.serializers import UserSerializer, GroupSerializer, PostSerializer
 from soc.models import Post
+from soc_api.serializers import PostSerializer, UserSerializer
 
 
-class UserViewSet(ModelViewSet):
-    """"endpoint для отображения пользователей."""
-    queryset = User.objects.all().order_by('-date_joined')
-    serializer_class = UserSerializer
-    permission_classes = [permissions.IsAuthenticated]
+@api_view(['GET', 'POST'])
+def post_list(request):
+    """endpoint для отдачи всех постов."""
+    if request.method == 'GET':
+        all_posts = Post.objects.all()
+        serializer = PostSerializer(all_posts, many=True)
+        return JsonResponse(serializer.data, safe=False, status=HTTP_200_OK)
+
+    elif request.method == "POST":
+        data = JSONParser().parse(request)
+        serializer = PostSerializer(data=data)
+        if serializer.is_valid():
+            serializer.save()
+            return JsonResponse(serializer.data, status=201)
+
+        return JsonResponse({"message": "bad request"}, status=HTTP_400_BAD_REQUEST)
 
 
-class GroupViewSet(ModelViewSet):
-    """endpoint для отображения групп."""
-    queryset = Group.objects.all()
-    serializer_class = GroupSerializer
-    permission_classes = [permissions.IsAuthenticated]
+@api_view
+def post_detail(request, pk):
+    """endpoint для отдачи поста по его id"""
+    try:
+        post = Post.objects.get(pk=pk)
+    except Post.DoesNotExist:
+        return JsonResponse({"message": "Post is not being with this id"}, status=HTTP_404_NOT_FOUND)
+
+    if request.method == 'GET':
+        serializer = PostSerializer(post)
+        return JsonResponse(serializer.data, status=HTTP_200_OK)
 
 
-class PostViewSet(ModelViewSet):
-    """endpount для отображения постов."""
-    queryset = Post.objects.all().order_by('-created_at')
-    serializer_class = PostSerializer
-    permissions_classes = [permissions.IsAuthenticated]
+@api_view
+def user_list(request):
+    """endpoint для отдачи всех пользователей."""
+    if request.method == 'GET':
+        all_users = User.objects.all()
+        serializer = UserSerializer(all_users, many=True)
+        return JsonResponse(serializer.data, safe=False, status=HTTP_200_OK)
+
+
+@api_view
+def user_detail(request, username):
+    try:
+        user = User.objects.get(username=username)
+    except User.DoesNotExist:
+        return JsonResponse({"message": "User is not being with this username"}, status=HTTP_404_NOT_FOUND)
+
+    if request.method == "GET":
+        serializer = UserSerializer(user)
+        return JsonResponse(serializer.data, safe=False)

@@ -1,25 +1,25 @@
 from django.contrib.auth.models import User, Group
-from rest_framework.serializers import HyperlinkedModelSerializer
+from rest_framework.serializers import ModelSerializer
 
 from soc.models import Post
 
 
-class UserSerializer(HyperlinkedModelSerializer):
+class UserSerializer(ModelSerializer):
     """Сериализатор для пользователей сайта."""
     class Meta:
         model = User
-        fields = ['url', 'username', 'email', 'groups']
+        fields = ['id', 'username', 'email']
 
 
-class GroupSerializer(HyperlinkedModelSerializer):
+class GroupSerializer(ModelSerializer):
     """Сериализатор для групп пользователей сайта."""
     class Meta:
         model = Group
-        fields = ['url', 'name']
+        fields = ['id', 'name']
 
 
-class PostSerializer(HyperlinkedModelSerializer):
+class PostSerializer(ModelSerializer):
     """Сериализатор для постов."""
     class Meta:
         model = Post
-        fields = ['url', 'title', 'text', 'created_at']
+        fields = ['id', 'title', 'text', 'created_at', 'user_id']

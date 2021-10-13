@@ -23,7 +23,8 @@
                       {% if form.errors %}
                           <p class="text-danger">Вы неправильно ввели логин или пароль. Попробуйте снова.</p>
                       {% endif %}
-                      <a href="#" class="text-right">Register here</a>
+                      <a href="{% url 'registration' %}" class="text-right">У меня нет аккаунта :(</a><br>
+                      <a href="{% url 'password_reset' %}" class="text-right">Я забыл пароль :|</a>
                       <br><br>
                       <div class="form-group">
                           <button type="submit" class="btn btn-primary">Войти</button>
