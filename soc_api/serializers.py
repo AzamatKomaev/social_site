@@ -1,5 +1,5 @@
 from django.contrib.auth.models import User, Group
-from rest_framework.serializers import ModelSerializer
+from rest_framework.serializers import ModelSerializer, HiddenField, CurrentUserDefault
 
 from soc.models import Post
 
@@ -20,6 +20,8 @@ class GroupSerializer(ModelSerializer):
 
 class PostSerializer(ModelSerializer):
     """Сериализатор для постов."""
+    user = HiddenField(default=CurrentUserDefault())
+
     class Meta:
         model = Post
-        fields = ['id', 'title', 'text', 'created_at', 'user_id']
+        fields = ['user', 'id', 'title', 'text', 'created_at', 'user_id']

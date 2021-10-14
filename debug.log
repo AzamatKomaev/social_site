@@ -1,8 +1,5 @@
-2021-10-13 17:11:19,849 django.utils.autoreload INFO     /home/azamat/Рабочий стол/Django/social/soc_api/views.py changed, reloading.
-2021-10-13 17:11:20,335 django.utils.autoreload INFO     Watching for file changes with StatReloader
-2021-10-13 17:11:39,145 django.utils.autoreload INFO     /home/azamat/Рабочий стол/Django/social/soc_api/views.py changed, reloading.
-2021-10-13 17:11:39,573 django.utils.autoreload INFO     Watching for file changes with StatReloader
-2021-10-13 17:11:50,195 django.request ERROR    Internal Server Error: /api/v1/posts/
+2021-10-14 18:55:28,378 django.utils.autoreload INFO     Watching for file changes with StatReloader
+2021-10-14 18:55:35,863 django.request ERROR    Internal Server Error: /api/v1/news/
 Traceback (most recent call last):
   File "/home/azamat/.var/app/com.jetbrains.PyCharm-Community/data/python/lib/python3.9/site-packages/django/core/handlers/exception.py", line 47, in inner
     response = get_response(request)
@@ -10,12 +7,100 @@ Traceback (most recent call last):
     response = wrapped_callback(request, *callback_args, **callback_kwargs)
   File "/home/azamat/.var/app/com.jetbrains.PyCharm-Community/data/python/lib/python3.9/site-packages/django/views/decorators/csrf.py", line 54, in wrapped_view
     return view_func(*args, **kwargs)
-  File "/home/azamat/Рабочий стол/Django/social/soc_api/views.py", line 11, in post_list
-    print(request.params)
-AttributeError: 'WSGIRequest' object has no attribute 'params'
-2021-10-13 17:13:26,146 django.utils.autoreload INFO     /home/azamat/Рабочий стол/Django/social/soc_api/views.py changed, reloading.
-2021-10-13 17:13:26,534 django.utils.autoreload INFO     Watching for file changes with StatReloader
-2021-10-13 17:14:04,651 django.request ERROR    Internal Server Error: /api/v1/posts
+  File "/home/azamat/.var/app/com.jetbrains.PyCharm-Community/data/python/lib/python3.9/site-packages/django/views/generic/base.py", line 70, in view
+    return self.dispatch(request, *args, **kwargs)
+  File "/home/azamat/.var/app/com.jetbrains.PyCharm-Community/data/python/lib/python3.9/site-packages/rest_framework/views.py", line 509, in dispatch
+    response = self.handle_exception(exc)
+  File "/home/azamat/.var/app/com.jetbrains.PyCharm-Community/data/python/lib/python3.9/site-packages/rest_framework/views.py", line 469, in handle_exception
+    self.raise_uncaught_exception(exc)
+  File "/home/azamat/.var/app/com.jetbrains.PyCharm-Community/data/python/lib/python3.9/site-packages/rest_framework/views.py", line 480, in raise_uncaught_exception
+    raise exc
+  File "/home/azamat/.var/app/com.jetbrains.PyCharm-Community/data/python/lib/python3.9/site-packages/rest_framework/views.py", line 506, in dispatch
+    response = handler(request, *args, **kwargs)
+  File "/home/azamat/Рабочий стол/Django/social/soc_api/views.py", line 76, in get
+    return JsonResponse(serializer.data)
+  File "/home/azamat/.var/app/com.jetbrains.PyCharm-Community/data/python/lib/python3.9/site-packages/django/http/response.py", line 596, in __init__
+    raise TypeError(
+TypeError: In order to allow non-dict objects to be serialized set the safe parameter to False.
+2021-10-14 18:57:20,316 django.utils.autoreload INFO     /home/azamat/Рабочий стол/Django/social/social/settings.py changed, reloading.
+2021-10-14 18:57:20,742 django.utils.autoreload INFO     Watching for file changes with StatReloader
+2021-10-14 18:57:22,990 django.request ERROR    Internal Server Error: /api/v1/news/
+Traceback (most recent call last):
+  File "/home/azamat/.var/app/com.jetbrains.PyCharm-Community/data/python/lib/python3.9/site-packages/django/core/handlers/exception.py", line 47, in inner
+    response = get_response(request)
+  File "/home/azamat/.var/app/com.jetbrains.PyCharm-Community/data/python/lib/python3.9/site-packages/django/core/handlers/base.py", line 181, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/home/azamat/.var/app/com.jetbrains.PyCharm-Community/data/python/lib/python3.9/site-packages/django/views/decorators/csrf.py", line 54, in wrapped_view
+    return view_func(*args, **kwargs)
+  File "/home/azamat/.var/app/com.jetbrains.PyCharm-Community/data/python/lib/python3.9/site-packages/django/views/generic/base.py", line 70, in view
+    return self.dispatch(request, *args, **kwargs)
+  File "/home/azamat/.var/app/com.jetbrains.PyCharm-Community/data/python/lib/python3.9/site-packages/rest_framework/views.py", line 509, in dispatch
+    response = self.handle_exception(exc)
+  File "/home/azamat/.var/app/com.jetbrains.PyCharm-Community/data/python/lib/python3.9/site-packages/rest_framework/views.py", line 469, in handle_exception
+    self.raise_uncaught_exception(exc)
+  File "/home/azamat/.var/app/com.jetbrains.PyCharm-Community/data/python/lib/python3.9/site-packages/rest_framework/views.py", line 480, in raise_uncaught_exception
+    raise exc
+  File "/home/azamat/.var/app/com.jetbrains.PyCharm-Community/data/python/lib/python3.9/site-packages/rest_framework/views.py", line 506, in dispatch
+    response = handler(request, *args, **kwargs)
+  File "/home/azamat/Рабочий стол/Django/social/soc_api/views.py", line 76, in get
+    return JsonResponse(serializer.data)
+  File "/home/azamat/.var/app/com.jetbrains.PyCharm-Community/data/python/lib/python3.9/site-packages/django/http/response.py", line 596, in __init__
+    raise TypeError(
+TypeError: In order to allow non-dict objects to be serialized set the safe parameter to False.
+2021-10-14 18:57:23,085 django.request WARNING  Not Found: /favicon.ico
+2021-10-14 18:58:20,684 django.utils.autoreload INFO     /home/azamat/Рабочий стол/Django/social/soc_api/views.py changed, reloading.
+2021-10-14 18:58:21,163 django.utils.autoreload INFO     Watching for file changes with StatReloader
+2021-10-14 18:58:47,193 django.utils.autoreload INFO     /home/azamat/Рабочий стол/Django/social/soc_api/views.py changed, reloading.
+2021-10-14 18:58:47,594 django.utils.autoreload INFO     Watching for file changes with StatReloader
+2021-10-14 19:00:11,394 django.request WARNING  Not Found: /favicon.ico
+2021-10-14 19:01:02,971 django.utils.autoreload INFO     /home/azamat/Рабочий стол/Django/social/soc_api/views.py changed, reloading.
+2021-10-14 19:01:03,420 django.utils.autoreload INFO     Watching for file changes with StatReloader
+2021-10-14 19:01:43,970 django.request WARNING  Bad Request: /api/v1/news/
+2021-10-14 19:02:06,816 django.request WARNING  Not Found: /api/v1/
+2021-10-14 19:02:06,846 django.request WARNING  Not Found: /favicon.ico
+2021-10-14 19:02:15,401 django.request ERROR    Internal Server Error: /api/v1/news/
+Traceback (most recent call last):
+  File "/home/azamat/.var/app/com.jetbrains.PyCharm-Community/data/python/lib/python3.9/site-packages/django/core/handlers/exception.py", line 47, in inner
+    response = get_response(request)
+  File "/home/azamat/.var/app/com.jetbrains.PyCharm-Community/data/python/lib/python3.9/site-packages/django/core/handlers/base.py", line 181, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/home/azamat/.var/app/com.jetbrains.PyCharm-Community/data/python/lib/python3.9/site-packages/django/views/decorators/csrf.py", line 54, in wrapped_view
+    return view_func(*args, **kwargs)
+  File "/home/azamat/.var/app/com.jetbrains.PyCharm-Community/data/python/lib/python3.9/site-packages/django/views/generic/base.py", line 70, in view
+    return self.dispatch(request, *args, **kwargs)
+  File "/home/azamat/.var/app/com.jetbrains.PyCharm-Community/data/python/lib/python3.9/site-packages/rest_framework/views.py", line 509, in dispatch
+    response = self.handle_exception(exc)
+  File "/home/azamat/.var/app/com.jetbrains.PyCharm-Community/data/python/lib/python3.9/site-packages/rest_framework/views.py", line 469, in handle_exception
+    self.raise_uncaught_exception(exc)
+  File "/home/azamat/.var/app/com.jetbrains.PyCharm-Community/data/python/lib/python3.9/site-packages/rest_framework/views.py", line 480, in raise_uncaught_exception
+    raise exc
+  File "/home/azamat/.var/app/com.jetbrains.PyCharm-Community/data/python/lib/python3.9/site-packages/rest_framework/views.py", line 506, in dispatch
+    response = handler(request, *args, **kwargs)
+  File "/home/azamat/Рабочий стол/Django/social/soc_api/views.py", line 76, in get
+    return JsonResponse(serializer.data)
+  File "/home/azamat/.var/app/com.jetbrains.PyCharm-Community/data/python/lib/python3.9/site-packages/django/http/response.py", line 596, in __init__
+    raise TypeError(
+TypeError: In order to allow non-dict objects to be serialized set the safe parameter to False.
+2021-10-14 19:02:27,731 django.utils.autoreload INFO     /home/azamat/Рабочий стол/Django/social/soc_api/views.py changed, reloading.
+2021-10-14 19:02:28,146 django.utils.autoreload INFO     Watching for file changes with StatReloader
+2021-10-14 19:03:28,897 django.utils.autoreload INFO     /home/azamat/Рабочий стол/Django/social/soc_api/views.py changed, reloading.
+2021-10-14 19:03:29,346 django.utils.autoreload INFO     Watching for file changes with StatReloader
+2021-10-14 19:03:30,784 django.request WARNING  Not Found: /favicon.ico
+2021-10-14 19:04:22,930 django.utils.autoreload INFO     /home/azamat/Рабочий стол/Django/social/soc_api/views.py changed, reloading.
+2021-10-14 19:04:23,328 django.utils.autoreload INFO     Watching for file changes with StatReloader
+2021-10-14 19:05:45,571 django.utils.autoreload INFO     /home/azamat/Рабочий стол/Django/social/soc_api/views.py changed, reloading.
+2021-10-14 19:05:45,989 django.utils.autoreload INFO     Watching for file changes with StatReloader
+2021-10-14 19:07:16,413 django.utils.autoreload INFO     /home/azamat/Рабочий стол/Django/social/soc_api/views.py changed, reloading.
+2021-10-14 19:07:16,773 django.utils.autoreload INFO     Watching for file changes with StatReloader
+2021-10-14 19:07:27,368 django.utils.autoreload INFO     /home/azamat/Рабочий стол/Django/social/soc_api/views.py changed, reloading.
+2021-10-14 19:07:27,798 django.utils.autoreload INFO     Watching for file changes with StatReloader
+2021-10-14 19:07:50,745 django.utils.autoreload INFO     /home/azamat/Рабочий стол/Django/social/soc_api/views.py changed, reloading.
+2021-10-14 19:07:51,145 django.utils.autoreload INFO     Watching for file changes with StatReloader
+2021-10-14 19:07:57,170 django.request WARNING  Bad Request: /api/v1/posts/
+2021-10-14 19:08:18,211 django.utils.autoreload INFO     /home/azamat/Рабочий стол/Django/social/soc_api/views.py changed, reloading.
+2021-10-14 19:08:18,565 django.utils.autoreload INFO     Watching for file changes with StatReloader
+2021-10-14 19:08:26,920 django.request WARNING  Bad Request: /api/v1/posts/
+2021-10-14 19:10:54,321 django.request ERROR    Internal Server Error: /api/v1/posts
 Traceback (most recent call last):
   File "/home/azamat/.var/app/com.jetbrains.PyCharm-Community/data/python/lib/python3.9/site-packages/django/core/handlers/exception.py", line 47, in inner
     response = get_response(request)
@@ -26,150 +111,92 @@ Traceback (most recent call last):
   File "/home/azamat/.var/app/com.jetbrains.PyCharm-Community/data/python/lib/python3.9/site-packages/django/middleware/common.py", line 88, in get_full_path_with_slash
     raise RuntimeError(
 RuntimeError: You called this URL via POST, but the URL doesn't end in a slash and you have APPEND_SLASH set. Django can't redirect to the slash URL while maintaining POST data. Change your form to point to 127.0.0.1:8000/api/v1/posts/ (note the trailing slash), or set APPEND_SLASH=False in your Django settings.
-2021-10-13 17:15:04,002 django.utils.autoreload INFO     /home/azamat/Рабочий стол/Django/social/social/settings.py changed, reloading.
-2021-10-13 17:15:04,339 django.utils.autoreload INFO     Watching for file changes with StatReloader
-2021-10-13 17:15:06,932 django.request WARNING  Not Found: /api/v1/posts
-2021-10-13 17:15:38,444 django.utils.autoreload INFO     /home/azamat/Рабочий стол/Django/social/soc_api/views.py changed, reloading.
-2021-10-13 17:15:38,827 django.utils.autoreload INFO     Watching for file changes with StatReloader
-2021-10-13 17:15:41,998 django.request WARNING  Not Found: /api/v1/posts
-2021-10-13 17:16:05,856 django.request WARNING  Not Found: /api/v1/posts
-2021-10-13 17:16:46,699 django.request WARNING  Not Found: /api/v1/posts
-2021-10-13 17:17:20,494 django.request WARNING  Not Found: /api/v1/posts
-2021-10-13 17:18:00,564 django.request ERROR    Internal Server Error: /api/v1/posts/
-Traceback (most recent call last):
-  File "/home/azamat/.var/app/com.jetbrains.PyCharm-Community/data/python/lib/python3.9/site-packages/django/db/backends/utils.py", line 84, in _execute
-    return self.cursor.execute(sql, params)
-  File "/home/azamat/.var/app/com.jetbrains.PyCharm-Community/data/python/lib/python3.9/site-packages/django/db/backends/sqlite3/base.py", line 423, in execute
-    return Database.Cursor.execute(self, query, params)
-sqlite3.IntegrityError: NOT NULL constraint failed: soc_post.user_id
-
-The above exception was the direct cause of the following exception:
-
+2021-10-14 19:11:25,304 django.request WARNING  Bad Request: /api/v1/news/
+2021-10-14 19:11:48,217 django.request WARNING  Bad Request: /api/v1/news/
+2021-10-14 19:13:20,580 django.utils.autoreload INFO     /home/azamat/Рабочий стол/Django/social/soc_api/views.py changed, reloading.
+2021-10-14 19:13:20,950 django.utils.autoreload INFO     Watching for file changes with StatReloader
+2021-10-14 19:20:44,658 django.request WARNING  Not Found: /news/
+2021-10-14 19:21:34,945 django.request WARNING  Not Found: /news/
+2021-10-14 19:22:06,426 django.request WARNING  Not Found: /news/
+2021-10-14 19:27:49,763 django.utils.autoreload INFO     /home/azamat/Рабочий стол/Django/social/soc_api/views.py changed, reloading.
+2021-10-14 19:27:50,382 django.utils.autoreload INFO     Watching for file changes with StatReloader
+2021-10-14 19:29:44,333 django.utils.autoreload INFO     /home/azamat/Рабочий стол/Django/social/soc_api/views.py changed, reloading.
+2021-10-14 19:29:44,742 django.utils.autoreload INFO     Watching for file changes with StatReloader
+2021-10-14 19:30:08,691 django.utils.autoreload INFO     /home/azamat/Рабочий стол/Django/social/soc_api/urls.py changed, reloading.
+2021-10-14 19:30:09,075 django.utils.autoreload INFO     Watching for file changes with StatReloader
+2021-10-14 19:30:21,591 django.request ERROR    Internal Server Error: /api/v1/show_posts/
 Traceback (most recent call last):
   File "/home/azamat/.var/app/com.jetbrains.PyCharm-Community/data/python/lib/python3.9/site-packages/django/core/handlers/exception.py", line 47, in inner
     response = get_response(request)
   File "/home/azamat/.var/app/com.jetbrains.PyCharm-Community/data/python/lib/python3.9/site-packages/django/core/handlers/base.py", line 181, in _get_response
     response = wrapped_callback(request, *callback_args, **callback_kwargs)
-  File "/home/azamat/.var/app/com.jetbrains.PyCharm-Community/data/python/lib/python3.9/site-packages/django/views/decorators/csrf.py", line 54, in wrapped_view
-    return view_func(*args, **kwargs)
-  File "/home/azamat/Рабочий стол/Django/social/soc_api/views.py", line 21, in post_list
-    serializer.save()
-  File "/home/azamat/.var/app/com.jetbrains.PyCharm-Community/data/python/lib/python3.9/site-packages/rest_framework/serializers.py", line 205, in save
-    self.instance = self.create(validated_data)
-  File "/home/azamat/.var/app/com.jetbrains.PyCharm-Community/data/python/lib/python3.9/site-packages/rest_framework/serializers.py", line 939, in create
-    instance = ModelClass._default_manager.create(**validated_data)
-  File "/home/azamat/.var/app/com.jetbrains.PyCharm-Community/data/python/lib/python3.9/site-packages/django/db/models/manager.py", line 85, in manager_method
-    return getattr(self.get_queryset(), name)(*args, **kwargs)
-  File "/home/azamat/.var/app/com.jetbrains.PyCharm-Community/data/python/lib/python3.9/site-packages/django/db/models/query.py", line 453, in create
-    obj.save(force_insert=True, using=self.db)
-  File "/home/azamat/.var/app/com.jetbrains.PyCharm-Community/data/python/lib/python3.9/site-packages/django/db/models/base.py", line 726, in save
-    self.save_base(using=using, force_insert=force_insert,
-  File "/home/azamat/.var/app/com.jetbrains.PyCharm-Community/data/python/lib/python3.9/site-packages/django/db/models/base.py", line 763, in save_base
-    updated = self._save_table(
-  File "/home/azamat/.var/app/com.jetbrains.PyCharm-Community/data/python/lib/python3.9/site-packages/django/db/models/base.py", line 868, in _save_table
-    results = self._do_insert(cls._base_manager, using, fields, returning_fields, raw)
-  File "/home/azamat/.var/app/com.jetbrains.PyCharm-Community/data/python/lib/python3.9/site-packages/django/db/models/base.py", line 906, in _do_insert
-    return manager._insert(
-  File "/home/azamat/.var/app/com.jetbrains.PyCharm-Community/data/python/lib/python3.9/site-packages/django/db/models/manager.py", line 85, in manager_method
-    return getattr(self.get_queryset(), name)(*args, **kwargs)
-  File "/home/azamat/.var/app/com.jetbrains.PyCharm-Community/data/python/lib/python3.9/site-packages/django/db/models/query.py", line 1270, in _insert
-    return query.get_compiler(using=using).execute_sql(returning_fields)
-  File "/home/azamat/.var/app/com.jetbrains.PyCharm-Community/data/python/lib/python3.9/site-packages/django/db/models/sql/compiler.py", line 1416, in execute_sql
-    cursor.execute(sql, params)
-  File "/home/azamat/.var/app/com.jetbrains.PyCharm-Community/data/python/lib/python3.9/site-packages/django/db/backends/utils.py", line 98, in execute
-    return super().execute(sql, params)
-  File "/home/azamat/.var/app/com.jetbrains.PyCharm-Community/data/python/lib/python3.9/site-packages/django/db/backends/utils.py", line 66, in execute
-    return self._execute_with_wrappers(sql, params, many=False, executor=self._execute)
-  File "/home/azamat/.var/app/com.jetbrains.PyCharm-Community/data/python/lib/python3.9/site-packages/django/db/backends/utils.py", line 75, in _execute_with_wrappers
-    return executor(sql, params, many, context)
-  File "/home/azamat/.var/app/com.jetbrains.PyCharm-Community/data/python/lib/python3.9/site-packages/django/db/backends/utils.py", line 84, in _execute
-    return self.cursor.execute(sql, params)
-  File "/home/azamat/.var/app/com.jetbrains.PyCharm-Community/data/python/lib/python3.9/site-packages/django/db/utils.py", line 90, in __exit__
-    raise dj_exc_value.with_traceback(traceback) from exc_value
-  File "/home/azamat/.var/app/com.jetbrains.PyCharm-Community/data/python/lib/python3.9/site-packages/django/db/backends/utils.py", line 84, in _execute
-    return self.cursor.execute(sql, params)
-  File "/home/azamat/.var/app/com.jetbrains.PyCharm-Community/data/python/lib/python3.9/site-packages/django/db/backends/sqlite3/base.py", line 423, in execute
-    return Database.Cursor.execute(self, query, params)
-django.db.utils.IntegrityError: NOT NULL constraint failed: soc_post.user_id
-2021-10-13 17:27:41,935 django.utils.autoreload INFO     /home/azamat/Рабочий стол/Django/social/soc_api/views.py changed, reloading.
-2021-10-13 17:27:42,400 django.utils.autoreload INFO     Watching for file changes with StatReloader
-2021-10-13 17:32:26,239 django.utils.autoreload INFO     /home/azamat/Рабочий стол/Django/social/soc_api/views.py changed, reloading.
-2021-10-13 17:32:26,646 django.utils.autoreload INFO     Watching for file changes with StatReloader
-2021-10-13 17:32:40,276 django.utils.autoreload INFO     /home/azamat/Рабочий стол/Django/social/soc_api/urls.py changed, reloading.
-2021-10-13 17:32:40,608 django.utils.autoreload INFO     Watching for file changes with StatReloader
-2021-10-13 17:33:53,363 django.utils.autoreload INFO     /home/azamat/Рабочий стол/Django/social/soc_api/views.py changed, reloading.
-2021-10-13 17:33:53,832 django.utils.autoreload INFO     Watching for file changes with StatReloader
-2021-10-13 17:34:39,100 django.utils.autoreload INFO     /home/azamat/Рабочий стол/Django/social/soc_api/serializers.py changed, reloading.
-2021-10-13 17:34:39,464 django.utils.autoreload INFO     Watching for file changes with StatReloader
-2021-10-13 17:36:31,070 django.utils.autoreload INFO     /home/azamat/Рабочий стол/Django/social/soc_api/views.py changed, reloading.
-2021-10-13 17:36:31,499 django.utils.autoreload INFO     Watching for file changes with StatReloader
-2021-10-13 17:36:36,871 django.request WARNING  Not Found: /api/v1/users/fjehfefe'
-2021-10-13 17:37:40,238 django.request WARNING  Not Found: /api/v1/users/mewfhweifhfe
-2021-10-13 17:38:09,734 django.utils.autoreload INFO     /home/azamat/Рабочий стол/Django/social/soc_api/views.py changed, reloading.
-2021-10-13 17:38:10,201 django.utils.autoreload INFO     Watching for file changes with StatReloader
-2021-10-13 17:41:20,185 django.utils.autoreload INFO     /home/azamat/Рабочий стол/Django/social/soc_api/views.py changed, reloading.
-2021-10-13 17:41:20,576 django.utils.autoreload INFO     Watching for file changes with StatReloader
-2021-10-13 17:43:13,644 django.request WARNING  Not Found: /api/v1/users
-2021-10-13 17:44:57,454 django.utils.autoreload INFO     /home/azamat/Рабочий стол/Django/social/soc_api/views.py changed, reloading.
-2021-10-13 17:44:57,839 django.utils.autoreload INFO     Watching for file changes with StatReloader
-2021-10-13 17:45:02,481 django.request ERROR    Internal Server Error: /api/v1/posts/
+  File "/home/azamat/Рабочий стол/Django/social/soc_api/views.py", line 120, in show_all_news
+    return render(request, 'soc_api/index.html', posts=posts)
+TypeError: render() got an unexpected keyword argument 'posts'
+2021-10-14 19:31:16,029 django.utils.autoreload INFO     /home/azamat/Рабочий стол/Django/social/soc_api/views.py changed, reloading.
+2021-10-14 19:31:16,444 django.utils.autoreload INFO     Watching for file changes with StatReloader
+2021-10-14 19:34:00,518 django.utils.autoreload INFO     /home/azamat/Рабочий стол/Django/social/soc_api/views.py changed, reloading.
+2021-10-14 19:34:00,904 django.utils.autoreload INFO     Watching for file changes with StatReloader
+2021-10-14 19:35:20,091 django.utils.autoreload INFO     /home/azamat/Рабочий стол/Django/social/soc_api/views.py changed, reloading.
+2021-10-14 19:35:20,438 django.utils.autoreload INFO     Watching for file changes with StatReloader
+2021-10-14 19:37:39,455 django.utils.autoreload INFO     /home/azamat/Рабочий стол/Django/social/soc_api/views.py changed, reloading.
+2021-10-14 19:37:39,938 django.utils.autoreload INFO     Watching for file changes with StatReloader
+2021-10-14 19:37:44,247 django.request WARNING  Not Found: /favicon.ico
+2021-10-14 19:38:09,005 django.utils.autoreload INFO     /home/azamat/Рабочий стол/Django/social/soc_api/views.py changed, reloading.
+2021-10-14 19:38:09,460 django.utils.autoreload INFO     Watching for file changes with StatReloader
+2021-10-14 19:38:11,381 django.request ERROR    Internal Server Error: /api/v1/show_posts/
 Traceback (most recent call last):
   File "/home/azamat/.var/app/com.jetbrains.PyCharm-Community/data/python/lib/python3.9/site-packages/django/core/handlers/exception.py", line 47, in inner
     response = get_response(request)
   File "/home/azamat/.var/app/com.jetbrains.PyCharm-Community/data/python/lib/python3.9/site-packages/django/core/handlers/base.py", line 181, in _get_response
     response = wrapped_callback(request, *callback_args, **callback_kwargs)
-  File "/home/azamat/.var/app/com.jetbrains.PyCharm-Community/data/python/lib/python3.9/site-packages/django/views/decorators/csrf.py", line 54, in wrapped_view
-    return view_func(*args, **kwargs)
-  File "/home/azamat/Рабочий стол/Django/social/soc_api/views.py", line 13, in post_list
-    print(request.data)
-AttributeError: 'WSGIRequest' object has no attribute 'data'
-2021-10-13 17:46:21,746 django.utils.autoreload INFO     /home/azamat/Рабочий стол/Django/social/soc_api/views.py changed, reloading.
-2021-10-13 17:46:22,355 django.utils.autoreload INFO     Watching for file changes with StatReloader
-2021-10-13 17:48:55,611 django.utils.autoreload INFO     /home/azamat/Рабочий стол/Django/social/soc_api/views.py changed, reloading.
-2021-10-13 17:48:55,959 django.utils.autoreload INFO     Watching for file changes with StatReloader
-2021-10-13 17:49:43,176 django.utils.autoreload INFO     /home/azamat/Рабочий стол/Django/social/soc_api/views.py changed, reloading.
-2021-10-13 17:49:43,657 django.utils.autoreload INFO     Watching for file changes with StatReloader
-2021-10-13 17:51:05,520 django.utils.autoreload INFO     /home/azamat/Рабочий стол/Django/social/soc_api/views.py changed, reloading.
-2021-10-13 17:51:05,990 django.utils.autoreload INFO     Watching for file changes with StatReloader
-2021-10-13 17:51:45,113 django.utils.autoreload INFO     /home/azamat/Рабочий стол/Django/social/soc_api/views.py changed, reloading.
-2021-10-13 17:51:45,505 django.utils.autoreload INFO     Watching for file changes with StatReloader
-2021-10-13 17:53:58,129 django.utils.autoreload INFO     /home/azamat/Рабочий стол/Django/social/soc_api/views.py changed, reloading.
-2021-10-13 17:53:58,496 django.utils.autoreload INFO     Watching for file changes with StatReloader
-2021-10-13 17:54:13,121 django.utils.autoreload INFO     /home/azamat/Рабочий стол/Django/social/soc_api/views.py changed, reloading.
-2021-10-13 17:54:13,468 django.utils.autoreload INFO     Watching for file changes with StatReloader
-2021-10-13 17:55:44,549 django.request WARNING  Not Found: /api/v1/posts
-2021-10-13 17:56:13,721 django.request WARNING  Bad Request: /api/v1/posts/
-2021-10-13 17:56:38,311 django.request WARNING  Bad Request: /api/v1/posts/
-2021-10-13 17:57:19,480 django.request WARNING  Bad Request: /api/v1/posts/
-2021-10-13 17:57:29,885 django.request WARNING  Bad Request: /api/v1/posts/
-2021-10-13 17:58:02,463 django.utils.autoreload INFO     /home/azamat/Рабочий стол/Django/social/soc_api/views.py changed, reloading.
-2021-10-13 17:58:02,817 django.utils.autoreload INFO     Watching for file changes with StatReloader
-2021-10-13 17:58:05,928 django.request WARNING  Bad Request: /api/v1/posts/
-2021-10-13 17:58:11,052 django.request WARNING  Bad Request: /api/v1/posts/
-2021-10-13 17:58:11,562 django.request WARNING  Bad Request: /api/v1/posts/
-2021-10-13 17:58:11,971 django.request WARNING  Bad Request: /api/v1/posts/
-2021-10-13 17:58:12,250 django.request WARNING  Bad Request: /api/v1/posts/
-2021-10-13 17:58:12,509 django.request WARNING  Bad Request: /api/v1/posts/
-2021-10-13 17:58:12,735 django.request WARNING  Bad Request: /api/v1/posts/
-2021-10-13 18:25:42,862 django.utils.autoreload INFO     Watching for file changes with StatReloader
-2021-10-13 18:26:51,233 django.utils.autoreload INFO     /home/azamat/Рабочий стол/Django/social/soc/middleware.py changed, reloading.
-2021-10-13 18:26:51,828 django.utils.autoreload INFO     Watching for file changes with StatReloader
-2021-10-13 18:27:16,864 django.utils.autoreload INFO     /home/azamat/Рабочий стол/Django/social/soc/middleware.py changed, reloading.
-2021-10-13 18:27:17,251 django.utils.autoreload INFO     Watching for file changes with StatReloader
-2021-10-13 18:27:48,772 django.request WARNING  Not Found: /accounts/
-2021-10-13 18:27:55,050 django.request WARNING  Not Found: /favicon.ico
-2021-10-13 18:29:08,343 django.request WARNING  Not Found: /favicon.ico
-2021-10-13 18:29:18,102 django.request WARNING  Not Found: /favicon.ico
-2021-10-13 18:29:20,540 django.request WARNING  Not Found: /favicon.ico
-2021-10-13 18:32:08,204 django.request WARNING  Not Found: /favicon.ico
-2021-10-13 18:32:27,392 django.request WARNING  Not Found: /favicon.ico
-2021-10-13 18:32:58,761 django.utils.autoreload INFO     Watching for file changes with StatReloader
-2021-10-13 18:33:05,251 django.request WARNING  Not Found: /favicon.ico
-2021-10-13 18:37:32,404 django.request WARNING  Not Found: /main
-2021-10-13 18:38:23,232 django.utils.autoreload INFO     /home/azamat/Рабочий стол/Django/social/soc/urls.py changed, reloading.
-2021-10-13 18:38:23,520 django.utils.autoreload INFO     Watching for file changes with StatReloader
-2021-10-13 18:38:26,330 django.request WARNING  Not Found: /main
-2021-10-13 18:38:31,931 django.utils.autoreload INFO     /home/azamat/Рабочий стол/Django/social/soc/urls.py changed, reloading.
-2021-10-13 18:38:32,368 django.utils.autoreload INFO     Watching for file changes with StatReloader
-2021-10-13 18:38:48,928 django.utils.autoreload INFO     /home/azamat/Рабочий стол/Django/social/social/settings.py changed, reloading.
-2021-10-13 18:38:49,198 django.utils.autoreload INFO     Watching for file changes with StatReloader
+  File "/home/azamat/Рабочий стол/Django/social/soc_api/views.py", line 123, in show_all_news
+    print("Кол во записей в бд: " + str(len(posts)) + "\n" + "Время выполнения запроса: " + str(round(time_after - time_before), 3))
+TypeError: str() argument 2 must be str, not int
+2021-10-14 19:38:21,219 django.utils.autoreload INFO     /home/azamat/Рабочий стол/Django/social/soc_api/views.py changed, reloading.
+2021-10-14 19:38:21,617 django.utils.autoreload INFO     Watching for file changes with StatReloader
+2021-10-14 19:41:12,690 django.utils.autoreload INFO     /home/azamat/Рабочий стол/Django/social/soc_api/views.py changed, reloading.
+2021-10-14 19:41:13,084 django.utils.autoreload INFO     Watching for file changes with StatReloader
+2021-10-14 19:41:52,364 django.utils.autoreload INFO     /home/azamat/Рабочий стол/Django/social/soc_api/views.py changed, reloading.
+2021-10-14 19:41:52,945 django.utils.autoreload INFO     Watching for file changes with StatReloader
+2021-10-14 19:42:34,779 django.utils.autoreload INFO     /home/azamat/Рабочий стол/Django/social/soc_api/views.py changed, reloading.
+2021-10-14 19:42:35,241 django.utils.autoreload INFO     Watching for file changes with StatReloader
+2021-10-14 19:51:11,497 django.utils.autoreload INFO     /home/azamat/Рабочий стол/Django/social/soc_api/views.py changed, reloading.
+2021-10-14 19:51:11,857 django.utils.autoreload INFO     Watching for file changes with StatReloader
+2021-10-14 19:51:41,744 django.utils.autoreload INFO     /home/azamat/Рабочий стол/Django/social/soc_api/urls.py changed, reloading.
+2021-10-14 19:51:42,106 django.utils.autoreload INFO     Watching for file changes with StatReloader
+2021-10-14 19:51:48,723 django.request WARNING  Not Found: /api/v1/
+2021-10-14 19:51:57,642 django.request WARNING  Bad Request: /api/v1/news/
+2021-10-14 19:55:45,112 django.request WARNING  Bad Request: /api/v1/posts/
+2021-10-14 19:56:17,344 django.request WARNING  Not Found: /favicon.ico
+2021-10-14 21:40:13,679 django.utils.autoreload INFO     Watching for file changes with StatReloader
+2021-10-14 21:40:16,451 django.request WARNING  Not Found: /favicon.ico
+2021-10-14 21:43:03,043 django.utils.autoreload INFO     /home/azamat/Рабочий стол/Django/social/soc_api/views.py changed, reloading.
+2021-10-14 21:43:03,458 django.utils.autoreload INFO     Watching for file changes with StatReloader
+2021-10-14 21:43:19,125 django.utils.autoreload INFO     /home/azamat/Рабочий стол/Django/social/soc_api/views.py changed, reloading.
+2021-10-14 21:43:19,471 django.utils.autoreload INFO     Watching for file changes with StatReloader
+2021-10-14 21:44:27,452 django.request WARNING  Bad Request: /api/v1/posts/
+2021-10-14 21:44:56,030 django.request WARNING  Forbidden: /api/v1/posts/
+2021-10-14 21:50:35,273 soc.views    INFO     Post values: {'title': 'ewd', 'text': 'wddwd', 'image': None, 'user_id': 1}
+2021-10-14 21:50:35,280 soc.service.content_service INFO     Пост  5|ewd был добавлен пользователем 1|Azamatik
+2021-10-14 21:53:00,296 django.security.csrf WARNING  Forbidden (CSRF cookie not set.): /accounts/login/
+2021-10-14 21:54:17,784 django.security.csrf WARNING  Forbidden (CSRF cookie not set.): /accounts/login/
+2021-10-14 22:09:16,725 django.utils.autoreload INFO     /home/azamat/Рабочий стол/Django/social/soc_api/views.py changed, reloading.
+2021-10-14 22:09:17,084 django.utils.autoreload INFO     Watching for file changes with StatReloader
+2021-10-14 22:09:59,295 django.utils.autoreload INFO     /home/azamat/Рабочий стол/Django/social/soc_api/urls.py changed, reloading.
+2021-10-14 22:09:59,678 django.utils.autoreload INFO     Watching for file changes with StatReloader
+2021-10-14 22:10:12,440 django.request WARNING  Not Found: /api/v1/posts/10
+2021-10-14 22:10:18,045 django.request WARNING  Not Found: /api/v1/posts/1
+2021-10-14 22:10:20,978 django.request WARNING  Forbidden: /api/v1/posts/
+2021-10-14 22:13:06,032 django.utils.autoreload INFO     /home/azamat/Рабочий стол/Django/social/soc_api/views.py changed, reloading.
+2021-10-14 22:13:06,611 django.utils.autoreload INFO     Watching for file changes with StatReloader
+2021-10-14 22:13:57,051 django.utils.autoreload INFO     /home/azamat/Рабочий стол/Django/social/soc_api/urls.py changed, reloading.
+2021-10-14 22:13:57,644 django.utils.autoreload INFO     Watching for file changes with StatReloader
+2021-10-14 22:15:09,648 django.utils.autoreload INFO     /home/azamat/Рабочий стол/Django/social/soc_api/views.py changed, reloading.
+2021-10-14 22:15:10,034 django.utils.autoreload INFO     Watching for file changes with StatReloader
+2021-10-14 22:16:57,544 django.utils.autoreload INFO     /home/azamat/Рабочий стол/Django/social/soc_api/views.py changed, reloading.
+2021-10-14 22:16:57,907 django.utils.autoreload INFO     Watching for file changes with StatReloader
+2021-10-14 22:17:26,111 django.request WARNING  Forbidden: /api/v1/users/
+2021-10-14 22:22:23,294 django.utils.autoreload INFO     /home/azamat/Рабочий стол/Django/social/soc_api/views.py changed, reloading.
+2021-10-14 22:22:23,729 django.utils.autoreload INFO     Watching for file changes with StatReloader
+2021-10-14 22:24:28,939 django.utils.autoreload INFO     Watching for file changes with StatReloader
