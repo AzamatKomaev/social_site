@@ -1,4 +1,4 @@
 Django~=3.2.7
 Pillow==7.0.0
 djangorestframework==3.12.4
-
+djangorestframework-api-key==2.1.0

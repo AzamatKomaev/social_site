@@ -200,3 +200,5 @@ TypeError: str() argument 2 must be str, not int
 2021-10-14 22:22:23,294 django.utils.autoreload INFO     /home/azamat/Рабочий стол/Django/social/soc_api/views.py changed, reloading.
 2021-10-14 22:22:23,729 django.utils.autoreload INFO     Watching for file changes with StatReloader
 2021-10-14 22:24:28,939 django.utils.autoreload INFO     Watching for file changes with StatReloader
+2021-10-14 22:26:18,790 django.utils.autoreload INFO     /home/azamat/Рабочий стол/Django/social/soc_api/views.py changed, reloading.
+2021-10-14 22:26:19,327 django.utils.autoreload INFO     Watching for file changes with StatReloader
