@@ -45,8 +45,9 @@ LOGGING = {
 
 
 REST_FRAMEWORK = {
-    'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
-    'PAGE_SIZE': 5
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        'rest_framework.authentication.TokenAuthentication'
+    ]
 }
 
 
@@ -54,6 +55,7 @@ INSTALLED_APPS = [
     'soc',
     'soc_api',
     'rest_framework',
+    'rest_framework.authtoken',
 
     'django.contrib.admin',
     'django.contrib.auth',
@@ -154,3 +156,4 @@ EMAIL_HOST_USER = private.EMAIL
 EMAIL_HOST_PASSWORD = private.PASSWORD_FROM_EMAIL
 EMAIL_USE_TLS = True
 EMAIL_USE_SSL = False
+

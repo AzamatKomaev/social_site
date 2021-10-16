@@ -6,6 +6,7 @@ from rest_framework.parsers import JSONParser
 from rest_framework.permissions import IsAuthenticated, IsAdminUser
 from rest_framework.views import APIView
 from rest_framework.response import Response
+from rest_framework.authtoken.models import Token
 
 from soc.models import Post
 from soc_api.serializers import PostSerializer, UserSerializer
@@ -23,17 +24,10 @@ class PostList(APIView):
         serializer = PostSerializer(posts, many=True)
         return Response(serializer.data, status=HTTP_200_OK)
 
-    def post(self, request) -> Response:
-        data = JSONParser().parse(request)
-        logger.info(data)
-        serializer = PostSerializer(data=data)
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data, status=HTTP_201_CREATED)
-
 
 class PostDetail(APIView):
     """endpoint для подробного отображения поста по его id."""
+
     def get(self, request, pk: int) -> Response:
         try:
             post = Post.objects.get(pk=pk)
