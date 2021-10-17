@@ -1182,3 +1182,15 @@ AttributeError: 'bool' object has no attribute 'data'
 ыс
 сы был оставлен под постом 10|hello пользователем 1|Azamatik
 2021-10-17 17:42:43,902 django.request WARNING  Not Found: /main/api/v1
+2021-10-17 19:28:34,358 django.utils.autoreload INFO     /home/azamat/Рабочий стол/Django/social/soc_api/models.py changed, reloading.
+2021-10-17 19:28:34,735 django.utils.autoreload INFO     Watching for file changes with StatReloader
+2021-10-17 19:31:41,846 django.request WARNING  Not Found: /favicon.ico
+2021-10-17 19:31:43,400 django.request WARNING  Not Found: /favicon.ico
+2021-10-17 19:32:52,836 django.request WARNING  Not Found: /favicon.ico
+2021-10-17 19:33:53,616 django.request WARNING  Not Found: /favicon.ico
+2021-10-17 19:39:55,503 django.request WARNING  Not Found: /favicon.ico
+2021-10-17 20:11:20,906 django.request WARNING  Not Found: /favicon.ico
+2021-10-17 20:14:48,229 django.request WARNING  Not Found: /favicon.ico
+2021-10-17 20:15:03,002 django.request WARNING  Not Found: /favicon.ico
+2021-10-17 20:15:22,854 django.request WARNING  Not Found: /favicon.ico
+2021-10-17 20:22:48,601 django.request WARNING  Not Found: /favicon.ico
