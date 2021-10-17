@@ -2,3 +2,5 @@
 .idea
 __pycache__ 
 db.sqlite3
+debug.log
+crontab.txt
