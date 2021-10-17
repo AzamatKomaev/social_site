@@ -20,7 +20,6 @@
 <p>
   А вот сама вертска:<br><br>
   <img src="screens_for_gitrep/disain1.jpg" alt="disain1">
-  <img src="screens_for_gitrep/disain2.jpg" alt="disain2">
   <img src="screens_for_gitrep/disain3.jpg" alt="disain3">
   <img src="screens_for_gitrep/disain4.jpg" alt="disain4">
   <img src="screens_for_gitrep/disain5.jpg" alt="disain5">
