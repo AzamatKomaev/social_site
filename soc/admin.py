@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from .models import Post, Comment, Attachment, Token, Avatar
+from soc.models import Post, Comment, Attachment, Token, Avatar
 
 
 admin.site.register(Post)

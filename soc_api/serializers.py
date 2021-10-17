@@ -24,4 +24,5 @@ class PostSerializer(ModelSerializer):
 
     class Meta:
         model = Post
-        fields = ['user', 'id', 'title', 'text', 'created_at', 'user_id']
+        fields = ['id', 'title', 'text', 'created_at', 'user', 'user_id'
+                                                               '']

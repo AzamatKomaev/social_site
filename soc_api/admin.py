@@ -1,3 +1,6 @@
 from django.contrib import admin
 
-# Register your models here.
+from soc_api.models import TokenWasUsed
+
+
+admin.site.register(TokenWasUsed)

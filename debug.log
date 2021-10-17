@@ -1,5 +1,8 @@
-2021-10-14 18:55:28,378 django.utils.autoreload INFO     Watching for file changes with StatReloader
-2021-10-14 18:55:35,863 django.request ERROR    Internal Server Error: /api/v1/news/
+2021-10-17 08:21:45,247 django.utils.autoreload INFO     /home/azamat/Рабочий стол/Django/social/soc_api/views.py changed, reloading.
+2021-10-17 08:21:45,630 django.utils.autoreload INFO     Watching for file changes with StatReloader
+2021-10-17 08:48:30,018 django.utils.autoreload INFO     /home/azamat/Рабочий стол/Django/social/soc_api/views.py changed, reloading.
+2021-10-17 08:48:30,423 django.utils.autoreload INFO     Watching for file changes with StatReloader
+2021-10-17 08:48:33,894 django.request ERROR    Internal Server Error: /api/v1/posts/
 Traceback (most recent call last):
   File "/home/azamat/.var/app/com.jetbrains.PyCharm-Community/data/python/lib/python3.9/site-packages/django/core/handlers/exception.py", line 47, in inner
     response = get_response(request)
@@ -17,14 +20,10 @@ Traceback (most recent call last):
     raise exc
   File "/home/azamat/.var/app/com.jetbrains.PyCharm-Community/data/python/lib/python3.9/site-packages/rest_framework/views.py", line 506, in dispatch
     response = handler(request, *args, **kwargs)
-  File "/home/azamat/Рабочий стол/Django/social/soc_api/views.py", line 76, in get
-    return JsonResponse(serializer.data)
-  File "/home/azamat/.var/app/com.jetbrains.PyCharm-Community/data/python/lib/python3.9/site-packages/django/http/response.py", line 596, in __init__
-    raise TypeError(
-TypeError: In order to allow non-dict objects to be serialized set the safe parameter to False.
-2021-10-14 18:57:20,316 django.utils.autoreload INFO     /home/azamat/Рабочий стол/Django/social/social/settings.py changed, reloading.
-2021-10-14 18:57:20,742 django.utils.autoreload INFO     Watching for file changes with StatReloader
-2021-10-14 18:57:22,990 django.request ERROR    Internal Server Error: /api/v1/news/
+  File "/home/azamat/Рабочий стол/Django/social/soc_api/views.py", line 25, in get
+    serializer = PostService.get_serializer()
+TypeError: get_serializer() missing 1 required positional argument: 'self'
+2021-10-17 08:48:34,975 django.request ERROR    Internal Server Error: /api/v1/posts/
 Traceback (most recent call last):
   File "/home/azamat/.var/app/com.jetbrains.PyCharm-Community/data/python/lib/python3.9/site-packages/django/core/handlers/exception.py", line 47, in inner
     response = get_response(request)
@@ -42,23 +41,12 @@ Traceback (most recent call last):
     raise exc
   File "/home/azamat/.var/app/com.jetbrains.PyCharm-Community/data/python/lib/python3.9/site-packages/rest_framework/views.py", line 506, in dispatch
     response = handler(request, *args, **kwargs)
-  File "/home/azamat/Рабочий стол/Django/social/soc_api/views.py", line 76, in get
-    return JsonResponse(serializer.data)
-  File "/home/azamat/.var/app/com.jetbrains.PyCharm-Community/data/python/lib/python3.9/site-packages/django/http/response.py", line 596, in __init__
-    raise TypeError(
-TypeError: In order to allow non-dict objects to be serialized set the safe parameter to False.
-2021-10-14 18:57:23,085 django.request WARNING  Not Found: /favicon.ico
-2021-10-14 18:58:20,684 django.utils.autoreload INFO     /home/azamat/Рабочий стол/Django/social/soc_api/views.py changed, reloading.
-2021-10-14 18:58:21,163 django.utils.autoreload INFO     Watching for file changes with StatReloader
-2021-10-14 18:58:47,193 django.utils.autoreload INFO     /home/azamat/Рабочий стол/Django/social/soc_api/views.py changed, reloading.
-2021-10-14 18:58:47,594 django.utils.autoreload INFO     Watching for file changes with StatReloader
-2021-10-14 19:00:11,394 django.request WARNING  Not Found: /favicon.ico
-2021-10-14 19:01:02,971 django.utils.autoreload INFO     /home/azamat/Рабочий стол/Django/social/soc_api/views.py changed, reloading.
-2021-10-14 19:01:03,420 django.utils.autoreload INFO     Watching for file changes with StatReloader
-2021-10-14 19:01:43,970 django.request WARNING  Bad Request: /api/v1/news/
-2021-10-14 19:02:06,816 django.request WARNING  Not Found: /api/v1/
-2021-10-14 19:02:06,846 django.request WARNING  Not Found: /favicon.ico
-2021-10-14 19:02:15,401 django.request ERROR    Internal Server Error: /api/v1/news/
+  File "/home/azamat/Рабочий стол/Django/social/soc_api/views.py", line 25, in get
+    serializer = PostService.get_serializer()
+TypeError: get_serializer() missing 1 required positional argument: 'self'
+2021-10-17 08:50:20,940 django.utils.autoreload INFO     /home/azamat/Рабочий стол/Django/social/soc_api/views.py changed, reloading.
+2021-10-17 08:50:21,294 django.utils.autoreload INFO     Watching for file changes with StatReloader
+2021-10-17 08:50:24,660 django.request ERROR    Internal Server Error: /api/v1/posts/
 Traceback (most recent call last):
   File "/home/azamat/.var/app/com.jetbrains.PyCharm-Community/data/python/lib/python3.9/site-packages/django/core/handlers/exception.py", line 47, in inner
     response = get_response(request)
@@ -76,200 +64,1090 @@ Traceback (most recent call last):
     raise exc
   File "/home/azamat/.var/app/com.jetbrains.PyCharm-Community/data/python/lib/python3.9/site-packages/rest_framework/views.py", line 506, in dispatch
     response = handler(request, *args, **kwargs)
-  File "/home/azamat/Рабочий стол/Django/social/soc_api/views.py", line 76, in get
-    return JsonResponse(serializer.data)
-  File "/home/azamat/.var/app/com.jetbrains.PyCharm-Community/data/python/lib/python3.9/site-packages/django/http/response.py", line 596, in __init__
-    raise TypeError(
-TypeError: In order to allow non-dict objects to be serialized set the safe parameter to False.
-2021-10-14 19:02:27,731 django.utils.autoreload INFO     /home/azamat/Рабочий стол/Django/social/soc_api/views.py changed, reloading.
-2021-10-14 19:02:28,146 django.utils.autoreload INFO     Watching for file changes with StatReloader
-2021-10-14 19:03:28,897 django.utils.autoreload INFO     /home/azamat/Рабочий стол/Django/social/soc_api/views.py changed, reloading.
-2021-10-14 19:03:29,346 django.utils.autoreload INFO     Watching for file changes with StatReloader
-2021-10-14 19:03:30,784 django.request WARNING  Not Found: /favicon.ico
-2021-10-14 19:04:22,930 django.utils.autoreload INFO     /home/azamat/Рабочий стол/Django/social/soc_api/views.py changed, reloading.
-2021-10-14 19:04:23,328 django.utils.autoreload INFO     Watching for file changes with StatReloader
-2021-10-14 19:05:45,571 django.utils.autoreload INFO     /home/azamat/Рабочий стол/Django/social/soc_api/views.py changed, reloading.
-2021-10-14 19:05:45,989 django.utils.autoreload INFO     Watching for file changes with StatReloader
-2021-10-14 19:07:16,413 django.utils.autoreload INFO     /home/azamat/Рабочий стол/Django/social/soc_api/views.py changed, reloading.
-2021-10-14 19:07:16,773 django.utils.autoreload INFO     Watching for file changes with StatReloader
-2021-10-14 19:07:27,368 django.utils.autoreload INFO     /home/azamat/Рабочий стол/Django/social/soc_api/views.py changed, reloading.
-2021-10-14 19:07:27,798 django.utils.autoreload INFO     Watching for file changes with StatReloader
-2021-10-14 19:07:50,745 django.utils.autoreload INFO     /home/azamat/Рабочий стол/Django/social/soc_api/views.py changed, reloading.
-2021-10-14 19:07:51,145 django.utils.autoreload INFO     Watching for file changes with StatReloader
-2021-10-14 19:07:57,170 django.request WARNING  Bad Request: /api/v1/posts/
-2021-10-14 19:08:18,211 django.utils.autoreload INFO     /home/azamat/Рабочий стол/Django/social/soc_api/views.py changed, reloading.
-2021-10-14 19:08:18,565 django.utils.autoreload INFO     Watching for file changes with StatReloader
-2021-10-14 19:08:26,920 django.request WARNING  Bad Request: /api/v1/posts/
-2021-10-14 19:10:54,321 django.request ERROR    Internal Server Error: /api/v1/posts
-Traceback (most recent call last):
-  File "/home/azamat/.var/app/com.jetbrains.PyCharm-Community/data/python/lib/python3.9/site-packages/django/core/handlers/exception.py", line 47, in inner
-    response = get_response(request)
-  File "/home/azamat/.var/app/com.jetbrains.PyCharm-Community/data/python/lib/python3.9/site-packages/django/utils/deprecation.py", line 116, in __call__
-    response = self.process_request(request)
-  File "/home/azamat/.var/app/com.jetbrains.PyCharm-Community/data/python/lib/python3.9/site-packages/django/middleware/common.py", line 54, in process_request
-    path = self.get_full_path_with_slash(request)
-  File "/home/azamat/.var/app/com.jetbrains.PyCharm-Community/data/python/lib/python3.9/site-packages/django/middleware/common.py", line 88, in get_full_path_with_slash
-    raise RuntimeError(
-RuntimeError: You called this URL via POST, but the URL doesn't end in a slash and you have APPEND_SLASH set. Django can't redirect to the slash URL while maintaining POST data. Change your form to point to 127.0.0.1:8000/api/v1/posts/ (note the trailing slash), or set APPEND_SLASH=False in your Django settings.
-2021-10-14 19:11:25,304 django.request WARNING  Bad Request: /api/v1/news/
-2021-10-14 19:11:48,217 django.request WARNING  Bad Request: /api/v1/news/
-2021-10-14 19:13:20,580 django.utils.autoreload INFO     /home/azamat/Рабочий стол/Django/social/soc_api/views.py changed, reloading.
-2021-10-14 19:13:20,950 django.utils.autoreload INFO     Watching for file changes with StatReloader
-2021-10-14 19:20:44,658 django.request WARNING  Not Found: /news/
-2021-10-14 19:21:34,945 django.request WARNING  Not Found: /news/
-2021-10-14 19:22:06,426 django.request WARNING  Not Found: /news/
-2021-10-14 19:27:49,763 django.utils.autoreload INFO     /home/azamat/Рабочий стол/Django/social/soc_api/views.py changed, reloading.
-2021-10-14 19:27:50,382 django.utils.autoreload INFO     Watching for file changes with StatReloader
-2021-10-14 19:29:44,333 django.utils.autoreload INFO     /home/azamat/Рабочий стол/Django/social/soc_api/views.py changed, reloading.
-2021-10-14 19:29:44,742 django.utils.autoreload INFO     Watching for file changes with StatReloader
-2021-10-14 19:30:08,691 django.utils.autoreload INFO     /home/azamat/Рабочий стол/Django/social/soc_api/urls.py changed, reloading.
-2021-10-14 19:30:09,075 django.utils.autoreload INFO     Watching for file changes with StatReloader
-2021-10-14 19:30:21,591 django.request ERROR    Internal Server Error: /api/v1/show_posts/
+  File "/home/azamat/Рабочий стол/Django/social/soc_api/views.py", line 25, in get
+    serializer = post_service.get_serializer()
+  File "/home/azamat/Рабочий стол/Django/social/soc_api/service/content_service.py", line 19, in get_serializer
+    self._use_token()
+  File "/home/azamat/Рабочий стол/Django/social/soc_api/service/content_service.py", line 24, in _use_token
+    token_model = TokenWasUsed.objects.get(key=self.key)
+  File "/home/azamat/.var/app/com.jetbrains.PyCharm-Community/data/python/lib/python3.9/site-packages/django/db/models/manager.py", line 85, in manager_method
+    return getattr(self.get_queryset(), name)(*args, **kwargs)
+  File "/home/azamat/.var/app/com.jetbrains.PyCharm-Community/data/python/lib/python3.9/site-packages/django/db/models/query.py", line 424, in get
+    clone = self._chain() if self.query.combinator else self.filter(*args, **kwargs)
+  File "/home/azamat/.var/app/com.jetbrains.PyCharm-Community/data/python/lib/python3.9/site-packages/django/db/models/query.py", line 941, in filter
+    return self._filter_or_exclude(False, args, kwargs)
+  File "/home/azamat/.var/app/com.jetbrains.PyCharm-Community/data/python/lib/python3.9/site-packages/django/db/models/query.py", line 961, in _filter_or_exclude
+    clone._filter_or_exclude_inplace(negate, args, kwargs)
+  File "/home/azamat/.var/app/com.jetbrains.PyCharm-Community/data/python/lib/python3.9/site-packages/django/db/models/query.py", line 968, in _filter_or_exclude_inplace
+    self._query.add_q(Q(*args, **kwargs))
+  File "/home/azamat/.var/app/com.jetbrains.PyCharm-Community/data/python/lib/python3.9/site-packages/django/db/models/sql/query.py", line 1393, in add_q
+    clause, _ = self._add_q(q_object, self.used_aliases)
+  File "/home/azamat/.var/app/com.jetbrains.PyCharm-Community/data/python/lib/python3.9/site-packages/django/db/models/sql/query.py", line 1412, in _add_q
+    child_clause, needed_inner = self.build_filter(
+  File "/home/azamat/.var/app/com.jetbrains.PyCharm-Community/data/python/lib/python3.9/site-packages/django/db/models/sql/query.py", line 1286, in build_filter
+    lookups, parts, reffed_expression = self.solve_lookup_type(arg)
+  File "/home/azamat/.var/app/com.jetbrains.PyCharm-Community/data/python/lib/python3.9/site-packages/django/db/models/sql/query.py", line 1112, in solve_lookup_type
+    _, field, _, lookup_parts = self.names_to_path(lookup_splitted, self.get_meta())
+  File "/home/azamat/.var/app/com.jetbrains.PyCharm-Community/data/python/lib/python3.9/site-packages/django/db/models/sql/query.py", line 1539, in names_to_path
+    raise FieldError("Cannot resolve keyword '%s' into field. "
+django.core.exceptions.FieldError: Cannot resolve keyword 'key' into field. Choices are: created_at, how_many_used, id, token, token_id, updated_at
+2021-10-17 08:51:43,366 django.utils.autoreload INFO     /home/azamat/Рабочий стол/Django/social/soc_api/service/content_service.py changed, reloading.
+2021-10-17 08:51:43,765 django.utils.autoreload INFO     Watching for file changes with StatReloader
+2021-10-17 08:51:52,170 django.request ERROR    Internal Server Error: /api/v1/posts/
 Traceback (most recent call last):
   File "/home/azamat/.var/app/com.jetbrains.PyCharm-Community/data/python/lib/python3.9/site-packages/django/core/handlers/exception.py", line 47, in inner
     response = get_response(request)
   File "/home/azamat/.var/app/com.jetbrains.PyCharm-Community/data/python/lib/python3.9/site-packages/django/core/handlers/base.py", line 181, in _get_response
     response = wrapped_callback(request, *callback_args, **callback_kwargs)
-  File "/home/azamat/Рабочий стол/Django/social/soc_api/views.py", line 120, in show_all_news
-    return render(request, 'soc_api/index.html', posts=posts)
-TypeError: render() got an unexpected keyword argument 'posts'
-2021-10-14 19:31:16,029 django.utils.autoreload INFO     /home/azamat/Рабочий стол/Django/social/soc_api/views.py changed, reloading.
-2021-10-14 19:31:16,444 django.utils.autoreload INFO     Watching for file changes with StatReloader
-2021-10-14 19:34:00,518 django.utils.autoreload INFO     /home/azamat/Рабочий стол/Django/social/soc_api/views.py changed, reloading.
-2021-10-14 19:34:00,904 django.utils.autoreload INFO     Watching for file changes with StatReloader
-2021-10-14 19:35:20,091 django.utils.autoreload INFO     /home/azamat/Рабочий стол/Django/social/soc_api/views.py changed, reloading.
-2021-10-14 19:35:20,438 django.utils.autoreload INFO     Watching for file changes with StatReloader
-2021-10-14 19:37:39,455 django.utils.autoreload INFO     /home/azamat/Рабочий стол/Django/social/soc_api/views.py changed, reloading.
-2021-10-14 19:37:39,938 django.utils.autoreload INFO     Watching for file changes with StatReloader
-2021-10-14 19:37:44,247 django.request WARNING  Not Found: /favicon.ico
-2021-10-14 19:38:09,005 django.utils.autoreload INFO     /home/azamat/Рабочий стол/Django/social/soc_api/views.py changed, reloading.
-2021-10-14 19:38:09,460 django.utils.autoreload INFO     Watching for file changes with StatReloader
-2021-10-14 19:38:11,381 django.request ERROR    Internal Server Error: /api/v1/show_posts/
+  File "/home/azamat/.var/app/com.jetbrains.PyCharm-Community/data/python/lib/python3.9/site-packages/django/views/decorators/csrf.py", line 54, in wrapped_view
+    return view_func(*args, **kwargs)
+  File "/home/azamat/.var/app/com.jetbrains.PyCharm-Community/data/python/lib/python3.9/site-packages/django/views/generic/base.py", line 70, in view
+    return self.dispatch(request, *args, **kwargs)
+  File "/home/azamat/.var/app/com.jetbrains.PyCharm-Community/data/python/lib/python3.9/site-packages/rest_framework/views.py", line 509, in dispatch
+    response = self.handle_exception(exc)
+  File "/home/azamat/.var/app/com.jetbrains.PyCharm-Community/data/python/lib/python3.9/site-packages/rest_framework/views.py", line 469, in handle_exception
+    self.raise_uncaught_exception(exc)
+  File "/home/azamat/.var/app/com.jetbrains.PyCharm-Community/data/python/lib/python3.9/site-packages/rest_framework/views.py", line 480, in raise_uncaught_exception
+    raise exc
+  File "/home/azamat/.var/app/com.jetbrains.PyCharm-Community/data/python/lib/python3.9/site-packages/rest_framework/views.py", line 506, in dispatch
+    response = handler(request, *args, **kwargs)
+  File "/home/azamat/Рабочий стол/Django/social/soc_api/views.py", line 25, in get
+    serializer = post_service.get_serializer()
+  File "/home/azamat/Рабочий стол/Django/social/soc_api/service/content_service.py", line 19, in get_serializer
+    self._use_token()
+  File "/home/azamat/Рабочий стол/Django/social/soc_api/service/content_service.py", line 24, in _use_token
+    token_model = TokenWasUsed.objects.get(token=self.key)
+  File "/home/azamat/.var/app/com.jetbrains.PyCharm-Community/data/python/lib/python3.9/site-packages/django/db/models/manager.py", line 85, in manager_method
+    return getattr(self.get_queryset(), name)(*args, **kwargs)
+  File "/home/azamat/.var/app/com.jetbrains.PyCharm-Community/data/python/lib/python3.9/site-packages/django/db/models/query.py", line 435, in get
+    raise self.model.DoesNotExist(
+soc_api.models.TokenWasUsed.DoesNotExist: TokenWasUsed matching query does not exist.
+2021-10-17 08:52:07,909 django.request WARNING  Not Found: /favicon.ico
+2021-10-17 08:52:37,547 django.request ERROR    Internal Server Error: /api/v1/posts/
 Traceback (most recent call last):
   File "/home/azamat/.var/app/com.jetbrains.PyCharm-Community/data/python/lib/python3.9/site-packages/django/core/handlers/exception.py", line 47, in inner
     response = get_response(request)
   File "/home/azamat/.var/app/com.jetbrains.PyCharm-Community/data/python/lib/python3.9/site-packages/django/core/handlers/base.py", line 181, in _get_response
     response = wrapped_callback(request, *callback_args, **callback_kwargs)
-  File "/home/azamat/Рабочий стол/Django/social/soc_api/views.py", line 123, in show_all_news
-    print("Кол во записей в бд: " + str(len(posts)) + "\n" + "Время выполнения запроса: " + str(round(time_after - time_before), 3))
-TypeError: str() argument 2 must be str, not int
-2021-10-14 19:38:21,219 django.utils.autoreload INFO     /home/azamat/Рабочий стол/Django/social/soc_api/views.py changed, reloading.
-2021-10-14 19:38:21,617 django.utils.autoreload INFO     Watching for file changes with StatReloader
-2021-10-14 19:41:12,690 django.utils.autoreload INFO     /home/azamat/Рабочий стол/Django/social/soc_api/views.py changed, reloading.
-2021-10-14 19:41:13,084 django.utils.autoreload INFO     Watching for file changes with StatReloader
-2021-10-14 19:41:52,364 django.utils.autoreload INFO     /home/azamat/Рабочий стол/Django/social/soc_api/views.py changed, reloading.
-2021-10-14 19:41:52,945 django.utils.autoreload INFO     Watching for file changes with StatReloader
-2021-10-14 19:42:34,779 django.utils.autoreload INFO     /home/azamat/Рабочий стол/Django/social/soc_api/views.py changed, reloading.
-2021-10-14 19:42:35,241 django.utils.autoreload INFO     Watching for file changes with StatReloader
-2021-10-14 19:51:11,497 django.utils.autoreload INFO     /home/azamat/Рабочий стол/Django/social/soc_api/views.py changed, reloading.
-2021-10-14 19:51:11,857 django.utils.autoreload INFO     Watching for file changes with StatReloader
-2021-10-14 19:51:41,744 django.utils.autoreload INFO     /home/azamat/Рабочий стол/Django/social/soc_api/urls.py changed, reloading.
-2021-10-14 19:51:42,106 django.utils.autoreload INFO     Watching for file changes with StatReloader
-2021-10-14 19:51:48,723 django.request WARNING  Not Found: /api/v1/
-2021-10-14 19:51:57,642 django.request WARNING  Bad Request: /api/v1/news/
-2021-10-14 19:55:45,112 django.request WARNING  Bad Request: /api/v1/posts/
-2021-10-14 19:56:17,344 django.request WARNING  Not Found: /favicon.ico
-2021-10-14 21:40:13,679 django.utils.autoreload INFO     Watching for file changes with StatReloader
-2021-10-14 21:40:16,451 django.request WARNING  Not Found: /favicon.ico
-2021-10-14 21:43:03,043 django.utils.autoreload INFO     /home/azamat/Рабочий стол/Django/social/soc_api/views.py changed, reloading.
-2021-10-14 21:43:03,458 django.utils.autoreload INFO     Watching for file changes with StatReloader
-2021-10-14 21:43:19,125 django.utils.autoreload INFO     /home/azamat/Рабочий стол/Django/social/soc_api/views.py changed, reloading.
-2021-10-14 21:43:19,471 django.utils.autoreload INFO     Watching for file changes with StatReloader
-2021-10-14 21:44:27,452 django.request WARNING  Bad Request: /api/v1/posts/
-2021-10-14 21:44:56,030 django.request WARNING  Forbidden: /api/v1/posts/
-2021-10-14 21:50:35,273 soc.views    INFO     Post values: {'title': 'ewd', 'text': 'wddwd', 'image': None, 'user_id': 1}
-2021-10-14 21:50:35,280 soc.service.content_service INFO     Пост  5|ewd был добавлен пользователем 1|Azamatik
-2021-10-14 21:53:00,296 django.security.csrf WARNING  Forbidden (CSRF cookie not set.): /accounts/login/
-2021-10-14 21:54:17,784 django.security.csrf WARNING  Forbidden (CSRF cookie not set.): /accounts/login/
-2021-10-14 22:09:16,725 django.utils.autoreload INFO     /home/azamat/Рабочий стол/Django/social/soc_api/views.py changed, reloading.
-2021-10-14 22:09:17,084 django.utils.autoreload INFO     Watching for file changes with StatReloader
-2021-10-14 22:09:59,295 django.utils.autoreload INFO     /home/azamat/Рабочий стол/Django/social/soc_api/urls.py changed, reloading.
-2021-10-14 22:09:59,678 django.utils.autoreload INFO     Watching for file changes with StatReloader
-2021-10-14 22:10:12,440 django.request WARNING  Not Found: /api/v1/posts/10
-2021-10-14 22:10:18,045 django.request WARNING  Not Found: /api/v1/posts/1
-2021-10-14 22:10:20,978 django.request WARNING  Forbidden: /api/v1/posts/
-2021-10-14 22:13:06,032 django.utils.autoreload INFO     /home/azamat/Рабочий стол/Django/social/soc_api/views.py changed, reloading.
-2021-10-14 22:13:06,611 django.utils.autoreload INFO     Watching for file changes with StatReloader
-2021-10-14 22:13:57,051 django.utils.autoreload INFO     /home/azamat/Рабочий стол/Django/social/soc_api/urls.py changed, reloading.
-2021-10-14 22:13:57,644 django.utils.autoreload INFO     Watching for file changes with StatReloader
-2021-10-14 22:15:09,648 django.utils.autoreload INFO     /home/azamat/Рабочий стол/Django/social/soc_api/views.py changed, reloading.
-2021-10-14 22:15:10,034 django.utils.autoreload INFO     Watching for file changes with StatReloader
-2021-10-14 22:16:57,544 django.utils.autoreload INFO     /home/azamat/Рабочий стол/Django/social/soc_api/views.py changed, reloading.
-2021-10-14 22:16:57,907 django.utils.autoreload INFO     Watching for file changes with StatReloader
-2021-10-14 22:17:26,111 django.request WARNING  Forbidden: /api/v1/users/
-2021-10-14 22:22:23,294 django.utils.autoreload INFO     /home/azamat/Рабочий стол/Django/social/soc_api/views.py changed, reloading.
-2021-10-14 22:22:23,729 django.utils.autoreload INFO     Watching for file changes with StatReloader
-2021-10-14 22:24:28,939 django.utils.autoreload INFO     Watching for file changes with StatReloader
-2021-10-14 22:26:18,790 django.utils.autoreload INFO     /home/azamat/Рабочий стол/Django/social/soc_api/views.py changed, reloading.
-2021-10-14 22:26:19,327 django.utils.autoreload INFO     Watching for file changes with StatReloader
-2021-10-14 22:28:46,832 django.utils.autoreload INFO     /home/azamat/Рабочий стол/Django/social/social/settings.py changed, reloading.
-2021-10-14 22:28:47,238 django.utils.autoreload INFO     Watching for file changes with StatReloader
-2021-10-14 22:29:09,376 django.utils.autoreload INFO     Watching for file changes with StatReloader
-2021-10-14 22:29:23,042 django.request WARNING  Not Found: /favicon.ico
-2021-10-14 22:35:42,464 django.utils.autoreload INFO     /home/azamat/Рабочий стол/Django/social/social/settings.py changed, reloading.
-2021-10-14 22:35:43,023 django.utils.autoreload INFO     Watching for file changes with StatReloader
-2021-10-14 22:37:01,053 django.utils.autoreload INFO     /home/azamat/Рабочий стол/Django/social/soc_api/views.py changed, reloading.
-2021-10-14 22:37:01,492 django.utils.autoreload INFO     Watching for file changes with StatReloader
-2021-10-14 22:37:26,367 django.utils.autoreload INFO     /home/azamat/Рабочий стол/Django/social/soc_api/views.py changed, reloading.
-2021-10-14 22:37:26,756 django.utils.autoreload INFO     Watching for file changes with StatReloader
-2021-10-14 22:37:34,598 django.request WARNING  Forbidden: /api/v1/posts/
-2021-10-14 22:37:39,742 django.request WARNING  Forbidden: /api/v1/posts/
-2021-10-14 22:38:27,953 django.request WARNING  Forbidden: /api/v1/posts/
-2021-10-14 22:38:37,536 django.request WARNING  Forbidden: /api/v1/posts/
-2021-10-14 22:39:51,605 django.request WARNING  Forbidden: /api/v1/posts/
-2021-10-14 22:40:29,962 django.utils.autoreload INFO     /home/azamat/Рабочий стол/Django/social/soc_api/views.py changed, reloading.
-2021-10-14 22:40:30,315 django.utils.autoreload INFO     Watching for file changes with StatReloader
-2021-10-14 22:40:34,298 django.request WARNING  Forbidden: /api/v1/posts/
-2021-10-14 22:40:46,030 django.request WARNING  Forbidden: /api/v1/posts/
-2021-10-14 22:40:55,563 django.request WARNING  Forbidden: /api/v1/posts/
-2021-10-14 22:40:59,805 django.request WARNING  Forbidden: /api/v1/posts/
-2021-10-14 22:41:34,670 django.request WARNING  Forbidden: /api/v1/posts/
-2021-10-16 07:33:53,448 django.utils.autoreload INFO     Watching for file changes with StatReloader
-2021-10-16 07:34:09,921 django.request WARNING  Forbidden: /api/v1/posts/
-2021-10-16 07:34:55,047 django.request WARNING  Not Found: /favicon.ico
-2021-10-16 07:35:48,482 django.request WARNING  Forbidden: /api/v1/posts/
-2021-10-16 07:38:30,323 django.utils.autoreload INFO     /home/azamat/Рабочий стол/Django/social/soc_api/views.py changed, reloading.
-2021-10-16 07:38:30,684 django.utils.autoreload INFO     Watching for file changes with StatReloader
-2021-10-16 07:38:55,167 django.request WARNING  Forbidden: /api/v1/posts/
-2021-10-16 07:39:26,167 django.request WARNING  Forbidden: /api/v1/posts/
-2021-10-16 07:39:58,793 django.utils.autoreload INFO     /home/azamat/Рабочий стол/Django/social/soc_api/views.py changed, reloading.
-2021-10-16 07:39:59,140 django.utils.autoreload INFO     Watching for file changes with StatReloader
-2021-10-16 07:40:43,186 django.request WARNING  Forbidden: /api/v1/posts/
-2021-10-16 07:41:02,365 django.request WARNING  Forbidden: /api/v1/posts/
-2021-10-16 07:42:03,431 django.request WARNING  Forbidden: /api/v1/posts/
-2021-10-16 07:43:59,009 django.request WARNING  Forbidden: /api/v1/posts/
-2021-10-16 07:44:45,063 django.request WARNING  Forbidden: /api/v1/posts/
-2021-10-16 07:46:35,717 django.request WARNING  Forbidden: /api/v1/posts/
-2021-10-16 07:46:58,660 django.request WARNING  Forbidden: /api/v1/posts/
-2021-10-16 07:47:32,058 django.utils.autoreload INFO     /home/azamat/Рабочий стол/Django/social/social/settings.py changed, reloading.
-2021-10-16 07:47:32,404 django.utils.autoreload INFO     Watching for file changes with StatReloader
-2021-10-16 07:47:37,828 django.request WARNING  Forbidden: /api/v1/posts/
-2021-10-16 15:28:43,327 django.utils.autoreload INFO     Watching for file changes with StatReloader
-2021-10-16 15:28:55,597 django.request WARNING  Not Found: /favicon.ico
-2021-10-16 15:31:25,857 soc_api.views INFO     Headers of requests are
-{'SHELL': '/bin/sh', 'SESSION_MANAGER': 'local/azamat-Lenovo-IdeaPad-S145-15IIL:@/tmp/.ICE-unix/1092,unix/azamat-Lenovo-IdeaPad-S145-15IIL:/tmp/.ICE-unix/1092', 'QT_ACCESSIBILITY': '1', 'XDG_CONFIG_DIRS': '/app/etc/xdg:/etc/xdg', 'XDG_SESSION_PATH': '/org/freedesktop/DisplayManager/Session0', 'GNOME_DESKTOP_SESSION_ID': 'this-is-deprecated', 'PYCHARM_JDK': '${FLATPAK_DEST}/pycharm/jre64/', 'TERMINAL_EMULATOR': 'JetBrains-JediTerm', 'LANGUAGE': 'ru', 'MANDATORY_PATH': '/usr/share/gconf/cinnamon.mandatory.path', 'SSH_AUTH_SOCK': '/run/user/1000/keyring/ssh', 'XDG_DATA_HOME': '/home/azamat/.var/app/com.jetbrains.PyCharm-Community/data', 'CINNAMON_VERSION': '5.0.5', 'XDG_CONFIG_HOME': '/home/azamat/.var/app/com.jetbrains.PyCharm-Community/config', 'TERM_SESSION_ID': 'be4f76dd-950d-43c4-99db-ab2a055ae8c4', '__INTELLIJ_COMMAND_HISTFILE__': '/home/azamat/.var/app/com.jetbrains.PyCharm-Community/cache/JetBrains/PyCharmCE2021.2/terminal/history/social-history1', 'DESKTOP_SESSION': 'cinnamon', 'SSH_AGENT_PID': '1162', 'FLATPAK_ID': 'com.jetbrains.PyCharm-Community', 'GTK_MODULES': 'gail:atk-bridge', 'XDG_SEAT': 'seat0', 'PWD': '/home/azamat/Рабочий стол/Django/social', 'ALSA_CONFIG_PATH': '/usr/share/alsa/alsa-flatpak.conf', 'XDG_SESSION_DESKTOP': 'cinnamon', 'LOGNAME': 'azamat', 'QT_QPA_PLATFORMTHEME': 'qt5ct', 'XDG_SESSION_TYPE': 'x11', 'FLATPAK_JETBRAINS_ENV': '1', 'GPG_AGENT_INFO': '/run/user/1000/gnupg/S.gpg-agent:0:1', '_': '/usr/bin/python3', 'XAUTHORITY': '/run/user/1000/Xauthority', 'XDG_GREETER_DATA_DIR': '/var/lib/lightdm-data/azamat', 'GJS_DEBUG_TOPICS': 'JS ERROR;JS LOG', 'GDM_LANG': 'ru', 'GI_TYPELIB_PATH': '/app/lib/girepository-1.0', 'HOME': '/home/azamat', 'LANG': 'ru_RU.UTF-8', 'CARGO_HOME': '/home/azamat/.var/app/com.jetbrains.PyCharm-Community/data/cargo', 'XDG_CURRENT_DESKTOP': 'X-Cinnamon', 'AT_SPI_BUS_ADDRESS': 'unix:path=/run/user/1000/at-spi-bus', 'TMPDIR': '/run/user/1000/app/com.jetbrains.PyCharm-Community', 'XDG_SEAT_PATH': '/org/freedesktop/DisplayManager/Seat0', 'PULSE_CLIENTCONFIG': '/run/user/1000/pulse/config', 'XDG_CACHE_HOME': '/home/azamat/.var/app/com.jetbrains.PyCharm-Community/cache', 'GJS_DEBUG_OUTPUT': 'stderr', 'XDG_SESSION_CLASS': 'user', 'PYTHONPATH': '/app/packages/python', 'TERM': 'xterm-256color', 'GTK_OVERLAY_SCROLLING': '1', 'DEFAULTS_PATH': '/usr/share/gconf/cinnamon.default.path', 'USER': 'azamat', 'CARGO_INSTALL_ROOT': '/home/azamat/.var/app/com.jetbrains.PyCharm-Community/data/cargo', 'NPM_CONFIG_USERCONFIG': '/home/azamat/.var/app/com.jetbrains.PyCharm-Community/config/npmrc', 'DISPLAY': ':99.0', 'SHLVL': '2', 'FLATPAK_SANDBOX_DIR': '/home/azamat/.var/app/com.jetbrains.PyCharm-Community/sandbox', 'XDG_VTNR': '7', 'XDG_SESSION_ID': 'c2', 'XDG_RUNTIME_DIR': '/run/user/1000', 'GST_PLUGIN_SYSTEM_PATH': '/app/lib/gstreamer-1.0:/usr/lib/extensions/gstreamer-1.0:/usr/lib/x86_64-linux-gnu/gstreamer-1.0', 'GTK3_MODULES': 'xapp-gtk3-module', 'XDG_DATA_DIRS': '/app/share:/usr/share:/usr/share/runtime/share:/run/host/user-share:/run/host/share', 'PATH': '/app/bin:/usr/bin:/app/extensions/bin:/app/packages/bin:/home/azamat/.var/app/com.jetbrains.PyCharm-Community/data/node/bin:/home/azamat/.var/app/com.jetbrains.PyCharm-Community/data/cargo/bin:/home/azamat/.var/app/com.jetbrains.PyCharm-Community/data/python/bin', 'GDMSESSION': 'cinnamon', 'PYTHONUSERBASE': '/home/azamat/.var/app/com.jetbrains.PyCharm-Community/data/python', 'DBUS_SESSION_BUS_ADDRESS': 'unix:path=/run/user/1000/bus', 'ALSA_CONFIG_DIR': '/usr/share/alsa', 'PULSE_SERVER': 'unix:/run/user/1000/pulse/native', 'GIO_LAUNCHED_DESKTOP_FILE_PID': '1905', 'GIO_LAUNCHED_DESKTOP_FILE': '/var/lib/flatpak/exports/share/applications/com.jetbrains.PyCharm-Community.desktop', 'DJANGO_SETTINGS_MODULE': 'social.settings', 'TZ': 'Europe/Moscow', 'RUN_MAIN': 'true', 'SERVER_NAME': 'localhost', 'GATEWAY_INTERFACE': 'CGI/1.1', 'SERVER_PORT': '8000', 'REMOTE_HOST': '', 'CONTENT_LENGTH': '', 'SCRIPT_NAME': '', 'SERVER_PROTOCOL': 'HTTP/1.1', 'SERVER_SOFTWARE': 'WSGIServer/0.2', 'REQUEST_METHOD': 'GET', 'PATH_INFO': '/api/v1/posts/', 'QUERY_STRING': '', 'REMOTE_ADDR': '127.0.0.1', 'CONTENT_TYPE': 'text/plain', 'HTTP_AUTHORIZATION': 'Api-Key bcmgHFTj.kOuZKfWigP7SUkS4zKYk0FLju3U717fF', 'HTTP_USER_AGENT': 'PostmanRuntime/7.28.4', 'HTTP_ACCEPT': '*/*', 'HTTP_POSTMAN_TOKEN': '40cb3788-d7a3-4116-8cd5-0d3296a32f4c', 'HTTP_HOST': '127.0.0.1:8000', 'HTTP_ACCEPT_ENCODING': 'gzip, deflate, br', 'HTTP_CONNECTION': 'keep-alive', 'wsgi.input': <django.core.handlers.wsgi.LimitedStream object at 0x7f7c58305670>, 'wsgi.errors': <_io.TextIOWrapper name='<stderr>' mode='w' encoding='utf-8'>, 'wsgi.version': (1, 0), 'wsgi.run_once': False, 'wsgi.url_scheme': 'http', 'wsgi.multithread': True, 'wsgi.multiprocess': False, 'wsgi.file_wrapper': <class 'wsgiref.util.FileWrapper'>}
-2021-10-16 18:40:51,298 django.utils.autoreload INFO     Watching for file changes with StatReloader
-2021-10-16 18:40:57,377 django.request WARNING  Not Found: /admin/rest_framework_api_key/apikey/
-2021-10-16 18:40:57,419 django.request WARNING  Not Found: /favicon.ico
-2021-10-16 18:42:26,641 django.utils.autoreload INFO     /home/azamat/Рабочий стол/Django/social/soc_api/views.py changed, reloading.
-2021-10-16 18:42:26,998 django.utils.autoreload INFO     Watching for file changes with StatReloader
-2021-10-16 18:44:05,909 django.utils.autoreload INFO     /home/azamat/Рабочий стол/Django/social/soc_api/views.py changed, reloading.
-2021-10-16 18:44:06,412 django.utils.autoreload INFO     Watching for file changes with StatReloader
-2021-10-16 18:44:56,526 django.request WARNING  Not Found: /favicon.ico
-2021-10-16 18:45:15,074 django.request WARNING  Forbidden: /api/v1/posts/
-2021-10-16 18:45:32,394 django.utils.autoreload INFO     /home/azamat/Рабочий стол/Django/social/soc_api/views.py changed, reloading.
-2021-10-16 18:45:32,747 django.utils.autoreload INFO     Watching for file changes with StatReloader
-2021-10-16 18:45:43,479 django.request WARNING  Forbidden: /api/v1/posts/
-2021-10-16 18:47:11,733 django.utils.autoreload INFO     /home/azamat/Рабочий стол/Django/social/soc_api/views.py changed, reloading.
-2021-10-16 18:47:12,230 django.utils.autoreload INFO     Watching for file changes with StatReloader
-2021-10-16 18:47:37,175 django.request WARNING  Forbidden: /api/v1/posts/
-2021-10-16 18:47:37,470 django.request WARNING  Forbidden: /api/v1/posts/
-2021-10-16 18:48:28,954 django.utils.autoreload INFO     /home/azamat/Рабочий стол/Django/social/social/settings.py changed, reloading.
-2021-10-16 18:48:29,326 django.utils.autoreload INFO     Watching for file changes with StatReloader
-2021-10-16 18:48:32,203 soc_api.views INFO     Headers of requests are
-{'SHELL': '/bin/sh', 'SESSION_MANAGER': 'local/azamat-Lenovo-IdeaPad-S145-15IIL:@/tmp/.ICE-unix/1101,unix/azamat-Lenovo-IdeaPad-S145-15IIL:/tmp/.ICE-unix/1101', 'QT_ACCESSIBILITY': '1', 'XDG_CONFIG_DIRS': '/app/etc/xdg:/etc/xdg', 'XDG_SESSION_PATH': '/org/freedesktop/DisplayManager/Session0', 'GNOME_DESKTOP_SESSION_ID': 'this-is-deprecated', 'PYCHARM_JDK': '${FLATPAK_DEST}/pycharm/jre64/', 'TERMINAL_EMULATOR': 'JetBrains-JediTerm', 'LANGUAGE': 'ru', 'MANDATORY_PATH': '/usr/share/gconf/cinnamon.mandatory.path', 'SSH_AUTH_SOCK': '/run/user/1000/keyring/ssh', 'XDG_DATA_HOME': '/home/azamat/.var/app/com.jetbrains.PyCharm-Community/data', 'CINNAMON_VERSION': '5.0.5', 'XDG_CONFIG_HOME': '/home/azamat/.var/app/com.jetbrains.PyCharm-Community/config', 'TERM_SESSION_ID': 'b66ac1d5-bb87-4397-9e21-90e210d9bedb', '__INTELLIJ_COMMAND_HISTFILE__': '/home/azamat/.var/app/com.jetbrains.PyCharm-Community/cache/JetBrains/PyCharmCE2021.2/terminal/history/social-history', 'DESKTOP_SESSION': 'cinnamon', 'SSH_AGENT_PID': '1171', 'FLATPAK_ID': 'com.jetbrains.PyCharm-Community', 'GTK_MODULES': 'gail:atk-bridge', 'XDG_SEAT': 'seat0', 'PWD': '/home/azamat/Рабочий стол/Django/social', 'ALSA_CONFIG_PATH': '/usr/share/alsa/alsa-flatpak.conf', 'XDG_SESSION_DESKTOP': 'cinnamon', 'LOGNAME': 'azamat', 'QT_QPA_PLATFORMTHEME': 'qt5ct', 'XDG_SESSION_TYPE': 'x11', 'FLATPAK_JETBRAINS_ENV': '1', 'GPG_AGENT_INFO': '/run/user/1000/gnupg/S.gpg-agent:0:1', 'XAUTHORITY': '/run/user/1000/Xauthority', 'XDG_GREETER_DATA_DIR': '/var/lib/lightdm-data/azamat', 'GJS_DEBUG_TOPICS': 'JS ERROR;JS LOG', 'GDM_LANG': 'ru', 'GI_TYPELIB_PATH': '/app/lib/girepository-1.0', 'HOME': '/home/azamat', 'LANG': 'ru_RU.UTF-8', 'CARGO_HOME': '/home/azamat/.var/app/com.jetbrains.PyCharm-Community/data/cargo', 'XDG_CURRENT_DESKTOP': 'X-Cinnamon', 'AT_SPI_BUS_ADDRESS': 'unix:path=/run/user/1000/at-spi-bus', 'TMPDIR': '/run/user/1000/app/com.jetbrains.PyCharm-Community', 'XDG_SEAT_PATH': '/org/freedesktop/DisplayManager/Seat0', 'PULSE_CLIENTCONFIG': '/run/user/1000/pulse/config', 'XDG_CACHE_HOME': '/home/azamat/.var/app/com.jetbrains.PyCharm-Community/cache', 'GJS_DEBUG_OUTPUT': 'stderr', 'XDG_SESSION_CLASS': 'user', 'PYTHONPATH': '/app/packages/python', 'TERM': 'xterm-256color', 'GTK_OVERLAY_SCROLLING': '1', 'DEFAULTS_PATH': '/usr/share/gconf/cinnamon.default.path', 'USER': 'azamat', 'CARGO_INSTALL_ROOT': '/home/azamat/.var/app/com.jetbrains.PyCharm-Community/data/cargo', 'NPM_CONFIG_USERCONFIG': '/home/azamat/.var/app/com.jetbrains.PyCharm-Community/config/npmrc', 'DISPLAY': ':99.0', 'SHLVL': '2', 'FLATPAK_SANDBOX_DIR': '/home/azamat/.var/app/com.jetbrains.PyCharm-Community/sandbox', 'XDG_VTNR': '7', 'XDG_SESSION_ID': 'c2', 'XDG_RUNTIME_DIR': '/run/user/1000', 'GST_PLUGIN_SYSTEM_PATH': '/app/lib/gstreamer-1.0:/usr/lib/extensions/gstreamer-1.0:/usr/lib/x86_64-linux-gnu/gstreamer-1.0', 'GTK3_MODULES': 'xapp-gtk3-module', 'XDG_DATA_DIRS': '/app/share:/usr/share:/usr/share/runtime/share:/run/host/user-share:/run/host/share', 'PATH': '/app/bin:/usr/bin:/app/extensions/bin:/app/packages/bin:/home/azamat/.var/app/com.jetbrains.PyCharm-Community/data/node/bin:/home/azamat/.var/app/com.jetbrains.PyCharm-Community/data/cargo/bin:/home/azamat/.var/app/com.jetbrains.PyCharm-Community/data/python/bin', 'GDMSESSION': 'cinnamon', 'PYTHONUSERBASE': '/home/azamat/.var/app/com.jetbrains.PyCharm-Community/data/python', 'DBUS_SESSION_BUS_ADDRESS': 'unix:path=/run/user/1000/bus', 'ALSA_CONFIG_DIR': '/usr/share/alsa', 'PULSE_SERVER': 'unix:/run/user/1000/pulse/native', 'GIO_LAUNCHED_DESKTOP_FILE_PID': '2633', 'GIO_LAUNCHED_DESKTOP_FILE': '/var/lib/flatpak/exports/share/applications/com.jetbrains.PyCharm-Community.desktop', '_': '/usr/bin/python3', 'DJANGO_SETTINGS_MODULE': 'social.settings', 'TZ': 'Europe/Moscow', 'RUN_MAIN': 'true', 'SERVER_NAME': 'localhost', 'GATEWAY_INTERFACE': 'CGI/1.1', 'SERVER_PORT': '8000', 'REMOTE_HOST': '', 'CONTENT_LENGTH': '', 'SCRIPT_NAME': '', 'SERVER_PROTOCOL': 'HTTP/1.1', 'SERVER_SOFTWARE': 'WSGIServer/0.2', 'REQUEST_METHOD': 'GET', 'PATH_INFO': '/api/v1/posts/', 'QUERY_STRING': '', 'REMOTE_ADDR': '127.0.0.1', 'CONTENT_TYPE': 'text/plain', 'HTTP_AUTHORIZATION': 'Token 1bfdfa4e4a541d3909e221930311d60c308238cb', 'HTTP_USER_AGENT': 'PostmanRuntime/7.28.4', 'HTTP_ACCEPT': '*/*', 'HTTP_POSTMAN_TOKEN': '4ca46915-7542-4536-9f0e-640efb8a74cb', 'HTTP_HOST': '127.0.0.1:8000', 'HTTP_ACCEPT_ENCODING': 'gzip, deflate, br', 'HTTP_CONNECTION': 'keep-alive', 'wsgi.input': <django.core.handlers.wsgi.LimitedStream object at 0x7fe31a7e0a90>, 'wsgi.errors': <_io.TextIOWrapper name='<stderr>' mode='w' encoding='utf-8'>, 'wsgi.version': (1, 0), 'wsgi.run_once': False, 'wsgi.url_scheme': 'http', 'wsgi.multithread': True, 'wsgi.multiprocess': False, 'wsgi.file_wrapper': <class 'wsgiref.util.FileWrapper'>}
-2021-10-16 18:49:20,644 django.utils.autoreload INFO     /home/azamat/Рабочий стол/Django/social/soc_api/views.py changed, reloading.
-2021-10-16 18:49:21,096 django.utils.autoreload INFO     Watching for file changes with StatReloader
-2021-10-16 18:49:27,012 django.request WARNING  Unauthorized: /api/v1/posts/
-2021-10-16 18:49:39,936 django.request WARNING  Unauthorized: /api/v1/posts/
-2021-10-16 18:51:02,952 django.request WARNING  Unauthorized: /api/v1/users/
+  File "/home/azamat/.var/app/com.jetbrains.PyCharm-Community/data/python/lib/python3.9/site-packages/django/views/decorators/csrf.py", line 54, in wrapped_view
+    return view_func(*args, **kwargs)
+  File "/home/azamat/.var/app/com.jetbrains.PyCharm-Community/data/python/lib/python3.9/site-packages/django/views/generic/base.py", line 70, in view
+    return self.dispatch(request, *args, **kwargs)
+  File "/home/azamat/.var/app/com.jetbrains.PyCharm-Community/data/python/lib/python3.9/site-packages/rest_framework/views.py", line 509, in dispatch
+    response = self.handle_exception(exc)
+  File "/home/azamat/.var/app/com.jetbrains.PyCharm-Community/data/python/lib/python3.9/site-packages/rest_framework/views.py", line 469, in handle_exception
+    self.raise_uncaught_exception(exc)
+  File "/home/azamat/.var/app/com.jetbrains.PyCharm-Community/data/python/lib/python3.9/site-packages/rest_framework/views.py", line 480, in raise_uncaught_exception
+    raise exc
+  File "/home/azamat/.var/app/com.jetbrains.PyCharm-Community/data/python/lib/python3.9/site-packages/rest_framework/views.py", line 506, in dispatch
+    response = handler(request, *args, **kwargs)
+  File "/home/azamat/Рабочий стол/Django/social/soc_api/views.py", line 25, in get
+    serializer = post_service.get_serializer()
+  File "/home/azamat/Рабочий стол/Django/social/soc_api/service/content_service.py", line 19, in get_serializer
+    self._use_token()
+  File "/home/azamat/Рабочий стол/Django/social/soc_api/service/content_service.py", line 25, in _use_token
+    how_many_was_used = token_model.how_many_was_used
+AttributeError: 'TokenWasUsed' object has no attribute 'how_many_was_used'
+2021-10-17 08:53:25,323 django.utils.autoreload INFO     /home/azamat/Рабочий стол/Django/social/soc_api/service/content_service.py changed, reloading.
+2021-10-17 08:53:25,694 django.utils.autoreload INFO     Watching for file changes with StatReloader
+2021-10-17 08:55:00,913 django.utils.autoreload INFO     /home/azamat/Рабочий стол/Django/social/soc_api/service/content_service.py changed, reloading.
+2021-10-17 08:55:01,305 django.utils.autoreload INFO     Watching for file changes with StatReloader
+2021-10-17 08:56:04,149 django.utils.autoreload INFO     /home/azamat/Рабочий стол/Django/social/soc_api/service/content_service.py changed, reloading.
+2021-10-17 08:56:04,568 django.utils.autoreload INFO     Watching for file changes with StatReloader
+2021-10-17 08:56:07,875 django.request ERROR    Internal Server Error: /api/v1/posts/
+Traceback (most recent call last):
+  File "/home/azamat/.var/app/com.jetbrains.PyCharm-Community/data/python/lib/python3.9/site-packages/django/core/handlers/exception.py", line 47, in inner
+    response = get_response(request)
+  File "/home/azamat/.var/app/com.jetbrains.PyCharm-Community/data/python/lib/python3.9/site-packages/django/core/handlers/base.py", line 181, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/home/azamat/.var/app/com.jetbrains.PyCharm-Community/data/python/lib/python3.9/site-packages/django/views/decorators/csrf.py", line 54, in wrapped_view
+    return view_func(*args, **kwargs)
+  File "/home/azamat/.var/app/com.jetbrains.PyCharm-Community/data/python/lib/python3.9/site-packages/django/views/generic/base.py", line 70, in view
+    return self.dispatch(request, *args, **kwargs)
+  File "/home/azamat/.var/app/com.jetbrains.PyCharm-Community/data/python/lib/python3.9/site-packages/rest_framework/views.py", line 509, in dispatch
+    response = self.handle_exception(exc)
+  File "/home/azamat/.var/app/com.jetbrains.PyCharm-Community/data/python/lib/python3.9/site-packages/rest_framework/views.py", line 469, in handle_exception
+    self.raise_uncaught_exception(exc)
+  File "/home/azamat/.var/app/com.jetbrains.PyCharm-Community/data/python/lib/python3.9/site-packages/rest_framework/views.py", line 480, in raise_uncaught_exception
+    raise exc
+  File "/home/azamat/.var/app/com.jetbrains.PyCharm-Community/data/python/lib/python3.9/site-packages/rest_framework/views.py", line 506, in dispatch
+    response = handler(request, *args, **kwargs)
+  File "/home/azamat/Рабочий стол/Django/social/soc_api/views.py", line 25, in get
+    serializer = post_service.get_serializer()
+  File "/home/azamat/Рабочий стол/Django/social/soc_api/service/content_service.py", line 19, in get_serializer
+    self._use_token()
+  File "/home/azamat/Рабочий стол/Django/social/soc_api/service/content_service.py", line 27, in _use_token
+    token_model(how_many_used = how_many_used + 1)
+TypeError: 'TokenWasUsed' object is not callable
+2021-10-17 08:56:08,907 django.request ERROR    Internal Server Error: /api/v1/posts/
+Traceback (most recent call last):
+  File "/home/azamat/.var/app/com.jetbrains.PyCharm-Community/data/python/lib/python3.9/site-packages/django/core/handlers/exception.py", line 47, in inner
+    response = get_response(request)
+  File "/home/azamat/.var/app/com.jetbrains.PyCharm-Community/data/python/lib/python3.9/site-packages/django/core/handlers/base.py", line 181, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/home/azamat/.var/app/com.jetbrains.PyCharm-Community/data/python/lib/python3.9/site-packages/django/views/decorators/csrf.py", line 54, in wrapped_view
+    return view_func(*args, **kwargs)
+  File "/home/azamat/.var/app/com.jetbrains.PyCharm-Community/data/python/lib/python3.9/site-packages/django/views/generic/base.py", line 70, in view
+    return self.dispatch(request, *args, **kwargs)
+  File "/home/azamat/.var/app/com.jetbrains.PyCharm-Community/data/python/lib/python3.9/site-packages/rest_framework/views.py", line 509, in dispatch
+    response = self.handle_exception(exc)
+  File "/home/azamat/.var/app/com.jetbrains.PyCharm-Community/data/python/lib/python3.9/site-packages/rest_framework/views.py", line 469, in handle_exception
+    self.raise_uncaught_exception(exc)
+  File "/home/azamat/.var/app/com.jetbrains.PyCharm-Community/data/python/lib/python3.9/site-packages/rest_framework/views.py", line 480, in raise_uncaught_exception
+    raise exc
+  File "/home/azamat/.var/app/com.jetbrains.PyCharm-Community/data/python/lib/python3.9/site-packages/rest_framework/views.py", line 506, in dispatch
+    response = handler(request, *args, **kwargs)
+  File "/home/azamat/Рабочий стол/Django/social/soc_api/views.py", line 25, in get
+    serializer = post_service.get_serializer()
+  File "/home/azamat/Рабочий стол/Django/social/soc_api/service/content_service.py", line 19, in get_serializer
+    self._use_token()
+  File "/home/azamat/Рабочий стол/Django/social/soc_api/service/content_service.py", line 27, in _use_token
+    token_model(how_many_used = how_many_used + 1)
+TypeError: 'TokenWasUsed' object is not callable
+2021-10-17 08:56:38,635 django.utils.autoreload INFO     /home/azamat/Рабочий стол/Django/social/soc_api/service/content_service.py changed, reloading.
+2021-10-17 08:56:38,982 django.utils.autoreload INFO     Watching for file changes with StatReloader
+2021-10-17 09:06:20,469 django.utils.autoreload INFO     /home/azamat/Рабочий стол/Django/social/soc_api/service/content_service.py changed, reloading.
+2021-10-17 09:06:20,921 django.utils.autoreload INFO     Watching for file changes with StatReloader
+2021-10-17 09:08:21,760 django.utils.autoreload INFO     /home/azamat/Рабочий стол/Django/social/soc_api/service/content_service.py changed, reloading.
+2021-10-17 09:08:22,276 django.utils.autoreload INFO     Watching for file changes with StatReloader
+2021-10-17 09:10:55,704 django.utils.autoreload INFO     /home/azamat/Рабочий стол/Django/social/soc_api/service/content_service.py changed, reloading.
+2021-10-17 09:10:56,143 django.utils.autoreload INFO     Watching for file changes with StatReloader
+2021-10-17 09:12:51,653 django.utils.autoreload INFO     /home/azamat/Рабочий стол/Django/social/soc_api/service/content_service.py changed, reloading.
+2021-10-17 09:12:52,014 django.utils.autoreload INFO     Watching for file changes with StatReloader
+2021-10-17 09:13:06,663 django.utils.autoreload INFO     /home/azamat/Рабочий стол/Django/social/soc_api/service/content_service.py changed, reloading.
+2021-10-17 09:13:07,032 django.utils.autoreload INFO     Watching for file changes with StatReloader
+2021-10-17 09:13:58,184 django.utils.autoreload INFO     /home/azamat/Рабочий стол/Django/social/soc_api/service/content_service.py changed, reloading.
+2021-10-17 09:13:58,526 django.utils.autoreload INFO     Watching for file changes with StatReloader
+2021-10-17 09:15:16,633 django.utils.autoreload INFO     /home/azamat/Рабочий стол/Django/social/soc_api/service/content_service.py changed, reloading.
+2021-10-17 09:15:16,984 django.utils.autoreload INFO     Watching for file changes with StatReloader
+2021-10-17 09:17:24,096 django.utils.autoreload INFO     /home/azamat/Рабочий стол/Django/social/soc_api/service/content_service.py changed, reloading.
+2021-10-17 09:17:24,505 django.utils.autoreload INFO     Watching for file changes with StatReloader
+2021-10-17 09:20:31,293 django.utils.autoreload INFO     /home/azamat/Рабочий стол/Django/social/soc_api/views.py changed, reloading.
+2021-10-17 09:20:31,727 django.utils.autoreload INFO     Watching for file changes with StatReloader
+2021-10-17 09:23:25,294 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:25,316 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:25,340 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:25,364 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:25,388 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:25,406 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:25,423 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:25,441 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:25,459 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:25,476 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:25,493 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:25,511 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:25,531 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:25,548 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:25,564 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:25,583 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:25,602 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:25,620 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:25,641 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:25,663 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:25,683 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:25,705 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:25,726 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:25,747 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:25,770 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:25,790 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:25,811 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:25,833 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:25,853 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:25,873 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:25,894 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:25,916 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:25,938 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:25,961 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:25,984 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:26,006 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:26,030 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:26,053 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:26,075 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:26,096 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:26,117 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:26,140 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:26,162 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:26,184 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:26,208 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:26,230 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:26,251 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:26,271 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:26,291 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:26,311 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:26,332 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:26,352 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:26,374 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:26,395 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:26,416 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:26,442 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:26,465 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:26,489 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:26,512 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:26,534 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:26,558 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:26,576 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:26,595 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:26,614 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:26,637 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:26,658 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:26,680 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:26,704 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:26,727 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:26,749 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:26,771 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:26,794 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:26,816 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:26,838 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:26,862 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:26,884 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:26,906 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:26,928 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:26,950 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:26,972 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:26,995 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:27,018 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:27,041 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:27,063 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:27,084 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:27,107 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:27,127 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:27,149 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:27,170 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:27,193 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:27,214 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:27,234 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:27,257 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:27,278 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:27,298 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:27,321 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:27,342 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:27,363 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:27,388 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:27,411 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:27,432 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:27,448 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:27,467 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:27,485 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:27,506 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:27,523 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:27,540 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:27,559 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:27,580 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:27,597 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:27,616 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:27,636 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:27,657 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:27,676 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:27,697 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:27,722 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:27,746 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:27,768 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:27,789 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:27,813 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:27,836 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:27,857 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:27,881 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:27,903 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:27,925 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:27,948 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:27,971 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:27,993 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:28,015 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:28,036 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:28,056 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:28,076 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:28,097 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:28,117 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:28,137 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:28,160 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:28,185 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:28,209 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:28,229 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:28,251 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:28,272 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:28,291 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:28,315 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:28,339 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:28,363 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:28,386 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:28,409 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:28,431 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:28,454 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:28,477 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:28,496 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:28,514 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:28,531 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:28,548 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:28,564 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:28,581 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:28,598 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:28,616 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:28,633 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:28,651 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:28,668 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:28,686 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:28,702 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:28,719 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:28,735 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:28,752 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:28,769 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:28,787 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:28,806 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:28,824 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:28,841 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:28,858 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:28,875 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:28,893 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:28,910 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:28,929 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:28,946 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:28,964 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:28,980 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:28,997 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:29,014 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:29,031 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:29,048 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:29,065 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:29,084 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:29,101 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:29,119 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:29,135 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:29,152 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:29,169 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:29,186 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:29,203 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:29,221 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:29,240 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:29,257 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:29,275 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:29,292 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:29,309 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:29,326 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:29,344 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:29,363 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:29,379 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:29,397 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:29,414 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:29,431 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:29,447 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:29,465 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:29,486 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:29,505 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:29,524 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:29,543 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:29,562 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:29,582 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:29,602 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:29,621 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:29,641 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:29,659 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:29,679 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:29,701 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:29,720 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:29,742 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:29,766 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:29,787 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:29,808 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:29,829 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:29,848 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:29,868 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:29,892 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:29,915 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:29,938 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:29,960 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:29,983 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:30,004 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:30,027 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:30,051 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:30,075 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:30,096 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:30,116 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:30,137 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:30,159 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:30,182 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:30,204 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:30,224 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:30,244 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:30,267 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:30,290 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:30,342 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:30,366 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:30,388 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:30,410 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:30,433 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:30,454 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:30,477 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:30,499 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:30,519 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:30,542 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:30,564 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:30,586 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:30,608 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:30,632 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:30,656 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:30,673 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:30,691 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:30,710 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:30,729 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:30,751 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:30,772 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:30,794 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:30,817 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:30,840 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:30,863 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:30,885 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:30,909 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:30,932 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:30,954 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:30,978 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:31,002 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:31,025 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:31,046 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:31,068 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:31,090 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:41,252 django.request WARNING  Not Found: /favicon.ico
+2021-10-17 09:23:47,822 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:47,839 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:47,860 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:47,880 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:47,900 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:47,924 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:47,950 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:47,970 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:47,991 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:48,009 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:48,029 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:48,049 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:48,072 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:48,096 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:48,118 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:48,140 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:48,164 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:48,185 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:48,207 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:48,230 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:48,253 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:48,275 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:48,298 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:48,320 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:48,343 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:48,366 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:48,390 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:48,411 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:48,433 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:48,455 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:48,481 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:48,503 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:48,525 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:48,548 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:48,571 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:48,592 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:48,611 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:48,632 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:48,653 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:48,673 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:48,696 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:48,717 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:48,739 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:48,762 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:48,784 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:48,801 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:48,825 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:48,845 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:48,864 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:48,887 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:48,904 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:48,923 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:48,946 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:48,968 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:48,992 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:49,014 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:49,030 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:49,048 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:49,068 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:49,086 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:49,104 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:49,123 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:49,141 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:49,162 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:49,186 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:49,208 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:49,232 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:49,252 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:49,271 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:49,288 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:49,309 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:49,330 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:49,351 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:49,371 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:49,391 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:49,410 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:49,428 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:49,451 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:49,473 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:49,491 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:49,513 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:49,534 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:49,555 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:49,576 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:49,595 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:49,613 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:49,631 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:49,653 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:49,674 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:49,693 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:49,713 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:49,730 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:49,750 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:49,768 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:49,785 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:49,802 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:49,820 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:49,839 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:49,857 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:49,876 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:49,894 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:49,913 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:49,932 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:49,951 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:49,969 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:49,987 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:50,005 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:50,023 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:50,039 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:50,056 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:50,075 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:50,097 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:50,117 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:50,136 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:50,158 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:50,179 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:50,199 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:50,218 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:50,240 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:50,258 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:50,280 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:50,301 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:50,320 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:50,339 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:50,358 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:50,377 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:50,396 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:50,415 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:50,433 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:50,450 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:50,468 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:50,485 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:50,504 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:50,523 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:50,542 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:50,562 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:50,581 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:50,601 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:50,622 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:50,642 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:50,660 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:50,680 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:50,700 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:50,720 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:50,740 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:50,761 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:50,781 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:50,800 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:50,822 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:50,845 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:50,865 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:50,885 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:50,906 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:50,925 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:50,944 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:50,963 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:50,981 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:51,001 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:51,021 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:51,041 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:51,058 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:51,074 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:51,091 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:51,107 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:51,126 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:51,146 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:51,168 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:51,186 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:51,205 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:51,228 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:51,249 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:51,271 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:51,290 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:51,308 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:51,326 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:51,345 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:51,367 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:51,390 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:51,413 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:51,434 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:51,455 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:51,476 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:51,499 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:51,515 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:51,533 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:51,552 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:51,569 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:51,588 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:51,608 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:51,629 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:51,649 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:51,667 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:51,688 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:51,708 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:51,729 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:51,748 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:51,768 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:51,788 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:51,808 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:51,828 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:51,849 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:51,873 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:51,896 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:51,916 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:51,935 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:51,955 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:51,975 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:51,995 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:52,024 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:52,056 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:52,084 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:52,116 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:52,142 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:52,163 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:52,182 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:52,199 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:52,216 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:52,233 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:52,254 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:52,279 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:52,306 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:52,334 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:52,361 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:52,388 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:52,416 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:52,443 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:52,466 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:52,490 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:52,515 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:52,537 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:52,560 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:52,581 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:52,600 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:52,618 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:52,638 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:52,657 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:52,679 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:52,702 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:52,723 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:52,742 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:52,762 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:52,782 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:52,802 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:52,822 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:52,841 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:52,862 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:52,882 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:52,904 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:52,925 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:52,943 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:52,960 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:52,979 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:52,999 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:53,021 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:53,041 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:53,061 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:53,082 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:53,101 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:53,124 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:53,141 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:53,159 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:53,180 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:53,202 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:53,225 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:53,247 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:53,266 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:53,284 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:53,304 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:53,328 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:53,348 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:53,368 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:53,387 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:53,407 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:53,426 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:53,445 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:53,465 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:53,484 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:53,504 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:53,526 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:53,550 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:53,566 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:53,586 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:53,607 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:53,626 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:53,649 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:53,669 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:53,689 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:53,709 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:53,732 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:53,751 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:53,771 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:53,792 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:53,811 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:53,829 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:53,846 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:53,864 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:53,884 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:53,904 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:53,924 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:53,943 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:53,961 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:53,978 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:53,996 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:54,013 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:54,032 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:54,049 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:54,068 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:54,086 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:54,106 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:54,128 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:54,146 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:54,162 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:54,181 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:54,198 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:54,218 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:54,239 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:54,260 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:54,280 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:54,300 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:54,318 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:54,339 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:54,359 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:54,378 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:54,398 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:54,420 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:54,443 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:54,466 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:54,489 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:54,510 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:54,531 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:54,549 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:54,568 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:54,590 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:54,610 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:54,629 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:54,647 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:54,671 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:54,694 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:54,720 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:54,740 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:54,760 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:54,781 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:54,803 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:54,825 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:54,846 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:54,869 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:54,890 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:54,909 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:54,931 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:54,951 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:54,973 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:54,993 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:55,012 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:55,029 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:55,047 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:55,064 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:55,083 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:55,104 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:55,123 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:55,141 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:55,159 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:55,179 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:55,197 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:55,215 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:55,233 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:55,253 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:55,274 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:55,293 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:55,310 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:55,327 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:55,345 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:55,363 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:55,381 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:55,401 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:55,421 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:55,440 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:55,457 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:55,474 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:55,491 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:55,509 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:55,526 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:55,544 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:55,562 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:55,579 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:55,597 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:55,614 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:55,633 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:55,654 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:55,675 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:55,696 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:55,717 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:55,740 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:55,764 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:55,785 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:55,807 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:55,829 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:55,850 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:55,870 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:55,892 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:55,915 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:55,939 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:55,962 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:55,985 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:56,008 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:56,031 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:56,053 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:56,077 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:56,099 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:56,122 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:56,144 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:56,168 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:56,186 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:56,242 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:56,266 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:56,292 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:56,315 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:56,337 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:56,357 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:56,377 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:56,400 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:56,421 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:56,444 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:56,466 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:56,488 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:56,510 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:56,532 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:56,555 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:56,579 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:56,603 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:56,625 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:56,648 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:56,672 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:56,696 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:56,719 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:56,742 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:56,767 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:56,790 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:56,813 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:56,836 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:56,858 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:56,878 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:56,900 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:56,920 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:56,943 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:56,965 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:56,987 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:57,011 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:57,035 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:57,056 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:57,075 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:57,094 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:57,114 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:57,135 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:57,155 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:57,174 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:57,197 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:57,214 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:57,233 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:57,255 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:57,279 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:57,300 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:57,321 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:57,341 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:57,362 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:57,382 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:23:57,403 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:24:53,736 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:24:55,750 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:24:56,095 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:24:56,363 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:24:56,564 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:24:56,730 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:24:56,908 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:24:57,763 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:24:58,493 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:24:58,768 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:24:58,979 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:24:59,197 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:24:59,414 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:25:00,557 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:25:00,754 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:25:00,921 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:25:01,103 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:25:01,287 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:25:01,470 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:25:01,953 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:25:02,150 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:25:02,333 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:25:02,515 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:25:02,691 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:25:02,865 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:25:03,069 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:25:06,425 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:25:06,691 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:25:06,917 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:25:07,110 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:25:07,332 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:25:07,543 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 09:25:07,738 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 10:13:53,239 django.utils.autoreload INFO     /home/azamat/Рабочий стол/Django/social/soc/views.py changed, reloading.
+2021-10-17 10:13:53,654 django.utils.autoreload INFO     Watching for file changes with StatReloader
+2021-10-17 10:14:19,614 django.utils.autoreload INFO     /home/azamat/Рабочий стол/Django/social/soc/views.py changed, reloading.
+2021-10-17 10:14:19,988 django.utils.autoreload INFO     Watching for file changes with StatReloader
+2021-10-17 10:14:28,674 django.request WARNING  Not Found: /favicon.ico
+2021-10-17 10:14:53,099 django.utils.autoreload INFO     /home/azamat/Рабочий стол/Django/social/soc/views.py changed, reloading.
+2021-10-17 10:14:53,560 django.utils.autoreload INFO     Watching for file changes with StatReloader
+2021-10-17 10:21:54,568 django.utils.autoreload INFO     /home/azamat/Рабочий стол/Django/social/soc_api/views.py changed, reloading.
+2021-10-17 10:21:54,919 django.utils.autoreload INFO     Watching for file changes with StatReloader
+2021-10-17 10:22:07,515 django.utils.autoreload INFO     /home/azamat/Рабочий стол/Django/social/soc_api/service/content_service.py changed, reloading.
+2021-10-17 10:22:07,909 django.utils.autoreload INFO     Watching for file changes with StatReloader
+2021-10-17 10:23:03,451 django.utils.autoreload INFO     /home/azamat/Рабочий стол/Django/social/soc_api/service/content_service.py changed, reloading.
+2021-10-17 10:23:03,786 django.utils.autoreload INFO     Watching for file changes with StatReloader
+2021-10-17 10:23:13,943 django.request ERROR    Internal Server Error: /api/v1/posts/
+Traceback (most recent call last):
+  File "/home/azamat/.var/app/com.jetbrains.PyCharm-Community/data/python/lib/python3.9/site-packages/django/core/handlers/exception.py", line 47, in inner
+    response = get_response(request)
+  File "/home/azamat/.var/app/com.jetbrains.PyCharm-Community/data/python/lib/python3.9/site-packages/django/core/handlers/base.py", line 181, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/home/azamat/.var/app/com.jetbrains.PyCharm-Community/data/python/lib/python3.9/site-packages/django/views/decorators/csrf.py", line 54, in wrapped_view
+    return view_func(*args, **kwargs)
+  File "/home/azamat/.var/app/com.jetbrains.PyCharm-Community/data/python/lib/python3.9/site-packages/django/views/generic/base.py", line 70, in view
+    return self.dispatch(request, *args, **kwargs)
+  File "/home/azamat/.var/app/com.jetbrains.PyCharm-Community/data/python/lib/python3.9/site-packages/rest_framework/views.py", line 509, in dispatch
+    response = self.handle_exception(exc)
+  File "/home/azamat/.var/app/com.jetbrains.PyCharm-Community/data/python/lib/python3.9/site-packages/rest_framework/views.py", line 469, in handle_exception
+    self.raise_uncaught_exception(exc)
+  File "/home/azamat/.var/app/com.jetbrains.PyCharm-Community/data/python/lib/python3.9/site-packages/rest_framework/views.py", line 480, in raise_uncaught_exception
+    raise exc
+  File "/home/azamat/.var/app/com.jetbrains.PyCharm-Community/data/python/lib/python3.9/site-packages/rest_framework/views.py", line 506, in dispatch
+    response = handler(request, *args, **kwargs)
+  File "/home/azamat/Рабочий стол/Django/social/soc_api/views.py", line 39, in post
+    if serializer.is_valid():
+AttributeError: 'bool' object has no attribute 'is_valid'
+2021-10-17 10:23:15,047 django.request ERROR    Internal Server Error: /api/v1/posts/
+Traceback (most recent call last):
+  File "/home/azamat/.var/app/com.jetbrains.PyCharm-Community/data/python/lib/python3.9/site-packages/django/core/handlers/exception.py", line 47, in inner
+    response = get_response(request)
+  File "/home/azamat/.var/app/com.jetbrains.PyCharm-Community/data/python/lib/python3.9/site-packages/django/core/handlers/base.py", line 181, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/home/azamat/.var/app/com.jetbrains.PyCharm-Community/data/python/lib/python3.9/site-packages/django/views/decorators/csrf.py", line 54, in wrapped_view
+    return view_func(*args, **kwargs)
+  File "/home/azamat/.var/app/com.jetbrains.PyCharm-Community/data/python/lib/python3.9/site-packages/django/views/generic/base.py", line 70, in view
+    return self.dispatch(request, *args, **kwargs)
+  File "/home/azamat/.var/app/com.jetbrains.PyCharm-Community/data/python/lib/python3.9/site-packages/rest_framework/views.py", line 509, in dispatch
+    response = self.handle_exception(exc)
+  File "/home/azamat/.var/app/com.jetbrains.PyCharm-Community/data/python/lib/python3.9/site-packages/rest_framework/views.py", line 469, in handle_exception
+    self.raise_uncaught_exception(exc)
+  File "/home/azamat/.var/app/com.jetbrains.PyCharm-Community/data/python/lib/python3.9/site-packages/rest_framework/views.py", line 480, in raise_uncaught_exception
+    raise exc
+  File "/home/azamat/.var/app/com.jetbrains.PyCharm-Community/data/python/lib/python3.9/site-packages/rest_framework/views.py", line 506, in dispatch
+    response = handler(request, *args, **kwargs)
+  File "/home/azamat/Рабочий стол/Django/social/soc_api/views.py", line 39, in post
+    if serializer.is_valid():
+AttributeError: 'bool' object has no attribute 'is_valid'
+2021-10-17 10:24:46,340 django.utils.autoreload INFO     /home/azamat/Рабочий стол/Django/social/soc_api/views.py changed, reloading.
+2021-10-17 10:24:46,698 django.utils.autoreload INFO     Watching for file changes with StatReloader
+2021-10-17 10:24:50,234 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 10:25:02,459 django.utils.autoreload INFO     /home/azamat/Рабочий стол/Django/social/soc_api/service/content_service.py changed, reloading.
+2021-10-17 10:25:02,822 django.utils.autoreload INFO     Watching for file changes with StatReloader
+2021-10-17 10:26:44,081 django.utils.autoreload INFO     /home/azamat/Рабочий стол/Django/social/soc_api/service/content_service.py changed, reloading.
+2021-10-17 10:26:44,427 django.utils.autoreload INFO     Watching for file changes with StatReloader
+2021-10-17 12:29:05,883 django.utils.autoreload INFO     Watching for file changes with StatReloader
+2021-10-17 12:29:48,324 django.utils.autoreload INFO     /home/azamat/Рабочий стол/Django/social/soc_api/service/content_service.py changed, reloading.
+2021-10-17 12:29:48,764 django.utils.autoreload INFO     Watching for file changes with StatReloader
+2021-10-17 12:30:02,125 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 12:30:16,877 django.utils.autoreload INFO     /home/azamat/Рабочий стол/Django/social/soc_api/service/content_service.py changed, reloading.
+2021-10-17 12:30:17,253 django.utils.autoreload INFO     Watching for file changes with StatReloader
+2021-10-17 12:30:22,009 django.request WARNING  Bad Request: /api/v1/posts/
+2021-10-17 12:34:02,877 django.utils.autoreload INFO     /home/azamat/Рабочий стол/Django/social/soc_api/service/content_service.py changed, reloading.
+2021-10-17 12:34:03,224 django.utils.autoreload INFO     Watching for file changes with StatReloader
+2021-10-17 12:44:46,053 django.request WARNING  Not Found: /api/v1/posts/1
+2021-10-17 12:46:39,004 django.utils.autoreload INFO     /home/azamat/Рабочий стол/Django/social/soc_api/service/content_service.py changed, reloading.
+2021-10-17 12:46:39,456 django.utils.autoreload INFO     Watching for file changes with StatReloader
+2021-10-17 12:48:07,502 django.utils.autoreload INFO     /home/azamat/Рабочий стол/Django/social/soc_api/views.py changed, reloading.
+2021-10-17 12:48:08,133 django.utils.autoreload INFO     Watching for file changes with StatReloader
+2021-10-17 12:48:18,853 django.utils.autoreload INFO     /home/azamat/Рабочий стол/Django/social/soc_api/service/content_service.py changed, reloading.
+2021-10-17 12:48:19,226 django.utils.autoreload INFO     Watching for file changes with StatReloader
+2021-10-17 12:48:21,459 django.request ERROR    Internal Server Error: /api/v1/posts/12
+Traceback (most recent call last):
+  File "/home/azamat/.var/app/com.jetbrains.PyCharm-Community/data/python/lib/python3.9/site-packages/django/core/handlers/exception.py", line 47, in inner
+    response = get_response(request)
+  File "/home/azamat/.var/app/com.jetbrains.PyCharm-Community/data/python/lib/python3.9/site-packages/django/core/handlers/base.py", line 181, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/home/azamat/.var/app/com.jetbrains.PyCharm-Community/data/python/lib/python3.9/site-packages/django/views/decorators/csrf.py", line 54, in wrapped_view
+    return view_func(*args, **kwargs)
+  File "/home/azamat/.var/app/com.jetbrains.PyCharm-Community/data/python/lib/python3.9/site-packages/django/views/generic/base.py", line 70, in view
+    return self.dispatch(request, *args, **kwargs)
+  File "/home/azamat/.var/app/com.jetbrains.PyCharm-Community/data/python/lib/python3.9/site-packages/rest_framework/views.py", line 509, in dispatch
+    response = self.handle_exception(exc)
+  File "/home/azamat/.var/app/com.jetbrains.PyCharm-Community/data/python/lib/python3.9/site-packages/rest_framework/views.py", line 469, in handle_exception
+    self.raise_uncaught_exception(exc)
+  File "/home/azamat/.var/app/com.jetbrains.PyCharm-Community/data/python/lib/python3.9/site-packages/rest_framework/views.py", line 480, in raise_uncaught_exception
+    raise exc
+  File "/home/azamat/.var/app/com.jetbrains.PyCharm-Community/data/python/lib/python3.9/site-packages/rest_framework/views.py", line 506, in dispatch
+    response = handler(request, *args, **kwargs)
+  File "/home/azamat/Рабочий стол/Django/social/soc_api/views.py", line 58, in get
+    return Response(serializer.data, status=HTTP_200_OK)
+AttributeError: 'bool' object has no attribute 'data'
+2021-10-17 12:50:27,009 django.utils.autoreload INFO     /home/azamat/Рабочий стол/Django/social/soc_api/views.py changed, reloading.
+2021-10-17 12:50:27,370 django.utils.autoreload INFO     Watching for file changes with StatReloader
+2021-10-17 12:50:29,579 django.request WARNING  I'm a Teapot: /api/v1/posts/12
+2021-10-17 12:50:38,110 django.request WARNING  Not Found: /api/v1/posts/211
+2021-10-17 12:51:47,320 django.utils.autoreload INFO     /home/azamat/Рабочий стол/Django/social/soc_api/views.py changed, reloading.
+2021-10-17 12:51:47,689 django.utils.autoreload INFO     Watching for file changes with StatReloader
+2021-10-17 12:51:50,849 django.request WARNING  Not Found: /api/v1/posts/211
+2021-10-17 12:51:54,911 django.request WARNING  Not Found: /api/v1/posts/1
+2021-10-17 12:52:06,642 django.request WARNING  Not Found: /api/v1/posts/212121212
+2021-10-17 12:52:28,847 django.request WARNING  I'm a Teapot: /api/v1/posts/11
+2021-10-17 13:38:15,627 django.utils.autoreload INFO     /home/azamat/Рабочий стол/Django/social/soc_api/service/content_service.py changed, reloading.
+2021-10-17 13:38:15,993 django.utils.autoreload INFO     Watching for file changes with StatReloader
+2021-10-17 13:38:59,022 django.utils.autoreload INFO     /home/azamat/Рабочий стол/Django/social/soc_api/models.py changed, reloading.
+2021-10-17 13:38:59,398 django.utils.autoreload INFO     Watching for file changes with StatReloader
+2021-10-17 13:47:21,405 django.utils.autoreload INFO     /home/azamat/Рабочий стол/Django/social/soc_api/views.py changed, reloading.
+2021-10-17 13:47:21,887 django.utils.autoreload INFO     Watching for file changes with StatReloader
+2021-10-17 13:54:34,172 django.utils.autoreload INFO     /home/azamat/Рабочий стол/Django/social/soc_api/service/content_service.py changed, reloading.
+2021-10-17 13:54:34,573 django.utils.autoreload INFO     Watching for file changes with StatReloader
+2021-10-17 15:31:21,248 django.utils.autoreload INFO     /home/azamat/Рабочий стол/Django/social/soc_api/views.py changed, reloading.
+2021-10-17 15:31:21,649 django.utils.autoreload INFO     Watching for file changes with StatReloader
+2021-10-17 15:31:24,511 django.request WARNING  I'm a Teapot: /api/v1/posts/11
+2021-10-17 15:31:35,432 django.utils.autoreload INFO     /home/azamat/Рабочий стол/Django/social/soc_api/service/content_service.py changed, reloading.
+2021-10-17 15:31:35,779 django.utils.autoreload INFO     Watching for file changes with StatReloader
+2021-10-17 15:32:38,383 django.utils.autoreload INFO     /home/azamat/Рабочий стол/Django/social/soc_api/service/content_service.py changed, reloading.
+2021-10-17 15:32:38,787 django.utils.autoreload INFO     Watching for file changes with StatReloader
+2021-10-17 15:33:41,529 django.utils.autoreload INFO     /home/azamat/Рабочий стол/Django/social/soc_api/service/content_service.py changed, reloading.
+2021-10-17 15:33:41,991 django.utils.autoreload INFO     Watching for file changes with StatReloader
+2021-10-17 15:33:56,891 django.utils.autoreload INFO     /home/azamat/Рабочий стол/Django/social/soc_api/service/content_service.py changed, reloading.
+2021-10-17 15:33:57,261 django.utils.autoreload INFO     Watching for file changes with StatReloader
+2021-10-17 15:33:59,524 django.request WARNING  I'm a Teapot: /api/v1/posts/
+2021-10-17 15:34:07,970 django.utils.autoreload INFO     /home/azamat/Рабочий стол/Django/social/soc_api/service/content_service.py changed, reloading.
+2021-10-17 15:34:08,335 django.utils.autoreload INFO     Watching for file changes with StatReloader
+2021-10-17 15:34:11,825 django.request WARNING  Not Found: /favicon.ico
+2021-10-17 15:47:07,526 django.utils.autoreload INFO     /home/azamat/Рабочий стол/Django/social/soc_api/views.py changed, reloading.
+2021-10-17 15:47:08,059 django.utils.autoreload INFO     Watching for file changes with StatReloader
+2021-10-17 15:48:33,127 django.utils.autoreload INFO     /home/azamat/Рабочий стол/Django/social/soc_api/views.py changed, reloading.
+2021-10-17 15:48:33,530 django.utils.autoreload INFO     Watching for file changes with StatReloader
+2021-10-17 15:48:49,787 django.request WARNING  Not Found: /api/v1/posts/1
+2021-10-17 15:51:48,256 django.utils.autoreload INFO     /home/azamat/Рабочий стол/Django/social/soc_api/views.py changed, reloading.
+2021-10-17 15:51:48,741 django.utils.autoreload INFO     Watching for file changes with StatReloader
+2021-10-17 15:51:59,794 django.request WARNING  Not Found: /api/v1/users/1
+2021-10-17 15:52:02,430 django.request WARNING  Not Found: /api/v1/users/2
+2021-10-17 15:52:04,848 django.request WARNING  Not Found: /api/v1/users/3
+2021-10-17 16:02:34,376 django.utils.autoreload INFO     /home/azamat/Рабочий стол/Django/social/soc_api/views.py changed, reloading.
+2021-10-17 16:02:34,806 django.utils.autoreload INFO     Watching for file changes with StatReloader
+2021-10-17 16:04:02,863 django.utils.autoreload INFO     /home/azamat/Рабочий стол/Django/social/soc_api/service/content_service.py changed, reloading.
+2021-10-17 16:04:03,277 django.utils.autoreload INFO     Watching for file changes with StatReloader
