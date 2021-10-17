@@ -4,7 +4,7 @@ from django.contrib.auth.models import User
 
 class Avatar(models.Model):
 	user = models.ForeignKey(User, on_delete=models.CASCADE)
-	image = models.ImageField(db_column="Аватарка", default="/static/img/me.png", upload_to="user_images")
+	image = models.ImageField(db_column="Аватарка", default="/static/img/me.png", upload_to="media/user_images")
 
 	class Meta:
 		verbose_name = "Аватар"
@@ -44,9 +44,9 @@ class Comment(models.Model):
 class Attachment(models.Model):
 	"""Таблица для хранения файлов к посту"""
 	post = models.ForeignKey(Post, on_delete=models.CASCADE)
-	photo = models.ImageField(db_column="Изображение", default=" ", upload_to="media")
-	video = models.FileField(db_column="Видео", default=" ", upload_to="videos")
-	file = models.FileField(db_column="Файл", default=" ", upload_to="files")
+	photo = models.ImageField(db_column="Изображение", default=" ", upload_to="media/images")
+	video = models.FileField(db_column="Видео", default=" ", upload_to="media/videos")
+	file = models.FileField(db_column="Файл", default=" ", upload_to="media/files")
 
 	class Meta:
 		verbose_name = "Файл"

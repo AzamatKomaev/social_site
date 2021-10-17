@@ -90,5 +90,3 @@ class UserDetail(APIView):
 
         except ObjectDoesNotExist:
             return Response({"error": f"Пользователь с именем {username} не существует."}, status=HTTP_404_NOT_FOUND)
-
-

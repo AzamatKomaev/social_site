@@ -1151,3 +1151,34 @@ AttributeError: 'bool' object has no attribute 'data'
 2021-10-17 16:02:34,806 django.utils.autoreload INFO     Watching for file changes with StatReloader
 2021-10-17 16:04:02,863 django.utils.autoreload INFO     /home/azamat/Рабочий стол/Django/social/soc_api/service/content_service.py changed, reloading.
 2021-10-17 16:04:03,277 django.utils.autoreload INFO     Watching for file changes with StatReloader
+2021-10-17 17:15:44,454 django.utils.autoreload INFO     Watching for file changes with StatReloader
+2021-10-17 17:15:46,866 django.request WARNING  Not Found: /favicon.ico
+2021-10-17 17:20:30,779 django.utils.autoreload INFO     /home/azamat/Рабочий стол/Django/social/soc_api/views.py changed, reloading.
+2021-10-17 17:20:31,232 django.utils.autoreload INFO     Watching for file changes with StatReloader
+2021-10-17 17:23:51,006 django.request WARNING  Not Found: /favicon.ico
+2021-10-17 17:24:01,647 django.request WARNING  Not Found: /favicon.ico
+2021-10-17 17:25:50,060 django.request WARNING  Not Found: /main/user_images/photo_2021-10-17_17-25-33.jpg
+2021-10-17 17:25:52,396 django.request WARNING  Not Found: /main/user_images/photo_2021-10-17_17-25-33.jpg
+2021-10-17 17:31:18,792 django.request WARNING  Not Found: /main/user_images/user_images/photo_2021-10-17_17-25-33.jpg
+2021-10-17 17:31:18,803 django.request WARNING  Not Found: /main/user_images//static/img/me.png
+2021-10-17 17:33:13,620 django.utils.autoreload INFO     /home/azamat/Рабочий стол/Django/social/soc/models.py changed, reloading.
+2021-10-17 17:33:13,995 django.utils.autoreload INFO     Watching for file changes with StatReloader
+2021-10-17 17:34:01,789 django.request WARNING  Not Found: /favicon.ico
+2021-10-17 17:34:13,663 django.request WARNING  Not Found: /favicon.ico
+2021-10-17 17:34:14,847 django.request WARNING  Not Found: /favicon.ico
+2021-10-17 17:36:03,906 django.utils.autoreload INFO     /home/azamat/Рабочий стол/Django/social/soc/models.py changed, reloading.
+2021-10-17 17:36:04,284 django.utils.autoreload INFO     Watching for file changes with StatReloader
+2021-10-17 17:39:40,559 soc.service.content_service INFO     Комментарий  2|ага был оставлен под постом 10|hello пользователем 1|Azamatik
+2021-10-17 17:41:01,808 soc.service.content_service INFO     Комментарий  3|сысысы был оставлен под постом 10|hello пользователем 1|Azamatik
+2021-10-17 17:41:01,877 django.request WARNING  Not Found: /favicon.ico
+2021-10-17 17:41:06,623 soc.service.content_service INFO     Комментарий  4|сысысы
+сы
+сы
+с
+ыс
+ы
+с
+ы
+ыс
+сы был оставлен под постом 10|hello пользователем 1|Azamatik
+2021-10-17 17:42:43,902 django.request WARNING  Not Found: /main/api/v1

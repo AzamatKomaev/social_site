@@ -33,7 +33,7 @@
 		{% for post in posts %}
 		<div class="card border-secondary">
 			<div class="card-header bg-secondary text-white">
-				<img src="{{ post.user.avatar_set.get.image }}" class="rounded float-left" alt="avatar" style="width:65px;"><br><br><br>
+				<img src="media/{{ post.user.avatar_set.get.image }}" class="rounded-circle float-left" alt="avatar" style="width:65px;"><br><br><br>
 				<a href="{% url 'profile' username=post.user %}" class="text-white" style="font-size:17pt;">{{ post.user }}</a><br>
 				<p class="text-info">{{ post.user.groups.get }}</p>
 			</div>
