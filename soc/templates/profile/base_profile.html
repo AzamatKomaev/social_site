@@ -23,15 +23,63 @@
 		<div class="tab-pane fade show active" id="home">
 			<div class="row">
 				<div class="col-12 col-sm-11 col-md-3 col-lg-3">
-					<img src="/main{{ active_user.avatar_set.get.image.url }}" alt="avatar" class="w-100"><br>
+					<img src="/main{{ active_user.avatar_set.get.image.url }}" alt="avatar" class="rounded w-100"><br><br>
+					<button type="button" class="btn btn-outline-secondary btn-block">Редактировать</button>
+					<br><br>
 				</div>
-				<br><br>
 				<div class="col-12 col-sm-11 col-md-8 col-lg-8">
 					<p style="font-size: 20pt;">{{ active_user }}</p>
-					<p class="text-info">{{ active_user.groups.get }}</p>
-					<p>{{ active_user.email }}</p>
+					<p class="text-info" style="margin-top:-15px;">{{ active_user.groups.get }}</p>
+					<hr style="border-color: red;">
+					<div id="user_second_data">
+						<p><u>Почта</u>: {{ active_user.email }}</p>
+						{% if active_user.first_name and active_user.last_name %}
+							<p><u>Имя</u>: {{ active_user.first_name }}</p>
+							<p style="margin-top: -20px;"><u>Фамилия</u>: {{ active_user.last_name }}</p>
+						{% endif %}
+					</div>
 				</div>
 			</div>
+			<br><br>
+			<div class="row">
+				<div class="col">
+					<div class="all_posts">
+						{% for post in user_posts %}
+						<div class="card border-secondary">
+							<div class="card-header bg-secondary text-white">
+								<img src="/main{{ post.user.avatar_set.get.image.url }}" class="rounded-circle float-left" alt="avatar" style="width:65px;"><br><br><br>
+								<a href="{% url 'profile' username=post.user %}" class="text-white" style="font-size:17pt;">{{ post.user }}</a><br>
+								<p class="text-info">{{ post.user.groups.get }}</p>
+							</div>
+
+							<div class="card-body">
+								<a href="{% url 'post' id=post.id %}" class="text-dark" style="text-decoration: none;">
+									<h4>{{ post.title }}</h4>
+									{{ post.text|linebreaksbr }}
+									{% with post.attachment_set.all as attachs %}
+										{% for attach in attachs %}
+											{% if attach.photo %}
+												<br><br><br>
+												<p style="text-align: center;"><img class="img-fluid" src="/main{{ attach.photo.url }}" alt="image"></p>
+											{% endif %}
+										{% endfor %}
+									{% endwith %}
+								</a>
+							</div>
+							<div class="card-footer">{{ post.created_at }}</div>
+						</div>
+						<br><br>
+						{% endfor %}
+					</div>
+
+
+
+
+
+				</div>
+			</div>
+
+
 		</div>
 		{% if active_user == request.user %}
 			<div class="tab-pane" id="settings">

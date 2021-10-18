@@ -16,7 +16,8 @@ from .service.content_service import (
     get_form_and_create_comment,
     get_post_data,
     insert_into_post_table,
-    get_post_and_comments
+    get_post_and_comments,
+    get_data_about_user
 )
 
 from .forms import (
@@ -129,20 +130,24 @@ def accept_password(request, token: str):
         return redirect("error404")
 
 
-def register_done(request):
-    """Вьюшка для отображения успешной регистраций"""
-    return render(request, "soc/register_done.html")
-
-
 def show_profile(request, username: str):
     template_name = "profile/base_profile.html"
     try:
-        user = User.objects.get(username=username)
+        user_data = get_data_about_user(username)
         return render(request, template_name, {
-            'active_user': user
+            'active_user': user_data['user'],
+            'user_posts': user_data['user_posts']
         })
     except ObjectDoesNotExist:
         return redirect("error404")
+
+
+def show_all_users(request):
+    template_name = "soc/all_users.html"
+    users = User.objects.all().order_by('-pk')
+    return render(request, template_name, {
+        'users': users
+    })
 
 
 def password_is_send_success(request):
@@ -158,9 +163,6 @@ def return_error404(request):
     return render(request, "soc/error404.html")
 
 
-def show_all_users(request):
-    template_name = "soc/all_users.html"
-    users = User.objects.all().order_by('-pk')
-    return render(request, template_name, {
-        'users': users
-    })
+def register_done(request):
+    """Вьюшка для отображения успешной регистраций"""
+    return render(request, "soc/register_done.html")

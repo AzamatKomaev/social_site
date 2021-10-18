@@ -52,3 +52,12 @@ def get_post_and_comments(id: int) -> dict:
         'comments': comments
     }
 
+
+def get_data_about_user(username: str) -> dict:
+    """Получаем данные о пользователе для их отображения в личном профиле."""
+    user = User.objects.get(username=username)
+    user_posts = Post.objects.filter(user_id=user.id).order_by("-created_at")
+    return {
+        'user': user,
+        'user_posts': user_posts
+    }
