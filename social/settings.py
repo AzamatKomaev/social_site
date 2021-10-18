@@ -54,6 +54,8 @@ REST_FRAMEWORK = {
 INSTALLED_APPS = [
     'soc',
     'soc_api',
+    'chat',
+
     'rest_framework',
     'rest_framework.authtoken',
 

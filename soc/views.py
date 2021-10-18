@@ -138,9 +138,8 @@ def show_profile(request, username: str):
     template_name = "profile/base_profile.html"
     try:
         user = User.objects.get(username=username)
-        print(user)
         return render(request, template_name, {
-            'registred_user': user
+            'active_user': user
         })
     except ObjectDoesNotExist:
         return redirect("error404")

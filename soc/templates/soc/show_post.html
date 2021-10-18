@@ -12,7 +12,7 @@
     <div class="card border-secondary">
         <div class="card border-secondary">
 			<div class="card-header bg-secondary text-white">
-				<img src="media/{{ post.user.avatar_set.get.image }}" class="rounded-circle float-left" alt="avatar" style="width:60px;"><br><br><br>
+				<img src="/main{{ post.user.avatar_set.get.image.url }}" class="rounded-circle float-left" alt="avatar" style="width:60px;"><br><br><br>
 				<a href="{% url 'profile' username=post.user %}" class="text-white" style="font-size:21pt;">{{ post.user }}</a><br>
 				<p class="text-info">{{ post.user.groups.get.name }}</p>
 			</div>
@@ -24,7 +24,7 @@
 					{% for attach in attachs %}
 						{% if attach.photo %}
 							<br><br><br>
-							<p style="text-align: center;"><img class="img-fluid" src="media/{{ attach.photo }}" alt="image"></p>
+							<a href="/main{{ attach.photo.url }}"><p style="text-align: center;"><img class="img-fluid" src="/main{{ attach.photo.url }}" alt="image"></p></a>
 						{% endif %}
 					{% endfor %}
 				{% endwith %}
@@ -56,7 +56,7 @@
 	{% for comment in comments %}
 		<div class="card border-secondary">
 			<div class="card-header bg-secondary text-white">
-				<img src="media/{{ post.user.avatar_set.get.image }}" alt="avatar" class="rounded-circle float-left" style="width:60px;"><br><br><br>
+				<img src="/main{{ comment.user.avatar_set.get.image.url }}" alt="avatar" class="rounded-circle float-left" style="width:60px;"><br><br><br>
 				<a href="{% url 'profile' username=comment.user %}" class="text-white" style="font-size:17pt;">{{ comment.user }}</a><br>
 				<p class="text-info">{{ comment.user.groups.get.name }}</p>
 			</div>
