@@ -52,6 +52,8 @@ REST_FRAMEWORK = {
 
 
 INSTALLED_APPS = [
+    'channels',
+
     'soc',
     'soc_api',
     'chat',
@@ -65,7 +67,6 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-
 ]
 
 MIDDLEWARE = [
@@ -129,11 +130,8 @@ LANGUAGE_CODE = 'ru'
 
 TIME_ZONE = 'Europe/Moscow'
 UZE_TZ = True
-
 USE_I18N = True
-
 USE_L10N = True
-
 USE_TZ = True
 
 
@@ -159,3 +157,14 @@ EMAIL_HOST_PASSWORD = private.PASSWORD_FROM_EMAIL
 EMAIL_USE_TLS = True
 EMAIL_USE_SSL = False
 
+
+ASGI_APPLICATION = 'social.asgi.application'
+
+CHANNEL_LAYERS = {
+    'default': {
+        'BACKEND': 'channels_redis.core.RedisChannelLayer',
+        'CONFIG': {
+            "hosts": [('127.0.0.1', 6379)],
+        },
+    },
+}
