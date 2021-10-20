@@ -1,4 +1,4 @@
-<!-- chat/templates/chat/room.html -->
+<!-- chat_on_delete/templates/chat_on_delete/room.html -->
 <!DOCTYPE html>
 <html>
 <head>
@@ -6,7 +6,12 @@
     <title>Chat Room</title>
 </head>
 <body>
-    <textarea id="chat-log" cols="100" rows="20"></textarea><br>
+    <textarea id="chat-log" cols="100" rows="20">
+        {% for message in messages %}
+            {{ message.user }}|{{ message.text }}
+        {% endfor %}
+    </textarea><br>
+
     <input id="chat-message-input" type="text" size="100"><br>
     <input id="chat-message-submit" type="button" value="Send">
     {{ room_name|json_script:"room-name" }}
@@ -42,8 +47,7 @@
             const messageInputDom = document.querySelector('#chat-message-input');
             const message = messageInputDom.value;
             chatSocket.send(JSON.stringify({
-                'message': message,
-                'user': "Azamatik"
+                'message': message
             }));
             messageInputDom.value = '';
         };

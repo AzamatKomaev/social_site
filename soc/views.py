@@ -27,6 +27,7 @@ from .forms import (
 )
 from .models import Post
 
+
 #add logger
 logger = logging.getLogger(__name__)
 
@@ -34,7 +35,7 @@ logger = logging.getLogger(__name__)
 def show_all_post(request):
     """Функция для отображения всех постов"""
     template_name = "soc/post.html"
-    posts = Post.objects.order_by('-pk')
+    posts = Post.objects.all().order_by('-pk')
     if request.user.is_authenticated:
         group = return_user_group(request.user)
         return render(request, template_name, {
