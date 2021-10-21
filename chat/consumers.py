@@ -13,12 +13,10 @@ from chat.models import Message, Chat
 
 logger = logging.getLogger(__name__)
 
-
-@database_sync_to_async
-def is_user_in_chat(room_name: str, user: str) -> bool:
-    """Проверяем состоит ли юзер в беседе."""
-    return user in Chat.objects.get(name=room_name).users.all()
-
+"""
+DONT FORGET TO START REDIS:
+sudo docker run -p 6379:6379 -d redis:5
+"""
 
 @sync_to_async
 def create_message(message: str, room_name: str, user) -> Message:
@@ -34,9 +32,6 @@ class ChatConsumer(AsyncWebsocketConsumer):
         self.room_name = self.scope['url_route']['kwargs']['chat_name']
         self.chat_group_name = 'chat_%s' % self.room_name
         self.user = self.scope['user']
-
-        #if not await is_user_in_chat(self.room_name, self.user):
-        #    return redirect("error404")
 
         await self.channel_layer.group_add(
             self.chat_group_name,
