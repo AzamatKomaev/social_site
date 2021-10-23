@@ -9,6 +9,8 @@ from soc_api.serializers import PostSerializer, UserSerializer
 
 
 class BaseService:
+    """Родительский класс базового представления биизнес логики."""
+
     def __init__(self, request):
         self.request = request
         self.key = request.META["HTTP_AUTHORIZATION"].split()[1]
@@ -30,6 +32,7 @@ class BaseService:
 
 
 class PostService(BaseService):
+    """Бизнес логика со всем, что связано с постами."""
 
     def get_serializer(self) -> Union[PostSerializer or bool]:
         """Метод для возврата сериализатора get-запроса"""
@@ -58,6 +61,7 @@ class PostService(BaseService):
 
 
 class UserService(BaseService):
+    """Бизнес логика со всем, что связано с пользователями."""
 
     def get_serializer(self) -> Union[UserSerializer or bool]:
         users = User.objects.all().order_by('-id')
@@ -78,3 +82,4 @@ class UserService(BaseService):
             return False
 
         return serializer
+
