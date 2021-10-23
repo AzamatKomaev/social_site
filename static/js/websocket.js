@@ -11,7 +11,18 @@ const chatSocket = new WebSocket(
 chatSocket.onmessage = function(e) {
     console.log(e);
     const data = JSON.parse(e.data);
-    document.querySelector('#chat-log').innerHTML += '<p style="font-size: 20pt;">' + data.user + ' || ' + data.message + '\n' + '</p>'
+    document.querySelector('#chat-window').innerHTML += `
+              <div class="chat-message-left pb-4" style="width:80%; margin: auto;">
+                  <div>
+                      <img src="/main${data.avatar}" class="rounded-circle mr-1" alt="${data.user}" width="40" height="40">
+                  </div>
+                  <div class="flex-shrink-1 bg-light rounded py-2 px-3 mr-3">
+                      <div class="font-weight-bold mb-1">You</div>
+                      ${data.message}<br>
+                      <div class="text-muted small text-nowrap mt-2">${data.created_at}</div>
+                  </div>
+              </div>
+          `
 };
 
 chatSocket.onclose = function(e) {

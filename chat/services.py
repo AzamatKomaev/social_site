@@ -1,6 +1,6 @@
 from django.contrib.auth.models import User
 
-from chat.models import Chat
+from chat.models import Chat, Message
 
 
 def can_user_to_join_in_group(room_name: str, user: User) -> bool:
@@ -9,3 +9,12 @@ def can_user_to_join_in_group(room_name: str, user: User) -> bool:
         return True
 
     return False
+
+
+def get_data_about_room(chat_name: str) -> dict:
+    chat = Chat.objects.get(name=chat_name)
+    messages = Message.objects.filter(chat=chat)
+    return {
+        'messages': messages,
+        'chat': chat
+    }

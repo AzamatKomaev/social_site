@@ -2,14 +2,11 @@ import logging
 import json
 
 from asgiref.sync import sync_to_async
-from channels.db import database_sync_to_async
+from django.utils import dateformat, timezone
 from channels.generic.websocket import AsyncWebsocketConsumer
 
-from django.shortcuts import redirect
-from django.core.exceptions import ObjectDoesNotExist
-
 from chat.models import Message, Chat
-
+from social.settings import DATETIME_FORMAT
 
 logger = logging.getLogger(__name__)
 
@@ -18,15 +15,19 @@ DONT FORGET TO START REDIS:
 sudo docker run -p 6379:6379 -d redis:5
 """
 
-@sync_to_async
-def create_message(message: str, room_name: str, user) -> Message:
-    chat = Chat.objects.get(name=room_name)
-    message = Message.objects.create(text=message, user_id=user.id, chat_id=chat.id)
-    return message
-
 
 class ChatConsumer(AsyncWebsocketConsumer):
     user = ""
+
+    @sync_to_async
+    def create_message_and_get_data(self, message: str, room_name: str, user) -> dict:
+        chat = Chat.objects.get(name=room_name)
+        message = Message.objects.create(text=message, user_id=user.id, chat_id=chat.id)
+        avatar = message.user.avatar_set.get().image.url
+        return {
+            'avatar': avatar,
+            'message': message
+        }
 
     async def connect(self):
         self.room_name = self.scope['url_route']['kwargs']['chat_name']
@@ -37,7 +38,6 @@ class ChatConsumer(AsyncWebsocketConsumer):
             self.chat_group_name,
             self.channel_name
         )
-
         await self.accept()
 
     async def disconnect(self, close_code):
@@ -49,24 +49,29 @@ class ChatConsumer(AsyncWebsocketConsumer):
 
     async def receive(self, text_data):
         text_data_json = json.loads(text_data)
-        message = text_data_json['message']
-        await create_message(message, self.room_name, self.user)
+        data = await self.create_message_and_get_data(text_data_json['message'], self.room_name, self.user)
+        created_at = dateformat.format(data['message'].created_at, DATETIME_FORMAT)
 
         await self.channel_layer.group_send(
             self.chat_group_name,
             {
                 'type': 'chat_message',
                 'user': self.user.username,
-                'message': message
+                'message': data['message'].text,
+                'avatar': data['avatar'],
+                'created_at': str(created_at)
             }
         )
 
     async def chat_message(self, event):
-        message = event['message']
         user = event['user']
+        message = event['message']
+        avatar = event['avatar']
+        created_at = event['created_at']
 
         await self.send(text_data=json.dumps({
+            'user': user,
+            'avatar': avatar,
             'message': message,
-            'user': user
+            'created_at': created_at
         }))
-

@@ -1,350 +1,43 @@
-.head_shapka {
-    width: 100%;
-	background: black;
-	height: 150px;
-	border-width:12px; 
-	border-color: BlueViolet;                               
-	border-style: solid;
+.chat-online {
+    color: #34ce57
 }
 
-.post {
-    background: LightGreen; 
-    margin:0 25% 0 25%;
-    width:50%; 
-    border-width:10px; 
-    border-color: rgb(190,190,190); 
-    border-style: solid;
-    word-wrap: break-word; 
+.chat-offline {
+    color: #e4606d
 }
 
-.addpost {
-    margin:0 20% 0 20%;
-    width:60%; 
-    border-width:11px; 
-    border-color: black; 
-    border-style: solid;
-    height:900px;
+.chat-messages {
+    display: flex;
+    flex-direction: column;
+    max-height: 800px;
+    overflow-y: scroll
 }
 
-.comment {
-    background:white;
+.chat-message-left,
+.chat-message-right {
+    display: flex;
+    flex-shrink: 0
 }
 
-.full_post {
-    width:78%; 
-    margin: 0 11% 0 11%;
-    border-width:10px; 
-    border-color: rgb(190,190,190); 
-    border-style: solid; 
-    background: LightGreen
+.chat-message-left {
+    margin-right: auto
 }
 
-.full_comment {
-    background:Aqua;
-    width:80%;
-    margin: 0 10% 0 10%;
-    border-width:3px;
-    border-color: black;
-    border-style: solid;
+.chat-message-right {
+    flex-direction: row-reverse;
+    margin-left: auto
 }
-
-.sign_in {
-    margin-left:35%;
-    width:20%;
-    background: LightGreen;
+.py-3 {
+    padding-top: 1rem!important;
+    padding-bottom: 1rem!important;
 }
-
-.add_comment {
-    width:70%; 
-    margin: 0 15% 0 15%; 
-    background:black; 
-    height:235px; 
-    border-width:5px; 
-    border-color: LightGreen; 
-    border-style: solid;
+.px-4 {
+    padding-right: 1.5rem!important;
+    padding-left: 1.5rem!important;
 }
-
-.welcome_msg {
-    background: Aqua; 
-    margin:0 15% 0 15%;
-    width:70%; 
-    border-width:5px; 
-    border-color: rgb(190,190,190); 
-    border-style: solid;
-    word-wrap: break-word; 
+.flex-grow-0 {
+    flex-grow: 0!important;
 }
-
-.buttons {
-    margin-left:1%;
-    margin-top:50px;
+.border-top {
+    border-top: 1px solid #dee2e6!important;
 }
-
-.yellow_button {
-      display: inline-block;
-      background: yellow;
-      color: black;
-      padding: 17px;
-      border-radius: 3px;
-      text-decoration: none;
-      font-family: Tahoma;
-      font-size: 20px;
-      line-height: 1;
-      font-weight: 100;
-}
-
-.blue_button {
-      display: inline-block;
-      background: #2196f3;
-      color: #fff;
-      padding: 12px;
-      border-radius: 3px;
-      text-decoration: none;
-      font-family: Tahoma;
-      font-size: 18px;
-      line-height: 1;
-      font-weight: 100;
-}
-
-.red_button {
-      display: inline-block;
-      background: red;
-      color: white;
-      padding: 14px;
-      border-radius: 3px;
-      text-decoration: none;
-      font-family: Tahoma;
-      font-size: 25px;
-      line-height: 1;
-      font-weight: 100;
-}
-
-.button_join {
-      display: inline-block;
-      background: LightGreen;
-      color: black;
-      padding: 14px;
-      border-radius: 3px;
-      text-decoration: none;
-      font-family: Tahoma;
-      font-size: 25px;
-      line-height: 1;
-      font-weight: 120;    
-}
-
-.button_reg {
-      display: inline-block;
-      background: Aqua;
-      color: black;
-      padding: 14px;
-      border-radius: 3px;
-      text-decoration: none;
-      font-family: Tahoma;
-      font-size: 25px;
-      line-height: 1;
-      font-weight: 120;    
-}
-
-.profile_button {
-      display: inline-block;
-      background: #2196f3;
-      color: #fff;
-      padding: 18px;
-      border-radius: 3px;
-      text-decoration: none;
-      font-family: Tahoma;
-      font-size: 20px;
-      line-height: 1;
-      font-weight: 100;
-}
-
-.btn-group {
-    margin-left:80%;
-    margin-top: 10px;
-    cursor: pointer; /* Pointer/hand icon */
-}
-
-.aqua_button {
-    display: inline-block;
-    background: Aqua;
-    color: black;
-    padding: 12px;
-    border-radius: 3px;
-    text-decoration: none;
-    font-family: Tahoma;
-    font-size: 18px;
-    line-height: 1;
-    font-weight: 100;
-}
-
-    
-.name_social {
-    text-decoration:none; 
-    color: white;             
-    position: absolute;
-    left:30px;
-}
-
-.data_post {
-    background: white;
-}
-
-
-
-.avatar {
-    width:80px; 
-    height: 80px; 
-    border-radius: 50%; 
-    margin-left: 35px; 
-    margin-top: 30px;
-}
-
-.avatar_comment {
-    width:70px; 
-    height: 70px; 
-    border-radius: 50%; 
-    margin-left: 20px; 
-    margin-top: 15px;
-}
-
-
-.username {
-    font-size:15pt; 
-    margin-left: 170px; 
-    margin-top: -80px;
-}
-
-.username_comment {
-    font-size:12pt; 
-    margin-left: 170px; 
-    margin-top: -80px;
-}
-
-.group {
-    font-size:15pt; 
-    margin-left:170px;
-    margin-top: 0px;
-}
-
-.group_comment {
-    font-size:15pt; 
-    margin-left:170px;
-    margin-top: 0px;
-}
-
-.name_url {
-    text-decoration:none; 
-    color: black;
-}
-
-
-.comment_text {
-    font-size:15pt;
-    margin-left: 1%;
-    word-wrap: break-word;
-}
-
-.attach_photo {
-    width: 50%; 
-    float: center;
-}
-
-.attach_photo_full {
-    width: 75%;
-    float: center;
-}
-
-.post_created_at {
-    font-size: 10pt; 
-    float: right;
-}
-
-.btn-group button:not(:last-child) {
-    border-right: none; 
-}
-
-
-.btn-group:after {
-    content: "";
-    clear: both;
-    display: table;
-}
-
-.reset_pwd {
-    background: LightGreen;
-    width:18%;
-    margin-left: 36%;
-}
-
-.reset_but {
-    margin-left: 50%;
-}
-
-
-.change_password {
-    width:30%;
-    margin:0 35% 0 35%;
-    background: LightGreen;
-}
-
-
-#id_username {
-    width: 60%;
-    font-size: 15px;
-}
-
-#id_password {
-    width: 60%;
-    font-size: 15px;
-}
-
-#id_email {
-    width: 75%;
-    font-size: 15px;
-}
-
-.change_password {
-    width: 30%;
-    margin: 0 35% 0 35%;
-    background: LightGreen;
-}
-
-.new_password {
-    width: 70%;
-    font-size: 15px;
-}
-
-.pwd_change_done {
-    width: 70;
-    margin: 0 15% 0 15%;
-    background: LightGreen;
-}
-
-#exit_and_join {
-    width: 60%;
-    height: 200px;
-    margin: 0 20% 0 20%;
-    background: LightGreen;
-}
-
-li {
-    list-style-type: none;
-}
-
-textarea {
-    resize: none;
-}
-
-.profile {
-    float: right;
-    width: 65%;
-    margin-left:10px;
-}
-
-.left_menu {
-    float: left;
-    width: 10%;
-    background: Grey;
-    height: 1000px;
-}
-
-

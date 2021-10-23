@@ -1,5 +1,8 @@
+from datetime import datetime
+
 from django.db import models
 from django.contrib.auth.models import User
+from django.utils import timezone
 
 
 class Chat(models.Model):
@@ -21,6 +24,10 @@ class Message(models.Model):
     created_at = models.DateTimeField(auto_now=True)
     chat = models.ForeignKey(Chat, on_delete=models.CASCADE, default=None)
     user = models.ForeignKey(User, on_delete=models.CASCADE, default=None)
+
+    def was_created_minutes_ago(self):
+        difference = timezone.now() - self.created_at
+        return difference
 
     def __str__(self):
         return self.text
