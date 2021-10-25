@@ -4,4 +4,4 @@ __pycache__
 debug.log
 crontab.txt
 env
-soc/db_access.py
+/soc/db_access.py
