@@ -90,3 +90,8 @@ no such table: auth_user
 no such table: auth_user
 no such table: auth_user
 no such table: auth_user
+operator does not exist: boolean = integer
+LINE 1: ...E date_joined < NOW() + interval '-1 day' AND is_active = 0;
+                                                                   ^
+HINT:  No operator matches the given name and argument types. You might need to add explicit type casts.
+
