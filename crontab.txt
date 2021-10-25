@@ -65,3 +65,28 @@ Non-active users were deleted at 2021-10-22 22:10:01.374334
 Non-active users were deleted at 2021-10-23 09:10:01.554166
 Non-active users were deleted at 2021-10-23 10:10:01.726439
 Non-active users were deleted at 2021-10-23 11:10:01.865014
+no such table: auth_user
+no such table: auth_user
+no such table: auth_user
+no such table: auth_user
+no such table: auth_user
+no such table: auth_user
+error!!!!!
+no such table: auth_user
+no such table: auth_user
+no such table: auth_user
+no such table: auth_user
+no such table: auth_user
+no such table: auth_user
+no such table: auth_user
+no such table: auth_user
+no such table: auth_user
+no such table: auth_user
+no such table: auth_user
+no such table: auth_user
+no such table: auth_user
+error!!!!!
+no such table: auth_user
+no such table: auth_user
+no such table: auth_user
+no such table: auth_user

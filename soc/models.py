@@ -5,10 +5,14 @@ from django.contrib.auth.models import User
 class Avatar(models.Model):
 	user = models.ForeignKey(User, on_delete=models.CASCADE)
 	image = models.ImageField(default="/static/img/me.png", upload_to="media/user_images")
+	created_at = models.DateTimeField(auto_now_add=True)
 
 	class Meta:
 		verbose_name = "Аватар"
 		verbose_name_plural = "Аватарки"
+
+	def __str__(self):
+		return f"Аватарка пользователя {self.user}"
 
 
 class Post(models.Model):
@@ -16,7 +20,7 @@ class Post(models.Model):
 	user = models.ForeignKey(User, on_delete=models.CASCADE)
 	title = models.CharField(max_length=200)
 	text = models.TextField()
-	created_at = models.DateTimeField(auto_now=True)
+	created_at = models.DateTimeField(auto_now_add=True)
 
 	class Meta:
 		verbose_name = "Пост"
@@ -31,7 +35,7 @@ class Comment(models.Model):
 	user = models.ForeignKey(User, on_delete=models.CASCADE)
 	post = models.ForeignKey(Post, on_delete=models.CASCADE)
 	text = models.TextField(default=None)
-	created_at = models.DateTimeField(auto_now=True)
+	created_at = models.DateTimeField(auto_now_add=True)
 
 	class Meta:
 		verbose_name = "Комментарий"
@@ -47,6 +51,7 @@ class Attachment(models.Model):
 	photo = models.ImageField(default=" ", upload_to="media/images")
 	video = models.FileField(default=" ", upload_to="media/videos")
 	file = models.FileField(default=" ", upload_to="media/files")
+	created_at = models.DateTimeField(auto_now_add=True)
 
 	class Meta:
 		verbose_name = "Файл"
@@ -54,17 +59,3 @@ class Attachment(models.Model):
 
 	def __str__(self):
 		return f"Attachment for post {self.post}"
-
-
-class Token(models.Model):
-	"""Таблица для хранения токенов регистраций."""
-	user = models.OneToOneField(User, on_delete=models.CASCADE, unique=True)
-	token = models.TextField(max_length=30)
-	created_at = models.DateTimeField(auto_now=True)
-
-	class Meta:
-		verbose_name = "Токен"
-		verbose_name_plural = "Токены"
-
-	def __str__(self):
-		return f"Token {self.token}"

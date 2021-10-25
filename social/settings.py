@@ -57,6 +57,8 @@ INSTALLED_APPS = [
     'soc',
     'soc_api',
     'chat',
+    'soc_profile',
+    'soc_auth',
 
     'rest_framework',
     'rest_framework.authtoken',

@@ -5,7 +5,10 @@ from chat import views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+
     path('main/', include('soc.urls')),
+    path('users/', include('soc_profile.urls')),
+    path('auth/', include('soc_auth.urls')),
     path('api/v1/', include('soc_api.urls')),
 
     path('chat/', include('chat.urls')),
