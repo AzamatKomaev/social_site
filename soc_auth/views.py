@@ -56,7 +56,7 @@ def check_perms(request):
 
 def return_error404(request):
     template_name = "soc_auth/error404.html"
-    return render(request, template_name)
+    return render(request, template_name, status=404)
 
 
 def register_done(request):

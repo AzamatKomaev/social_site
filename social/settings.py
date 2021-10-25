@@ -80,7 +80,7 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 
-    'soc.middleware.RegisteredUserMiddleware',
+    'soc_auth.middleware.RegisteredUserMiddleware',
 ]
 
 ROOT_URLCONF = 'social.urls'

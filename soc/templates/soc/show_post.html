@@ -8,41 +8,45 @@
 <br>
 <br>
 
-<div class="main" style="width: 90%; margin: 0 5% 0 5%;">
-    <div class="card border-secondary">
-        <div class="card border-secondary">
-			<div class="card-header bg-secondary text-white">
-				<img src="/main{{ post.user.avatar_set.get.image.url }}" class="rounded-circle float-left" alt="avatar" style="width:60px;"><br><br><br>
-				<a href="{% url 'profile' username=post.user %}" class="text-white" style="font-size:21pt;">{{ post.user }}</a><br>
-				<p class="text-info">{{ post.user.groups.get.name }}</p>
-			</div>
+<div class="container-fluid">
+	<div class="row">
+		<div class="col-12 col-sm-11 col-lg-9 mx-auto">
+			<div class="card border-secondary">
+				<div class="card border-secondary">
+					<div class="card-header bg-secondary text-white">
+						<img src="/main{{ post.user.avatar_set.get.image.url }}" class="rounded-circle float-left" alt="avatar" style="width:60px;"><br><br><br>
+						<a href="{% url 'profile' username=post.user %}" class="text-white" style="font-size:21pt;">{{ post.user }}</a><br>
+						<p class="text-info">{{ post.user.groups.get.name }}</p>
+					</div>
 
-			<div class="card-body">
-				<h4>{{ post.title }}</h4>
-				{{ post.text|linebreaksbr }}
-				{% with post.attachment_set.all as attachs %}
-					{% for attach in attachs %}
-						{% if attach.photo %}
-							<br><br><br>
-							<a href="/main{{ attach.photo.url }}"><p style="text-align: center;"><img class="img-fluid" src="/main{{ attach.photo.url }}" alt="image"></p></a>
-						{% endif %}
-					{% endfor %}
-				{% endwith %}
+					<div class="card-body">
+						<h4>{{ post.title }}</h4>
+						{{ post.text|linebreaksbr }}
+						{% with post.attachment_set.all as attachs %}
+							{% for attach in attachs %}
+								{% if attach.photo %}
+									<br><br><br>
+									<a href="/main{{ attach.photo.url }}"><p style="text-align: center;"><img class="img-fluid" src="/main{{ attach.photo.url }}" alt="image"></p></a>
+								{% endif %}
+							{% endfor %}
+						{% endwith %}
+					</div>
+					<div class="card-footer">{{ post.created_at }}</div>
+					<br>
+				</div>
 			</div>
-			<div class="card-footer">{{ post.created_at }}</div>
-			<br>
-        </div>
-    </div>
+		</div>
+	</div>
 </div>
 <br><br><br><br>
 
 <h1 style="margin-left:15%;">Коментарий: <b class="text-info">{{ post.comment_set.all.count }}</b></h1>
 <br><br>
 <div class="comments" style="width:70%; margin: 0 15% 0 15%;">
-	<form method="POST">
+	<form method="POST" action="" onsubmit="setTimeout(function () { window.location.reload(); }, 10)">
 		{% csrf_token %}
 		<div class="form-group">
-			<textarea id="id_text" name="text" rows="5" class="form-control" spellcheck="false" placeholder="Добавить пост..."></textarea>
+			<textarea id="id_text" name="text" rows="5" class="form-control" spellcheck="false" placeholder="Добавить комментарий..."></textarea>
 			<p class="form-text text-muted" style="font-size:10pt;">Пожалуйста, уважайте своих собеседников!</p>
 		</div>
 		<div class="form-group row">

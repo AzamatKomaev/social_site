@@ -1,23 +1,10 @@
+{% extends 'soc/base.html' %}
+
 {% load static %}
-<!DOCTYPE html>
-<html>
-<head>
-    <meta charset="utf-8"/>
-    <title>Chat Room</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
-    <link rel="stylesheet" href="{% static 'css/style.css' %}">
-</head>
-<body>
-    <!--
-    <section id="chat-log" style="width:50%; height:700px; overflow-y: scroll;">
-        {% for message in messages %}
-            <p style="font-size: 20pt;">{{ message.user }} || {{message.text}}<br></p>
-        {% endfor %}
-    </section>
-    -->
 
 
+{% block title %}Chat Room{% endblock %}
+{% block content %}
     <main class="content">
         <div class="container p-0">
 
@@ -38,7 +25,7 @@
 
               {% with members=chat.users.all %}
                   {% for member in members %}
-                      <a href="#" class="list-group-item list-group-item-action border-0">
+                      <a href="{% url 'profile' username=member.username %}" class="list-group-item list-group-item-action border-0">
                           <div class="d-flex align-items-start">
                               <img src="/main{{ member.avatar_set.get.image.url }}" class="rounded-circle mr-1" alt="{{ member.username }}" width="40" height="40">
                               <div class="flex-grow-1 ml-3">
@@ -73,10 +60,10 @@
                           {% if message.user == request.user %}
                               <div class="chat-message-right pb-4" style="width:70%;">
                                   <div>
-                                      <img src="/main{{ message.user.avatar_set.get.image.url }}" class="rounded-circle mr-1" alt="{{ message.user }}" width="40" height="40">
+                                      <img src="/main{{ message.user.avatar_set.get.image.url }}" class="rounded-circle mr-1" alt="you" width="40" height="40">
                                   </div>
                                   <div class="flex-shrink-1 bg-light rounded py-2 px-3 mr-3">
-                                      <div class="font-weight-bold mb-1">You</div>
+                                      <div class="font-weight-bold mb-1"><a href="{% url 'profile' username=message.user.username %}" style="text-decoration: none; color: black;">Вы</a></div>
                                       {{ message.text|linebreaksbr }}
                                       <div class="text-muted small text-nowrap mt-2">{{ message.created_at }}</div>
                                   </div>
@@ -84,10 +71,10 @@
                           {% else %}
                               <div class="chat-message-left pb-4" style="width:70%;">
                                   <div>
-                                      <img src="/main{{ message.user.avatar_set.get.image.url }}" class="rounded-circle mr-1" alt="YOU" width="40" height="40">
+                                      <img src="/main{{ message.user.avatar_set.get.image.url }}" class="rounded-circle mr-1" alt="{{ message.user }}" width="40" height="40">
                                   </div>
                                   <div class="flex-shrink-1 bg-light rounded py-2 px-3 ml-3">
-                                      <div class="font-weight-bold mb-1">{{ message.user }}</div>
+                                      <div class="font-weight-bold mb-1"><a href="{% url 'profile' username=message.user.username %}" style="text-decoration: none; color: black;">{{ message.user.username }}</a></div>
                                       {{ message.text|linebreaksbr }}
                                       <div class="text-muted small text-nowrap mt-2">{{ message.created_at }}</div>
                                   </div>
@@ -116,5 +103,4 @@
       </div>
     </main>
     <script src="{% static 'js/websocket.js' %}"></script>
-</body>
-</html>
+{% endblock %}
