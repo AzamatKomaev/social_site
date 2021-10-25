@@ -1,5 +1,8 @@
 from datetime import datetime
-import sqlite3
+
+from django.conf import settings
+import psycopg2
+
 
 
 """
@@ -8,11 +11,16 @@ import sqlite3
 """
 
 try:
-    conn = sqlite3.connect("/home/azamat/Рабочий стол/Django/social/db.sqlite3")
+    conn = psycopg2.connect(
+        dbname="social_site",
+        user='azamat',
+
+    )
+
     cur = conn.cursor()
 
     """Удаляем пользователей с меткой is_active == False"""
-    cur.execute("DELETE FROM auth_user WHERE date_joined < datetime('now', 'localtime', '-1 day') AND is_active = 0;")
+    cur.execute("DELETE FROM auth_user WHERE date_joined < NOW() + interval '-1 day' AND is_active = 0;")
     conn.commit()
 
     print(f"Non-active users were deleted at {datetime.now()}")
