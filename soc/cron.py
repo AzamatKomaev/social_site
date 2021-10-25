@@ -23,9 +23,12 @@ try:
 
     """Удаляем пользователей с меткой is_active == False"""
     cur.execute("DELETE FROM auth_user WHERE date_joined < NOW() + interval '-1 day' AND is_active = 0;")
+    print(f"Non-active users were deleted at {datetime.now()}")
     conn.commit()
 
-    print(f"Non-active users were deleted at {datetime.now()}")
+    cur.execute("UPDATE soc_api_tokenwasused SET was_used = 0;")
+    print("Tokens was successfully updated")
+    conn.commit()
 
     conn.close()
 except Exception as e:

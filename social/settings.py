@@ -108,11 +108,11 @@ WSGI_APPLICATION = 'social.wsgi.application'
 DATABASES = {
     'default': {
          'ENGINE': 'django.db.backends.postgresql_psycopg2',
-         'NAME': 'social_site',
-         'USER': 'azamat',
+         'NAME': private.NAME_DATABASE_POSTGRESQL,
+         'USER': private.USER_POSTGRESQL,
          'PASSWORD': private.PASSWORD_FROM_POSTGRESQL,
-         'HOST': 'localhost',
-         'PORT': '',
+         'HOST': private.HOST_POSTGRESQL,
+         'PORT': ''
     }
 }
 
