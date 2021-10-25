@@ -7,6 +7,7 @@ class RegisteredUserMiddleware:
         self._get_response = get_response
 
     def __call__(self, request):
+        print(request.path)
         if ("/main/" in request.path and request.path != "/main/register") and (request.method == "POST") and (not request.user.is_authenticated):
             """Проверка пользователя на регистрацию при созданий поста/комментария."""
             return redirect('login')
@@ -14,11 +15,14 @@ class RegisteredUserMiddleware:
         if request.path == "/main/create_post" and not request.user.is_authenticated:
             return redirect("error404")
 
-        if request.path == "/main/exit_auth_user" and not request.user.is_authenticated:
+        if (request.path == "/auth/exit_auth_user/" or request.path == "/accounts/logout/") and (not request.user.is_authenticated):
             """
             Проверка пользователя на регистрацию при выходе.
             Анонимный пользователь не зарегистрирован и поэтому он не может выйти.
             """
+            return redirect('error404')
+
+        if (request.path == "/accounts/login/" or request.path == "/auth/register/") and request.user.is_authenticated:
             return redirect('error404')
 
         response = self._get_response(request)
