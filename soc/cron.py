@@ -3,6 +3,7 @@ from datetime import datetime
 from django.conf import settings
 import psycopg2
 
+from db_access import *
 
 
 """
@@ -12,9 +13,10 @@ import psycopg2
 
 try:
     conn = psycopg2.connect(
-        dbname="social_site",
-        user='azamat',
-
+        dbname=db_name,
+        user=user,
+        password=password,
+        host=host
     )
 
     cur = conn.cursor()

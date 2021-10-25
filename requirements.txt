@@ -26,6 +26,7 @@ msgpack==1.0.2
 Pillow==8.4.0
 pipenv==2021.5.29
 platformdirs==2.3.0
+psycopg2-binary==2.9.1
 pyasn1==0.4.8
 pyasn1-modules==0.2.8
 pycosat==0.6.3
