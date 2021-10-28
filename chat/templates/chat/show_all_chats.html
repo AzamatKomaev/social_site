@@ -1,0 +1,39 @@
+{% extends 'soc/base.html' %}
+
+{% load static %}
+
+
+{% block title %}My chats{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="card">
+        <div class="row">
+            <div class="col-11 col-md-10 col-lg-9 col-xl-9 mx-auto" style="display: flex;">
+                <input type="text" class="form-control my-3 ml-2" placeholder="Search...">
+                <button class="btn btn-primary my-3 ml-2">Найти</button>
+            </div>
+        </div>
+        <hr>
+        <div class="row">
+            <div class="col-12">
+                {% for chat, last_message in chat_data.items %}
+                    <div class="card col-9 my-3 mx-auto border border-primary">
+                        <a href="{% url 'chat' chat_name=chat %}" class="list-group-item list-group-item-action border-0">
+                            <div class="d-flex align-items-start" style="margin-left: -10px;">
+                                <img src="/main{{ chat.avatar.url }}" class="rounded-circle mr-1" alt="user1" width="60" height="60" style="margin-left:-10px; margin-top:-10px;">
+                                <div class="flex-grow-1 ml-3">
+                                    <p style="font-size:14pt; margin-left: -10px;">{{ chat }}</p>
+                                    <div class="small" style="margin-top:-10px;">
+                                        <p style="margin-left:-10px;">{% if last_message %}{{ last_message.user }}<br>{{ last_message|truncatechars:20 }}<br>{{ last_message.created_at }}{% else %}Нету сообщений{% endif %}</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

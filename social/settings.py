@@ -52,14 +52,13 @@ REST_FRAMEWORK = {
 
 
 INSTALLED_APPS = [
-    'channels',
-
     'soc',
     'soc_api',
     'chat',
     'soc_profile',
     'soc_auth',
 
+    'channels',
     'rest_framework',
     'rest_framework.authtoken',
 

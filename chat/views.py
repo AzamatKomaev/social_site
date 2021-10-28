@@ -1,12 +1,22 @@
 from django.shortcuts import render, redirect
 
 from chat.models import Chat, Message
-from chat.services import can_user_to_join_in_group, get_data_about_room
+from chat.services import (
+    can_user_to_join_in_group,
+    get_data_about_room,
+    get_data_about_user_chats
+)
 
 
-def index(request) -> render:
-    template_name = "chat/index.html"
-    return render(request, template_name)
+def show_all_chats(request) -> render:
+    if not request.user.is_authenticated:
+        return redirect('error404')
+
+    chat_data = get_data_about_user_chats(user=request.user)
+    print(chat_data)
+    return render(request, "chat/show_all_chats.html", {
+        'chat_data': chat_data
+    })
 
 
 def room(request, chat_name: str) -> render:
