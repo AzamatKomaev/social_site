@@ -20,22 +20,36 @@ from .forms import (
     PostForm,
     CommentForm
 )
-from .models import Post
+from soc.models import Post, Category
 
 
 #add logger
 logger = logging.getLogger(__name__)
 
 
-def show_all_post(request):
+def show_all_categories(request):
+    template_name = "soc/all_categories.html"
+    categories = Category.objects.all()
+
+    return render(request, template_name, {
+        'categories': categories
+    })
+
+
+def show_all_posts(request, category: str):
     """Функция для отображения всех постов"""
     template_name = "soc/all_posts.html"
-    posts = Post.objects.all().order_by('-pk')
+    try:
+        posts = Post.objects.filter(category=Category.objects.get(name=category)).order_by('-pk')
+    except ObjectDoesNotExist:
+        return redirect('error404')
+
     if request.user.is_authenticated:
         group = return_user_group(request.user)
         return render(request, template_name, {
             'posts': posts,
-            'group_active_user': group
+            'group_active_user': group,
+            'category': category
         })
 
     else:
@@ -44,7 +58,7 @@ def show_all_post(request):
         })
 
 
-def show_post(request, id: int): 
+def show_post(request, category: str, id: int):
     """Вьюшка для отображения полного поста"""
     template_name = "soc/show_post.html"
     try:
@@ -64,7 +78,7 @@ def show_post(request, id: int):
         return redirect('error404')
 
 
-def create_post(request):
+def create_post(request, category: str):
     """Функция для создания поста"""
     template_name = "soc/create_post.html"
     if request.method == "POST":
@@ -74,8 +88,8 @@ def create_post(request):
                 post_data = form.cleaned_data
                 post_values = get_post_data(request, post_data)
                 logger.info(f"Post values: {post_values}")
-                insert_into_post_table(**post_values)
-                return redirect("main")
+                insert_into_post_table(**post_values, category=category)
+                return redirect("all_posts", category=category)
             else:
                 redirect("login")
         else:

@@ -2,7 +2,7 @@ import logging
 
 from django.contrib.auth.models import User
 
-from ..models import Post
+from ..models import Post, Category
 from ..forms import CommentForm
 
 
@@ -33,10 +33,12 @@ def get_post_data(request, post_data: dict) -> dict:
     return {"title": title, "text": post, "image": image, "user_id": user_id}
 
 
-def insert_into_post_table(title, text, image, user_id) -> None:
+def insert_into_post_table(title, text, image, user_id, category) -> None:
     """Функция для создания поста"""
     user = User.objects.get(id=user_id)
-    added_post = Post.objects.create(title=title, text=text, user_id=user_id)
+    category = Category.objects.get(name=category)
+
+    added_post = Post.objects.create(title=title, text=text, user_id=user_id, category_id=category.id)
     added_post.attachment_set.create(photo=image) if image else None
     if added_post:
         logger.info(f"Пост  {added_post.id}|{added_post.title} был добавлен пользователем {user_id}|{user.username}")

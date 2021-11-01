@@ -1,0 +1,22 @@
+{% extends 'soc/base.html' %}
+
+
+{% block title %}Категорий{% endblock %}
+{% block content %}
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-11 col-sm-11 col-md-10 col-lg-8 col-xl-8 mx-auto border border-primary">
+                {% for category in categories %}
+                    <a href="{% url 'all_posts' category=category %}" class="list-group-item list-group-item-action border-0">
+                        <div class="d-flex align-items-start" style="margin-left: -10px;">
+                            <img src="/main{{ category.avatar.url }}" class="rounded-circle mr-1" alt="user1" width="80" height="80" style="margin-left:-10px">
+                            <div class="flex-grow-1 ml-3" id="{{ chat }}">
+                                <p style="font-size:14pt; margin-left: -10px;">{{ category }}</p>
+                            </div>
+                        </div>
+                    </a>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+{% endblock %}

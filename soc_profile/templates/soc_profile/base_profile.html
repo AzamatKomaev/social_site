@@ -57,7 +57,7 @@
 							</div>
 
 							<div class="card-body">
-								<a href="{% url 'post' id=post.id %}" class="text-dark" style="text-decoration: none;">
+								<a href="{% url 'post' category=post.category id=post.id %}" class="text-dark" style="text-decoration: none;">
 									<h4>{{ post.title }}</h4>
 									{{ post.text|linebreaksbr }}
 									{% with post.attachment_set.all as attachs %}

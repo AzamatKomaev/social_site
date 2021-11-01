@@ -2,6 +2,18 @@ from django.db import models
 from django.contrib.auth.models import User
 
 
+class Category(models.Model):
+	name = models.CharField(max_length=255)
+	avatar = models.ImageField(default="", upload_to="media/category_images")
+
+	class Meta:
+		verbose_name = "Категория"
+		verbose_name_plural = "Категорий"
+
+	def __str__(self):
+		return self.name
+
+
 class Avatar(models.Model):
 	user = models.ForeignKey(User, on_delete=models.CASCADE)
 	image = models.ImageField(default="/static/img/me.png", upload_to="media/user_images")
@@ -18,6 +30,8 @@ class Avatar(models.Model):
 class Post(models.Model):
 	"""Таблица для хранения поста"""
 	user = models.ForeignKey(User, on_delete=models.CASCADE)
+	category = models.ForeignKey(Category, on_delete=models.CASCADE)
+
 	title = models.CharField(max_length=200)
 	text = models.TextField()
 	created_at = models.DateTimeField(auto_now_add=True)
@@ -59,3 +73,5 @@ class Attachment(models.Model):
 
 	def __str__(self):
 		return f"Attachment for post {self.post}"
+
+

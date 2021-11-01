@@ -13,7 +13,6 @@ def show_all_chats(request) -> render:
         return redirect('error404')
 
     chat_data = get_data_about_user_chats(user=request.user)
-    print(chat_data)
     return render(request, "chat/show_all_chats.html", {
         'chat_data': chat_data
     })

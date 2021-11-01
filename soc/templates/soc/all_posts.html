@@ -18,7 +18,7 @@
 			<div class="container-fluid">
 				<div class="row">
 					<a class="btn btn-lg btn-primary btn-block" href="{% url 'profile' username=user.username %}" role="button">Перейти в профиль</a>
-					<a class="btn btn-lg btn-success btn-block" href="{% url 'create_post' %}" role="button">Добавить пост</a>
+					<a class="btn btn-lg btn-success btn-block" href="{% url 'create_post' category=category %}" role="button">Добавить пост</a>
 					<a class="btn btn-lg btn-warning btn-block" href="{% url 'all_chats' %}" role="button">Чаты</a>
 					<a class="btn btn-lg btn-danger btn-block" href="{% url 'logout' %}" role="button">Выйти</a>
 
@@ -45,7 +45,7 @@
 			</div>
 
 			<div class="card-body">
-				<a href="{% url 'post' id=post.id %}" class="text-dark" style="text-decoration: none;">
+				<a href="{% url 'post' category=post.category id=post.id %}" class="text-dark" style="text-decoration: none;">
 					<h4>{{ post.title }}</h4>
 					{{ post.text|linebreaksbr }}
 					{% with post.attachment_set.all as attachs %}
@@ -58,15 +58,9 @@
 					{% endwith %}
 				</a>
 			</div>
-			<p style="margin-left:10px;">{{ post.created_at }}</p>
-			<div class="card-footer" style="display: flex;">
 
-				<p class="text-danger">35 </p>
-				<svg style="margin-top: 10px;" xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" class="bi bi-chat-left-dots" viewBox="0 0 16 16">
-					<path d="M14 1a1 1 0 0 1 1 1v8a1 1 0 0 1-1 1H4.414A2 2 0 0 0 3 11.586l-2 2V2a1 1 0 0 1 1-1h12zM2 0a2 2 0 0 0-2 2v12.793a.5.5 0 0 0 .854.353l2.853-2.853A1 1 0 0 1 4.414 12H14a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2H2z"/>
-					<path d="M5 6a1 1 0 1 1-2 0 1 1 0 0 1 2 0zm4 0a1 1 0 1 1-2 0 1 1 0 0 1 2 0zm4 0a1 1 0 1 1-2 0 1 1 0 0 1 2 0z"/>
-				</svg>
-			</div>
+			<div class="card-footer" style="display: flex;">{{ post.created_at }}</div>
+
 		</div>
 		<br><br>
 		{% endfor %}
