@@ -12,6 +12,9 @@
                             <img src="/main{{ category.avatar.url }}" class="rounded-circle mr-1" alt="user1" width="80" height="80" style="margin-left:-10px">
                             <div class="flex-grow-1 ml-3" id="{{ chat }}">
                                 <p style="font-size:14pt; margin-left: -10px;">{{ category }}</p>
+                                <div class="small" style="margin-left: -10px; font-size: 10pt;">
+                                    Всего постов: {{ category.post_set.all.count }}
+                                </div>
                             </div>
                         </div>
                     </a>

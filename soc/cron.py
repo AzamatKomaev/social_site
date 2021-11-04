@@ -1,9 +1,7 @@
 from datetime import datetime
+import os
 
-from django.conf import settings
 import psycopg2
-
-from db_access import *
 
 
 """
@@ -13,10 +11,10 @@ from db_access import *
 
 try:
     conn = psycopg2.connect(
-        dbname=db_name,
-        user=user,
-        password=password,
-        host=host
+        dbname=os.getenv("NAME_DATABASE_POSTGRESQL"),
+        user=os.getenv("USER_POSTGRESQL"),
+        password=os.getenv("PASSWORD_FROM_POSTGRESQL"),
+        host=os.getenv("HOST_POSTGRESQL")
     )
 
     cur = conn.cursor()

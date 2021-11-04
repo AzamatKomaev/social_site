@@ -1,7 +1,6 @@
-/social/private.py
 .idea
 __pycache__
 debug.log
 crontab.txt
 env
-/soc/db_access.py
+/setenv.sh

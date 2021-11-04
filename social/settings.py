@@ -1,12 +1,10 @@
 from pathlib import Path
 import os
 
-from social import private
-
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-SECRET_KEY = private.KEY
+SECRET_KEY = os.getenv('KEY')
 
 DEBUG = True
 ALLOWED_HOSTS = []
@@ -107,10 +105,10 @@ WSGI_APPLICATION = 'social.wsgi.application'
 DATABASES = {
     'default': {
          'ENGINE': 'django.db.backends.postgresql_psycopg2',
-         'NAME': private.NAME_DATABASE_POSTGRESQL,
-         'USER': private.USER_POSTGRESQL,
-         'PASSWORD': private.PASSWORD_FROM_POSTGRESQL,
-         'HOST': private.HOST_POSTGRESQL,
+         'NAME': os.getenv('NAME_DATABASE_POSTGRESQL'),
+         'USER': os.getenv('USER_POSTGRESQL'),
+         'PASSWORD': os.getenv('PASSWORD_FROM_POSTGRESQL'),
+         'HOST': os.getenv('HOST_POSTGRESQL'),
          'PORT': ''
     }
 }
@@ -157,8 +155,8 @@ LOGIN_REDIRECT_URL = '/main'
 #SMTP settings
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_PORT = 587
-EMAIL_HOST_USER = private.EMAIL
-EMAIL_HOST_PASSWORD = private.PASSWORD_FROM_EMAIL
+EMAIL_HOST_USER = os.getenv('EMAIL')
+EMAIL_HOST_PASSWORD = os.getenv('PASSWORD_FROM_EMAIL')
 EMAIL_USE_TLS = True
 EMAIL_USE_SSL = False
 
