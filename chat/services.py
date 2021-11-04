@@ -1,6 +1,12 @@
 from django.contrib.auth.models import User
+from django.core.exceptions import ObjectDoesNotExist
 
-from chat.models import Chat, Message
+from chat.models import (
+    Chat,
+    Message,
+    PersonalChat,
+    PersonalMessage
+)
 
 
 def get_data_about_user_chats(user: User) -> dict:
@@ -32,3 +38,32 @@ def get_data_about_room(chat_name: str) -> dict:
         'messages': messages,
         'chat': chat
     }
+
+
+def is_users_friends(first_id: int, second_id: int) -> bool:
+    return True
+
+
+class PersonalChatService:
+    from_user: User
+    to_user: User
+
+    def __init__(self, from_username: str, to_username: str):
+        self.from_user = User.objects.get(username=from_username)
+        self.to_user = User.objects.get(username=to_username)
+
+    def create(self) -> None:
+        """Метод для создания диалога для двух юзеров"""
+        pers_chat = PersonalChat.objects.create()
+        pers_chat.users.add(self.from_user, self.to_user)
+
+    def is_chat_exists(self) -> bool:
+        """Метод для проверки существует ли уже чат между двумя юзерами."""
+        try:
+            PersonalChat.objects.get(users=self.to_user)
+            return True
+        except ObjectDoesNotExist:
+            return False
+
+    def get_chat_data(self) -> dict:
+        pass

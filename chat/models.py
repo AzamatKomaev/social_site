@@ -36,3 +36,13 @@ class Message(models.Model):
     class Meta:
         verbose_name = "Сообщение"
         verbose_name_plural = "Сообщения"
+
+
+class PersonalChat(models.Model):
+    users = models.ManyToManyField(User)
+
+
+class PersonalMessage(models.Model):
+    text = models.TextField()
+    created_at = models.DateTimeField(auto_now_add=True)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
