@@ -8,11 +8,15 @@ from channels.generic.websocket import AsyncWebsocketConsumer
 from chat.models import Message, Chat
 from social.settings import DATETIME_FORMAT
 
+
 logger = logging.getLogger(__name__)
 
 """
-DONT FORGET TO START REDIS:
+DONT FORGET TO CREATE CONTAINER WITH REDIS:
 sudo docker run -p 6379:6379 -d redis:5
+
+IF YOU CREATED IT, YOU CAN TO START IT:
+sudo docker start <id container>
 """
 
 

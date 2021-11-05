@@ -4,6 +4,11 @@
 
 {% block content %}
     <div>
-        <p>Чат создан</p>
+        <h1>Чат c {{ interlocutor }}</h1>
+        <textarea cols="70" rows="20">
+            {% for message in messages %}
+                {{ message.user }} || {{ message }}
+            {% endfor %}
+        </textarea>
     </div>
 {% endblock %}

@@ -47,4 +47,7 @@ def personal_chat(request, username: str) -> render:
     except ObjectDoesNotExist:
         return redirect('error404')
 
-    return render(request, template_name, {})
+    return render(request, template_name, {
+        "interlocutor": chat_service.to_user,
+        "messages": chat_service.get_chat_messages()
+    })

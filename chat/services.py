@@ -4,8 +4,7 @@ from django.core.exceptions import ObjectDoesNotExist
 from chat.models import (
     Chat,
     Message,
-    PersonalChat,
-    PersonalMessage
+    PersonalChat
 )
 
 
@@ -59,11 +58,13 @@ class PersonalChatService:
 
     def is_chat_exists(self) -> bool:
         """Метод для проверки существует ли уже чат между двумя юзерами."""
-        try:
-            PersonalChat.objects.get(users=self.to_user)
-            return True
-        except ObjectDoesNotExist:
+        chat = PersonalChat.objects.filter(users=self.from_user).filter(users=self.to_user).first()
+        if not chat:
             return False
 
-    def get_chat_data(self) -> dict:
-        pass
+        return True
+
+    def get_chat_messages(self) -> list:
+        chat = PersonalChat.objects.filter(users=self.from_user).filter(users=self.to_user).first()
+        messages = chat.personalmessage_set.all()
+        return messages
