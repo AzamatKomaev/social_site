@@ -3,9 +3,12 @@ import json
 
 from asgiref.sync import sync_to_async
 from django.utils import dateformat, timezone
+from django.contrib.auth.models import User
 from channels.generic.websocket import AsyncWebsocketConsumer
+from channels.db import database_sync_to_async
 
 from chat.models import Message, Chat
+from chat.services import PersonalChatService
 from social.settings import DATETIME_FORMAT
 
 
@@ -78,4 +81,60 @@ class ChatConsumer(AsyncWebsocketConsumer):
             'avatar': avatar,
             'message': message,
             'created_at': created_at
+        }))
+
+
+class PersonalChatConsumer(AsyncWebsocketConsumer):
+    chat_service: PersonalChatService
+
+    @sync_to_async
+    def parse_value_for_connecting_ws(self, string: str) -> list:
+        """Функция для парсинга значения для одного подключения двух юзеров."""
+        users_id = string.split("_")
+        return [User.objects.get(id=int(users_id[0])), User.objects.get(id=int(users_id[0]))]
+
+    @sync_to_async
+    def get_chat_service(self, from_user_username: str, to_user_username: str):
+        return PersonalChatService(from_username=from_user_username, to_username=to_user_username)
+
+    async def connect(self):
+        users = await self.parse_value_for_connecting_ws(self.scope['url_route']['kwargs']['users'])
+        user1_username = users[0]
+        user2_username = users[1]
+
+        self.chat_service = await self.get_chat_service(user2_username, user2_username)
+        chat = await database_sync_to_async(self.chat_service.get_chat_with_both_users)()
+
+        self.room_name = await database_sync_to_async(self.chat_service.get_value_for_connecting_ws)()
+        self.chat_group_name = f"Chat_{chat.id}"
+
+        await self.channel_layer.group_add(
+            self.chat_group_name,
+            self.channel_name
+        )
+        await self.accept()
+
+    async def disconnect(self, close_code):
+
+        await self.channel_layer.group_discard(
+            self.chat_group_name,
+            self.channel_name
+        )
+
+    async def receive(self, text_data):
+        text_data_json = json.loads(text_data)
+
+        await self.channel_layer.group_send(
+            self.chat_group_name,
+            {
+                'type': 'chat_message',
+                'message': text_data_json['message'],
+            }
+        )
+
+    async def chat_message(self, event):
+        message = event['message']
+
+        await self.send(text_data=json.dumps({
+            'message': message,
         }))

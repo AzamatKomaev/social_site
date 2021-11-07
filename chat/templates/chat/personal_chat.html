@@ -1,14 +1,20 @@
 {% extends 'soc/base.html' %}
+{% load static %}
+
 
 {% block title %}Chat{% endblock %}
 
 {% block content %}
     <div>
         <h1>Чат c {{ interlocutor }}</h1>
-        <textarea cols="70" rows="20">
+        <textarea id="chat" cols="70" rows="20">
             {% for message in messages %}
                 {{ message.user }} || {{ message }}
             {% endfor %}
         </textarea>
+        <input type="text" id="chat-input">
+        <button id="button-send">Отправить</button>
     </div>
+    {{ users|json_script:"users_id" }}
+    <script src="{% static 'js/personal_websocket.js' %}"></script>
 {% endblock %}

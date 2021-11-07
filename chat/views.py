@@ -49,5 +49,7 @@ def personal_chat(request, username: str) -> render:
 
     return render(request, template_name, {
         "interlocutor": chat_service.to_user,
-        "messages": chat_service.get_chat_messages()
+        "messages": chat_service.get_chat_messages(),
+        "chat": chat_service.get_chat_with_both_users(),
+        "users": chat_service.get_value_for_connecting_ws()
     })

@@ -56,15 +56,28 @@ class PersonalChatService:
         pers_chat = PersonalChat.objects.create()
         pers_chat.users.add(self.from_user, self.to_user)
 
+
+    def get_chat_with_both_users(self):
+        return PersonalChat.objects.filter(users=self.from_user).filter(users=self.to_user).first()
+
     def is_chat_exists(self) -> bool:
         """Метод для проверки существует ли уже чат между двумя юзерами."""
-        chat = PersonalChat.objects.filter(users=self.from_user).filter(users=self.to_user).first()
+        chat = self.get_chat_with_both_users()
         if not chat:
             return False
 
         return True
 
     def get_chat_messages(self) -> list:
-        chat = PersonalChat.objects.filter(users=self.from_user).filter(users=self.to_user).first()
+        chat = self.get_chat_with_both_users()
         messages = chat.personalmessage_set.all()
         return messages
+
+    def get_value_for_connecting_ws(self) -> str:
+        """
+        Функция для получения значения для одного подключения для двух юзеров
+        (строка с id двух юзеров, разделенная пробелом).
+        """
+        chat = self.get_chat_with_both_users()
+        users_id = [str(user.id) for user in chat.users.all().order_by("id")]
+        return "_".join(users_id)

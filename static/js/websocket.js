@@ -9,7 +9,6 @@ const chatSocket = new WebSocket(
 );
 
 chatSocket.onmessage = function(e) {
-    console.log(e);
     const data = JSON.parse(e.data);
     document.querySelector('#chat-window').innerHTML += `
               <div class="chat-message-left pb-4" style="width:80%; margin: auto;">
