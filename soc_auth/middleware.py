@@ -5,7 +5,7 @@ class RegisteredUserMiddleware:
     """Middleware для проверки юзера на его регистрацию."""
     app_names = {
         'main': "/main/",
-        'create_post': "/auth/register/",
+        'create_post': "/create_post",
         'exit_and_login': "/auth/exit_auth_user/",
         'login': "/accounts/login/",
         'logout': "/accounts/logout/",
@@ -18,7 +18,7 @@ class RegisteredUserMiddleware:
 
     def __call__(self, request):
         print(request.path)
-        if (self.app_names['main'] in request.path and request.path != self.app_names['create_post']) and (request.method == "POST") and (not request.user.is_authenticated):
+        if (self.app_names['main'] in request.path and self.app_names['create_post'] not in request.path) and (request.method == "POST") and (not request.user.is_authenticated):
             """Проверка пользователя на регистрацию при созданий поста/комментария."""
             return redirect('login')
 

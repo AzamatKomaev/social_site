@@ -56,7 +56,6 @@ class PersonalChatService:
         pers_chat = PersonalChat.objects.create()
         pers_chat.users.add(self.from_user, self.to_user)
 
-
     def get_chat_with_both_users(self):
         return PersonalChat.objects.filter(users=self.from_user).filter(users=self.to_user).first()
 

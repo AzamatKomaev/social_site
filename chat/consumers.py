@@ -7,7 +7,7 @@ from django.contrib.auth.models import User
 from channels.generic.websocket import AsyncWebsocketConsumer
 from channels.db import database_sync_to_async
 
-from chat.models import Message, Chat
+from chat.models import Message, Chat, PersonalChat, PersonalMessage
 from chat.services import PersonalChatService
 from social.settings import DATETIME_FORMAT
 
@@ -91,18 +91,31 @@ class PersonalChatConsumer(AsyncWebsocketConsumer):
     def parse_value_for_connecting_ws(self, string: str) -> list:
         """Функция для парсинга значения для одного подключения двух юзеров."""
         users_id = string.split("_")
-        return [User.objects.get(id=int(users_id[0])), User.objects.get(id=int(users_id[0]))]
+        return [User.objects.get(id=int(users_id[0])), User.objects.get(id=int(users_id[1]))]
 
     @sync_to_async
     def get_chat_service(self, from_user_username: str, to_user_username: str):
         return PersonalChatService(from_username=from_user_username, to_username=to_user_username)
 
+    @sync_to_async
+    def get_user_avatar(self, user: User):
+        return user.avatar_set.get().image.url
+
+    @sync_to_async
+    def create_message_and_get_data(self, message_text: Message, user: User) -> dict:
+        chat = self.chat_service.get_chat_with_both_users()
+        message = PersonalMessage.objects.create(text=message_text, user_id=user.id, chat_id=chat.id)
+        return {
+            'message': message,
+            'user': {
+                'username': message.user.username,
+                'avatar': message.user.avatar_set.get().image.url
+            }
+        }
+
     async def connect(self):
         users = await self.parse_value_for_connecting_ws(self.scope['url_route']['kwargs']['users'])
-        user1_username = users[0]
-        user2_username = users[1]
-
-        self.chat_service = await self.get_chat_service(user2_username, user2_username)
+        self.chat_service = await self.get_chat_service(users[0], users[1])
         chat = await database_sync_to_async(self.chat_service.get_chat_with_both_users)()
 
         self.room_name = await database_sync_to_async(self.chat_service.get_value_for_connecting_ws)()
@@ -123,18 +136,32 @@ class PersonalChatConsumer(AsyncWebsocketConsumer):
 
     async def receive(self, text_data):
         text_data_json = json.loads(text_data)
+        data = await self.create_message_and_get_data(user=self.scope['user'], message_text=text_data_json['message'])
+        created_at = dateformat.format(data['message'].created_at, DATETIME_FORMAT)
 
         await self.channel_layer.group_send(
             self.chat_group_name,
             {
                 'type': 'chat_message',
-                'message': text_data_json['message'],
+                'message': {
+                    "text": data['message'].text,
+                    "created_at": created_at
+                },
+                'user': {
+                    'username': data['user']['username'],
+                    'avatar': data['user']['avatar']
+                }
             }
         )
 
     async def chat_message(self, event):
-        message = event['message']
-
         await self.send(text_data=json.dumps({
-            'message': message,
+            'message': {
+                'text': event['message']['text'],
+                'created_at': event['message']['created_at'],
+            },
+            'user': {
+                'username': event['user']['username'],
+                'avatar': event['user']['avatar']
+            }
         }))
