@@ -4,3 +4,5 @@ debug.log
 crontab.txt
 env
 /setenv.sh
+geckodriver
+geckodriver.log

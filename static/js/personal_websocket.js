@@ -1,6 +1,10 @@
 const usersId = JSON.parse(document.getElementById('users_id').textContent);
 const requestUser = document.getElementById('requestUser').textContent
 
+let chatHistory = document.getElementById('chat-window');
+chatHistory.scrollTop = chatHistory.scrollHeight;
+
+
 const chatSocket = new WebSocket(
     'ws://'
     + window.location.host
@@ -14,7 +18,7 @@ chatSocket.onmessage = function(e) {
     console.log(data)
     if (requestUser == data.user.username) {
         document.querySelector('#chat-window').innerHTML += `
-                  <div class="chat-message-left pb-4" style="width:80%;">
+                  <div class="chat-message-right pb-4" style="width:70%;">
                       <div>
                           <img src="/main${data.user.avatar}" class="rounded-circle mr-1" alt="${data.user}" width="40" height="40">
                       </div>
@@ -27,7 +31,7 @@ chatSocket.onmessage = function(e) {
               `
     } else {
         document.querySelector('#chat-window').innerHTML += `
-                  <div class="chat-message-left pb-4" style="width:80%;">
+                  <div class="chat-message-left pb-4" style="width:70%;">
                       <div>
                           <img src="/main${data.user.avatar}" class="rounded-circle mr-1" alt="${data.user}" width="40" height="40">
                       </div>
@@ -39,7 +43,7 @@ chatSocket.onmessage = function(e) {
                   </div>
               `
     }
-
+    chatHistory.scrollTop = chatHistory.scrollHeight;
 };
 
 

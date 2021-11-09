@@ -1,4 +1,4 @@
-from datetime import datetime
+from uuid import uuid4
 
 from django.db import models
 from django.contrib.auth.models import User
@@ -8,6 +8,7 @@ from django.utils import timezone
 class Chat(models.Model):
     name = models.CharField(max_length=50, help_text="Название чата")
     created_at = models.DateTimeField(auto_now_add=True)
+    token = models.UUIDField(default=uuid4, editable=False)
     avatar = models.ImageField(default="/static/img/me.png", upload_to="media/group_avatars")
     creator = models.ForeignKey(User, on_delete=models.CASCADE, related_name="creator_id")
     users = models.ManyToManyField(User, related_name="users_id")

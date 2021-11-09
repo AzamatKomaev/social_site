@@ -29,7 +29,7 @@ def room(request, chat_name: str) -> render:
 
     return render(request, template_name, {
         'messages': json_data_chat['messages'],
-        'chat': json_data_chat['chat']
+        'chat': json_data_chat['chat'],
     })
 
 

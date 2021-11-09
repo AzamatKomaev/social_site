@@ -2,12 +2,12 @@ import logging
 import json
 
 from asgiref.sync import sync_to_async
-from django.utils import dateformat, timezone
+from django.utils import dateformat
 from django.contrib.auth.models import User
 from channels.generic.websocket import AsyncWebsocketConsumer
 from channels.db import database_sync_to_async
 
-from chat.models import Message, Chat, PersonalChat, PersonalMessage
+from chat.models import Message, Chat, PersonalMessage
 from chat.services import PersonalChatService
 from social.settings import DATETIME_FORMAT
 
@@ -25,10 +25,11 @@ sudo docker start <id container>
 
 class ChatConsumer(AsyncWebsocketConsumer):
     user = ""
+    token = ""
 
     @sync_to_async
-    def create_message_and_get_data(self, message: str, room_name: str, user) -> dict:
-        chat = Chat.objects.get(name=room_name)
+    def create_message_and_get_data(self, message: str, token: str, user) -> dict:
+        chat = Chat.objects.get(token=token)
         message = Message.objects.create(text=message, user_id=user.id, chat_id=chat.id)
         avatar = message.user.avatar_set.get().image.url
         return {
@@ -37,7 +38,8 @@ class ChatConsumer(AsyncWebsocketConsumer):
         }
 
     async def connect(self):
-        self.room_name = self.scope['url_route']['kwargs']['chat_name']
+        self.token = self.scope['url_route']['kwargs']['token']
+        self.room_name = self.token
         self.chat_group_name = 'chat_%s' % self.room_name
         self.user = self.scope['user']
 
@@ -56,7 +58,7 @@ class ChatConsumer(AsyncWebsocketConsumer):
 
     async def receive(self, text_data):
         text_data_json = json.loads(text_data)
-        data = await self.create_message_and_get_data(text_data_json['message'], self.room_name, self.user)
+        data = await self.create_message_and_get_data(text_data_json['message'], self.token, self.user)
         created_at = dateformat.format(data['message'].created_at, DATETIME_FORMAT)
 
         await self.channel_layer.group_send(

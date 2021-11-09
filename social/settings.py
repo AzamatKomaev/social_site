@@ -132,7 +132,7 @@ AUTH_PASSWORD_VALIDATORS = [
 LANGUAGE_CODE = 'ru'
 
 TIME_ZONE = 'Europe/Moscow'
-DATETIME_FORMAT = 'd E Y г. h:i' #22 октября 2021 г. 9:16
+DATETIME_FORMAT = 'd E Y г. H:i' #22 октября 2021 г. 9:16
 UZE_TZ = True
 USE_I18N = True
 USE_L10N = True
