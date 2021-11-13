@@ -6,3 +6,4 @@ env
 /setenv.sh
 geckodriver
 geckodriver.log
+google_api

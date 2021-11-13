@@ -1,17 +1,17 @@
 import random
 import string
 
-from django.contrib.auth.models import User
+from django.contrib.auth.models import User, Group
 from django.core.mail import send_mail
 
 from social.settings import EMAIL_HOST_USER
-from .models import Token
+from soc_auth.models import Token
 
 
 class CreationUser:
     """Класс для создания пользователя, который хочет зарегаться"""
-    token = ""
-    user = ""
+    token: str = ""
+    user: User
     alphabet = list(string.ascii_lowercase)
 
     def __init__(self, data: dict) -> None:
@@ -30,8 +30,8 @@ class CreationUser:
     def check_form_on_uniqueness(self) -> list:
         """Проверяем почту и логин на уникальность"""
         errors = [None, None]
-        errors[0] = True if User.objects.filter(username=self.username).exists() else False
-        errors[1] = True if User.objects.filter(email=self.email).exists() else False
+        errors[0] = User.objects.filter(username=self.username).exists()
+        errors[1] = User.objects.filter(email=self.email).exists()
         return errors
 
     def send_message_with_code(self) -> None:
@@ -62,10 +62,11 @@ class CreationUser:
                                                 email=self.email,
                                                 password=self.password,
                                                 is_active=False
-                                        )
+                                            )
 
         self.user.avatar_set.create()
-        self.user.groups.add(2)
+        #self.user.groups.add(2)
+        Group.objects.all().last().user_set.add(self.user)
         self._insert_token_in_table()
 
 
