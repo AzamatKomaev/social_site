@@ -1,5 +1,6 @@
 from django.contrib.auth.models import User
 from django.core.exceptions import ObjectDoesNotExist
+from django.db.models import QuerySet
 
 from chat.models import (
     Chat,
@@ -8,17 +9,42 @@ from chat.models import (
 )
 
 
-def get_data_about_user_chats(user: User) -> dict:
-    """Получаем информацию о чатах пользователя."""
-    data_json = {}
+class UserChat:
+    user: User
+    group_chats: QuerySet
+    personal_chats: QuerySet
 
-    chats = Chat.objects.filter(users=user)
-    for chat in chats:
-        """Привязываем ключ с чатом и значение с его сообщениями."""
-        last_message = chat.message_set.all().last()
-        data_json[chat] = last_message
+    def __init__(self, user: User):
+        self.user = user
+        self.group_chats = Chat.objects.filter(users=user)
+        self.personal_chats = PersonalChat.objects.filter(users=user)
 
-    return data_json
+    def get_interlocutor(self, personal_chat: PersonalChat) -> User:
+        members_of_personal_chat = personal_chat.users.all()
+        return members_of_personal_chat.exclude(username=self.user.username).get()
+
+    def return_dict_with_chats_and_last_messages(self, chats: QuerySet, is_personal: bool) -> dict:
+        data_chat = {}
+        for chat in chats:
+            if is_personal:
+                last_message = chat.personalmessage_set.all().last()
+                data_chat[chat] = {}
+                data_chat[chat]['last_message'] = last_message
+                data_chat[chat]['interlocutor'] = self.get_interlocutor(personal_chat=chat)
+            else:
+                last_message = chat.message_set.all().last()
+                data_chat[chat] = last_message
+
+        return data_chat
+
+    def get_data_about_user_chats(self) -> dict:
+        group_chats_data = self.return_dict_with_chats_and_last_messages(chats=self.group_chats, is_personal=False)
+        personal_chats_data = self.return_dict_with_chats_and_last_messages(chats=self.personal_chats, is_personal=True)
+        print(personal_chats_data)
+        return {
+            "group_chats_data": group_chats_data,
+            "personal_chats_data": personal_chats_data
+        }
 
 
 def can_user_to_join_in_group(room_name: str, user: User) -> bool:
