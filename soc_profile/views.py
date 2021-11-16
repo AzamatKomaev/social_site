@@ -2,9 +2,12 @@ from django.contrib.auth.models import User
 from django.core.exceptions import ObjectDoesNotExist
 from django.shortcuts import render, redirect
 
+from ratelimit.decorators import ratelimit
+
 from .services import get_data_about_user
 
 
+@ratelimit(key='ip', rate='60/m', block=True)
 def show_profile(request, username: str):
     template_name = "soc_profile/base_profile.html"
     try:
@@ -17,6 +20,7 @@ def show_profile(request, username: str):
         return redirect("error404")
 
 
+@ratelimit(key='ip', rate='60/m', block=True)
 def show_all_users(request):
     template_name = "soc_profile/all_users.html"
     users = User.objects.all().order_by('-pk')

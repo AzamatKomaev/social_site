@@ -1,6 +1,8 @@
 from django.shortcuts import render, redirect
 from django.core.exceptions import ObjectDoesNotExist
 
+from ratelimit.decorators import ratelimit
+
 from chat.models import Chat, Message
 from chat.services import (
     can_user_to_join_in_group,
@@ -10,6 +12,7 @@ from chat.services import (
 )
 
 
+@ratelimit(key='ip', rate='20/m', block=True)
 def show_all_chats(request) -> render:
     if not request.user.is_authenticated:
         return redirect('error404')
@@ -20,6 +23,7 @@ def show_all_chats(request) -> render:
     })
 
 
+@ratelimit(key='ip', rate='20/m', block=True)
 def room(request, chat_name: str) -> render:
     template_name = "chat/room.html"
     if not can_user_to_join_in_group(room_name=chat_name, user=request.user):
@@ -33,6 +37,7 @@ def room(request, chat_name: str) -> render:
     })
 
 
+@ratelimit(key='ip', rate='20/m', block=True)
 def create_chat(request) -> render:
     template_name = "chat/create_chat.html"
     return render(request, template_name, {})

@@ -5,6 +5,8 @@ from django.shortcuts import render, redirect
 from django.contrib.auth.models import User
 from django.core.exceptions import ObjectDoesNotExist
 
+from ratelimit.decorators import ratelimit
+
 from .service.user_service import (
     return_user_group
 )
@@ -27,6 +29,7 @@ from soc.models import Post, Category
 logger = logging.getLogger(__name__)
 
 
+@ratelimit(key='ip', rate='60/m', block=True)
 def show_all_categories(request):
     template_name = "soc/all_categories.html"
     categories = Category.objects.all()
@@ -36,6 +39,7 @@ def show_all_categories(request):
     })
 
 
+@ratelimit(key='ip', rate='60/m', block=True)
 def show_all_posts(request, category: str):
     """Функция для отображения всех постов"""
     template_name = "soc/all_posts.html"
@@ -58,6 +62,7 @@ def show_all_posts(request, category: str):
         })
 
 
+@ratelimit(key='ip', rate='60/m', block=True)
 def show_post(request, category: str, id: int):
     """Вьюшка для отображения полного поста"""
     template_name = "soc/show_post.html"
@@ -78,6 +83,7 @@ def show_post(request, category: str, id: int):
         return redirect('error404')
 
 
+@ratelimit(key='ip', rate='20/m', block=True)
 def create_post(request, category: str):
     """Функция для создания поста"""
     template_name = "soc/create_post.html"

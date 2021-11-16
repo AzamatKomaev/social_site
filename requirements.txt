@@ -21,6 +21,7 @@ daphne==3.0.2
 defusedxml==0.7.1
 distlib==0.3.2
 Django==3.2.8
+django-ratelimit==3.0.1
 django-templated-mail==1.1.1
 djangorestframework==3.12.4
 filelock==3.0.12
@@ -40,6 +41,7 @@ itypes==1.2.0
 Jinja2==3.0.2
 MarkupSafe==2.0.1
 msgpack==1.0.2
+nodeenv==1.6.0
 oauthlib==3.1.1
 outcome==1.1.0
 packaging==21.2
