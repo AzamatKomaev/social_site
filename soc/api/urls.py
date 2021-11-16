@@ -1,5 +1,6 @@
 from django.urls import path
-from soc_api import views
+from soc.api import views
+
 
 urlpatterns = [
     path('posts/', views.PostList.as_view()),

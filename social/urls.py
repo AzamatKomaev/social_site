@@ -10,7 +10,7 @@ urlpatterns = [
     path('users/', include('soc_profile.urls')),
     path('auth/', include('soc_auth.urls')),
 
-    path('api/v1/', include('soc_api.urls')),
+    path('api/v1/', include('soc.api.urls')),
 
     path('chats/', include('chat.urls')),
 

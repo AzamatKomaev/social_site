@@ -1,11 +1,10 @@
 from typing import Union
 
 from django.contrib.auth.models import User
-from rest_framework.authtoken.models import Token
 
 from soc.models import Post
-from soc_api.models import TokenWasUsed
-from soc_api.serializers import PostSerializer, UserSerializer
+from soc.api.models import TokenWasUsed
+from soc.api.serializers import PostSerializer, UserSerializer
 
 
 class BaseService:

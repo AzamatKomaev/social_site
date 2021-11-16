@@ -51,7 +51,6 @@ REST_FRAMEWORK = {
 
 INSTALLED_APPS = [
     'soc',
-    'soc_api',
     'chat',
     'soc_profile',
     'soc_auth',
