@@ -1,89 +1,49 @@
-import logging
-
+from django.contrib.auth.models import User
 from django.core.exceptions import ObjectDoesNotExist
-from rest_framework.status import (
-    HTTP_200_OK,
-    HTTP_201_CREATED,
-    HTTP_400_BAD_REQUEST,
-    HTTP_404_NOT_FOUND,
-    HTTP_418_IM_A_TEAPOT
-)
+from django.db.utils import IntegrityError
 
-from rest_framework.permissions import IsAuthenticated, IsAdminUser
 from rest_framework.views import APIView
 from rest_framework.response import Response
+from rest_framework import status
 
-from soc.api.service.content_service import PostService, UserService
+from soc.api.serializers import (
+    CategorySerializer,
+    PostSerializer,
+)
+from soc.models import Category, Post
 
 
-logger = logging.getLogger(__name__)
 
-
-class PostList(APIView):
-    """endpoint для отображения списка постов."""
-    permission_classes = [IsAuthenticated]
+class CategoryListAPIView(APIView):
 
     def get(self, request) -> Response:
-        post_service = PostService(request)
-        serializer = post_service.get_serializer()
-        if serializer == False:
-            return Response({"error": "Ежедневный лимит токена превысил норму."}, status=HTTP_418_IM_A_TEAPOT)
+        categories = Category.objects.all()
+        serializer = CategorySerializer(categories, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
 
-        return Response(serializer.data, status=HTTP_200_OK)
 
-    def post(self, request) -> Response:
-        post_service = PostService(request)
-        serializer = post_service.get_serializer()
-        if serializer == False:
-            return Response({"error": "Ежедневный лимит токена превысил норму."}, status=HTTP_418_IM_A_TEAPOT)
+class PostListAPIVIew(APIView):
+    #permission_classes = [permissions.IsAuthenticatedOrReadOnly]
+
+    def get(self, request, category_id: int):
+        try:
+            category = Category.objects.get(id=category_id)
+        except ObjectDoesNotExist:
+            return Response({"message": f"Category {category_id} does not exists."}, status=status.HTTP_404_NOT_FOUND)
+
+        posts = Post.objects.filter(category=category)
+        serializer = PostSerializer(posts, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
+    def post(self, request, category_id: int):
+        post_data = {**request.data, **{"category_id": category_id}}
+        serializer = PostSerializer(data=post_data, context={'request': request})
 
         if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data, status=HTTP_201_CREATED)
-        return Response(serializer.errors, status=HTTP_400_BAD_REQUEST)
+            try:
+                serializer.save()
+            except IntegrityError:
+                return Response({"error"})
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
 
-
-class PostDetail(APIView):
-    """endpoint для подробного отображения поста по его id."""
-
-    def get(self, request, pk: int) -> Response:
-        post_service = PostService(request)
-        try:
-            serializer = post_service.get_detail_serializer(pk)
-            if serializer == False:
-                return Response({"error": "Ежедневный лимит токена превысил норму."}, status=HTTP_418_IM_A_TEAPOT)
-
-            return Response(serializer.data, status=HTTP_200_OK)
-
-        except ObjectDoesNotExist:
-            return Response({"error": f"Пост с id {pk} не существует."}, status=HTTP_404_NOT_FOUND)
-
-
-class UserList(APIView):
-    """endpoint для отображения списка юзеров."""
-    permission_classes = [IsAdminUser]
-
-    def get(self, request) -> Response:
-        user_service = UserService(request)
-        serializer = user_service.get_serializer()
-        if serializer == False:
-            return Response({"error": "Ежедневный лимит токена превысил норму."}, status=HTTP_418_IM_A_TEAPOT)
-
-        return Response(serializer.data, status=HTTP_200_OK)
-
-
-class UserDetail(APIView):
-    """endpoint для подробного отображения юзера по его юзернейму."""
-    permission_classes = [IsAdminUser]
-
-    def get(self, request, username: str) -> Response:
-        user_service = UserService(request)
-        try:
-            serializer = user_service.get_detail_serializer(username)
-            if serializer == False:
-                return Response({"error": "Ежедневный лимит токена превысил норму."}, status=HTTP_418_IM_A_TEAPOT)
-
-            return Response(serializer.data, status=HTTP_200_OK)
-
-        except ObjectDoesNotExist:
-            return Response({"error": f"Пользователь с именем {username} не существует."}, status=HTTP_404_NOT_FOUND)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)

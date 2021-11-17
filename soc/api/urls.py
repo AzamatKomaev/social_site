@@ -3,9 +3,6 @@ from soc.api import views
 
 
 urlpatterns = [
-    path('posts/', views.PostList.as_view()),
-    path('posts/<int:pk>', views.PostDetail.as_view()),
-
-    path('users/', views.UserList.as_view()),
-    path('users/<str:username>', views.UserDetail.as_view()),
+    path('category/', views.CategoryListAPIView.as_view()),
+    path('category/<int:category_id>/', views.PostListAPIVIew.as_view()),
 ]

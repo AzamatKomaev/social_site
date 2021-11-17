@@ -58,6 +58,7 @@ INSTALLED_APPS = [
     'channels',
     'rest_framework',
     'rest_framework.authtoken',
+    'djoser',
 
     'django.contrib.admin',
     'django.contrib.auth',

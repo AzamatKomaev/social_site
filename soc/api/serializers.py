@@ -1,7 +1,13 @@
 from django.contrib.auth.models import User, Group
-from rest_framework.serializers import ModelSerializer, HiddenField, CurrentUserDefault
 
-from soc.models import Post
+from rest_framework.serializers import (
+    ModelSerializer,
+    HiddenField,
+    IntegerField,
+    CurrentUserDefault,
+)
+
+from soc.models import Post, Category
 
 
 class UserSerializer(ModelSerializer):
@@ -18,11 +24,19 @@ class GroupSerializer(ModelSerializer):
         fields = ['id', 'name']
 
 
+class CategorySerializer(ModelSerializer):
+    """Сериализатор для категорий."""
+    class Meta:
+        model = Category
+        fields = '__all__'
+
+
 class PostSerializer(ModelSerializer):
     """Сериализатор для постов."""
     user = HiddenField(default=CurrentUserDefault())
+    category_id = IntegerField()
 
     class Meta:
         model = Post
-        fields = ['id', 'title', 'text', 'created_at', 'user', 'user_id'
-                                                               '']
+        fields = ['id', 'title', 'text', 'created_at', 'user', 'user_id',
+                                                               'category_id']
