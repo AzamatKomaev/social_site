@@ -2,7 +2,6 @@ import logging
 
 from django.http import HttpResponse
 from django.shortcuts import render, redirect
-from django.contrib.auth.models import User
 from django.core.exceptions import ObjectDoesNotExist
 
 from ratelimit.decorators import ratelimit
@@ -44,7 +43,7 @@ def show_all_posts(request, category: str):
     """Функция для отображения всех постов"""
     template_name = "soc/all_posts.html"
     try:
-        posts = Post.objects.filter(category=Category.objects.get(name=category)).order_by('-pk')
+        posts = Post.objects.filter(category=Category.objects.get(name=category))
     except ObjectDoesNotExist:
         return redirect('error404')
 
@@ -104,5 +103,5 @@ def create_post(request, category: str):
         form = PostForm()
     return render(request,  template_name, {
                            "form": form
-                            })
+                     })
 

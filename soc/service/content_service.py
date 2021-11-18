@@ -48,7 +48,7 @@ def insert_into_post_table(title, text, image, user_id, category) -> None:
 
 def get_post_and_comments(id: int) -> dict:
     post = Post.objects.get(id=id)
-    comments = post.comment_set.all().order_by('-pk') if post.comment_set.all() else None
+    comments = post.comment_set.all() if post.comment_set.all() else None
     return {
         'post': post,
         'comments': comments
