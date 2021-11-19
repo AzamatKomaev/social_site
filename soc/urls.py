@@ -6,9 +6,11 @@ from . import views
 
 
 urlpatterns = [
-    path("test", views.index, name="test"),
-    path("", views.show_all_categories, name='main'),
-    path("<str:category>", views.show_all_posts, name='all_posts'),
-    path("<str:category>/<int:id>", views.show_post, name="post"),
-    path("<str:category>/create_post", views.create_post, name="create_post"),
+    path("", views.index),
+    path("categories", views.index, name="home"),
+    path("categories/<int:category_id>", views.index, name="home"),
+    #path("main", views.show_all_categories, name='main'),
+    #path("<str:category>", views.show_all_posts, name='all_posts'),
+    #path("<str:category>/<int:id>", views.show_post, name="post"),
+    #path("<str:category>/create_post", views.create_post, name="create_post"),
     ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

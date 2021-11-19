@@ -1,25 +1,27 @@
-import logo from './logo.svg';
+import React from 'react';
+import {
+    Route,
+    Switch,
+    withRouter,
+    Redirect
+} from "react-router-dom";
+
 import './App.css';
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+import Categories from './components/soc-ui/Categories';
+import Posts from './components/soc-ui/Posts';
+
+
+const App = (props) => {
+    const { history } = props;
+    return (
+        <div className="App">
+            <Switch>
+                <Route history={history} path='/categories' component={Categories} />
+                <Redirect from='/' to='/categories'/>
+            </Switch>
+        </div>
+    );
 }
 
-export default App;
+export default withRouter(App);
