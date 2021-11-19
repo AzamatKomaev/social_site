@@ -28,6 +28,10 @@ from soc.models import Post, Category
 logger = logging.getLogger(__name__)
 
 
+def index(request):
+    return render(request, "index.html", {})
+
+
 @ratelimit(key='ip', rate='60/m', block=True)
 def show_all_categories(request):
     template_name = "soc/all_categories.html"
