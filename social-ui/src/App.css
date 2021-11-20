@@ -1,3 +1,7 @@
+div {
+    white-space: pre-line;
+}
+
 .category-name {
     font-size: 14pt;
     margin-left: -10px;

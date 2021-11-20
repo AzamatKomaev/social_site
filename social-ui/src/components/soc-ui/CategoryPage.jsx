@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
-import Header from '../extend/Header.jsx';
+import Header from '../extend/Header';
 import Category from './include/Category';
 
 
@@ -21,7 +21,7 @@ const CategoryPage = () => {
             <div className="container-fluid">
                 {categories.map((category) => (
                     <div className="row" style={{marginTop: "25px"}}>
-                        <Category name={category.name} avatar={category.avatar} key={category.id}/>
+                        <Category id={category.id} name={category.name} avatar={category.avatar} key={category.id}/>
                     </div>
                 ))}
             </div>
