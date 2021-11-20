@@ -45,7 +45,6 @@ LOGGING = {
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': [
         'rest_framework.authentication.TokenAuthentication',
-        'rest_framework.authentication.SessionAuthentication',
     ],
 
     'DEFAULT_THROTTLE_CLASSES': [
@@ -54,7 +53,7 @@ REST_FRAMEWORK = {
     ],
 
     'DEFAULT_THROTTLE_RATES': {
-        'anon': '120/minute',
+        'anon': '60/minute',
         'user': '60/minute'
     }
 }
@@ -110,7 +109,6 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'social.wsgi.application'
-
 
 
 DATABASES = {

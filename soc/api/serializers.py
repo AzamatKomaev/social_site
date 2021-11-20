@@ -4,6 +4,7 @@ from rest_framework.serializers import (
     ModelSerializer,
     HiddenField,
     IntegerField,
+    SerializerMethodField,
     CurrentUserDefault,
 )
 
@@ -26,20 +27,38 @@ class GroupSerializer(ModelSerializer):
 
 class CategorySerializer(ModelSerializer):
     """Сериализатор для категорий."""
+    count = SerializerMethodField('get_count_of_posts')
+
     class Meta:
         model = Category
         fields = '__all__'
+
+    def get_count_of_posts(self, obj):
+        return obj.post_set.all().count()
 
 
 class PostSerializer(ModelSerializer):
     """Сериализатор для постов."""
     user = HiddenField(default=CurrentUserDefault())
     category_id = IntegerField()
+    user_data = SerializerMethodField('get_data_about_user')
+    attachment = SerializerMethodField('get_attachment')
 
     class Meta:
         model = Post
-        fields = ['id', 'title', 'text', 'created_at', 'user', 'user_id',
-                                                               'category_id']
+        fields = "__all__"
+
+    def get_data_about_user(self, obj: Post) -> dict:
+        return {
+            "id": obj.user.id,
+            "username": obj.user.username,
+            "avatar": obj.user.avatar_set.all().first().image.url,
+            "group": obj.user.groups.get().name
+        }
+
+    def get_attachment(self, obj: Post) -> list:
+        images = [image.photo.url for image in obj.attachment_set.all()]
+        return images
 
 
 class CommentSerializer(ModelSerializer):

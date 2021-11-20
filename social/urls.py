@@ -8,7 +8,7 @@ from chat import views
 
 
 urlpatterns = [
-    #path('admin/', admin.site.urls),
+    path('admin/', admin.site.urls),
 
     path('', include('soc.urls')),
     #path('users/', include('soc_profile.urls')),

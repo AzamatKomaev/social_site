@@ -21,7 +21,13 @@ const CategoryPage = () => {
             <div className="container-fluid">
                 {categories.map((category) => (
                     <div className="row" style={{marginTop: "25px"}}>
-                        <Category id={category.id} name={category.name} avatar={category.avatar} key={category.id}/>
+                        <Category
+                            id={category.id}
+                            name={category.name}
+                            avatar={category.avatar}
+                            count={category.count}
+                            key={category.id}
+                        />
                     </div>
                 ))}
             </div>
