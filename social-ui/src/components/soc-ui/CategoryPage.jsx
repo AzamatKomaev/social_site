@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import 'bootstrap/dist/css/bootstrap.min.css';
 
 import Header from '../extend/Header.jsx';
 import Category from './include/Category';
 
 
-const Categories = () => {
+const CategoryPage = () => {
     const [categories, setCategories] = useState([])
 
     useEffect(() => {
@@ -17,11 +18,15 @@ const Categories = () => {
     return (
         <div>
             <Header/>
-            {categories.map((category) => (
-                <Category name={category.name} avatar={category.avatar} key={category.id}/>
-            ))}
+            <div className="container-fluid">
+                {categories.map((category) => (
+                    <div className="row" style={{marginTop: "25px"}}>
+                        <Category name={category.name} avatar={category.avatar} key={category.id}/>
+                    </div>
+                ))}
+            </div>
         </div>
     )
 }
 
-export default Categories;
+export default CategoryPage;

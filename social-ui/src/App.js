@@ -8,8 +8,8 @@ import {
 
 import './App.css';
 
-import Categories from './components/soc-ui/Categories';
-import Posts from './components/soc-ui/Posts';
+import CategoryPage from './components/soc-ui/CategoryPage';
+import PostPage from './components/soc-ui/PostPage';
 
 
 const App = (props) => {
@@ -17,7 +17,8 @@ const App = (props) => {
     return (
         <div className="App">
             <Switch>
-                <Route history={history} path='/categories' component={Categories} />
+                <Route exact path='/categories/' component={CategoryPage} />
+                <Route exact path='/categories/:categoryId/' component={PostPage} />
                 <Redirect from='/' to='/categories'/>
             </Switch>
         </div>
