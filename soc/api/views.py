@@ -56,7 +56,7 @@ class PostDetailAPIView(APIView):
             post = Post.objects.get(category=category_id, id=post_id)
         except ObjectDoesNotExist:
             return Response({"error": f"Post {post_id} in category {category_id} does not exists."},
-                            status=status.HTTP_400_BAD_REQUEST)
+                            status=status.HTTP_404_NOT_FOUND)
 
         serializer = PostSerializer(post)
         return Response(serializer.data, status=status.HTTP_200_OK)
@@ -96,7 +96,7 @@ class CommentDetailAPIView(APIView):
             comment = Comment.objects.get(id=comment_id, post_id=post_id)
         except ObjectDoesNotExist:
             return Response({"error": f"Comment {comment_id} for post {post_id} does not exists."},
-                            status=status.HTTP_400_BAD_REQUEST)
+                            status=status.HTTP_404_NOT_FOUND)
 
         serializer = CommentSerializer(comment)
         return Response(serializer.data, status=status.HTTP_200_OK)

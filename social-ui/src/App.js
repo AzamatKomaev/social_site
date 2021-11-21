@@ -10,7 +10,7 @@ import './App.css';
 
 import CategoryPage from './components/soc-ui/CategoryPage';
 import PostPage from './components/soc-ui/PostPage';
-
+import PostDetailPage from './components/soc-ui/PostDetailPage';
 
 const App = (props) => {
     const { history } = props;
@@ -19,6 +19,7 @@ const App = (props) => {
             <Switch>
                 <Route exact path='/categories/' component={CategoryPage} />
                 <Route exact path='/categories/:categoryId/' component={PostPage} />
+                <Route exact path='/categories/:categoryId/:postId/' component={PostDetailPage} />
                 <Redirect from='/' to='/categories'/>
             </Switch>
         </div>

@@ -27,7 +27,7 @@ const CategoryPage = () => {
                             avatar={category.avatar}
                             count={category.count}
                             key={category.id}
-                        />
+                         />
                     </div>
                 ))}
             </div>

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect} from 'react';
 import axios from 'axios';
 
 import Header from '../extend/Header';
@@ -46,7 +46,8 @@ const PostPage = (props) => {
                                 created_at={post.created_at}
                                 user_data={post.user_data}
                                 attachment={post.attachment}
-                            />
+                                url={"/categories/" + categoryId + "/" + post.id}
+                             />
                             {"\n"}
                         </div>
                     ))}

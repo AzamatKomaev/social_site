@@ -21,7 +21,7 @@ const Post = (props) => {
 			</div>
 
 			<div className="card-body">
-				<a href="/" className="text-dark" style={{textDecoration: "none"}}>
+				<a href={props.url} className="text-dark" style={{textDecoration: "none"}}>
 					<h4>{props.title}</h4>
 					{props.text}
 					{props.attachment.map((photo) => (
