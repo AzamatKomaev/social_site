@@ -8,21 +8,34 @@ from rest_framework.serializers import (
     CurrentUserDefault,
 )
 
-from soc.models import Post, Category, Comment
+from soc.models import Post, Category, Comment, Avatar
 
 
 class UserSerializer(ModelSerializer):
     """Сериализатор для пользователей сайта."""
+    group_data = SerializerMethodField('get_group_data')
+    avatar = SerializerMethodField('get_avatar')
+
+    def get_group_data(self, obj: User) -> dict:
+        return GroupSerializer(obj.groups.get()).data
+
+    def get_avatar(self, obj: User):
+        return AvatarSerializer(obj.avatar_set.get()).data
+
     class Meta:
         model = User
-        fields = ['id', 'username', 'email']
+        fields = ["id",
+                  "username",
+                  "email",
+                  "group_data",
+                  "avatar"]
 
 
 class GroupSerializer(ModelSerializer):
     """Сериализатор для групп пользователей сайта."""
     class Meta:
         model = Group
-        fields = ['id', 'name']
+        fields = ['name']
 
 
 class CategorySerializer(ModelSerializer):
@@ -33,7 +46,7 @@ class CategorySerializer(ModelSerializer):
         model = Category
         fields = '__all__'
 
-    def get_count_of_posts(self, obj):
+    def get_count_of_posts(self, obj) -> int:
         return obj.post_set.all().count()
 
 
@@ -43,29 +56,39 @@ class PostSerializer(ModelSerializer):
     category_id = IntegerField()
     user_data = SerializerMethodField('get_data_about_user')
     attachment = SerializerMethodField('get_attachment')
-
-    class Meta:
-        model = Post
-        fields = "__all__"
+    comments = SerializerMethodField('get_comments')
 
     def get_data_about_user(self, obj: Post) -> dict:
-        return {
-            "id": obj.user.id,
-            "username": obj.user.username,
-            "avatar": obj.user.avatar_set.all().first().image.url,
-            "group": obj.user.groups.get().name
-        }
+        return UserSerializer(obj.user).data
 
     def get_attachment(self, obj: Post) -> list:
         images = [image.photo.url for image in obj.attachment_set.all()]
         return images
 
+    def get_comments(self, obj: Post) -> list:
+        comments = Comment.objects.filter(post_id=obj.id)
+        comments_list = [CommentSerializer(comment).data for comment in comments]
+        return comments_list
+
+    class Meta:
+        model = Post
+        fields = "__all__"
+
+
 
 class CommentSerializer(ModelSerializer):
     """Сериализатор для комментариев."""
-    user = HiddenField(default=CurrentUserDefault())
-    post_id = IntegerField()
+    user_data = SerializerMethodField("get_user_data")
+
+    def get_user_data(self, obj: Comment):
+        return UserSerializer(obj.user).data
 
     class Meta:
         model = Comment
-        fields = ['id', 'text', 'created_at', 'post_id', 'user']
+        fields = "__all__"
+
+
+class AvatarSerializer(ModelSerializer):
+    class Meta:
+        model = Avatar
+        fields = ["image"]
