@@ -66,7 +66,7 @@ def show_all_posts(request, category: str):
 
 
 @ratelimit(key='ip', rate='60/m', block=True)
-def show_post(request, category: str, id: int):
+def show_post(request, category_id: int, id: int):
     """Вьюшка для отображения полного поста"""
     template_name = "soc/show_post.html"
     try:

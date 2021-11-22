@@ -7,6 +7,7 @@ import Error429TooManyRequests from '../extend/Error429TooManyRequests';
 import '../../App.css';
 
 import Post from './include/Post';
+import CommentList from './include/CommentList';
 
 
 const PostDetailPage = (props) => {
@@ -62,7 +63,10 @@ const PostDetailPage = (props) => {
                         attachment={post.attachment}
                         url="#"
                      />
-                    {"\n"}
+                </div>
+                {"\n\n\n"}
+                <div className="comments">
+                    <CommentList comments={post.comments}/>
                 </div>
             </div>
         )
