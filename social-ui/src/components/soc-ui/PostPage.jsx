@@ -7,6 +7,7 @@ import Error429TooManyRequests from '../extend/Error429TooManyRequests';
 import '../../App.css';
 
 import Post from './include/Post';
+import PostList from './include/PostList';
 
 
 const PostPage = (props) => {
@@ -35,23 +36,8 @@ const PostPage = (props) => {
         return (
             <div>
                 <Header/>
-                <div className="posts">
-                    {"\n\n"}
-                    {posts.map((post) => (
-                        <div class="container">
-                            <Post
-                                id={post.id}
-                                title={post.title}
-                                text={post.text}
-                                created_at={post.created_at}
-                                user_data={post.user_data}
-                                attachment={post.attachment}
-                                url={"/categories/" + categoryId + "/" + post.id}
-                             />
-                            {"\n"}
-                        </div>
-                    ))}
-                </div>
+                {"\n\n"}
+                <PostList posts={posts} categoryId={categoryId}/>
             </div>
         )
     } else if (error.response == 404) {

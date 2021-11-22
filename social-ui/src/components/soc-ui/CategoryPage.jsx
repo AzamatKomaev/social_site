@@ -4,6 +4,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 
 import Header from '../extend/Header';
 import Category from './include/Category';
+import CategoryList from './include/CategoryList';
 
 
 const CategoryPage = () => {
@@ -18,19 +19,7 @@ const CategoryPage = () => {
     return (
         <div>
             <Header/>
-            <div className="container-fluid">
-                {categories.map((category) => (
-                    <div className="row" style={{marginTop: "25px"}}>
-                        <Category
-                            id={category.id}
-                            name={category.name}
-                            avatar={category.avatar}
-                            count={category.count}
-                            key={category.id}
-                         />
-                    </div>
-                ))}
-            </div>
+            <CategoryList categories={categories}/>
         </div>
     )
 }
