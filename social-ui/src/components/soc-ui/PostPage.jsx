@@ -32,6 +32,7 @@ const PostPage = (props) => {
             })
     }, []);
 
+
     if (!error) {
         return (
             <div>

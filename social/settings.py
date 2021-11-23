@@ -44,7 +44,7 @@ LOGGING = {
 
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': [
-        'rest_framework.authentication.TokenAuthentication',
+        'rest_framework_simplejwt.authentication.JWTAuthentication',
     ],
 
     'DEFAULT_THROTTLE_CLASSES': [
@@ -67,8 +67,7 @@ INSTALLED_APPS = [
 
     'channels',
     'rest_framework',
-    'rest_framework.authtoken',
-    'djoser',
+    'rest_framework_simplejwt',
 
     'django.contrib.admin',
     'django.contrib.auth',
