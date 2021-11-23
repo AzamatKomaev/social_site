@@ -1,4 +1,5 @@
 from django.core.exceptions import ObjectDoesNotExist
+from django.contrib.auth.models import User
 from django.db.utils import IntegrityError
 
 from rest_framework.views import APIView
@@ -6,11 +7,28 @@ from rest_framework.response import Response
 from rest_framework import status, permissions
 
 from soc.api.serializers import (
+    UserSerializer,
     CategorySerializer,
     PostSerializer,
     CommentSerializer
 )
 from soc.models import Category, Post, Comment
+
+
+class UserDetailAPIView(APIView):
+
+    def get(self, request, username: str = None, user_id: int = None):
+        user = ""
+        try:
+            if username is not None:
+                user = User.objects.get(username=username)
+            elif user_id is not None:
+                user = User.objects.get(id=user_id)
+        except ObjectDoesNotExist:
+            return Response({"error": "User not found with given data."}, status=status.HTTP_404_NOT_FOUND)
+
+        serializer = UserSerializer(user)
+        return Response(serializer.data, status=status.HTTP_200_OK)
 
 
 class CategoryListAPIView(APIView):

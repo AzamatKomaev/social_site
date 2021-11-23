@@ -8,4 +8,7 @@ urlpatterns = [
     path('category/<int:category_id>/<int:post_id>/', views.PostDetailAPIView.as_view(), name="post"),
     path('category/<int:category_id>/<int:post_id>/comment/', views.CommentListAPIView.as_view(), name="comments"),
     path('category/<int:category_id>/<int:post_id>/comment/<int:comment_id>/', views.CommentDetailAPIView.as_view(), name="comment"),
+
+    path('user/<int:user_id>/', views.UserDetailAPIView.as_view()),
+    path('user/<str:username>/', views.UserDetailAPIView.as_view()),
 ]

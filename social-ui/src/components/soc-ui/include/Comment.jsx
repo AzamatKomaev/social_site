@@ -3,7 +3,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import axios from 'axios';
 
 import '../../../App.css';
-import getReadableDateFormat from '../../../services/service';
+import { getReadableDateFormat } from '../../../services/service';
 
 
 const Comment = (props) => {

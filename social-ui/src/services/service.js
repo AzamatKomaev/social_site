@@ -4,4 +4,12 @@ const getReadableDateFormat = (dateString) => {
     return result;
 }
 
-export default getReadableDateFormat;
+const isUserAuth = () => {
+    if (localStorage.getItem("jwt") != null) {
+        return true;
+    } else {
+        return false;
+    }
+}
+
+export { getReadableDateFormat, isUserAuth };

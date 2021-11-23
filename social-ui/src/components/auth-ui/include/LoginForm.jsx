@@ -5,12 +5,26 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import '../style.css';
 import '../../../App.css';
 
-
 const LoginForm = (props) => {
     const [username, setUsername] = useState()
     const [password, setPassword] = useState()
+    const [error, setError] = useState("")
 
-    const createJwt = (event) => {
+    const addUserDataInLocalStorage = (username) => {
+        axios.get("http://127.0.0.1:8000/api/v1/user/" + username + "/")
+            .then((response) => {
+                localStorage.setItem("user_id", response.data.id)
+                localStorage.setItem("user_username", response.data.username)
+                localStorage.setItem("user_email", response.data.email)
+                localStorage.setItem("user_group", response.data.group_data.name)
+                localStorage.setItem("user_avatar", response.data.avatar.image)
+            })
+            .catch((error) => {
+                console.log(error.response.status)
+            })
+    }
+
+    const authUserAndCreateJwt = (event) => {
         axios
             .post("http://127.0.0.1:8000/jwt/token/", {
                 username: username,
@@ -18,15 +32,24 @@ const LoginForm = (props) => {
             })
             .then(response => {
                 localStorage.setItem("jwt", response.data.access)
+                addUserDataInLocalStorage(username)
                 window.location.href = 'http://127.0.0.1:8000/categories/';
              })
-            .catch(error => console.log(error));
+            .catch(error => {
+                if (error.response.status == 401) {
+                    setError("Вы неправильно ввели логин или пароль. Попробуйте снова.")
+                } else if (error.response.status == 400) {
+                    setError("Логин или пароль не могут быть пустыми -_-.")
+                } else {
+                    alert(`${error.response.status} error`)
+                }
+            });
     }
 
     return (
         <div className="row" style={{margin: "0"}}>
             <div className="col-11 col-sm-9 col-md-6 mx-auto p-0">
-                <div className="card">
+                <div className="card" id="login-card">
                     <div className="login-box">
                         <div className="login-snip">
                             <input id="tab-1" type="radio" name="tab" className="sign-in" checked/>
@@ -71,8 +94,9 @@ const LoginForm = (props) => {
                                                 type="button"
                                                 className="button"
                                                 value="Sign In"
-                                                onClick={createJwt}
+                                                onClick={authUserAndCreateJwt}
                                              />
+                                        <p className="text-danger">{error}</p>
                                         </div>
                                         <div className="hr"></div>
                                         <div className="foot"> <a href="#">Forgot Password?</a> </div>
