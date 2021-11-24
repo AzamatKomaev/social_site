@@ -1,6 +1,7 @@
 from pathlib import Path
 import os
 
+from datetime import timedelta
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -56,6 +57,10 @@ REST_FRAMEWORK = {
         'anon': '60/minute',
         'user': '60/minute'
     }
+}
+
+SIMPLE_JWT = {
+    'ACCESS_TOKEN_LIFETIME': timedelta(days=30),
 }
 
 

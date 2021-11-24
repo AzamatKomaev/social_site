@@ -5,6 +5,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import Header from '../extend/Header';
 import Category from './include/Category';
 import CategoryList from './include/CategoryList';
+import { WelcomeAuthBox } from './include/WelcomeBox';
 
 
 const CategoryPage = () => {
@@ -16,9 +17,14 @@ const CategoryPage = () => {
         }))
     }, [setCategories]);
 
+
     return (
         <div>
             <Header/>
+            <WelcomeAuthBox
+                jwtToken={localStorage.getItem("jwt")}
+                key={1}
+             />
             <CategoryList categories={categories}/>
         </div>
     )

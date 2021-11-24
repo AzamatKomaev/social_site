@@ -10,20 +10,6 @@ const LoginForm = (props) => {
     const [password, setPassword] = useState()
     const [error, setError] = useState("")
 
-    const addUserDataInLocalStorage = (username) => {
-        axios.get("http://127.0.0.1:8000/api/v1/user/" + username + "/")
-            .then((response) => {
-                localStorage.setItem("user_id", response.data.id)
-                localStorage.setItem("user_username", response.data.username)
-                localStorage.setItem("user_email", response.data.email)
-                localStorage.setItem("user_group", response.data.group_data.name)
-                localStorage.setItem("user_avatar", response.data.avatar.image)
-            })
-            .catch((error) => {
-                console.log(error.response.status)
-            })
-    }
-
     const authUserAndCreateJwt = (event) => {
         axios
             .post("http://127.0.0.1:8000/jwt/token/", {
@@ -32,7 +18,6 @@ const LoginForm = (props) => {
             })
             .then(response => {
                 localStorage.setItem("jwt", response.data.access)
-                addUserDataInLocalStorage(username)
                 window.location.href = 'http://127.0.0.1:8000/categories/';
              })
             .catch(error => {
@@ -41,7 +26,7 @@ const LoginForm = (props) => {
                 } else if (error.response.status == 400) {
                     setError("Логин или пароль не могут быть пустыми -_-.")
                 } else {
-                    alert(`${error.response.status} error`)
+                    setError(`${error.response.status} error`)
                 }
             });
     }

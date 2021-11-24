@@ -15,6 +15,14 @@ from soc.api.serializers import (
 from soc.models import Category, Post, Comment
 
 
+class UserJwtAPIView(APIView):
+    permission_classes = [permissions.IsAuthenticated]
+
+    def get(self, request):
+        serilizer = UserSerializer(request.user)
+        return Response(serilizer.data, status=status.HTTP_200_OK)
+
+
 class UserDetailAPIView(APIView):
 
     def get(self, request, username: str = None, user_id: int = None):
