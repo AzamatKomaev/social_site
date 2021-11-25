@@ -25,4 +25,21 @@ const isUserAuth = async() => {
     return status;
 }
 
-export { getReadableDateFormat, isUserAuth };
+const getCurrentUserData = async() => {
+    let data = null
+
+    await axios.get("http://127.0.0.1:8000/api/v1/user/is_auth/", {
+        headers: {
+            Authorization: 'Bearer ' + localStorage.getItem("jwt")
+        }
+    })
+        .then((response) => {
+            data = response.data
+        })
+        .catch((error) => {
+            data = false
+        })
+    return data;
+}
+
+export { getReadableDateFormat, isUserAuth, getCurrentUserData };

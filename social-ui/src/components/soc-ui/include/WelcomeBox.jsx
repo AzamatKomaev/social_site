@@ -12,31 +12,14 @@ const WelcomeAuthBox = (props) => {
         window.location.href = 'http://127.0.0.1:8000/auth/login/';
     }
 
-
-    const [userData, setUserData] = useState()
-
-    useEffect(() => {
-        axios.get("http://127.0.0.1:8000/api/v1/user/is_auth/", {
-            headers: {
-                Authorization: 'Bearer ' + localStorage.getItem("jwt")
-            }
-        })
-            .then((response) => {
-                setUserData(response.data)
-            })
-            .catch((error) => {
-                setUserData(null)
-            })
-    }, [])
-
-    if (userData) {
+    if (props.userData) {
         return (
             <div className="container">
                 <div className="jumbotron">
                     <h1>Здраствуйте!</h1>
                     <p className="lead" style={{fontSize:"18pt"}}>
-                        { userData.username }, добро пожаловать в InTheGame. <a href="#">Перейти в ваш профиль?</a>
-                        <h2 align="center" style={{fontSize:"20pt"}}>Статус аккаунта: { userData.group_data.name }</h2>
+                        { props.userData.username }, добро пожаловать в InTheGame. <a href="#">Перейти в ваш профиль?</a>
+                        <h2 align="center" style={{fontSize:"20pt"}}>Статус аккаунта: { props.userData.group_data.name }</h2>
                     </p>
                     <hr/>
                     <div className="container-fluid">

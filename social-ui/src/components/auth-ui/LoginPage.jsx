@@ -12,14 +12,16 @@ import { isUserAuth } from '../../services/service';
 
 
 const LoginPage = (props) => {
+    /*
     const [isAuth, setIsAuth] = useState(() => {
                                              isUserAuth()
                                                 .then((value) => {
                                                     return value;
                                                 })
                                              })
+    */
 
-    if (isAuth) {
+    if (props.isAuth) {
         return (
             <div>
                 <Header/>

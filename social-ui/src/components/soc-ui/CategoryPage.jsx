@@ -6,33 +6,30 @@ import Header from '../extend/Header';
 import Category from './include/Category';
 import CategoryList from './include/CategoryList';
 import { WelcomeAuthBox, WelcomeAnonBox } from './include/WelcomeBox';
-import { isUserAuth } from '../../services/service';
+import { isUserAuth, getCurrentUserData } from '../../services/service';
 
 
-const CategoryPage = () => {
+const CategoryPage = (props) => {
     const [categories, setCategories] = useState([])
     const [isAuth, setIsAuth] = useState()
+    const [userData, setUserData] = useState()
 
 
     useEffect(() => {
         axios.get("http://127.0.0.1:8000/api/v1/category/").then((response => {
             setCategories(response.data);
         }))
-    }, [setCategories]);
+    }, []);
 
-    useEffect(() => {
-        isUserAuth()
-            .then((value) => {
-                setIsAuth(value)
-            })
-    }, [setIsAuth]);
 
-    if (isAuth) {
+
+    if (props.isAuth) {
         return (
             <div>
                 <Header/>{"\n"}
                 <WelcomeAuthBox
                     jwtToken={localStorage.getItem("jwt")}
+                    userData={props.userData}
                     key={1}
                  />{"\n\n"}
                 <CategoryList categories={categories}/>
