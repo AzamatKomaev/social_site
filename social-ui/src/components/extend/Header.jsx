@@ -12,8 +12,8 @@ const Header = () => {
                 <a className="p-2 text-dark" href="api/v1">API</a>
                 <a className="p-2 text-dark" href="#">О нас</a>
             </nav>
-            <a className="btn btn-outline-primary" href="{% url 'exit_and_login' %}" style={{marginRight: '5px'}}>Вход</a>
-            <a className="btn btn-outline-secondary" href="{% url 'exit_and_login' %}">Регистрация</a>
+            <a className="btn btn-outline-primary" href="/auth/login/" style={{marginRight: '5px'}}>Вход</a>
+            <a className="btn btn-outline-secondary" href="/auth/login/">Регистрация</a>
 	    </div>
     )
 }

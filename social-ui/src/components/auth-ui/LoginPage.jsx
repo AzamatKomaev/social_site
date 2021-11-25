@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
 import './style.css';
@@ -12,7 +12,14 @@ import { isUserAuth } from '../../services/service';
 
 
 const LoginPage = (props) => {
-    if (isUserAuth()) {
+    const [isAuth, setIsAuth] = useState(() => {
+                                             isUserAuth()
+                                                .then((value) => {
+                                                    return value;
+                                                })
+                                             })
+
+    if (isAuth) {
         return (
             <div>
                 <Header/>

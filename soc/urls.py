@@ -8,7 +8,8 @@ from . import views
 urlpatterns = [
     path("categories/", views.index, name="home"),
     path("categories/<int:category_id>/", views.index, name="all_posts"),
-    path("categories/<int:category_id>/<int:post_id>/", views.index, name="detail_post"),
+    path("categories/<int:category_id>/create", views.index, name="create_post"),
+    path("categories/<int:category_id>/id/<int:post_id>/", views.index, name="detail_post"),
 
     path("auth/login/", views.index, name="login"),
     #path("main", views.show_all_categories, name='main'),

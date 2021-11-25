@@ -19,6 +19,7 @@ urlpatterns = [
 
     path('api/v1/', include('soc.api.urls')),
     path('jwt/token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
+    path('jwt/refresh_token/', TokenRefreshView.as_view(), name='token_refresh'),
     #path('auth_api/', include('djoser.urls')),
     #path('auth_api/token', obtain_auth_token, name="token"),
 
