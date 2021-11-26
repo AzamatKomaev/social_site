@@ -10,7 +10,7 @@ import {
 } from "react-router-dom";
 
 import './App.css';
-import { isUserAuth, getCurrentUserData } from './services/service'
+import { isUserAuth, getCurrentUserData, getCategories } from './services/service'
 
 import CategoryPage from './components/soc-ui/CategoryPage';
 import PostPage from './components/soc-ui/PostPage';
@@ -24,40 +24,41 @@ const App = (props) => {
     const { history } = props;
     const [isAuth, setIsAuth] = useState()
     const [userData, setUserData] = useState()
-
-    useEffect(() => {
-        isUserAuth()
-            .then((value) => {
-                setIsAuth(value)
-            })
-    }, []);
+    const [categories, setCategories] = useState([])
 
     useEffect(() => {
         getCurrentUserData()
             .then((data) => {
-                setUserData(data)
-            })
+                setUserData(data.info)
+                setIsAuth(data.isAuth)
+            });
+
+        getCategories()
+            .then((data) => {
+                setCategories(data)
+            });
     }, [])
+
 
     const LoginPageUp = (props) => {
         return (<LoginPage {...props} isAuth={isAuth} key={uuidv4()} />);
     };
 
     const CategoryPageUp = (props) => {
-        return (<CategoryPage {...props} isAuth={isAuth} userData={userData} key={uuidv4()} />);
+        return (<CategoryPage {...props} isAuth={isAuth} userData={userData} categories={categories} key={uuidv4()} />);
     };
 
     const CreatePostPageUp = (props) => {
-        return (<CreatePostPage {...props} isAuth={isAuth} />)
+        return (<CreatePostPage {...props} isAuth={isAuth} categories={categories} />)
     }
 
     return (
         <div className="App">
             <Switch>
                 <Route exact path='/categories/' component={CategoryPageUp} />
-                <Route exact path='/categories/:categoryId/' component={PostPage} />
-                <Route exact path='/categories/:categoryId/create' component={CreatePostPageUp} />
-                <Route exact path='/categories/:categoryId/id/:postId/' component={PostDetailPage} />
+                <Route exact path='/categories/create/' component={CreatePostPageUp} />
+                <Route exact path='/categories/c_id/:categoryId/' component={PostPage} />
+                <Route exact path='/categories/c_id/:categoryId/:postId/' component={PostDetailPage} />
 
                 <Route exact path='/auth/login/' component={LoginPageUp} />
 

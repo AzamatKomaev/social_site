@@ -1,5 +1,6 @@
 import React, { useState, useEffect} from 'react';
 import axios from 'axios';
+import { v4 as uuidv4 } from 'uuid';
 
 import Header from '../extend/Header';
 import Error404NotFound from '../extend/Error404NotFound';
@@ -38,7 +39,11 @@ const PostPage = (props) => {
             <div>
                 <Header/>
                 {"\n\n"}
-                <PostList posts={posts} categoryId={categoryId}/>
+                <PostList
+                    posts={posts}
+                    categoryId={categoryId}
+                    key={uuidv4()}
+                 />
             </div>
         )
     } else if (error.response == 404) {
@@ -57,10 +62,9 @@ const PostPage = (props) => {
             </div>
         )
     } else {
-        console.log(error)
+        alert(error.response)
         return (
             <div>
-                i dont know this error :(
             </div>
         )
     }

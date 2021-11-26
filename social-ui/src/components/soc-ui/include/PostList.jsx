@@ -17,7 +17,7 @@ const PostList = (props) => {
                         created_at={post.created_at}
                         user_data={post.user_data}
                         attachment={post.attachment}
-                        url={"/categories/" + props.categoryId + "/id/" + post.id + "/"}
+                        url={"/categories/c_id/" + props.categoryId + "/" + post.id + "/"}
                      />
                     {"\n"}
                 </div>

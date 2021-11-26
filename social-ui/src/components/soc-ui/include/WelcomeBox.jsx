@@ -25,7 +25,7 @@ const WelcomeAuthBox = (props) => {
                     <div className="container-fluid">
                         <div className="row">
                             <a className="btn btn-lg btn-primary btn-block" href="{% url 'profile' username=user.username %}" role="button">Перейти в профиль</a>
-                            <a className="btn btn-lg btn-success btn-block" href="{% url 'create_post' category=category %}" role="button">Добавить пост</a>
+                            <a className="btn btn-lg btn-success btn-block" href="/categories/create/" role="button">Добавить пост</a>
                             <a className="btn btn-lg btn-warning btn-block" href="{% url 'all_chats' %}" role="button">Чаты</a>
                             <button className="btn btn-lg btn-danger btn-block" onClick={handleExitButton}>Выйти</button>
                         </div>
