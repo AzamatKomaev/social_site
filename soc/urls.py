@@ -12,6 +12,7 @@ urlpatterns = [
     path("categories/c_id/<int:category_id>/<int:post_id>/", views.index, name="detail_post"),
 
     path("auth/login/", views.index, name="login"),
+    path("auth/sign_up/", views.index, name="signup"),
     #path("main", views.show_all_categories, name='main'),
     #path("<str:category>", views.show_all_posts, name='all_posts'),
     #path("test/<int:category_id>/<int:id>/", views.show_post, name="post"),

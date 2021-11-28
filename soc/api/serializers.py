@@ -6,6 +6,7 @@ from rest_framework.serializers import (
     IntegerField,
     SerializerMethodField,
     CurrentUserDefault,
+    CharField
 )
 
 from soc.models import Post, Category, Comment, Avatar
@@ -78,7 +79,9 @@ class PostSerializer(ModelSerializer):
 
 class CommentSerializer(ModelSerializer):
     """Сериализатор для комментариев."""
+    user = HiddenField(default=CurrentUserDefault())
     user_data = SerializerMethodField("get_user_data")
+    text = CharField()
 
     def get_user_data(self, obj: Comment):
         return UserSerializer(obj.user).data

@@ -8,6 +8,7 @@ import '../../App.css';
 
 import Post from './include/Post';
 import CommentList from './include/CommentList';
+import CommentForm from './include/CommentForm';
 
 
 const PostDetailPage = (props) => {
@@ -63,6 +64,8 @@ const PostDetailPage = (props) => {
                         attachment={post.attachment}
                         url="#"
                      />
+                     {"\n\n\n"}
+                    <CommentForm postId={postId} categoryId={categoryId}/>
                 </div>
                 {"\n\n\n"}
                 <div className="comments">

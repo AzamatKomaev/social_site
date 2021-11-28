@@ -6,7 +6,7 @@ import '../../../App.css';
 
 const CommentList = (props) => {
     return(
-        <div>
+        <div className="container">
             {props.comments.map(comment => (
                 <div>
                     <Comment
@@ -15,7 +15,7 @@ const CommentList = (props) => {
                         created_at={comment.created_at}
                         user_data={comment.user_data}
                      />
-                     {"\n\n"}
+                     {"\n"}
                 </div>
             ))}
         </div>

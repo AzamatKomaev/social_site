@@ -13,7 +13,7 @@ const Header = () => {
                 <a className="p-2 text-dark" href="#">О нас</a>
             </nav>
             <a className="btn btn-outline-primary" href="/auth/login/" style={{marginRight: '5px'}}>Вход</a>
-            <a className="btn btn-outline-secondary" href="/auth/login/">Регистрация</a>
+            <a className="btn btn-outline-secondary" href="/auth/sign_up/">Регистрация</a>
 	    </div>
     )
 }

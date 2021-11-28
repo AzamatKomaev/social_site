@@ -19,7 +19,7 @@ const PostList = (props) => {
                         attachment={post.attachment}
                         url={"/categories/c_id/" + props.categoryId + "/" + post.id + "/"}
                      />
-                    {"\n"}
+                    {"\n\n\n"}
                 </div>
             ))}
         </div>

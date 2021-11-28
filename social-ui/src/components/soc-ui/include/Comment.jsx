@@ -11,12 +11,17 @@ const Comment = (props) => {
         <div>
             <div className="card border-secondary">
                 <div className="card-header bg-secondary text-white">
-                    <img src={props.user_data.avatar.image} alt="avatar" className="rounded-circle float-left" style={{width: "60px"}}/>
-                    {"\n\n\n"}
-                    <a href="#" className="text-white" style={{fontSize: "17pt"}}>{props.user_data.username}</a>{"\n"}
-                    <p className="text-info">{props.user_data.group_data.name}</p>
+                    <div class="d-flex align-items-center py-1">
+                        <div class="position-relative">
+                            <img src={props.user_data.avatar.image} alt="avatar" style={{marginTop: "-10px"}} className="rounded-circle float-left" width="48" height="48"/>
+                        </div>
+                            <div class="flex-grow-1 pl-3">
+                                <a href="#" className="text-white" style={{fontSize: "13pt"}}>{props.user_data.username}</a>{"\n"}
+                                <p className="text-info" style={{fontSize: "10pt"}}>{props.user_data.group_data.name}</p>
+                            </div>
+                    </div>
                 </div>
-    
+
                 <div className="card-body">
                     {props.text}
                 </div>

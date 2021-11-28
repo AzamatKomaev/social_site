@@ -18,6 +18,8 @@ import PostDetailPage from './components/soc-ui/PostDetailPage';
 import CreatePostPage from './components/soc-ui/CreatePostPage';
 
 import LoginPage from './components/auth-ui/LoginPage';
+import SignUpPage from './components/auth-ui/SignUpPage';
+
 
 
 const App = (props) => {
@@ -44,6 +46,10 @@ const App = (props) => {
         return (<LoginPage {...props} isAuth={isAuth} key={uuidv4()} />);
     };
 
+    const SignUpPageUp = (props) => {
+        return (<SignUpPage {...props} isAuth={isAuth} key={uuidv4()} />);
+    }
+
     const CategoryPageUp = (props) => {
         return (<CategoryPage {...props} isAuth={isAuth} userData={userData} categories={categories} key={uuidv4()} />);
     };
@@ -61,6 +67,7 @@ const App = (props) => {
                 <Route exact path='/categories/c_id/:categoryId/:postId/' component={PostDetailPage} />
 
                 <Route exact path='/auth/login/' component={LoginPageUp} />
+                <Route exact path='/auth/sign_up/' component={SignUpPageUp} />
 
                 <Redirect from='/' to='/categories'/>
             </Switch>

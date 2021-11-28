@@ -100,7 +100,7 @@ class CommentListAPIView(APIView):
         return Response(serializer.data, status=status.HTTP_200_OK)
 
     def post(self, request, category_id: int, post_id: int) -> Response:
-        comment_data = {**request.data, **{"post_id": post_id}}
+        comment_data = {**request.data, **{"post": post_id}}
         serializer = CommentSerializer(data=comment_data, context={"request": request})
 
         if serializer.is_valid():

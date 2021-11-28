@@ -1,15 +1,17 @@
-import React, { useState } from 'react';
-import 'bootstrap/dist/css/bootstrap.min.css';
+import React from 'react';
+import axios from 'axios';
 
-import './style.css';
+import 'bootstrap/dist/css/bootstrap.min.css';
 import '../../App.css';
 
 import Header from '../extend/Header';
 import Error404NotFound from '../extend/Error404NotFound';
-import LoginForm from "./include/LoginForm";
+import SignUpForm from "./include/SignUpForm";
+
+import { isUserAuth } from '../../services/service';
 
 
-const LoginPage = (props) => {
+const SignUpPage = (props) => {
     if (props.isAuth) {
         return (
             <div>
@@ -23,10 +25,11 @@ const LoginPage = (props) => {
             <div>
                 <Header/>
                 {"\n"}
-                <LoginForm/>
+                <SignUpForm/>
             </div>
         )
     }
 }
 
-export default LoginPage;
+
+export default SignUpPage;
