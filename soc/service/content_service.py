@@ -1,6 +1,6 @@
 import logging
 
-from django.contrib.auth.models import User
+from soc.models import User
 
 from ..models import Post, Category
 from ..forms import CommentForm

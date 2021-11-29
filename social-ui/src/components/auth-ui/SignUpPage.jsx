@@ -12,23 +12,18 @@ import { isUserAuth } from '../../services/service';
 
 
 const SignUpPage = (props) => {
-    if (props.isAuth) {
-        return (
-            <div>
-                <Header/>
-                {"\n"}
-                <Error404NotFound/>
-            </div>
-        )
-    } else {
-        return (
-            <div>
-                <Header/>
-                {"\n"}
-                <SignUpForm/>
-            </div>
-        )
-    }
+    return (
+        <div>
+            <Header/>
+            {"\n"}
+            {props.isAuth
+            ?
+            <Error404NotFound/>
+            :
+            <SignUpForm/>
+            }
+        </div>
+    )
 }
 
 

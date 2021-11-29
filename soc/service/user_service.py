@@ -1,4 +1,4 @@
-from django.contrib.auth.models import User
+from soc.models import User
 
 
 def return_user_group(user) -> str:

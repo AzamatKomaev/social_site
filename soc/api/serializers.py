@@ -1,12 +1,13 @@
-from django.contrib.auth.models import User, Group
-
+from soc.models import User
+from django.contrib.auth.models import Group
 from rest_framework.serializers import (
     ModelSerializer,
     HiddenField,
     IntegerField,
     SerializerMethodField,
     CurrentUserDefault,
-    CharField
+    CharField,
+    EmailField,
 )
 
 from soc.models import Post, Category, Comment, Avatar
@@ -95,3 +96,12 @@ class AvatarSerializer(ModelSerializer):
     class Meta:
         model = Avatar
         fields = ["image"]
+
+
+class RegistrationUserSerializer(ModelSerializer):
+    email = EmailField()
+    password = CharField(min_length=8, max_length=100, write_only=True)
+
+    class Meta:
+        model = User
+        fields = ["email", "username", "password"]

@@ -3,7 +3,7 @@ import os
 
 from django.test import TestCase
 from django.test.utils import override_settings
-from django.contrib.auth.models import User, Group
+from soc.models import User, Group
 from django.core.mail import send_mail
 from django.core import mail
 

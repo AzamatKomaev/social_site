@@ -1,5 +1,5 @@
 from django import forms
-from django.contrib.auth.models import User
+from soc.models import User
 
 
 class PostForm(forms.Form):

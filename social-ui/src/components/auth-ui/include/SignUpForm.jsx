@@ -8,6 +8,18 @@ import '../../../App.css';
 
 
 const SignUpForm = () => {
+    const [username, setUsername] = useState()
+    const [password1, setPassword1] = useState()
+    const [password2, setPassword2] = useState()
+    const [email, setEmail] = useState()
+
+    const [errorReg, setErrorReg] = useState({
+        username: null,
+        password1: null,
+        password2: null,
+        email: null
+    })
+
     return (
         <div className="row">
             <div className="col-10 mx-auto">
@@ -28,7 +40,7 @@ const SignUpForm = () => {
                         <div className="form-group">
                             <input type="text" className="form-control item" id="email" placeholder="Email"/>
                         </div>
-                        <a href="#" style={{float: "right", marginTop: "-10px"}}>Already have an account?</a>
+                        <a href="#" style={{float: "right", marginTop: "-10px", backgroundColor: "PowderBlue"}}>Already have an account?</a>
                         {"\n"}
                         <div className="form-group">
                             <button type="button" className="btn btn-block create-account">Create Account</button>

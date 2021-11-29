@@ -141,6 +141,8 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
+AUTH_USER_MODEL = "soc.User"
+
 
 LANGUAGE_CODE = 'ru'
 
@@ -167,8 +169,8 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 LOGIN_REDIRECT_URL = '/main'
 
 #SMTP settings
-EMAIL_HOST = 'smtp.gmail.com'
-EMAIL_PORT = 587
+EMAIL_HOST = 'smtp.mail.ru'
+EMAIL_PORT = 2525
 EMAIL_HOST_USER = os.getenv('EMAIL')
 EMAIL_HOST_PASSWORD = os.getenv('PASSWORD_FROM_EMAIL')
 EMAIL_USE_TLS = True

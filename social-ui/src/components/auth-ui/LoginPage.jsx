@@ -10,23 +10,18 @@ import LoginForm from "./include/LoginForm";
 
 
 const LoginPage = (props) => {
-    if (props.isAuth) {
-        return (
-            <div>
-                <Header/>
-                {"\n"}
-                <Error404NotFound/>
-            </div>
-        )
-    } else {
-        return (
-            <div>
-                <Header/>
-                {"\n"}
-                <LoginForm/>
-            </div>
-        )
-    }
+    return (
+        <div>
+            <Header/>
+            {"\n"}
+            {props.isAuth
+            ?
+            <Error404NotFound/>
+            :
+            <LoginForm/>
+            }
+        </div>
+    )
 }
 
 export default LoginPage;

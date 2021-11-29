@@ -8,23 +8,10 @@ import '../../../App.css';
 
 
 const LoginForm = (props) => {
-    //for login
     const [username, setUsername] = useState()
     const [password, setPassword] = useState()
 
-    //for registration
-    const [usernameReg, setUsernameReg] = useState()
-    const [password1Reg, setPassword1Reg] = useState()
-    const [password2Reg, setPassword2Reg] = useState()
-    const [emailReg, setEmailReg] = useState()
-
     const [error, setError] = useState("")
-    const [errorReg, setErrorReg] = useState({
-        username: null,
-        password1: null,
-        password2: null,
-        email: null
-    })
 
     const authUserAndCreateJwt = (event) => {
         axios
@@ -45,10 +32,6 @@ const LoginForm = (props) => {
                     setError(`${error.response.status} error`)
                 }
             });
-    }
-
-    const registerUser = () => {
-        console.log(usernameReg, password1Reg, password2Reg, emailReg)
     }
 
     return (
@@ -77,8 +60,9 @@ const LoginForm = (props) => {
                                 onChange={e => setPassword(e.target.value)}
                                 placeholder="Password"/>
                         </div>
-                        <a href="#" style={{float:"right", marginTop: "-10px", fontWeight: "800"}}>Don't have an account?</a>
-                        {"\n"}
+                        <a href="#" style={{float:"right", marginTop: "-10px", backgroundColor: "PowderBlue"}}>Don't have an account?</a>{"\n"}
+                        <p className="text-danger" style={{float:"right",  backgroundColor: "PowderBlue"}}>{error}</p>
+                        {"\n\n"}
                         <div className="form-group">
                             <button type="button" className="btn btn-block create-account" onClick={authUserAndCreateJwt}>Sign In</button>
                         </div>

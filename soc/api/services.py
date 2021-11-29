@@ -70,21 +70,10 @@ class CreationUser:
         self._insert_token_in_table()
 
 
-def accept_password_to_reg(token):
+def accept_password_to_reg(token: str) -> None:
     """Функция для установки пользователя активным и удаления токена из таблицы"""
     token_from_db = Token.objects.get(token=token)
     user = User.objects.get(id=token_from_db.user_id)
     user.is_active = True
     user.save()
     token_from_db.delete()
-
-
-def get_client_ip(request):
-    """Получаем ip адрес пользователя."""
-    x_forwarded_for = request.META.get('HTTP_X_FORWARDED_FOR')
-    if x_forwarded_for:
-        ip = x_forwarded_for.split(',')[-1].strip()
-    else:
-        ip = request.META.get('REMOTE_ADDR')
-    return ip
-

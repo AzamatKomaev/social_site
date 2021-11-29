@@ -11,5 +11,6 @@ urlpatterns = [
 
     path('user/find/<int:user_id>/', views.UserDetailAPIView.as_view()),
     path('user/find/<str:username>/', views.UserDetailAPIView.as_view()),
+    path('user/register/', views.RegistrationUserAPIView.as_view()),
     path('user/is_auth/', views.UserJwtAPIView.as_view()),
 ]
