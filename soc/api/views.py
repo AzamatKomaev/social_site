@@ -142,18 +142,13 @@ class CommentDetailAPIView(APIView):
         return Response(serializer.data, status=status.HTTP_200_OK)
 
 
-class SendMailAPIView(APIView):
-    def get(self, request, mail: str):
-        send_mail("test", "hello world", EMAIL_HOST_USER, [mail])
-        return Response({"message": "done"})
-
-
 class RegistrationUserAPIView(APIView):
+
     def post(self, request):
         serializer = RegistrationUserSerializer(data=request.data)
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data)
 
-        return Response(serializer.errors)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 

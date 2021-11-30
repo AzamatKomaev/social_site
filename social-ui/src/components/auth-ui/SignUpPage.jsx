@@ -15,7 +15,6 @@ const SignUpPage = (props) => {
     return (
         <div>
             <Header/>
-            {"\n"}
             {props.isAuth
             ?
             <Error404NotFound/>

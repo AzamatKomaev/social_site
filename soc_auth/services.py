@@ -1,9 +1,10 @@
 import random
 import string
 
-from soc.models import User, Group
+from django.contrib.auth.models import Group
 from django.core.mail import send_mail
 
+from soc.models import User
 from social.settings import EMAIL_HOST_USER
 from soc.models import Token
 
@@ -37,7 +38,7 @@ class CreationUser:
     def send_message_with_code(self) -> None:
         """Отправляем токен на почту"""
         self._generate_code()
-        self.create_user()
+        self._create_user()
         content = f"Дарова {self.username}.\n" \
                   "Чтобы успешно пройти регистрацию перейди по данной ссылке:\n" \
                   f"Ссылка: http://127.0.0.1:8000/auth/accept_password/{self.token}\n" \
@@ -56,13 +57,14 @@ class CreationUser:
             [self.email]
         )
 
-    def create_user(self) -> None:
+    def _create_user(self) -> None:
         """Метод для создания нового пользователя"""
-        self.user = User.objects.create_user(username=self.username,
-                                                email=self.email,
-                                                password=self.password,
-                                                is_active=False
-                                            )
+        self.user = User.objects.create_user(
+            username=self.username,
+            email=self.email,
+            password=self.password,
+            is_active=False
+        )
 
         self.user.avatar_set.create()
         #self.user.groups.add(2)

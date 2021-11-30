@@ -53,7 +53,7 @@ const CreatePostForm = (props) => {
         )
             .then((result) => {
                 console.log(result.data)
-                //window.location.href = 'http://127.0.0.1:8000/categories/c_id/' + category + "/";
+                window.location.href = 'http://127.0.0.1:8000/categories/c_id/' + category + "/";
             })
             .catch((error) => {
                 if (error.response.status == 400) {
