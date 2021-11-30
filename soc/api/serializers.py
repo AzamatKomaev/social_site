@@ -55,17 +55,11 @@ class CategorySerializer(ModelSerializer):
 class PostSerializer(ModelSerializer):
     """Сериализатор для постов."""
     user = HiddenField(default=CurrentUserDefault())
-    category_id = IntegerField()
     user_data = SerializerMethodField('get_data_about_user')
-    attachment = SerializerMethodField('get_attachment')
     comments = SerializerMethodField('get_comments')
 
     def get_data_about_user(self, obj: Post) -> dict:
         return UserSerializer(obj.user).data
-
-    def get_attachment(self, obj: Post) -> list:
-        images = [image.photo.url for image in obj.attachment_set.all()]
-        return images
 
     def get_comments(self, obj: Post) -> list:
         comments = Comment.objects.filter(post_id=obj.id)

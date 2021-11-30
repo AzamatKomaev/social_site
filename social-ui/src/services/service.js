@@ -28,6 +28,7 @@ const getCurrentUserData = async() => {
                 info: null,
                 isAuth: false
             }
+            alert(error.response.status)
 
             if (error.response.status && error.response.status != 401) {
                 alert(error.response.status + " error")

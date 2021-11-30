@@ -10,6 +10,7 @@ const CreatePostForm = (props) => {
     const [category, setCategory] = useState()
     const [title, setTitle] = useState()
     const [content, setContent] = useState()
+    const [photo, setPhoto] = useState(null)
 
     const [error, setError] = useState({
         title: null,
@@ -17,26 +18,42 @@ const CreatePostForm = (props) => {
         category: null
     })
 
-    console.log(error)
+    const changePhoto = (event) => {
+        event.preventDefault()
+        if (event.target.files[0]) {
+            setPhoto(event.target.files[0])
+        }
+    }
+
+    const getPostDataInForm = (title, content, category, photo) => {
+        let formData = new FormData()
+        formData.append("title", title)
+        formData.append("text", content)
+        formData.append("category", category)
+        if (photo != null) {
+            formData.append("photo", photo)
+        }
+        return formData
+    }
 
 
     const createPost = () => {
         if (category == undefined || category == "Выбери категорию") {
             alert("Вы не указали категорию. Куда добавлять пост? -_-")
         }
-        axios.post("http://127.0.0.1:8000/api/v1/category/" + category + "/", {
-                title: title,
-                text: content,
-                category: category
-            },
+        let dataForm = getPostDataInForm(title, content, category, photo)
+        console.log(dataForm)
+        axios.post("http://127.0.0.1:8000/api/v1/category/" + category + "/", dataForm,
             {
                 headers: {
                     Authorization: 'Bearer ' + localStorage.getItem("jwt")
+                    //'Content-Type': 'multipart/form-data'
                 }
             }
         )
             .then((result) => {
-                window.location.href = 'http://127.0.0.1:8000/categories/c_id/' + category + "/";
+                console.log(result.data)
+                //window.location.href = 'http://127.0.0.1:8000/categories/c_id/' + category + "/";
             })
             .catch((error) => {
                 if (error.response.status == 400) {
@@ -102,6 +119,7 @@ const CreatePostForm = (props) => {
                             id="id_image"
                             accept=".png, .jpg, .jpeg"
                             name="image"
+                            onChange={changePhoto}
                          />
                     </div>
                     <div className="input-group-append">

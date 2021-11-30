@@ -38,6 +38,7 @@ class Post(models.Model):
 
 	title = models.CharField(max_length=200)
 	text = models.TextField()
+	photo = models.ImageField(null=True, blank=True, upload_to="media/post_photo")
 	created_at = models.DateTimeField(auto_now_add=True)
 
 	class Meta:
@@ -63,22 +64,6 @@ class Comment(models.Model):
 
 	def __str__(self):
 		return self.text
-
-
-class Attachment(models.Model):
-	"""Таблица для хранения файлов к посту"""
-	post = models.ForeignKey(Post, on_delete=models.CASCADE)
-	photo = models.ImageField(default=" ", upload_to="media/images")
-	video = models.FileField(default=" ", upload_to="media/videos")
-	file = models.FileField(default=" ", upload_to="media/files")
-	created_at = models.DateTimeField(auto_now_add=True)
-
-	class Meta:
-		verbose_name = "Файл"
-		verbose_name_plural = "Файлы"
-
-	def __str__(self):
-		return f"Attachment for post {self.post}"
 
 
 class Token(models.Model):

@@ -53,6 +53,16 @@ class CategoryListAPIView(APIView):
 class PostListAPIVIew(APIView):
     permission_classes = [permissions.IsAuthenticatedOrReadOnly]
 
+    def pars_data_from_request(self, data: dict, updated_data: dict = {}) -> dict:
+        updated_data["title"] = data["title"]
+        updated_data["text"] = data["text"]
+        updated_data["category"] = data["category"]
+
+        if "photo" in data:
+            updated_data["photo"] = data["photo"]
+
+        return updated_data
+
     def get(self, request, category_id: int):
         try:
             category = Category.objects.get(id=category_id)
@@ -64,7 +74,8 @@ class PostListAPIVIew(APIView):
         return Response(serializer.data, status=status.HTTP_200_OK)
 
     def post(self, request, category_id: int):
-        post_data = {**request.data, **{"category_id": category_id}}
+        print(request.data)
+        post_data = self.pars_data_from_request(data=request.data)
         serializer = PostSerializer(data=post_data, context={'request': request})
 
         if serializer.is_valid():

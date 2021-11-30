@@ -5,9 +5,6 @@ import '../../../App.css';
 import { getReadableDateFormat } from '../../../services/service';
 
 const Post = (props) => {
-    const [attachment, setAttachment] = useState(props.attachment)
-
-
     return (
 		<div className="card border-secondary">
 			<div className="card-header bg-secondary text-white">
@@ -26,12 +23,14 @@ const Post = (props) => {
 				<a href={props.url} className="text-dark" style={{textDecoration: "none"}}>
 					<h4>{props.title}</h4>
 					{props.text}
-					{props.attachment.map((photo) => (
-					    <div>
+					{props.photo ?
+                        <div>
 					        {"\n"}
-					        <p style={{textAlign: "center"}}><img style={{width: "50%"}} className="img-fluid" src={photo} alt="image"/></p>
+					        <p style={{textAlign: "center"}}><img style={{width: "50%"}} className="img-fluid" src={props.photo} alt={props.photo}/></p>
 					    </div>
-					))}
+					:
+					null}
+
 				</a>
 			</div>
 
