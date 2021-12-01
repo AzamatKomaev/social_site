@@ -71,15 +71,15 @@ class Comment(models.Model):
 		return self.text
 
 
-class Token(models.Model):
+class AcceptAuthToken(models.Model):
 	"""Таблица для хранения токенов регистраций."""
 	user = models.OneToOneField(User, on_delete=models.CASCADE, unique=True)
-	token = models.TextField(max_length=30)
+	token = models.TextField(max_length=50)
 	created_at = models.DateTimeField(auto_now_add=True)
 
 	class Meta:
-		verbose_name = "Токен"
-		verbose_name_plural = "Токены"
+		verbose_name = "Токен авторизаций."
+		verbose_name_plural = "Токены авторизаций."
 
 	def __str__(self):
 		return f"Token {self.token}"

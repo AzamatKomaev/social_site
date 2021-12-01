@@ -4,9 +4,8 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import { v4 as uuidv4 } from 'uuid';
 
 import Header from '../extend/Header';
-import Category from './include/Category';
-import CategoryList from './include/CategoryList';
-import { WelcomeAuthBox, WelcomeAnonBox } from './include/WelcomeBox';
+import CategoryList from './include/category/CategoryList';
+import { WelcomeAuthBox, WelcomeAnonBox } from './include/welcome_box/WelcomeBox';
 import { isUserAuth, getCurrentUserData, getCategories } from '../../services/service';
 
 

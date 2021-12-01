@@ -7,8 +7,8 @@ import Error404NotFound from '../extend/Error404NotFound';
 import Error429TooManyRequests from '../extend/Error429TooManyRequests';
 import '../../App.css';
 
-import Post from './include/Post';
-import PostList from './include/PostList';
+import Post from './include/post/Post';
+import PostList from './include/post/PostList';
 
 
 const PostPage = (props) => {

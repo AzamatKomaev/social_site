@@ -94,8 +94,9 @@ const SignUpForm = () => {
                              />
                             <p className="text-danger" style={{float: "left", marginTop: "-10px", backgroundColor: "PowderBlue"}}>{errorReg.email}</p>
                         </div>
-                        <a href="#" style={{float: "right", marginTop: "-5px", backgroundColor: "PowderBlue"}}>Already have an account?</a>
                         {"\n"}
+                        <a href="#" style={{float: "right", marginTop: "-5px", backgroundColor: "PowderBlue"}}>Already have an account?</a>
+                        {"\n\n"}
                         <div className="form-group">
                             <button onClick={createAccount} className="btn btn-block create-account">Create Account</button>
                         </div>

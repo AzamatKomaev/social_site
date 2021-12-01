@@ -4,7 +4,7 @@
 
 .registration-form .form{
     background-color: #fff;
-    background-image: url("/home/azamat/Рабочий стол/Django/social/social-ui/src/components/auth-ui/include/img/Vladikavkaz3.jpeg");
+    background-image: url("/home/azamat/Рабочий стол/Django/social/social-ui/src/components/auth-ui/include/img/Vladikavkaz5.jpeg");
     max-width: 600px;
     margin: auto;
     padding: 50px 70px;
@@ -16,6 +16,7 @@
 .registration-form .form-login{
     background-color: #fff;
     background-image: url("/home/azamat/Рабочий стол/Django/social/social-ui/src/components/auth-ui/include/img/Vladikavkaz4.jpeg");
+    background-size: cover;
     max-width: 600px;
     margin: auto;
     padding: 50px 70px;

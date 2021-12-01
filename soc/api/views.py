@@ -1,13 +1,11 @@
 from django.core.exceptions import ObjectDoesNotExist
 from soc.models import User
-from django.core.mail import send_mail
 from django.db.utils import IntegrityError
 
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status, permissions
 
-from social.settings import EMAIL_HOST_USER
 from soc.api.serializers import (
     UserSerializer,
     CategorySerializer,
@@ -15,6 +13,7 @@ from soc.api.serializers import (
     CommentSerializer,
     RegistrationUserSerializer
 )
+from soc.api.services import accept_password_to_reg
 from soc.models import Category, Post, Comment
 
 
@@ -143,7 +142,7 @@ class CommentDetailAPIView(APIView):
 
 
 class RegistrationUserAPIView(APIView):
-
+    """Endpoint для регистраций пользователя."""
     def post(self, request):
         serializer = RegistrationUserSerializer(data=request.data)
         if serializer.is_valid():
@@ -152,3 +151,13 @@ class RegistrationUserAPIView(APIView):
 
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
+
+class AcceptUserAPIView(APIView):
+    """Endpoint для подтверждения пользователя."""
+    def get(self, request, token: str):
+        try:
+            accept_password_to_reg(token=token)
+        except (ObjectDoesNotExist, NameError):
+            return Response({"message": "Token doesnt exists."}, status=status.HTTP_404_NOT_FOUND)
+
+        return Response({"message": "Accepted successfully."}, status=status.HTTP_200_OK)

@@ -10,6 +10,7 @@ from rest_framework.serializers import (
     EmailField,
 )
 
+from soc.api.services import CreationUser
 from soc.models import User
 from soc.models import Post, Category, Comment, Avatar
 
@@ -100,13 +101,7 @@ class RegistrationUserSerializer(ModelSerializer):
         model = User
         fields = ["email", "username", "password"]
 
-    def create(self, validated_data):
-        validated_data['password'] = make_password(validated_data['password'])
-        user = User.objects.create(
-            email=validated_data['email'],
-            username=validated_data['username'],
-            password=validated_data['password']
-        )
-        user.avatar_set.create()
-        Group.objects.all().last().user_set.add(user)
-        return user
+    def create(self, validated_data) -> User:
+        creation_user = CreationUser(validated_data)
+        creation_user.create_user()
+        return creation_user.user

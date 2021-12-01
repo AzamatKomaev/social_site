@@ -19,7 +19,7 @@ import CreatePostPage from './components/soc-ui/CreatePostPage';
 
 import LoginPage from './components/auth-ui/LoginPage';
 import SignUpPage from './components/auth-ui/SignUpPage';
-
+import AcceptAccountPage from './components/auth-ui/AcceptAccountPage';
 
 
 const App = (props) => {
@@ -58,6 +58,10 @@ const App = (props) => {
         return (<CreatePostPage {...props} isAuth={isAuth} categories={categories} />)
     }
 
+    const AcceptAccountPageUp = (props) => {
+        return (<AcceptAccountPage {...props} isAuth={isAuth} />)
+    }
+
     return (
         <div className="App">
             <Switch>
@@ -68,6 +72,7 @@ const App = (props) => {
 
                 <Route exact path='/auth/login/' component={LoginPageUp} />
                 <Route exact path='/auth/sign_up/' component={SignUpPageUp} />
+                <Route exact path='/auth/accept/:token/' component={AcceptAccountPageUp} />
 
                 <Redirect from='/' to='/categories'/>
             </Switch>

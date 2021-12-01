@@ -1,11 +1,13 @@
 import random
 import string
 
-from soc.models import User, Group
 from django.core.mail import send_mail
+from django.contrib.auth.models import Group
+from django.contrib.auth.hashers import make_password
 
 from social.settings import EMAIL_HOST_USER
-from soc.models import Token
+from soc.models import AcceptAuthToken
+from soc.models import User
 
 
 class CreationUser:
@@ -17,7 +19,7 @@ class CreationUser:
     def __init__(self, data: dict) -> None:
         self.username = data['username']
         self.email = data['email']
-        self.password = data['password1']
+        self.password = data['password']
 
     def _generate_code(self) -> None:
         for i in range(0, 50):
@@ -25,7 +27,7 @@ class CreationUser:
 
     def _insert_token_in_table(self) -> None:
         """Добавляем токен в таблицу"""
-        Token.objects.create(token=self.token, user_id=self.user.id)
+        AcceptAuthToken.objects.create(token=self.token, user_id=self.user.id)
 
     def check_form_on_uniqueness(self) -> list:
         """Проверяем почту и логин на уникальность"""
@@ -37,7 +39,6 @@ class CreationUser:
     def send_message_with_code(self) -> None:
         """Отправляем токен на почту"""
         self._generate_code()
-        self.create_user()
         content = f"Дарова {self.username}.\n" \
                   "Чтобы успешно пройти регистрацию перейди по данной ссылке:\n" \
                   f"Ссылка: http://127.0.0.1:8000/auth/accept_password/{self.token}\n" \
@@ -58,11 +59,14 @@ class CreationUser:
 
     def create_user(self) -> None:
         """Метод для создания нового пользователя"""
-        self.user = User.objects.create_user(username=self.username,
-                                                email=self.email,
-                                                password=self.password,
-                                                is_active=False
-                                            )
+        self.send_message_with_code()
+
+        self.user = User.objects.create_user(
+            username=self.username,
+            email=self.email,
+            password=self.password,
+            is_active=False
+        )
 
         self.user.avatar_set.create()
         #self.user.groups.add(2)
@@ -72,7 +76,7 @@ class CreationUser:
 
 def accept_password_to_reg(token: str) -> None:
     """Функция для установки пользователя активным и удаления токена из таблицы"""
-    token_from_db = Token.objects.get(token=token)
+    token_from_db = AcceptAuthToken.objects.get(token=token)
     user = User.objects.get(id=token_from_db.user_id)
     user.is_active = True
     user.save()

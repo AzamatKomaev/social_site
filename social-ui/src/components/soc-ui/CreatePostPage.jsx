@@ -4,7 +4,7 @@ import axios from 'axios';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import '../../App.css';
 
-import CreatePostForm from './include/CreatePostForm';
+import CreatePostForm from './include/post/CreatePostForm';
 
 import Header from '../extend/Header';
 import Error404NotFound from '../extend/Error404NotFound';

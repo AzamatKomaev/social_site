@@ -28,7 +28,12 @@ from soc.models import Post, Category
 logger = logging.getLogger(__name__)
 
 
-def index(request, category_id=None, post_id=None):
+def index(
+        request,
+        category_id=None,
+        post_id=None,
+        token=None
+):
     return render(request, "index.html", {})
 
 

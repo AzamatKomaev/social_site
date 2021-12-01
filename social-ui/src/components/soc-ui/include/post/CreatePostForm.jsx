@@ -3,7 +3,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import axios from 'axios';
 import { v4 as uuidv4 } from 'uuid';
 
-import '../../../App.css';
+import '../../../../App.css';
 
 
 const CreatePostForm = (props) => {

@@ -1,7 +1,7 @@
 import React from 'react';
 
 import Comment from './Comment';
-import '../../../App.css';
+import '../../../../App.css';
 
 
 const CommentList = (props) => {
