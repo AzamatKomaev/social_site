@@ -29,10 +29,11 @@ logger = logging.getLogger(__name__)
 
 
 def index(
-        request,
-        category_id=None,
-        post_id=None,
-        token=None
+    request,
+    category_id=None,
+    post_id=None,
+    token=None,
+    username=None
 ):
     return render(request, "index.html", {})
 

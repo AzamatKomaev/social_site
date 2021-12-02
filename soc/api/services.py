@@ -41,12 +41,12 @@ class CreationUser:
         self._generate_code()
         content = f"Дарова {self.username}.\n" \
                   "Чтобы успешно пройти регистрацию перейди по данной ссылке:\n" \
-                  f"Ссылка: http://127.0.0.1:8000/auth/accept_password/{self.token}\n" \
+                  f"Ссылка: http://127.0.0.1:8000/auth/accept/{self.token}\n" \
                   "Смотри не ошибись, братело :).\n" \
                   "Всего хорошего ©Azamat Komaev\n\n" \
                   f"Hello, {self.username}.\n" \
                   "If you wanna pass registration, click on the url down:\n" \
-                  f"url: http://127.0.0.1:8000/auth/accept_password/{self.token}\n" \
+                  f"url: http://127.0.0.1:8000/auth/accept/{self.token}\n" \
                   "Dont make mistake, bro :)\n" \
                   "Good luck ©Azamat Komaev"
 

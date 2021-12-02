@@ -6,9 +6,7 @@ import '../../App.css';
 
 import Header from '../extend/Header';
 import Error404NotFound from '../extend/Error404NotFound';
-import SignUpForm from "./include/SignUpForm";
-
-import { isUserAuth } from '../../services/service';
+import SignUpForm from "./include/forms/SignUpForm";
 
 
 const SignUpPage = (props) => {

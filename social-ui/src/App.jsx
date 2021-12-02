@@ -21,26 +21,15 @@ import LoginPage from './components/auth-ui/LoginPage';
 import SignUpPage from './components/auth-ui/SignUpPage';
 import AcceptAccountPage from './components/auth-ui/AcceptAccountPage';
 
+import UserPage from './components/profile-ui/UserPage';
+
 
 const App = (props) => {
     const { history } = props;
     const [isAuth, setIsAuth] = useState()
     const [userData, setUserData] = useState()
     const [categories, setCategories] = useState([])
-
-    useEffect(() => {
-        getCurrentUserData()
-            .then((data) => {
-                setUserData(data.info)
-                setIsAuth(data.isAuth)
-            });
-
-        getCategories()
-            .then((data) => {
-                setCategories(data)
-            });
-    }, [])
-
+    const [accepted, setAccepted] = useState()
 
     const LoginPageUp = (props) => {
         return (<LoginPage {...props} isAuth={isAuth} key={uuidv4()} />);
@@ -60,7 +49,20 @@ const App = (props) => {
 
     const AcceptAccountPageUp = (props) => {
         return (<AcceptAccountPage {...props} isAuth={isAuth} />)
-    }
+}
+
+    useEffect(() => {
+        getCurrentUserData()
+            .then((data) => {
+                setUserData(data.info)
+                setIsAuth(data.isAuth)
+            });
+
+        getCategories()
+            .then((data) => {
+                setCategories(data)
+            });
+    }, [])
 
     return (
         <div className="App">
@@ -73,6 +75,8 @@ const App = (props) => {
                 <Route exact path='/auth/login/' component={LoginPageUp} />
                 <Route exact path='/auth/sign_up/' component={SignUpPageUp} />
                 <Route exact path='/auth/accept/:token/' component={AcceptAccountPageUp} />
+
+                <Route exact path='/users/:username' component={UserPage} />
 
                 <Redirect from='/' to='/categories'/>
             </Switch>

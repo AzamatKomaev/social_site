@@ -1,4 +1,5 @@
 from django.core.exceptions import ObjectDoesNotExist
+
 from soc.models import User
 from django.db.utils import IntegrityError
 
