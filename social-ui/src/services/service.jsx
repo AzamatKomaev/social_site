@@ -51,4 +51,25 @@ const getCategories = async() => {
     return categories;
 }
 
-export { getReadableDateFormat, getCurrentUserData, getCategories };
+const findUserAndGetData = async(username) => {
+    let data = null;
+
+    await axios.get("http://127.0.0.1:8000/api/v1/user/find/" + username + "/")
+        .then((response) => {
+            data = response.data
+        })
+        .catch((err) => {
+            data = null
+            if (err.response.status != 404) {
+                alert(err.response.status + " error")
+            }
+        })
+    return data
+}
+
+export {
+    getReadableDateFormat,
+    getCurrentUserData,
+    getCategories,
+    findUserAndGetData
+};

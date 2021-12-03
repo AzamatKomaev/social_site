@@ -10,7 +10,7 @@ import {
 } from "react-router-dom";
 
 import './App.css';
-import { isUserAuth, getCurrentUserData, getCategories } from './services/service'
+import { isUserAuth, getCurrentUserData, getCategories } from './services/service';
 
 import CategoryPage from './components/soc-ui/CategoryPage';
 import PostPage from './components/soc-ui/PostPage';
@@ -26,55 +26,18 @@ import UserPage from './components/profile-ui/UserPage';
 
 const App = (props) => {
     const { history } = props;
-    const [isAuth, setIsAuth] = useState()
-    const [userData, setUserData] = useState()
-    const [categories, setCategories] = useState([])
-    const [accepted, setAccepted] = useState()
-
-    const LoginPageUp = (props) => {
-        return (<LoginPage {...props} isAuth={isAuth} key={uuidv4()} />);
-    };
-
-    const SignUpPageUp = (props) => {
-        return (<SignUpPage {...props} isAuth={isAuth} key={uuidv4()} />);
-    }
-
-    const CategoryPageUp = (props) => {
-        return (<CategoryPage {...props} isAuth={isAuth} userData={userData} categories={categories} key={uuidv4()} />);
-    };
-
-    const CreatePostPageUp = (props) => {
-        return (<CreatePostPage {...props} isAuth={isAuth} categories={categories} />)
-    }
-
-    const AcceptAccountPageUp = (props) => {
-        return (<AcceptAccountPage {...props} isAuth={isAuth} />)
-}
-
-    useEffect(() => {
-        getCurrentUserData()
-            .then((data) => {
-                setUserData(data.info)
-                setIsAuth(data.isAuth)
-            });
-
-        getCategories()
-            .then((data) => {
-                setCategories(data)
-            });
-    }, [])
 
     return (
         <div className="App">
             <Switch>
-                <Route exact path='/categories/' component={CategoryPageUp} />
-                <Route exact path='/categories/create/' component={CreatePostPageUp} />
+                <Route exact path='/categories/' component={CategoryPage} />
+                <Route exact path='/categories/create/' component={CreatePostPage} />
                 <Route exact path='/categories/c_id/:categoryId/' component={PostPage} />
                 <Route exact path='/categories/c_id/:categoryId/:postId/' component={PostDetailPage} />
 
-                <Route exact path='/auth/login/' component={LoginPageUp} />
-                <Route exact path='/auth/sign_up/' component={SignUpPageUp} />
-                <Route exact path='/auth/accept/:token/' component={AcceptAccountPageUp} />
+                <Route exact path='/auth/login/' component={LoginPage} />
+                <Route exact path='/auth/sign_up/' component={SignUpPage} />
+                <Route exact path='/auth/accept/:token/' component={AcceptAccountPage} />
 
                 <Route exact path='/users/:username' component={UserPage} />
 

@@ -4,6 +4,7 @@ import axios from 'axios';
 import { v4 as uuidv4 } from 'uuid';
 
 import '../../App.css';
+import { getCurrentUserData } from '../../services/service'
 
 import Header from '../extend/Header';
 import Error404NotFound from '../extend/Error404NotFound';
@@ -15,12 +16,13 @@ const acceptAccount = async(token, isAuth) => {
 
     if (isAuth) {
         accepted = false;
+        console.log("You cant go here, because you're register!")
+        return accepted;
     }
 
     await axios.get("http://127.0.0.1:8000/api/v1/user/accept/" + token + "/")
         .then((response) => {
             accepted = true
-            console.log("Accepted in then is " + accepted)
         })
         .catch((error) => {
             accepted = false
@@ -36,16 +38,23 @@ const acceptAccount = async(token, isAuth) => {
 
 const AcceptAccountPage = (props) => {
     const [accepted, setAccepted] = useState(false)
+    const [isAuth, setIsAuth] = useState()
+
     const token = props.match.params.token;
 
     useEffect(() => {
-        acceptAccount(token, props.isAuth)
+        getCurrentUserData()
+            .then((result) => {
+                setIsAuth(result.isAuth)
+            })
+    }, [])
+
+
+    useEffect(() => {
+        acceptAccount(token, isAuth)
             .then((data) => {
                 setAccepted(data)
-                console.log("Data is " + data)
             })
-
-        console.log("accepted at useEffect is " + accepted)
     }, [])
 
     return (

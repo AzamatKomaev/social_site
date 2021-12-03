@@ -6,23 +6,39 @@ import { v4 as uuidv4 } from 'uuid';
 import Header from '../extend/Header';
 import CategoryList from './include/category/CategoryList';
 import { WelcomeAuthBox, WelcomeAnonBox } from './include/welcome_box/WelcomeBox';
-import { isUserAuth, getCurrentUserData, getCategories } from '../../services/service';
+import { getCurrentUserData, getCategories } from '../../services/service';
 
 
 const CategoryPage = (props) => {
     const [isAuth, setIsAuth] = useState()
     const [userData, setUserData] = useState()
+    const [categories, setCategories] = useState([])
 
-    if (props.isAuth) {
+    useEffect(() => {
+        getCurrentUserData()
+            .then((result) => {
+                setIsAuth(result.isAuth)
+                setUserData(result.info)
+            })
+    }, [])
+
+    useEffect(() => {
+        getCategories()
+            .then((result) => {
+                setCategories(result)
+            })
+    }, [])
+
+    if (isAuth) {
         return (
             <div>
                 <Header/>{"\n"}
                 <WelcomeAuthBox
                     jwtToken={localStorage.getItem("jwt")}
-                    userData={props.userData}
+                    userData={userData}
                     key={uuidv4()}
                  />{"\n\n"}
-                <CategoryList categories={props.categories} key={uuidv4()}/>
+                <CategoryList categories={categories} key={uuidv4()}/>
             </div>
         )
 
@@ -31,7 +47,7 @@ const CategoryPage = (props) => {
             <div>
                 <Header/>{"\n"}
                 <WelcomeAnonBox/>{"\n\n"}
-                <CategoryList categories={props.categories} key={uuidv4()}/>
+                <CategoryList categories={categories} key={uuidv4()}/>
             </div>
         )
     }
