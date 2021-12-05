@@ -26,7 +26,7 @@ const Post = (props) => {
 					{props.photo ?
                         <div>
 					        {"\n"}
-					        <p style={{textAlign: "center"}}><img style={{width: "50%"}} className="img-fluid" src={props.photo} alt={props.photo}/></p>
+					        <p style={{textAlign: "center"}}><img className="img-fluid" src={props.photo} alt={props.photo}/></p>
 					    </div>
 					:
 					null}
