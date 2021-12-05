@@ -17,7 +17,7 @@ const PostList = (props) => {
                         created_at={post.created_at}
                         user_data={post.user_data}
                         photo={post.photo}
-                        url={"/categories/c_id/" + props.categoryId + "/" + post.id + "/"}
+                        url={"/categories/c_id/" + post.category + "/" + post.id + "/"}
                      />
                     {"\n\n\n"}
                 </div>

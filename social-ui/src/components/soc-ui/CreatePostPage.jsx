@@ -33,14 +33,14 @@ const CreatePostPage = (props) => {
     if (isAuth) {
         return (
             <div>
-                <Header/>{"\n"}
+                <Header isAuth={isAuth}/>{"\n"}
                 <CreatePostForm categories={categories} />
             </div>
         )
     } else if (!isAuth) {
         return (
             <div>
-                <Header/>
+                <Header isAuth={isAuth}/>
                 {"\n"}
                 <Error404NotFound/>
             </div>

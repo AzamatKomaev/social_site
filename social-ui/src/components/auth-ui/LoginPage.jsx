@@ -23,7 +23,7 @@ const LoginPage = () => {
 
     return (
         <div>
-            <Header/>
+            <Header isAuth={isAuth}/>
             {"\n"}
             {isAuth
             ?

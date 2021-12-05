@@ -13,7 +13,7 @@ const Post = (props) => {
 				        <img src={props.user_data.avatar.image} className="rounded-circle float-left" alt="avatar" width="57" height="57" style={{marginTop: "-10px"}}/>
 		            </div>
 		            <div class="flex-grow-1 pl-3">
-                        <a href="" className="text-white" style={{fontSize: "15pt"}}>{props.user_data.username}</a>
+                        <a href={"/users/" + props.user_data.username} className="text-white" style={{fontSize: "15pt"}}>{props.user_data.username}</a>
                         <p className="text-info" style={{fontSize: "12pt"}}>{props.user_data.group_data.name}</p>
                     </div>
 				</div>

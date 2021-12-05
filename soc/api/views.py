@@ -1,6 +1,6 @@
 from django.core.exceptions import ObjectDoesNotExist
+from django.core.paginator import Paginator, EmptyPage
 
-from soc.models import User
 from django.db.utils import IntegrityError
 
 from rest_framework.views import APIView
@@ -14,8 +14,9 @@ from soc.api.serializers import (
     CommentSerializer,
     RegistrationUserSerializer
 )
+
 from soc.api.services import accept_password_to_reg
-from soc.models import Category, Post, Comment
+from soc.models import Category, Post, Comment, User
 
 
 class UserJwtAPIView(APIView):
@@ -53,30 +54,26 @@ class CategoryListAPIView(APIView):
 class PostListAPIVIew(APIView):
     permission_classes = [permissions.IsAuthenticatedOrReadOnly]
 
-    def pars_data_from_request(self, data: dict, updated_data: dict = {}) -> dict:
-        updated_data["title"] = data["title"]
-        updated_data["text"] = data["text"]
-        updated_data["category"] = data["category"]
-
-        if "photo" in data:
-            updated_data["photo"] = data["photo"]
-
-        return updated_data
-
     def get(self, request, category_id: int):
         try:
             category = Category.objects.get(id=category_id)
         except ObjectDoesNotExist:
             return Response({"error": f"Category {category_id} does not exists."}, status=status.HTTP_404_NOT_FOUND)
 
+        page_number = request.query_params.get('page_number') or 1
+        page_size = 20
+
         posts = Post.objects.filter(category=category)
-        serializer = PostSerializer(posts, many=True)
-        return Response(serializer.data, status=status.HTTP_200_OK)
+        paginator = Paginator(posts, page_size)
+
+        try:
+            serializer = PostSerializer(paginator.page(page_number), many=True)
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        except EmptyPage:
+            return Response({}, status=status.HTTP_204_NO_CONTENT)
 
     def post(self, request, category_id: int):
-        print(request.data)
-        post_data = self.pars_data_from_request(data=request.data)
-        serializer = PostSerializer(data=post_data, context={'request': request})
+        serializer = PostSerializer(data=request.data, context={'request': request})
 
         if serializer.is_valid():
             try:
@@ -162,3 +159,14 @@ class AcceptUserAPIView(APIView):
             return Response({"message": "Token doesnt exists."}, status=status.HTTP_404_NOT_FOUND)
 
         return Response({"message": "Accepted successfully."}, status=status.HTTP_200_OK)
+
+
+class UserDetailPostAPIView(APIView):
+
+    def get(self, request, user_id: int) -> Response:
+        posts = Post.objects.filter(user_id=user_id)
+        serializer = PostSerializer(posts, many=True)
+        if not posts:
+            return Response({}, status=status.HTTP_204_NO_CONTENT)
+
+        return Response(serializer.data, status=status.HTTP_200_OK)

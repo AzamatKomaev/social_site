@@ -5,6 +5,7 @@ import Header from '../extend/Header';
 import Error404NotFound from '../extend/Error404NotFound';
 import Error429TooManyRequests from '../extend/Error429TooManyRequests';
 import '../../App.css';
+import { getCurrentUserData } from '../../services/service';
 
 import Post from './include/post/Post';
 import CommentList from './include/comment/CommentList';
@@ -15,6 +16,7 @@ const PostDetailPage = (props) => {
     const categoryId = props.match.params.categoryId;
     const postId = props.match.params.postId;
 
+    const [isAuth, setIsAuth] = useState()
     const [post, setPost] = useState(null);
     const [error, setError] = useState(false);
 
@@ -33,10 +35,17 @@ const PostDetailPage = (props) => {
             })
     }, []);
 
+    useEffect(() => {
+        getCurrentUserData()
+            .then((result) => {
+                setIsAuth(result.isAuth)
+            })
+    }, [])
+
     if (error.response == 404) {
         return (
             <div>
-                <Header/>
+                <Header isAuth={isAuth}/>
                 {"\n"}
                 <Error404NotFound/>
             </div>
@@ -44,7 +53,7 @@ const PostDetailPage = (props) => {
     } else if (error.response == 429) {
         return (
             <div>
-                <Header/>
+                <Header isAuth={isAuth}/>
                 {"\n"}
                 <Error429TooManyRequests/>
             </div>
@@ -52,7 +61,7 @@ const PostDetailPage = (props) => {
     } else if (!error && post) {
         return (
             <div>
-                <Header />
+                <Header isAuth={isAuth}/>
                 {"\n"}
                 <div class="container">
                     <Post

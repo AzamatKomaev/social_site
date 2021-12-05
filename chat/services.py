@@ -40,7 +40,6 @@ class UserChat:
     def get_data_about_user_chats(self) -> dict:
         group_chats_data = self.return_dict_with_chats_and_last_messages(chats=self.group_chats, is_personal=False)
         personal_chats_data = self.return_dict_with_chats_and_last_messages(chats=self.personal_chats, is_personal=True)
-        print(personal_chats_data)
         return {
             "group_chats_data": group_chats_data,
             "personal_chats_data": personal_chats_data
@@ -101,7 +100,7 @@ class PersonalChatService:
     def get_value_for_connecting_ws(self) -> str:
         """
         Функция для получения значения для одного подключения для двух юзеров
-        (строка с id двух юзеров, разделенная пробелом).
+        (строка с id двух юзеров, разделенная нижним подчеркиванием).
         """
         chat = self.get_chat_with_both_users()
         users_id = [str(user.id) for user in chat.users.all().order_by("id")]

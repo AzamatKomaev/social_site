@@ -18,13 +18,13 @@ const WelcomeAuthBox = (props) => {
                 <div className="jumbotron">
                     <h1>Здраствуйте!</h1>
                     <p className="lead" style={{fontSize:"18pt"}}>
-                        { props.userData.username }, добро пожаловать в InTheGame. <a href="#">Перейти в ваш профиль?</a>
+                        { props.userData.username }, добро пожаловать в InTheGame. <a href={"/users/" + props.userData.username}>Перейти в ваш профиль?</a>
                         <h2 align="center" style={{fontSize:"20pt"}}>Статус аккаунта: { props.userData.group_data.name }</h2>
                     </p>
                     <hr/>
                     <div className="container-fluid">
                         <div className="row">
-                            <a className="btn btn-lg btn-primary btn-block" href="{% url 'profile' username=user.username %}" role="button">Перейти в профиль</a>
+                            <a className="btn btn-lg btn-primary btn-block" href={"/users/" + props.userData.username} role="button">Перейти в профиль</a>
                             <a className="btn btn-lg btn-success btn-block" href="/categories/create/" role="button">Добавить пост</a>
                             <a className="btn btn-lg btn-warning btn-block" href="{% url 'all_chats' %}" role="button">Чаты</a>
                             <button className="btn btn-lg btn-danger btn-block" onClick={handleExitButton}>Выйти</button>

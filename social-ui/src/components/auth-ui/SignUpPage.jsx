@@ -22,7 +22,7 @@ const SignUpPage = () => {
 
     return (
         <div>
-            <Header/>
+            <Header isAuth={isAuth}/>
             {isAuth
             ?
             <Error404NotFound/>

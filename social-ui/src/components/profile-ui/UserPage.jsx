@@ -4,10 +4,11 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap/dist/js/bootstrap.js';
 
 import '../../App.css';
-import { findUserAndGetData } from '../../services/service';
+import { findUserAndGetData, getCurrentUserData } from '../../services/service';
 
 import Header from '../extend/Header';
 import Error404NotFound from '../extend/Error404NotFound';
+import PostList from '../soc-ui/include/post/PostList';
 
 import SwitchMenu from './include/menu/SwitchMenu';
 import InfoTab from './include/tab/InfoTab';
@@ -16,7 +17,11 @@ import SettingTab from './include/tab/SettingTab'
 
 const UserPage = (props) => {
     let username = props.match.params.username;
+
     const [user, setUser] = useState()
+    const [currentUser, setCurrentUser] = useState()
+    const [isAuth, setIsAuth] = useState()
+    const [userPosts, setUserPosts] = useState(null)
 
     useEffect(() => {
         findUserAndGetData(username)
@@ -25,16 +30,23 @@ const UserPage = (props) => {
             })
     }, [])
 
+    useEffect(() => {
+        getCurrentUserData()
+            .then((result) => {
+                setCurrentUser(result.info)
+                setIsAuth(result.isAuth)
+            })
+    }, [])
 
-    if (user) {
+    if (user && currentUser !== undefined) {
         return (
             <div>
-                <Header/>
+                <Header isAuth={isAuth}/>
                 <div className="container">
                     <SwitchMenu/>
                     <div className="tab-content">
                         {"\n"}
-                        <InfoTab user={user}/>
+                        <InfoTab user={user} currentUser={currentUser}/>
                         <SettingTab/>
                     </div>
                 </div>
@@ -43,7 +55,7 @@ const UserPage = (props) => {
     } else {
         return (
             <div>
-                <Header/>
+                <Header isAuth={isAuth}/>
                 <Error404NotFound/>
             </div>
         )

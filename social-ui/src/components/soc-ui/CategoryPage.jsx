@@ -32,7 +32,7 @@ const CategoryPage = (props) => {
     if (isAuth) {
         return (
             <div>
-                <Header/>{"\n"}
+                <Header isAuth={isAuth}/>{"\n"}
                 <WelcomeAuthBox
                     jwtToken={localStorage.getItem("jwt")}
                     userData={userData}
@@ -45,7 +45,7 @@ const CategoryPage = (props) => {
     } else {
         return (
             <div>
-                <Header/>{"\n"}
+                <Header isAuth={isAuth}/>{"\n"}
                 <WelcomeAnonBox/>{"\n\n"}
                 <CategoryList categories={categories} key={uuidv4()}/>
             </div>
