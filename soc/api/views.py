@@ -7,23 +7,22 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status, permissions
 
-from soc.api.serializers import (
-    UserSerializer,
-    CategorySerializer,
-    PostSerializer,
-    CommentSerializer,
-    RegistrationUserSerializer
-)
-
+from soc.api import serializers
 from soc.api.services import accept_password_to_reg
-from soc.models import Category, Post, Comment, User
+from soc.models import (
+    Category,
+    Post,
+    Comment,
+    User,
+    Chat
+)
 
 
 class UserJwtAPIView(APIView):
     permission_classes = [permissions.IsAuthenticated]
 
     def get(self, request):
-        serilizer = UserSerializer(request.user)
+        serilizer = serializers.UserSerializer(request.user)
         return Response(serilizer.data, status=status.HTTP_200_OK)
 
 
@@ -39,7 +38,7 @@ class UserDetailAPIView(APIView):
         except ObjectDoesNotExist:
             return Response({"error": "User not found with given data."}, status=status.HTTP_404_NOT_FOUND)
 
-        serializer = UserSerializer(user)
+        serializer = serializers.UserSerializer(user)
         return Response(serializer.data, status=status.HTTP_200_OK)
 
 
@@ -47,7 +46,7 @@ class CategoryListAPIView(APIView):
 
     def get(self, request) -> Response:
         categories = Category.objects.all()
-        serializer = CategorySerializer(categories, many=True)
+        serializer = serializers.CategorySerializer(categories, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
 
 
@@ -61,19 +60,19 @@ class PostListAPIVIew(APIView):
             return Response({"error": f"Category {category_id} does not exists."}, status=status.HTTP_404_NOT_FOUND)
 
         page_number = request.query_params.get('page_number') or 1
-        page_size = 20
+        page_size = 30
 
         posts = Post.objects.filter(category=category)
         paginator = Paginator(posts, page_size)
 
         try:
-            serializer = PostSerializer(paginator.page(page_number), many=True)
+            serializer = serializers.PostSerializer(paginator.page(page_number), many=True)
             return Response(serializer.data, status=status.HTTP_200_OK)
         except EmptyPage:
             return Response({}, status=status.HTTP_204_NO_CONTENT)
 
     def post(self, request, category_id: int):
-        serializer = PostSerializer(data=request.data, context={'request': request})
+        serializer = serializers.PostSerializer(data=request.data, context={'request': request})
 
         if serializer.is_valid():
             try:
@@ -95,7 +94,7 @@ class PostDetailAPIView(APIView):
             return Response({"error": f"Post {post_id} in category {category_id} does not exists."},
                             status=status.HTTP_404_NOT_FOUND)
 
-        serializer = PostSerializer(post)
+        serializer = serializers.PostSerializer(post)
         return Response(serializer.data, status=status.HTTP_200_OK)
 
 
@@ -107,12 +106,12 @@ class CommentListAPIView(APIView):
         if not comments:
             return Response({"error": f"Comments for post {post_id} in category {category_id} does not exists."}, status=status.HTTP_404_NOT_FOUND)
 
-        serializer = CommentSerializer(comments, many=True)
+        serializer = serializers.CommentSerializer(comments, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
 
     def post(self, request, category_id: int, post_id: int) -> Response:
         comment_data = {**request.data, **{"post": post_id}}
-        serializer = CommentSerializer(data=comment_data, context={"request": request})
+        serializer = serializers.CommentSerializer(data=comment_data, context={"request": request})
 
         if serializer.is_valid():
             try:
@@ -135,14 +134,14 @@ class CommentDetailAPIView(APIView):
             return Response({"error": f"Comment {comment_id} for post {post_id} does not exists."},
                             status=status.HTTP_404_NOT_FOUND)
 
-        serializer = CommentSerializer(comment)
+        serializer = serializers.CommentSerializer(comment)
         return Response(serializer.data, status=status.HTTP_200_OK)
 
 
 class RegistrationUserAPIView(APIView):
     """Endpoint для регистраций пользователя."""
     def post(self, request):
-        serializer = RegistrationUserSerializer(data=request.data)
+        serializer = serializers.RegistrationUserSerializer(data=request.data)
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data)
@@ -165,8 +164,17 @@ class UserDetailPostAPIView(APIView):
 
     def get(self, request, user_id: int) -> Response:
         posts = Post.objects.filter(user_id=user_id)
-        serializer = PostSerializer(posts, many=True)
+        serializer = serializers.PostSerializer(posts, many=True)
         if not posts:
             return Response({}, status=status.HTTP_204_NO_CONTENT)
 
         return Response(serializer.data, status=status.HTTP_200_OK)
+
+
+class ChatListAPIView(APIView):
+    permission_classes = [permissions.IsAuthenticated]
+
+    def get(self, request) -> Response:
+        chats = Chat.objects.filter(users=request.user)
+        serializer = serializers.ChatSerializer(chats, many=True)
+        return Response(serializer.data)

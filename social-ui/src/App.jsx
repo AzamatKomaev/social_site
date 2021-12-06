@@ -21,6 +21,8 @@ import LoginPage from './components/auth-ui/LoginPage';
 import SignUpPage from './components/auth-ui/SignUpPage';
 import AcceptAccountPage from './components/auth-ui/AcceptAccountPage';
 
+import ChatListPage from './components/chat-ui/ChatListPage';
+
 import UserPage from './components/profile-ui/UserPage';
 
 
@@ -40,6 +42,8 @@ const App = (props) => {
                 <Route exact path='/auth/accept/:token/' component={AcceptAccountPage} />
 
                 <Route exact path='/users/:username' component={UserPage} />
+
+                <Route exact path='/chats/' component={ChatListPage}/>
 
                 <Redirect from='/' to='/categories'/>
             </Switch>

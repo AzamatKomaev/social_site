@@ -70,9 +70,6 @@ SIMPLE_JWT = {
 
 INSTALLED_APPS = [
     'soc',
-    'chat',
-    'soc_profile',
-    'soc_auth',
 
     'channels',
     'rest_framework',
@@ -95,7 +92,7 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 
-    'soc_auth.middleware.RegisteredUserMiddleware',
+    #'soc_auth.middleware.RegisteredUserMiddleware',
 ]
 
 ROOT_URLCONF = 'social.urls'

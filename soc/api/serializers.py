@@ -1,5 +1,4 @@
 from django.contrib.auth.models import Group
-from django.contrib.auth.hashers import make_password
 from rest_framework.serializers import (
     ModelSerializer,
     HiddenField,
@@ -12,7 +11,14 @@ from rest_framework.serializers import (
 
 from soc.api.services import CreationUser
 from soc.models import User
-from soc.models import Post, Category, Comment, Avatar
+from soc.models import (
+    Post,
+    Category,
+    Comment,
+    Avatar,
+    Chat,
+    Message
+)
 
 
 class UserSerializer(ModelSerializer):
@@ -105,3 +111,27 @@ class RegistrationUserSerializer(ModelSerializer):
         creation_user = CreationUser(validated_data)
         creation_user.create_user()
         return creation_user.user
+
+
+class ChatSerializer(ModelSerializer):
+    user = HiddenField(default=CurrentUserDefault())
+    last_message = SerializerMethodField('get_last_message')
+
+    class Meta:
+        model = Chat
+        fields = '__all__'
+
+    def get_last_message(self, obj: Chat) -> dict:
+        return MessageSerializer(obj.message_set.all().first()).data
+
+
+class MessageSerializer(ModelSerializer):
+    user_data = SerializerMethodField("get_user_data")
+
+    class Meta:
+        model = Message
+        fields = "__all__"
+
+    def get_user_data(self, obj: Message) -> dict:
+        return UserSerializer(obj.user).data
+

@@ -6,7 +6,6 @@ from rest_framework_simplejwt.views import (
     TokenRefreshView,
 )
 
-from chat import views
 
 
 urlpatterns = [
