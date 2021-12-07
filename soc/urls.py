@@ -16,6 +16,7 @@ urlpatterns = [
     path("auth/accept/<str:token>/", views.index, name="signup"),
     path("users/<str:username>/", views.index, name="user-profile"),
     path("chats/", views.index, name="chats"),
+    path("chats/<int:chat_id>/", views.index, name="chat-messages"),
     #path("main", views.show_all_categories, name='main'),
     #path("<str:category>", views.show_all_posts, name='all_posts'),
     #path("test/<int:category_id>/<int:id>/", views.show_post, name="post"),

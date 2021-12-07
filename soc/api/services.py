@@ -3,11 +3,18 @@ import string
 
 from django.core.mail import send_mail
 from django.contrib.auth.models import Group
-from django.contrib.auth.hashers import make_password
+from django.core.exceptions import ObjectDoesNotExist
+from django.db.models import QuerySet
 
 from social.settings import EMAIL_HOST_USER
 from soc.models import AcceptAuthToken
-from soc.models import User
+from soc.models import (
+    User,
+    Chat,
+    PersonalChat,
+    Message,
+    PersonalMessage
+)
 
 
 class CreationUser:
@@ -81,3 +88,17 @@ def accept_password_to_reg(token: str) -> None:
     user.is_active = True
     user.save()
     token_from_db.delete()
+
+
+class ChatService:
+    chat: Chat
+
+    def __init__(self, chat: Chat):
+        self.chat = chat
+
+    def get_chat_messages(self) -> QuerySet:
+        messages = self.chat.message_set.all()
+        return messages
+
+    def is_user_member(self, user: User) -> bool:
+        return bool(user in self.chat.users.all())

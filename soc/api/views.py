@@ -2,13 +2,14 @@ from django.core.exceptions import ObjectDoesNotExist
 from django.core.paginator import Paginator, EmptyPage
 
 from django.db.utils import IntegrityError
+from rest_framework.decorators import permission_classes
 
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status, permissions
 
 from soc.api import serializers
-from soc.api.services import accept_password_to_reg
+from soc.api.services import accept_password_to_reg, ChatService
 from soc.models import (
     Category,
     Post,
@@ -178,3 +179,24 @@ class ChatListAPIView(APIView):
         chats = Chat.objects.filter(users=request.user)
         serializer = serializers.ChatSerializer(chats, many=True)
         return Response(serializer.data)
+
+
+class MessageListAPIView(APIView):
+    permission_classes = [permissions.IsAuthenticated]
+
+    def get(self, request, chat_id: int):
+        try:
+            chat = Chat.objects.get(id=chat_id)
+            chat_serializer = serializers.ChatSerializer(chat)
+        except ObjectDoesNotExist:
+            return Response({"message": f"Chat with id {chat_id} not found."}, status=status.HTTP_404_NOT_FOUND)
+
+        chat_service = ChatService(chat=chat)
+        if not chat_service.is_user_member(user=request.user):
+            return Response({"message": "You don't have permissions to see this chat."}, status=status.HTTP_403_FORBIDDEN)
+
+        messages_serializer = serializers.MessageSerializer(chat_service.get_chat_messages(), many=True)
+        return Response({
+            "chat": chat_serializer.data,
+            "messages": messages_serializer.data
+        })

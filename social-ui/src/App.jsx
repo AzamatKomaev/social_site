@@ -22,6 +22,7 @@ import SignUpPage from './components/auth-ui/SignUpPage';
 import AcceptAccountPage from './components/auth-ui/AcceptAccountPage';
 
 import ChatListPage from './components/chat-ui/ChatListPage';
+import MessageChatPage from './components/chat-ui/MessageChatPage';
 
 import UserPage from './components/profile-ui/UserPage';
 
@@ -44,6 +45,7 @@ const App = (props) => {
                 <Route exact path='/users/:username' component={UserPage} />
 
                 <Route exact path='/chats/' component={ChatListPage}/>
+                <Route exact path='/chats/:chatId/' component={MessageChatPage}/>
 
                 <Redirect from='/' to='/categories'/>
             </Switch>

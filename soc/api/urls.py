@@ -16,5 +16,6 @@ urlpatterns = [
     path('user/accept/<str:token>/', views.AcceptUserAPIView.as_view()),
     path('user/posts/<int:user_id>/', views.UserDetailPostAPIView.as_view()),
 
-    path('chats/', views.ChatListAPIView.as_view())
+    path('chats/', views.ChatListAPIView.as_view()),
+    path('chats/<int:chat_id>/', views.MessageListAPIView.as_view()),
 ]
