@@ -6,11 +6,10 @@ import { getReadableDateFormat } from '../../../../services/service';
 
 
 const Chat = (props) => {
-    console.log(props)
 
     return (
         <div className="card col-9 my-3 mx-auto border border-primary">
-            <a href="#" className="list-group-item list-group-item-action border-0">
+            <a href={"/chats/" + props.chat.id + "/"} className="list-group-item list-group-item-action border-0">
                 <div className="d-flex align-items-start" style={{marginLeft: "-10px"}}>
                     <img src={props.chat.avatar} className="rounded-circle mr-1" alt="lol" width="60" height="60" style={{marginLeft: "-10px"}}/>
                     <div className="flex-grow-1 ml-3" id={props.chat.id}>

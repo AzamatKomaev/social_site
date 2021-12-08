@@ -4,6 +4,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import '../style.css';
 
 import MessageList from './MessageList';
+import MessageInput from './MessageInput';
 
 
 const MessageChatWindow = (props) => {
@@ -56,13 +57,7 @@ const MessageChatWindow = (props) => {
                                         </center>
                                     </div>
                                 </div>
-
-                                <div className="flex-grow-0 py-3 px-4 border-top">
-                                    <div className="input-group">
-                                        <input type="text" className="form-control" id="chat-message-input" placeholder="Type your message"/>
-                                        <button className="btn btn-primary" id="chat-message-submit">Send</button>
-                                    </div>
-                                </div>
+                                <MessageInput chatId={props.chat.id}/>
                             </div>
                         </div>
                     </div>

@@ -126,6 +126,7 @@ class ChatSerializer(ModelSerializer):
 
 
 class MessageSerializer(ModelSerializer):
+    user = HiddenField(default=CurrentUserDefault())
     user_data = SerializerMethodField("get_user_data")
 
     class Meta:

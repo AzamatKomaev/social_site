@@ -48,6 +48,16 @@ const MessageChatPage = (props) => {
     const [error, setError] = useState(false)
 
     useEffect(() => {
+        let ws = new WebSocket("ws://127.0.0.1:8000/ws/chat/")
+
+        ws.onmessage = function(e){
+            console.log(e)
+        }
+    }, [])
+
+
+
+    useEffect(() => {
         getChatMessages(chatId)
             .then((result) => {
                 setMessages(result.data.messages)

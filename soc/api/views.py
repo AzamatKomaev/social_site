@@ -1,3 +1,5 @@
+from typing import Union
+
 from django.core.exceptions import ObjectDoesNotExist
 from django.core.paginator import Paginator, EmptyPage
 
@@ -184,19 +186,47 @@ class ChatListAPIView(APIView):
 class MessageListAPIView(APIView):
     permission_classes = [permissions.IsAuthenticated]
 
+    def get_chat_by_id(self, chat_id: int) -> dict:
+        chat = Chat.objects.filter(id=chat_id)
+        return {
+            "chat": chat.first(),
+            "exists": chat.exists()
+        }
+
     def get(self, request, chat_id: int):
-        try:
-            chat = Chat.objects.get(id=chat_id)
-            chat_serializer = serializers.ChatSerializer(chat)
-        except ObjectDoesNotExist:
+        chat_data = self.get_chat_by_id(chat_id)
+        if not chat_data["exists"]:
             return Response({"message": f"Chat with id {chat_id} not found."}, status=status.HTTP_404_NOT_FOUND)
 
-        chat_service = ChatService(chat=chat)
+        chat_service = ChatService(chat=chat_data['chat'])
         if not chat_service.is_user_member(user=request.user):
-            return Response({"message": "You don't have permissions to see this chat."}, status=status.HTTP_403_FORBIDDEN)
+            return Response({"message": "You don't have permissions to see this chat."},
+                            status=status.HTTP_403_FORBIDDEN)
 
+        chat_serializer = serializers.ChatSerializer(chat_data['chat'])
         messages_serializer = serializers.MessageSerializer(chat_service.get_chat_messages(), many=True)
         return Response({
             "chat": chat_serializer.data,
             "messages": messages_serializer.data
         })
+
+    def post(self, request, chat_id: int):
+        chat_data = self.get_chat_by_id(chat_id)
+        if not chat_data['exists']:
+            return Response({"message": f"Chat with id {chat_id} not found."}, status=status.HTTP_404_NOT_FOUND)
+
+        chat_service = ChatService(chat=chat_data['chat'])
+        if not chat_service.is_user_member(user=request.user):
+            return Response({"message": "You don't have permissions to see this chat."},
+                            status=status.HTTP_403_FORBIDDEN)
+
+        message_serializer = serializers.MessageSerializer(
+            data={**request.data, **{"chat": chat_data['chat'].id}},
+            context={"request": request}
+        )
+
+        if message_serializer.is_valid():
+            message_serializer.save()
+            return Response(message_serializer.data, status=status.HTTP_201_CREATED)
+
+        return Response(message_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
