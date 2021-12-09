@@ -3,7 +3,6 @@ import logging
 from soc.models import User
 
 from ..models import Post, Category
-from ..forms import CommentForm
 
 
 logger = logging.getLogger(__name__)
