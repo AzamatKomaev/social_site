@@ -33,9 +33,22 @@ const MessageInput = (props) => {
     const sendMessage = () => {
         addMessageInDb(message, props.chatId)
             .then((result) => {
-                console.log(result)
-                setMessage("")
+                props.ws.send((JSON.stringify({
+                    type: "send_message",
+                    data: result.info
+                })))
             })
+            .catch((error) => {
+                console.error(error)
+            })
+
+        /*
+        props.ws.send(JSON.stringify({
+            type: "send_message",
+            message: message,
+            fromUser: props.currentUserData.username
+        }))
+        */
     }
 
     return (

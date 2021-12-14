@@ -5,9 +5,13 @@ import '../style.css';
 
 
 const Message = (props) => {
+    if (props.new) {
+        console.log(props)
+    }
+
     return (
         <div>
-            {JSON.stringify(props.currentUserData) == JSON.stringify(props.message.user_data)
+            {props.currentUserData.id == props.message.user_data.id
             ?
                 <div className="chat-message-right pb-4" style={{width: "70%"}}>
                     <div>

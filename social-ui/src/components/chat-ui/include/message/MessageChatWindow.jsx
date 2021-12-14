@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
 import '../style.css';
@@ -8,6 +8,7 @@ import MessageInput from './MessageInput';
 
 
 const MessageChatWindow = (props) => {
+
     if (props.chat != undefined) {
         return (
             <main className="content">
@@ -49,15 +50,16 @@ const MessageChatWindow = (props) => {
                                 </div>
                                 <div className="position-relative">
                                     <div className="chat-messages p-4" id="chat-window" style={{height: "630px"}}>
-                                        <MessageList messages={props.messages} currentUserData={props.currentUserData}/>
+                                        <MessageList messages={props.messages} currentUserData={props.currentUserData} new={false}/>
                                         {"\n"}
                                         <center>
                                             <p>New messages</p>
                                             <hr style={{borderColor: "red"}}/>
                                         </center>
+                                        <MessageList messages={props.newMessages} currentUserData={props.currentUserData} new={true}/>
                                     </div>
                                 </div>
-                                <MessageInput chatId={props.chat.id}/>
+                                <MessageInput chatId={props.chat.id} ws={props.ws} currentUserData={props.currentUserData}/>
                             </div>
                         </div>
                     </div>
