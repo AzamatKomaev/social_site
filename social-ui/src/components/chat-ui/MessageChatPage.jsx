@@ -12,12 +12,9 @@ import { getCurrentUserData } from '../../services/service';
 import { WsConnect } from './include/message/websocket.jsx';
 
 
-const getChatMessages = async(chatId) => {
-    let messages = {
-        data: {
-            messages: null,
-            chat: null
-        },
+const getChatData = async(chatId) => {
+    let data = {
+        chat: null,
         error: false
     }
 
@@ -27,14 +24,38 @@ const getChatMessages = async(chatId) => {
         }
     })
         .then((response) => {
-            messages.data.messages = response.data.messages
-            messages.data.chat = response.data.chat
+            data.chat = response.data
         })
         .catch((error) => {
-            messages.error = error.response.status
+            data.error = error.response.status
         })
 
-    return messages;
+    return data;
+}
+
+const getChatMessages = async(chatId, pageNumber) => {
+    let data =  {
+        messages: null,
+        error: null
+    }
+
+    await axios.get("http://127.0.0.1:8000/api/v1/chats/" + chatId + "/messages/?page_number=" + pageNumber, {
+        headers: {
+            Authorization: 'Bearer ' + localStorage.getItem("jwt")
+        }
+    })
+        .then((response) => {
+            if (response.status != 204) {
+                data.messages = response.data
+            } else {
+                data.error = true
+            }
+        })
+        .catch((error) => {
+            data.error = true
+        })
+
+    return data
 }
 
 
@@ -45,19 +66,35 @@ const MessageChatPage = (props) => {
     const [currentUserData, setCurrentUserData] = useState()
 
     const [messages, setMessages] = useState([])
+
     const [newMessages, setNewMessages] = useState([])
 
     const [chat, setChat] = useState(null)
     const [error, setError] = useState(false)
 
+    const [currentPage, setCurrentPage] = useState(2);
+    const [fetching, setFetching] = useState(false)
+
     const ws = useRef()
-    const messagesFromApi = useRef()
+
+
+    const addNewMessageInArray = (data) => {
+        let chatHistory = document.getElementById('chat-window')
+
+        setNewMessages(
+            newMessages => [...newMessages, data]
+        )
+
+        if (chatHistory.scrollHeight - chatHistory.scrollTop < 1000) {
+            chatHistory.scrollTop = chatHistory.scrollHeight;
+        }
+    }
+
 
     useEffect(() => {
-        getChatMessages(chatId)
+        getChatData(chatId)
             .then((result) => {
-                setMessages(result.data.messages)
-                setChat(result.data.chat)
+                setChat(result.chat)
                 setError(result.error)
             })
     }, [])
@@ -68,22 +105,64 @@ const MessageChatPage = (props) => {
                 setIsAuth(result.isAuth)
                 setCurrentUserData(result.info)
             })
+        getChatMessages(chatId, 1)
+            .then((result) => {
+                setMessages(result.messages)
+
+                let chatHistory = document.getElementById('chat-window')
+                chatHistory.scrollTop = chatHistory.scrollHeight;
+            })
     }, [])
 
     useEffect(() => {
         ws.current = new WebSocket("ws://127.0.0.1:8000/ws/group_chat/" + chatId + "/?token=" + localStorage.getItem("jwt") + "/")
         ws.current.onopen = () => {
-            alert("Connection is opened.")
+            console.log("opened")
         }
 
         ws.current.onclose = () => {
-            alert("Connection is closed.")
+            console.log("closed")
         }
 
         ws.current.onmessage = (e) => {
-            setNewMessages([...newMessages, JSON.parse(e.data)])
+            addNewMessageInArray(JSON.parse(e.data))
         }
     }, [])
+
+    useEffect(() => {
+        if (fetching & currentPage != -1) {
+            console.log("fetching")
+            getChatMessages(chatId, currentPage)
+                .then((result) => {
+                    if (!result.error) {
+                        setMessages([...result.messages, ...messages])
+                        setCurrentPage(prevState => prevState + 1)
+                    } else {
+                        setCurrentPage(-1)
+                    }
+                })
+                .catch(err => {
+                    console.log(err);
+                })
+                .finally(() => {
+                    setFetching(false)
+                })
+        }
+    }, [fetching])
+
+
+    const scrollHandler = (e) => {
+
+        if (
+            e.target.scrollTop < 5 &&
+            currentPage != -1
+        ) {
+
+            console.log(e.target.scrollTopMax - 840)
+
+            e.target.scrollTop = e.target.scrollTopMax - 840
+        }
+    }
 
 
     if (error == 404 || error == 403) {
@@ -93,11 +172,18 @@ const MessageChatPage = (props) => {
                 <Error404NotFound/>
             </div>
         )
-    } else if (messages && currentUserData) {
+    } else if ((messages || newMessages) && currentUserData) {
         return (
             <div>
                 <Header isAuth={isAuth}/>
-                <MessageChatWindow messages={messages} newMessages={newMessages} chat={chat} ws={ws.current} currentUserData={currentUserData}/>
+                <MessageChatWindow
+                    messages={messages}
+                    newMessages={newMessages}
+                    chat={chat}
+                    ws={ws.current}
+                    currentUserData={currentUserData}
+                    scrollHandler={scrollHandler}
+                 />
             </div>
         )
     } else {

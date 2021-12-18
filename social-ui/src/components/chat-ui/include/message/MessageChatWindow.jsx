@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
 import '../style.css';
@@ -8,6 +8,18 @@ import MessageInput from './MessageInput';
 
 
 const MessageChatWindow = (props) => {
+    const messageRef = useRef();
+
+    useEffect(() => {
+        if (messageRef.current) {
+            messageRef.current.scrollIntoView(
+                {
+                    behavior: 'smooth',
+                    block: 'end',
+                    inline: 'nearest'
+                }
+            )}
+    })
 
     if (props.chat != undefined) {
         return (
@@ -49,7 +61,7 @@ const MessageChatWindow = (props) => {
                                     </div>
                                 </div>
                                 <div className="position-relative">
-                                    <div className="chat-messages p-4" id="chat-window" style={{height: "630px"}}>
+                                    <div className="chat-messages p-4" id="chat-window" onScroll={props.scrollHandler} ref={messageRef} style={{height: "550px"}}>
                                         <MessageList messages={props.messages} currentUserData={props.currentUserData} new={false}/>
                                         {"\n"}
                                         <center>
