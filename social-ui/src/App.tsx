@@ -10,7 +10,7 @@ import {
 } from "react-router-dom";
 
 import './App.css';
-import { isUserAuth, getCurrentUserData, getCategories } from './services/service';
+import { getCurrentUserData, getCategories } from './services/service';
 
 import CategoryPage from './components/soc-ui/CategoryPage';
 import PostPage from './components/soc-ui/PostPage';
@@ -27,7 +27,7 @@ import MessageChatPage from './components/chat-ui/MessageChatPage';
 import UserPage from './components/profile-ui/UserPage';
 
 
-const App = (props) => {
+const App = (props: any) => {
     const { history } = props;
 
     return (

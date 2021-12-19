@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, SetStateAction } from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import axios from 'axios';
 import { v4 as uuidv4 } from 'uuid';
@@ -11,8 +11,8 @@ import Error404NotFound from '../extend/Error404NotFound';
 import AcceptedPasswordAlert from './include/information/AcceptedPasswordAlert';
 
 
-const acceptAccount = async(token, isAuth) => {
-    let accepted;
+const acceptAccount = async(token: string, isAuth: boolean) => {
+    let accepted: any;
 
     if (isAuth) {
         accepted = false;
@@ -36,25 +36,29 @@ const acceptAccount = async(token, isAuth) => {
 }
 
 
-const AcceptAccountPage = (props) => {
+const AcceptAccountPage = (props: any) => {
+    console.log(props)
+
     const [accepted, setAccepted] = useState(false)
     const [isAuth, setIsAuth] = useState()
 
-    const token = props.match.params.token;
+    const token: string = props.match.params.token;
 
     useEffect(() => {
         getCurrentUserData()
-            .then((result) => {
+            .then((result: any) => {
                 setIsAuth(result.isAuth)
             })
     }, [])
 
 
     useEffect(() => {
-        acceptAccount(token, isAuth)
-            .then((data) => {
-                setAccepted(data)
-            })
+        if (typeof isAuth !== "undefined") {
+            acceptAccount(token, isAuth)
+                .then((data) => {
+                    setAccepted(data)
+                })
+        }
     }, [])
 
     return (

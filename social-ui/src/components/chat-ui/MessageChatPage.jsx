@@ -70,6 +70,7 @@ const MessageChatPage = (props) => {
     const [newMessages, setNewMessages] = useState([])
 
     const [chat, setChat] = useState(null)
+    const [scrollHeights, setScrollHeights] = useState([])
     const [error, setError] = useState(false)
 
     const [currentPage, setCurrentPage] = useState(2);
@@ -90,7 +91,6 @@ const MessageChatPage = (props) => {
         }
     }
 
-
     useEffect(() => {
         getChatData(chatId)
             .then((result) => {
@@ -107,7 +107,7 @@ const MessageChatPage = (props) => {
             })
         getChatMessages(chatId, 1)
             .then((result) => {
-                setMessages(result.messages)
+                setMessages(result.messages.reverse())
 
                 let chatHistory = document.getElementById('chat-window')
                 chatHistory.scrollTop = chatHistory.scrollHeight;
@@ -135,7 +135,7 @@ const MessageChatPage = (props) => {
             getChatMessages(chatId, currentPage)
                 .then((result) => {
                     if (!result.error) {
-                        setMessages([...result.messages, ...messages])
+                        setMessages([...result.messages.reverse(), ...messages])
                         setCurrentPage(prevState => prevState + 1)
                     } else {
                         setCurrentPage(-1)
@@ -150,17 +150,29 @@ const MessageChatPage = (props) => {
         }
     }, [fetching])
 
+    useEffect(() => {
+        if (messages && messages.length > 0) {
+            let chatHistory = document.getElementById('chat-window')
+            setScrollHeights([...scrollHeights, chatHistory.scrollHeight])
+        }
+    }, [messages])
+
 
     const scrollHandler = (e) => {
-
         if (
-            e.target.scrollTop < 5 &&
+            e.target.scrollTop < 10 &&
             currentPage != -1
         ) {
+            setFetching(true)
+            console.log(scrollHeights)
 
-            console.log(e.target.scrollTopMax - 840)
-
-            e.target.scrollTop = e.target.scrollTopMax - 840
+            if (scrollHeights.length === 1) {
+                e.target.scrollTop = 3705
+            } else {
+                //console.log("old valuse is " + scrollHeights[scrollHeights.length - 2])
+                //console.log("New value is " + e.target.scrollHeight)
+                e.target.scrollTop = e.target.scrollHeight - scrollHeights[scrollHeights.length - 2]
+            }
         }
     }
 
@@ -173,6 +185,14 @@ const MessageChatPage = (props) => {
             </div>
         )
     } else if ((messages || newMessages) && currentUserData) {
+
+        try {
+            let chatHistory = document.getElementById('chat-window')
+            //setCurrentHeight(chatHistory.scrollHeight)
+        } catch (e) {
+            console.log("pass")
+        }
+
         return (
             <div>
                 <Header isAuth={isAuth}/>

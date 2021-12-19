@@ -2,10 +2,17 @@ import { useState } from 'react';
 import axios from 'axios';
 
 
-const getReadableDateFormat = (dateString) => {
+const getReadableDateFormat = (dateString: Date) => {
     let dateJs = new Date(dateString);
-    let result = `${dateJs.getDate()} ${dateJs.toLocaleString('default', { month: 'long' })} ${dateJs.getFullYear()} г. ${dateJs.getHours()}:${dateJs.getMinutes()}`
-    return result;
+    let readableDateFormat = dateJs.toLocaleString('ru', {
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric',
+        hour: 'numeric',
+        minute: 'numeric'
+    })
+
+    return readableDateFormat.replace(",", "");
 }
 
 
@@ -37,7 +44,7 @@ const getCurrentUserData = async() => {
 }
 
 const getCategories = async() => {
-    let categories = []
+    let categories: object[] | null = []
 
     await axios.get("http://127.0.0.1:8000/api/v1/category/").
         then((response => {
@@ -51,7 +58,7 @@ const getCategories = async() => {
     return categories;
 }
 
-const findUserAndGetData = async(username) => {
+const findUserAndGetData = async(username: string) => {
     let data = null;
 
     await axios.get("http://127.0.0.1:8000/api/v1/user/find/" + username + "/")

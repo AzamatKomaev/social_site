@@ -25,7 +25,7 @@ def get_chat_by_id(chat_id: int) -> dict:
     }
 
 
-class ChatListAPIView(APIView):
+class GroupChatListAPIView(APIView):
     permission_classes = [permissions.IsAuthenticated]
 
     def get(self, request) -> Response:
@@ -34,7 +34,7 @@ class ChatListAPIView(APIView):
         return Response(serializer.data)
 
 
-class GroupChatAPIView(APIView):
+class GroupChatDetailAPIView(APIView):
     permission_classes = [permissions.IsAuthenticated]
 
     def get(self, request, chat_id: int):
@@ -51,7 +51,7 @@ class GroupChatAPIView(APIView):
         return Response(chat_serializer.data)
 
     def post(self, request, chat_id: int):
-        chat_data = self.get_chat_by_id(chat_id)
+        chat_data = get_chat_by_id(chat_id)
         if not chat_data['exists']:
             return Response({"message": f"Chat with id {chat_id} not found."}, status=status.HTTP_404_NOT_FOUND)
 
@@ -72,7 +72,7 @@ class GroupChatAPIView(APIView):
         return Response(message_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
-class MessageListAPIView(APIView):
+class GroupMessageListAPIView(APIView):
     permission_classes = [permissions.IsAuthenticated]
 
     def get(self, request, chat_id: int):
@@ -87,7 +87,7 @@ class MessageListAPIView(APIView):
                             status=status.HTTP_403_FORBIDDEN)
 
         page_number = request.query_params.get('page_number') or 1
-        page_size = 7
+        page_size = 15
         paginator = Paginator(chat_service.get_chat_messages(), page_size)
 
         try:

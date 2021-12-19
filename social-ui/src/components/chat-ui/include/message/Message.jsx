@@ -2,6 +2,7 @@ import React from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
 import '../style.css';
+import { getReadableDateFormat } from '../../../../services/service';
 
 
 const Message = (props) => {
@@ -23,7 +24,7 @@ const Message = (props) => {
                         <div className="flex-shrink-1 bg-light rounded py-2 px-3 mr-3">
                             <div className="font-weight-bold mb-1"><a href="#" style={{textDecoration: "none", color: "black"}}>Вы</a></div>
                             {props.message.text}
-                            <div className="text-muted small text-nowrap mt-2">{props.message.created_at}</div>
+                            <div className="text-muted small text-nowrap mt-2">{getReadableDateFormat(props.message.created_at)}</div>
                         </div>
                     </div>
                 :
@@ -34,7 +35,7 @@ const Message = (props) => {
                         <div className="flex-shrink-1 bg-light rounded py-2 px-3 ml-3">
                             <div className="font-weight-bold mb-1"><a href="#" style={{textDecoration: "none", color: "black"}}>{props.message.user_data.username}</a></div>
                             {props.message.text}
-                            <div className="text-muted small text-nowrap mt-2">{props.message.created_at}</div>
+                            <div className="text-muted small text-nowrap mt-2">{getReadableDateFormat(props.message.created_at)}</div>
                         </div>
                     </div>
                 }

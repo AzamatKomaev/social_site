@@ -21,7 +21,7 @@ urlpatterns = [
     path('user/accept/<str:token>/', user_views.AcceptUserAPIView.as_view()),
     path('user/posts/<int:user_id>/', user_views.UserDetailPostAPIView.as_view()),
 
-    path('chats/', chat_views.ChatListAPIView.as_view()),
-    path('chats/<int:chat_id>/', chat_views.GroupChatAPIView.as_view()),
-    path('chats/<int:chat_id>/messages/', chat_views.MessageListAPIView.as_view()),
+    path('chats/', chat_views.GroupChatListAPIView.as_view()),
+    path('chats/<int:chat_id>/', chat_views.GroupChatDetailAPIView.as_view()),
+    path('chats/<int:chat_id>/messages/', chat_views.GroupMessageAPIView.as_view()),
 ]
