@@ -12,7 +12,7 @@ from rest_framework_simplejwt.tokens import UntypedToken
 from rest_framework_simplejwt.exceptions import InvalidToken, TokenError
 from rest_framework import exceptions
 
-from soc.models import User, Chat
+from soc.models import User, GroupChat
 from soc.api.services import ChatService
 
 

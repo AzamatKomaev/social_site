@@ -10,9 +10,9 @@ from social.settings import EMAIL_HOST_USER
 from soc.models import AcceptAuthToken
 from soc.models import (
     User,
-    Chat,
+    GroupChat,
     PersonalChat,
-    Message,
+    GroupMessage,
     PersonalMessage
 )
 
@@ -76,7 +76,6 @@ class CreationUser:
         )
 
         self.user.avatar_set.create()
-        #self.user.groups.add(2)
         Group.objects.all().last().user_set.add(self.user)
         self._insert_token_in_table()
 
@@ -91,14 +90,26 @@ def accept_password_to_reg(token: str) -> None:
 
 
 class ChatService:
-    chat: Chat
+    chat: GroupChat
+    type_is_group: bool
 
-    def __init__(self, chat: Chat):
+    def __init__(self, chat: GroupChat, type_is_group: bool):
         self.chat = chat
+        self.type_is_group = type_is_group
 
     def get_chat_messages(self) -> QuerySet:
-        messages = self.chat.message_set.all()
+        messages: QuerySet
+    
+        if self.type_is_group:
+            messages = self.chat.groupmessage_set.all()
+        else:
+            messages = self.chat.personalmessage_set.all()
+            
         return messages
 
     def is_user_member(self, user: User) -> bool:
         return bool(user in self.chat.users.all())
+
+    def get_chat_members(self) -> QuerySet:
+        members = self.chat.users.all()
+        return members

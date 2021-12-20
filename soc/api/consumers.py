@@ -15,30 +15,14 @@ from channels.generic.websocket import AsyncWebsocketConsumer
 from channels.db import database_sync_to_async
 
 from . import serializers
-from soc.models import Chat, Message, User
+from soc.models import GroupChat, GroupMessage, User
 from soc.api.services import ChatService
 
 
 class GroupChatConsumer(AsyncWebsocketConsumer):
     @sync_to_async
-    def get_chat(self, chat_id: int) -> Union[None or Chat]:
-        return Chat.objects.filter(id=chat_id).first()
-
-    @database_sync_to_async
-    def get_user(token: str) -> Union[User or AnonymousUser]:
-        if not token or token == b'null':
-            return AnonymousUser()
-
-        try:
-            UntypedToken(token)
-        except (InvalidToken, TokenError) as e:
-            return AnonymousUser()
-
-        decoded_data = jwt_decode(token, settings.SECRET_KEY, algorithms=["HS256"])
-        try:
-            return User.objects.get(id=decoded_data['user_id'])
-        except ObjectDoesNotExist:
-            return AnonymousUser()
+    def get_chat(self, chat_id: int) -> Union[None or GroupChat]:
+        return GroupChat.objects.filter(id=chat_id).first()
 
     async def connect(self):
         chat_id = self.scope['url_route']['kwargs']['chat_id']
@@ -48,7 +32,7 @@ class GroupChatConsumer(AsyncWebsocketConsumer):
         if not chat:
             raise ObjectDoesNotExist("Chat doesn't exists.")
 
-        chat_service = ChatService(chat)
+        chat_service = ChatService(chat, type_is_group=True)
 
         if not await sync_to_async(chat_service.is_user_member)(self.scope['user']):
             raise PermissionDenied("You are not member of this chat.")

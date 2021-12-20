@@ -16,8 +16,8 @@ from soc.models import (
     Category,
     Comment,
     Avatar,
-    Chat,
-    Message
+    GroupChat,
+    GroupMessage
 )
 
 
@@ -113,26 +113,26 @@ class RegistrationUserSerializer(ModelSerializer):
         return creation_user.user
 
 
-class ChatSerializer(ModelSerializer):
+class GroupChatSerializer(ModelSerializer):
     user = HiddenField(default=CurrentUserDefault())
     last_message = SerializerMethodField('get_last_message')
 
     class Meta:
-        model = Chat
+        model = GroupChat
         fields = '__all__'
 
-    def get_last_message(self, obj: Chat) -> dict:
-        return MessageSerializer(obj.message_set.all().first()).data
+    def get_last_message(self, obj: GroupChat) -> dict:
+        return GroupMessageSerializer(obj.message_set.all().first()).data
 
 
-class MessageSerializer(ModelSerializer):
+class GroupMessageSerializer(ModelSerializer):
     user = HiddenField(default=CurrentUserDefault())
     user_data = SerializerMethodField("get_user_data")
 
     class Meta:
-        model = Message
+        model = GroupMessage
         fields = "__all__"
 
-    def get_user_data(self, obj: Message) -> dict:
+    def get_user_data(self, obj: GroupMessage) -> dict:
         return UserSerializer(obj.user).data
 

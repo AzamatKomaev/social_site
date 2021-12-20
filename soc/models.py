@@ -4,6 +4,8 @@ from django.db import models
 from django.contrib.auth.models import AbstractUser
 from django.utils import timezone
 
+from polymorphic.models import PolymorphicModel
+
 
 class User(AbstractUser):
 	email = models.EmailField(
@@ -88,10 +90,9 @@ class AcceptAuthToken(models.Model):
 		return f"Token {self.token}"
 
 
-class Chat(models.Model):
+class GroupChat(models.Model):
 	name = models.CharField(max_length=50, help_text="Название чата")
 	created_at = models.DateTimeField(auto_now_add=True)
-	token = models.UUIDField(default=uuid4, editable=False)
 	avatar = models.ImageField(default="/static/img/me.png", upload_to="media/group_avatars")
 	creator = models.ForeignKey(User, on_delete=models.CASCADE, related_name="creator_id")
 	users = models.ManyToManyField(User, related_name="users_id")
@@ -107,7 +108,7 @@ class Chat(models.Model):
 class Message(models.Model):
 	text = models.TextField()
 	created_at = models.DateTimeField(auto_now_add=True)
-	chat = models.ForeignKey(Chat, on_delete=models.CASCADE, default=None)
+	chat = models.ForeignKey(GroupChat, on_delete=models.CASCADE, default=None)
 	user = models.ForeignKey(User, on_delete=models.CASCADE, default=None)
 
 	def __str__(self):
@@ -119,6 +120,22 @@ class Message(models.Model):
 		ordering = ('-created_at',)
 
 
+class GroupChatRole(models.Model):
+    CHAT_ROLES = [
+        ("Adm",'Администратор'),
+        ("Mod", 'Модератор'),
+        ("Mem", 'Участник'),
+    ]
+
+    name = models.CharField(
+        max_length=3,
+        choices=CHAT_ROLES,
+        default="Mem"
+    )
+    data_joined = models.DateTimeField(auto_now_add=True)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    chat = models.ForeignKey(GroupChat, on_delete=models.CASCADE)
+
 
 class PersonalChat(models.Model):
 	users = models.ManyToManyField(User)
@@ -127,12 +144,32 @@ class PersonalChat(models.Model):
 		return str(self.id)
 
 
-class PersonalMessage(models.Model):
-	text = models.TextField()
-	created_at = models.DateTimeField(auto_now_add=True)
-	chat = models.ForeignKey(PersonalChat, on_delete=models.CASCADE)
-	user = models.ForeignKey(User, on_delete=models.CASCADE)
+class PolymorphicMessage(PolymorphicModel):
+    text = models.TextField()
+    created_at = models.DateTimeField(auto_now_add=True)
+    user = models.ForeignKey(User, on_delete=models.CASCADE, default=None)
 
-	def __str__(self):
-		return self.text
+
+class GroupMessage(PolymorphicMessage):
+    chat = models.ForeignKey(GroupChat, on_delete=models.CASCADE, default=None)
+
+    def __str__(self):
+        return self.text
+
+    class Meta:
+        verbose_name = "Групповое сообщение"
+        verbose_name_plural = "Групповые сообщения"
+        ordering = ('-created_at',)
+
+
+class PersonalMessage(PolymorphicMessage):
+    chat = models.ForeignKey(PersonalChat, on_delete=models.CASCADE, default=None)
+
+    def __str__(self):
+        return self.text
+
+    class Meta:
+        verbose_name = "Личное сообщение"
+        verbose_name_plural = "Личные сообщения"
+        ordering = ('-created_at',)
 

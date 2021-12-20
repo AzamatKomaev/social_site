@@ -13,7 +13,7 @@ from soc.models import (
     Post,
     Comment,
     User,
-    Chat
+    GroupChat
 )
 
 

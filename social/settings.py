@@ -72,6 +72,7 @@ INSTALLED_APPS = [
     'soc',
 
     'channels',
+    'polymorphic',
     'rest_framework',
     'rest_framework_simplejwt',
 

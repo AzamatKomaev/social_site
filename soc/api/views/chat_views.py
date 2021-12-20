@@ -13,12 +13,12 @@ from soc.models import (
     Post,
     Comment,
     User,
-    Chat
+    GroupChat
 )
 
 
 def get_chat_by_id(chat_id: int) -> dict:
-    chat = Chat.objects.filter(id=chat_id)
+    chat = GroupChat.objects.filter(id=chat_id)
     return {
         "chat": chat.first(),
         "exists": chat.exists()
@@ -29,8 +29,8 @@ class GroupChatListAPIView(APIView):
     permission_classes = [permissions.IsAuthenticated]
 
     def get(self, request) -> Response:
-        chats = Chat.objects.filter(users=request.user)
-        serializer = serializers.ChatSerializer(chats, many=True)
+        chats = GroupChat.objects.filter(users=request.user)
+        serializer = serializers.GroupChatSerializer(chats, many=True)
         return Response(serializer.data)
 
 
@@ -42,12 +42,12 @@ class GroupChatDetailAPIView(APIView):
         if not chat_data["exists"]:
             return Response({"message": f"Chat with id {chat_id} not found."}, status=status.HTTP_404_NOT_FOUND)
 
-        chat_service = ChatService(chat=chat_data['chat'])
+        chat_service = ChatService(chat=chat_data['chat'], type_is_group=True)
         if not chat_service.is_user_member(user=request.user):
             return Response({"message": "You don't have permissions to see this chat."},
                             status=status.HTTP_403_FORBIDDEN)
 
-        chat_serializer = serializers.ChatSerializer(chat_data['chat'])
+        chat_serializer = serializers.GroupChatSerializer(chat_data['chat'])
         return Response(chat_serializer.data)
 
     def post(self, request, chat_id: int):
@@ -55,12 +55,12 @@ class GroupChatDetailAPIView(APIView):
         if not chat_data['exists']:
             return Response({"message": f"Chat with id {chat_id} not found."}, status=status.HTTP_404_NOT_FOUND)
 
-        chat_service = ChatService(chat=chat_data['chat'])
+        chat_service = ChatService(chat=chat_data['chat'], type_is_group=True)
         if not chat_service.is_user_member(user=request.user):
             return Response({"message": "You don't have permissions to see this chat."},
                             status=status.HTTP_403_FORBIDDEN)
 
-        message_serializer = serializers.MessageSerializer(
+        message_serializer = serializers.GroupMessageSerializer(
             data={**request.data, **{"chat": chat_data['chat'].id}},
             context={"request": request}
         )
@@ -77,11 +77,10 @@ class GroupMessageListAPIView(APIView):
 
     def get(self, request, chat_id: int):
         chat_data = get_chat_by_id(chat_id)
-
         if not chat_data["exists"]:
             return Response({"message": f"Chat with id {chat_id} not found."}, status=status.HTTP_404_NOT_FOUND)
 
-        chat_service = ChatService(chat=chat_data['chat'])
+        chat_service = ChatService(chat=chat_data['chat'], type_is_group=True)
         if not chat_service.is_user_member(user=request.user):
             return Response({"message": "You don't have permissions to see this chat."},
                             status=status.HTTP_403_FORBIDDEN)
@@ -91,7 +90,24 @@ class GroupMessageListAPIView(APIView):
         paginator = Paginator(chat_service.get_chat_messages(), page_size)
 
         try:
-            serializer = serializers.MessageSerializer(paginator.page(page_number), many=True)
+            serializer = serializers.GroupMessageSerializer(paginator.page(page_number), many=True)
             return Response(serializer.data, status=status.HTTP_200_OK)
         except EmptyPage:
             return Response({}, status=status.HTTP_204_NO_CONTENT)
+
+
+class GroupChatMemberListAPIView(APIView):
+    permission_classes = [permissions.IsAuthenticated]
+
+    def get(self, request, chat_id: int):
+        chat_data = get_chat_by_id(chat_id)
+        if not chat_data["exists"]:
+            return Response({"message": f"Chat with id {chat_id} not found."}, status=status.HTTP_404_NOT_FOUND)
+
+        chat_service = ChatService(chat=chat_data['chat'])
+        if not chat_service.is_user_member(user=request.user):
+            return Response({"message": "You don't have permissions to see this chat."},
+                            status=status.HTTP_403_FORBIDDEN)
+
+        serializer = serializers.UserSerializer(chat_service.get_chat_members(), many=True)
+        return Response(serializer.data)
