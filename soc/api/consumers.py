@@ -16,7 +16,7 @@ from channels.db import database_sync_to_async
 
 from . import serializers
 from soc.models import GroupChat, GroupMessage, User
-from soc.api.services import ChatService
+from soc.api.services import GroupChatService
 
 
 class GroupChatConsumer(AsyncWebsocketConsumer):
@@ -32,7 +32,7 @@ class GroupChatConsumer(AsyncWebsocketConsumer):
         if not chat:
             raise ObjectDoesNotExist("Chat doesn't exists.")
 
-        chat_service = ChatService(chat, type_is_group=True)
+        chat_service = GroupChatService(chat)
 
         if not await sync_to_async(chat_service.is_user_member)(self.scope['user']):
             raise PermissionDenied("You are not member of this chat.")

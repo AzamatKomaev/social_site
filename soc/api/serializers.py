@@ -9,7 +9,7 @@ from rest_framework.serializers import (
     EmailField,
 )
 
-from soc.api.services import CreationUser
+from soc.api.services import CreationUser, PersonalChatService
 from soc.models import User
 from soc.models import (
     Post,
@@ -17,7 +17,8 @@ from soc.models import (
     Comment,
     Avatar,
     GroupChat,
-    GroupMessage
+    Message,
+    PersonalChat,
 )
 
 
@@ -122,17 +123,35 @@ class GroupChatSerializer(ModelSerializer):
         fields = '__all__'
 
     def get_last_message(self, obj: GroupChat) -> dict:
-        return GroupMessageSerializer(obj.message_set.all().first()).data
+        return MessageSerializer(obj.message_set.all().first()).data
 
 
-class GroupMessageSerializer(ModelSerializer):
+class MessageSerializer(ModelSerializer):
     user = HiddenField(default=CurrentUserDefault())
     user_data = SerializerMethodField("get_user_data")
 
     class Meta:
-        model = GroupMessage
+        model = Message
         fields = "__all__"
 
-    def get_user_data(self, obj: GroupMessage) -> dict:
+    def get_user_data(self, obj: Message) -> dict:
         return UserSerializer(obj.user).data
 
+
+class PersonalChatSerializer(ModelSerializer):
+    user = HiddenField(default=CurrentUserDefault())
+    last_message = SerializerMethodField('get_last_message')
+    interlocutor = SerializerMethodField('get_interlocutor')
+
+    class Meta:
+        model = PersonalChat
+        fields = "__all__"
+
+    def get_last_message(self, obj: PersonalChat) -> dict:
+        return MessageSerializer(obj.personalmessage_set.all().first()).data
+
+    def get_interlocutor(self, obj: PersonalChat) -> dict:
+        return UserSerializer(PersonalChatService.get_interlocutor(
+            personal_chat=obj,
+            user=self.context['request'].user
+        )).data

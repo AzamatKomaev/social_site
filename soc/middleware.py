@@ -13,7 +13,7 @@ from rest_framework_simplejwt.exceptions import InvalidToken, TokenError
 from rest_framework import exceptions
 
 from soc.models import User, GroupChat
-from soc.api.services import ChatService
+from soc.api.services import GroupChatService
 
 
 @database_sync_to_async
@@ -34,7 +34,6 @@ def get_user(token: str) -> Union[User or AnonymousUser]:
 
 
 class TokenAuthMiddleware:
-
     def __init__(self, inner):
         self.inner = inner
 

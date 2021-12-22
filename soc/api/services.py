@@ -1,5 +1,6 @@
 import random
 import string
+from typing import Union
 
 from django.core.mail import send_mail
 from django.contrib.auth.models import Group
@@ -89,22 +90,14 @@ def accept_password_to_reg(token: str) -> None:
     token_from_db.delete()
 
 
-class ChatService:
+class GroupChatService:
     chat: GroupChat
-    type_is_group: bool
 
-    def __init__(self, chat: GroupChat, type_is_group: bool):
+    def __init__(self, chat: GroupChat):
         self.chat = chat
-        self.type_is_group = type_is_group
 
     def get_chat_messages(self) -> QuerySet:
-        messages: QuerySet
-    
-        if self.type_is_group:
-            messages = self.chat.groupmessage_set.all()
-        else:
-            messages = self.chat.personalmessage_set.all()
-            
+        messages = self.chat.groupmessage_set.all()
         return messages
 
     def is_user_member(self, user: User) -> bool:
@@ -113,3 +106,37 @@ class ChatService:
     def get_chat_members(self) -> QuerySet:
         members = self.chat.users.all()
         return members
+
+
+class PersonalChatService:
+    from_user: User
+    to_user: User
+
+    def __init__(self, from_user_username: str, to_user_username: str):
+        self.from_user = User.objects.get(username=from_user_username)
+        self.to_user = User.objects.get(username=to_user_username)
+
+    def create(self) -> PersonalChat:
+        chat = PersonalChat.objects.create()
+        chat.users.add(self.from_user, self.to_user)
+
+    @staticmethod
+    def get_interlocutor(personal_chat: PersonalChat, user: User) -> User:
+        members_of_personal_chat = personal_chat.users.all()
+        return members_of_personal_chat.exclude(username=user.username).get()
+
+    def get_chat_with_both_users(self):
+        return PersonalChat.objects.filter(users=self.from_user).filter(users=self.to_user).first()
+
+    def is_chat_exists(self) -> bool:
+        """Метод для проверки существует ли уже чат между двумя юзерами."""
+        return bool(self.get_chat_with_both_users())
+
+    def get_value_for_connecting_ws(self) -> str:
+        """
+        Функция для получения значения для одного подключения для двух юзеров
+        (строка с id двух юзеров, разделенная нижним подчеркиванием).
+        """
+        chat = self.get_chat_with_both_users()
+        users_id = [str(user.id) for user in chat.users.all().order_by("id")]
+        return "_".join(users_id)
