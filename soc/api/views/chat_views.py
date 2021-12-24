@@ -142,3 +142,16 @@ class PersonalChatDetailAPIView(APIView):
             context={"request": request}
             )
         return Response(serializer.data)
+
+
+class PersonalMessageListAPIView(APIView):
+    permission_classes = [permissions.IsAuthenticated]
+
+    def get(self, request, to_user_username: str):
+        chat_service = PersonalChatService(from_user_username=request.user.username, to_user_username=to_user_username)
+        if not chat_service.is_chat_exists():
+            return Response({"message": f"Chat with {to_user_username} doesnt exists."}, status=status.HTTP_404_NOT_FOUND)
+
+        serializer = serializers.MessageSerializer(chat_service.get_messages(), many=True)
+        return Response(serializer.data)
+

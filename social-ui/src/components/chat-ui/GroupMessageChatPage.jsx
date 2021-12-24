@@ -4,7 +4,6 @@ import axios from 'axios';
 
 import Header from '../extend/Header';
 import Error404NotFound from '../extend/Error404NotFound';
-import Error429TooManyRequests from '../extend/Error429TooManyRequests';
 
 import MessageChatWindow from './include/message/MessageChatWindow';
 
@@ -59,7 +58,7 @@ const getChatMessages = async(chatId, pageNumber) => {
 }
 
 
-const MessageChatPage = (props) => {
+const GroupMessageChatPage = (props) => {
     const chatId = props.match.params.chatId;
 
     const [isAuth, setIsAuth] = useState()
@@ -169,8 +168,6 @@ const MessageChatPage = (props) => {
             if (scrollHeights.length === 1) {
                 e.target.scrollTop = 3705
             } else {
-                //console.log("old valuse is " + scrollHeights[scrollHeights.length - 2])
-                //console.log("New value is " + e.target.scrollHeight)
                 e.target.scrollTop = e.target.scrollHeight - scrollHeights[scrollHeights.length - 2]
             }
         }
@@ -197,6 +194,7 @@ const MessageChatPage = (props) => {
             <div>
                 <Header isAuth={isAuth}/>
                 <MessageChatWindow
+                    type_is_group={true}
                     messages={messages}
                     newMessages={newMessages}
                     chat={chat}
@@ -215,4 +213,4 @@ const MessageChatPage = (props) => {
     }
 }
 
-export default MessageChatPage;
+export default GroupMessageChatPage;

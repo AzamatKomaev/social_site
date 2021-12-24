@@ -5,6 +5,7 @@ from typing import Union
 from django.core.mail import send_mail
 from django.contrib.auth.models import Group
 from django.core.exceptions import ObjectDoesNotExist
+from django.shortcuts import get_object_or_404
 from django.db.models import QuerySet
 
 from social.settings import EMAIL_HOST_USER
@@ -113,8 +114,8 @@ class PersonalChatService:
     to_user: User
 
     def __init__(self, from_user_username: str, to_user_username: str):
-        self.from_user = User.objects.get(username=from_user_username)
-        self.to_user = User.objects.get(username=to_user_username)
+        self.from_user = get_object_or_404(User, username=from_user_username)
+        self.to_user = get_object_or_404(User, username=to_user_username)
 
     def create(self) -> PersonalChat:
         chat = PersonalChat.objects.create()
@@ -127,6 +128,10 @@ class PersonalChatService:
 
     def get_chat_with_both_users(self):
         return PersonalChat.objects.filter(users=self.from_user).filter(users=self.to_user).first()
+
+    def get_messages(self):
+        messages = self.get_chat_with_both_users().personalmessage_set.all()
+        return messages
 
     def is_chat_exists(self) -> bool:
         """Метод для проверки существует ли уже чат между двумя юзерами."""

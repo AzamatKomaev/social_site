@@ -27,5 +27,6 @@ urlpatterns = [
     path('chats/<int:chat_id>/members/', chat_views.GroupChatMemberListAPIView.as_view()),
 
     path('personal_chats/<str:to_user_username>/', chat_views.PersonalChatDetailAPIView.as_view()),
+    path('personal_chats/<str:to_user_username>/messages/', chat_views.PersonalMessageListAPIView.as_view()),
 ]
 

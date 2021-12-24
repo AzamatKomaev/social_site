@@ -6,6 +6,9 @@ import '../style.css';
 import MessageList from './MessageList';
 import MessageInput from './MessageInput';
 
+import ChatHeader from '../chat/ChatHeader';
+import ChatUserList from '../user/ChatUserList';
+
 
 const MessageChatWindow = (props) => {
     const messageRef = useRef();
@@ -27,39 +30,25 @@ const MessageChatWindow = (props) => {
                 <div className="container p-0">
                     <div className="card">
                         <div className="row g-0">
-                            <div className="col-12 col-lg-5 col-xl-3 d-none d-lg-block border-right">
+                            {props.type_is_group
+                                ? <ChatUserList users={[]}/>
+                                : ""
+                            }
+                            <hr className="d-block d-lg-none mt-1 mb-0"/>
+                                <div className={props.type_is_group ? "col-12 col-lg-7 col-xl-9" : "col-12 col-lg-12 col-xl-12"}>
 
-                                <div className="px-4 d-none d-md-block">
-                                    <div className="d-flex align-items-center">
-                                        <div className="flex-grow-1">
-                                            <input type="text" className="form-control my-3" placeholder="Search..."/>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <a href="{% url 'profile' username=member.username %}" className="list-group-item list-group-item-action border-0">
-                                    <div className="d-flex align-items-start">
-                                        <img src="/main{{ member.avatar_set.get.image.url }}" className="rounded-circle mr-1" alt="..." width="40" height="40"/>
-                                        <div className="flex-grow-1 ml-3">
-                                            {"member.username"}
-                                            <div className="small"><span className="fas fa-circle chat-offline"></span>Online</div>
-                                        </div>
-                                    </div>
-                                </a>
-
-                                <hr className="d-block d-lg-none mt-1 mb-0"/>
-                            </div>
-                            <div className="col-12 col-lg-7 col-xl-9">
-                                <div className="py-2 px-4 border-bottom  d-lg-block">
-                                    <div className="d-flex align-items-center py-1">
-                                        <div className="position-relative">
-                                            <img src={props.chat.avatar} className="rounded-circle mr-1" alt="..." width="50" height="50"/>
-                                        </div>
-                                        <div className="flex-grow-1 pl-3">
-                                            <strong>{props.chat.name}</strong>
-                                        </div>
-                                    </div>
-                                </div>
+                                {props.type_is_group
+                                    ?
+                                     <ChatHeader
+                                         avatar={props.chat.avatar}
+                                         name={props.chat.name}
+                                      />
+                                    :
+                                     <ChatHeader
+                                         avatar={props.chat.interlocutor.avatar.image}
+                                         name={props.chat.interlocutor.username}
+                                      />
+                                    }
                                 <div className="position-relative">
                                     <div className="chat-messages p-4" id="chat-window" onScroll={props.scrollHandler} ref={messageRef} style={{height: "550px"}}>
                                         <MessageList messages={props.messages} currentUserData={props.currentUserData} new={false}/>
