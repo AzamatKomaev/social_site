@@ -51,16 +51,29 @@ const MessageChatWindow = (props) => {
                                     }
                                 <div className="position-relative">
                                     <div className="chat-messages p-4" id="chat-window" onScroll={props.scrollHandler} ref={messageRef} style={{height: "550px"}}>
-                                        <MessageList messages={props.messages} currentUserData={props.currentUserData} new={false}/>
+                                        <MessageList
+                                            messages={props.messages}
+                                            currentUserData={props.currentUserData}
+                                            new={false}
+                                         />
                                         {"\n"}
                                         <center>
                                             <p>New messages</p>
                                             <hr style={{borderColor: "red"}}/>
                                         </center>
-                                        <MessageList messages={props.newMessages} currentUserData={props.currentUserData} new={true}/>
+                                        <MessageList
+                                            messages={props.newMessages}
+                                            currentUserData={props.currentUserData}
+                                            new={true}
+                                         />
                                     </div>
                                 </div>
-                                <MessageInput chatId={props.chat.id} ws={props.ws} currentUserData={props.currentUserData}/>
+                                <MessageInput
+                                    chat={props.chat}
+                                    ws={props.ws}
+                                    currentUserData={props.currentUserData}
+                                    type_is_group={props.type_is_group}
+                                 />
                             </div>
                         </div>
                     </div>

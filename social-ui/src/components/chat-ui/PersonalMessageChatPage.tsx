@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import axios from 'axios';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
@@ -35,13 +35,13 @@ const getPersonalChat = async(username: string) => {
     return data;
 }
 
-const getChatMessages = async(username: string, pageNumber: number) => {
+const getPersonalChatMessages = async(username: string, pageNumber: number) => {
     let data =  {
         messages: null,
         error: null
     }
 
-    await axios.get("http://127.0.0.1:8000/api/v1/chats/" + chatId + "/messages/?page_number=" + pageNumber, {
+    await axios.get("http://127.0.0.1:8000/api/v1/personal_chats/" + username + "/messages/?page_number=" + pageNumber, {
         headers: {
             Authorization: 'Bearer ' + localStorage.getItem("jwt")
         }
@@ -73,13 +73,28 @@ const PersonalMessageChatPage = (props: any) => {
 
     const [newMessages, setNewMessages] = useState([])
 
+    const ws: any = useRef()
+
+
+    const addNewMessageInArray = (data: any) => {
+        let chatHistory = document.getElementById('chat-window')
+
+        setNewMessages(
+            newMessages => [...newMessages, data]
+        )
+
+        if (chatHistory.scrollHeight - chatHistory.scrollTop < 1000) {
+            chatHistory.scrollTop = chatHistory.scrollHeight;
+        }
+    }
+
     useEffect(() => {
         getCurrentUserData()
             .then((result) => {
                 setIsAuth(result.isAuth)
                 setCurrentUserData(result.info)
             })
-        }, [])
+    }, [])
 
     useEffect(() => {
         getPersonalChat(interlocutorUsername)
@@ -87,6 +102,32 @@ const PersonalMessageChatPage = (props: any) => {
                 setChat(result.info)
                 setError(result.error)
             })
+    }, [])
+
+    useEffect(() => {
+        getPersonalChatMessages(interlocutorUsername, 1)
+            .then((result) => {
+                setMessages(result.messages.reverse())
+                let chatHistory = document.getElementById('chat-window')
+                chatHistory.scrollTop = chatHistory.scrollHeight;
+            })
+    }, [])
+
+    useEffect(() => {
+        ws.current = new WebSocket(
+            `ws://127.0.0.1:8000/ws/personal_chat/${interlocutorUsername}/?token=${(localStorage.getItem("jwt") as string)}/`
+        )
+        ws.current.onopen = () => {
+            console.log("opened")
+        }
+
+        ws.current.onclose = () => {
+            console.log("closed")
+        }
+
+        ws.current.onmessage = (e) => {
+            addNewMessageInArray(JSON.parse(e.data))
+        }
     }, [])
 
 
@@ -110,7 +151,7 @@ const PersonalMessageChatPage = (props: any) => {
                     messages={messages}
                     newMessages={newMessages}
                     chat={chat}
-                    ws={"null"}
+                    ws={ws.current}
                     currentUserData={currentUserData}
                     scrollHandler={scrollHandler}
                  />

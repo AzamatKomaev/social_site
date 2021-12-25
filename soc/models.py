@@ -13,7 +13,7 @@ class User(AbstractUser):
 		error_messages={
 			'unique': 'Пользователь с такой почтой уже существует.'
 		}
-	)
+)
 
 
 class Category(models.Model):
@@ -121,20 +121,20 @@ class Message(models.Model):
 
 
 class GroupChatRole(models.Model):
-    CHAT_ROLES = [
-        ("Adm",'Администратор'),
-        ("Mod", 'Модератор'),
-        ("Mem", 'Участник'),
-    ]
+	CHAT_ROLES = [
+		("Adm",'Администратор'),
+		("Mod", 'Модератор'),
+		("Mem", 'Участник'),
+	]
 
-    name = models.CharField(
-        max_length=3,
-        choices=CHAT_ROLES,
-        default="Mem"
-    )
-    data_joined = models.DateTimeField(auto_now_add=True)
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
-    chat = models.ForeignKey(GroupChat, on_delete=models.CASCADE)
+	name = models.CharField(
+		max_length=3,
+		choices=CHAT_ROLES,
+		default="Mem"
+	)
+	data_joined = models.DateTimeField(auto_now_add=True)
+	user = models.ForeignKey(User, on_delete=models.CASCADE)
+chat = models.ForeignKey(GroupChat, on_delete=models.CASCADE)
 
 
 class PersonalChat(models.Model):
@@ -145,31 +145,31 @@ class PersonalChat(models.Model):
 
 
 class PolymorphicMessage(PolymorphicModel):
-    text = models.TextField()
-    created_at = models.DateTimeField(auto_now_add=True)
-    user = models.ForeignKey(User, on_delete=models.CASCADE, default=None)
+	text = models.TextField()
+	created_at = models.DateTimeField(auto_now_add=True)
+	user = models.ForeignKey(User, on_delete=models.CASCADE, default=None)
 
 
 class GroupMessage(PolymorphicMessage):
-    chat = models.ForeignKey(GroupChat, on_delete=models.CASCADE, default=None)
+	chat = models.ForeignKey(GroupChat, on_delete=models.CASCADE, default=None)
 
-    def __str__(self):
-        return self.text
+	def __str__(self):
+		return self.text
 
-    class Meta:
-        verbose_name = "Групповое сообщение"
-        verbose_name_plural = "Групповые сообщения"
-        ordering = ('-created_at',)
+	class Meta:
+		verbose_name = "Групповое сообщение"
+		verbose_name_plural = "Групповые сообщения"
+		ordering = ('-created_at',)
 
 
 class PersonalMessage(PolymorphicMessage):
-    chat = models.ForeignKey(PersonalChat, on_delete=models.CASCADE, default=None)
+	chat = models.ForeignKey(PersonalChat, on_delete=models.CASCADE, default=None)
 
-    def __str__(self):
-        return self.text
+	def __str__(self):
+		return self.text
 
-    class Meta:
-        verbose_name = "Личное сообщение"
-        verbose_name_plural = "Личные сообщения"
-        ordering = ('-created_at',)
+	class Meta:
+		verbose_name = "Личное сообщение"
+		verbose_name_plural = "Личные сообщения"
+		ordering = ('-created_at',)
 

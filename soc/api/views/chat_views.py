@@ -13,24 +13,13 @@ from soc.api.services import (
     PersonalChatService
 )
 from soc.models import (
-    Category,
-    Post,
-    Comment,
-    User,
-    GroupChat
+    GroupChat,
+    PersonalChat
 )
 
 
 def get_chat_by_id(chat_id: int) -> dict:
     chat = GroupChat.objects.filter(id=chat_id)
-    return {
-        "chat": chat.first(),
-        "exists": chat.exists()
-    }
-
-
-def get_personal_chat_by_user_ids(from_username: str, to_username: str) -> dict:
-    chat = PersonalChat.objects.filter(id=chat_id)
     return {
         "chat": chat.first(),
         "exists": chat.exists()
@@ -72,7 +61,7 @@ class GroupChatDetailAPIView(APIView):
             return Response({"message": "You don't have permissions to see this chat."},
                             status=status.HTTP_403_FORBIDDEN)
 
-        message_serializer = serializers.MessageSerializer(
+        message_serializer = serializers.GroupMessageSerializer(
             data={**request.data, **{"chat": chat_data['chat'].id}},
             context={"request": request}
         )
@@ -102,7 +91,7 @@ class GroupMessageListAPIView(APIView):
         paginator = Paginator(chat_service.get_chat_messages(), page_size)
 
         try:
-            serializer = serializers.MessageSerializer(paginator.page(page_number), many=True)
+            serializer = serializers.GroupMessageSerializer(paginator.page(page_number), many=True)
             return Response(serializer.data, status=status.HTTP_200_OK)
         except EmptyPage:
             return Response({}, status=status.HTTP_204_NO_CONTENT)
@@ -128,7 +117,7 @@ class GroupChatMemberListAPIView(APIView):
 class PersonalChatDetailAPIView(APIView):
     permission_classes = [permissions.IsAuthenticated]
 
-    def get(self, request, to_user_username: int):
+    def get(self, request, to_user_username: str):
         try:
             chat_service = PersonalChatService(from_user_username=request.user.username, to_user_username=to_user_username)
             if not chat_service.is_chat_exists():
@@ -152,6 +141,21 @@ class PersonalMessageListAPIView(APIView):
         if not chat_service.is_chat_exists():
             return Response({"message": f"Chat with {to_user_username} doesnt exists."}, status=status.HTTP_404_NOT_FOUND)
 
-        serializer = serializers.MessageSerializer(chat_service.get_messages(), many=True)
+        serializer = serializers.PersonalMessageSerializer(chat_service.get_messages(), many=True)
         return Response(serializer.data)
 
+    def post(self, request, to_user_username: str):
+        chat_service = PersonalChatService(from_user_username=request.user.username, to_user_username=to_user_username)
+        if not chat_service.is_chat_exists():
+            return Response({"message": f"Chat with {to_user_username} doesnt exists."}, status=status.HTTP_404_NOT_FOUND)
+
+        message_serializer = serializers.PersonalMessageSerializer(
+            data={**request.data, **{"chat": chat_service.get_chat_with_both_users().id}},
+            context={"request": request}
+        )
+
+        if message_serializer.is_valid():
+            message_serializer.save()
+            return Response(message_serializer.data, status=status.HTTP_201_CREATED)
+
+        return Response(message_serializer.errors, status=status.HTTP_400_BAD_REQUEST)

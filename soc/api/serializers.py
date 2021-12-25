@@ -2,22 +2,20 @@ from django.contrib.auth.models import Group
 from rest_framework.serializers import (
     ModelSerializer,
     HiddenField,
-    IntegerField,
     SerializerMethodField,
     CurrentUserDefault,
     CharField,
-    EmailField,
 )
 
 from soc.api.services import CreationUser, PersonalChatService
-from soc.models import User
+from soc.models import User, GroupMessage
 from soc.models import (
     Post,
     Category,
     Comment,
     Avatar,
     GroupChat,
-    Message,
+    PersonalMessage,
     PersonalChat,
 )
 
@@ -123,18 +121,30 @@ class GroupChatSerializer(ModelSerializer):
         fields = '__all__'
 
     def get_last_message(self, obj: GroupChat) -> dict:
-        return MessageSerializer(obj.message_set.all().first()).data
+        return GroupMessageSerializer(obj.message_set.all().first()).data
 
 
-class MessageSerializer(ModelSerializer):
+class GroupMessageSerializer(ModelSerializer):
     user = HiddenField(default=CurrentUserDefault())
     user_data = SerializerMethodField("get_user_data")
 
     class Meta:
-        model = Message
+        model = GroupMessage
         fields = "__all__"
 
-    def get_user_data(self, obj: Message) -> dict:
+    def get_user_data(self, obj: GroupMessage) -> dict:
+        return UserSerializer(obj.user).data
+
+
+class PersonalMessageSerializer(ModelSerializer):
+    user = HiddenField(default=CurrentUserDefault())
+    user_data = SerializerMethodField("get_user_data")
+
+    class Meta:
+        model = PersonalMessage
+        fields = "__all__"
+
+    def get_user_data(self, obj: PersonalMessage) -> dict:
         return UserSerializer(obj.user).data
 
 
@@ -148,7 +158,7 @@ class PersonalChatSerializer(ModelSerializer):
         fields = "__all__"
 
     def get_last_message(self, obj: PersonalChat) -> dict:
-        return MessageSerializer(obj.personalmessage_set.all().first()).data
+        return GroupMessageSerializer(obj.personalmessage_set.all().first()).data
 
     def get_interlocutor(self, obj: PersonalChat) -> dict:
         return UserSerializer(PersonalChatService.get_interlocutor(

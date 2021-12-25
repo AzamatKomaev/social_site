@@ -3,13 +3,38 @@ import axios from 'axios';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
 
-const addMessageInDb = async(message, chatId) => {
+const addGroupMessageInDb = async(message, chatId) => {
     let data = {
         info: null,
         error: null
     }
+    let url = "http://127.0.0.1:8000/api/v1/chats/" + chatId + "/"
 
-    await axios.post("http://127.0.0.1:8000/api/v1/chats/" + chatId + "/", {
+    await axios.post(url, {
+        text: message
+    }, {
+        headers: {
+            Authorization: 'Bearer ' + localStorage.getItem("jwt")
+        }
+    })
+    .then((response) => {
+        data.info = response.data
+    })
+    .catch((error) => {
+        data.error = error.response.status
+    })
+
+    return data
+}
+
+const addPersonalMessageInDb = async(message, username) => {
+    let data = {
+        info: null,
+        error: null
+    }
+    let url = "http://127.0.0.1:8000/api/v1/personal_chats/" + username + "/messages/"
+
+    await axios.post(url, {
         text: message
     }, {
         headers: {
@@ -32,18 +57,30 @@ const MessageInput = (props) => {
 
     const sendMessage = () => {
         if (message != "") {
-            addMessageInDb(message, props.chatId)
-                .then((result) => {
-                    props.ws.send((JSON.stringify({
-                        type: "send_message",
-                        data: result.info
-                    })))
-                })
-                .catch((error) => {
-                    console.error(error)
-                })
+            if (props.type_is_group) {
+                addGroupMessageInDb(message, props.chat.id)
+                    .then((result) => {
+                        props.ws.send((JSON.stringify({
+                            type: "send_message",
+                            data: result.info
+                        })))
+                    })
+                    .catch((error) => {
+                        console.error(error)
+                    })
+            } else {
+                addPersonalMessageInDb(message, props.chat.interlocutor.username)
+                    .then((result) => {
+                        props.ws.send((JSON.stringify({
+                            type: "send_message",
+                            data: result.info
+                        })))
+                    })
+                    .catch((error) => {
+                        console.error(error)
+                    })
+            }
         }
-
         setMessage("")
     }
 
