@@ -13,6 +13,25 @@ class User(AbstractUser):
 	)
 	friends = models.ManyToManyField("User")
 
+	def add_friend(self, user):
+		"""Method to add the user in another user's friend list."""
+		self.friends.add(user)
+
+
+class FriendRequest(models.Model):
+	from_user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="from_user")
+	to_user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="to_user")
+	is_accepted = models.BooleanField(default=False)
+	created_at = models.DateTimeField(auto_now_add=True)
+	changed_at = models.DateTimeField(auto_now=True)
+
+	class Meta:
+		verbose_name = "Заявка в друзья"
+		verbose_name_plural = "Заявки в друзья"
+
+	def __str__(self):
+		return f"From {self.from_user} to {self.to_user}"
+
 
 class Category(models.Model):
 	name = models.CharField(max_length=255)

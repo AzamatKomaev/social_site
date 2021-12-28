@@ -8,7 +8,6 @@ from rest_framework.serializers import (
 )
 
 from soc.api.services import CreationUser, PersonalChatService
-from soc.models import User, GroupMessage
 from soc.models import (
     Post,
     Category,
@@ -17,8 +16,9 @@ from soc.models import (
     GroupChat,
     PersonalMessage,
     PersonalChat,
-    GroupChatRole
+    GroupChatRole, FriendRequest
 )
+from soc.models import User, GroupMessage
 
 
 class UserSerializer(ModelSerializer):
@@ -40,6 +40,12 @@ class UserSerializer(ModelSerializer):
                   "group_data",
                   "avatar",
                   "friends"]
+
+
+class FriendRequestSerializer(ModelSerializer):
+    class Meta:
+        model = FriendRequest
+        fields = "__all__"
 
 
 class GroupSerializer(ModelSerializer):

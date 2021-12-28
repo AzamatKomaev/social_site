@@ -2,19 +2,21 @@ import random
 import string
 from typing import Union
 
-from django.core.mail import send_mail
 from django.contrib.auth.models import Group
-from django.shortcuts import get_object_or_404
+from django.core.exceptions import ObjectDoesNotExist
+from django.core.mail import send_mail
 from django.db.models import QuerySet
+from django.shortcuts import get_object_or_404
 
-from social.settings import EMAIL_HOST_USER
 from soc.models import AcceptAuthToken
 from soc.models import (
     User,
     GroupChat,
     PersonalChat,
-    Post
+    Post,
+    FriendRequest
 )
+from social.settings import EMAIL_HOST_USER
 
 
 class CreationUser:
@@ -171,3 +173,40 @@ class UserService:
     def get_user_friends(self) -> QuerySet:
         """Method to get all user friends."""
         return self.user.friends.all()
+
+    def get_user_comments(self) -> QuerySet:
+        """Method to get all user comments."""
+        return self.user.comment_set.all()
+
+    def _is_friend_request_exists(self, to_user: User) -> bool:
+        """Method to check is friend request exists with the user."""
+        return bool(
+            FriendRequest.objects.filter(to_user=to_user, from_user=self.user)
+            or
+            FriendRequest.objects.filter(to_user=self.user, from_user=to_user)
+        )
+
+    def create_friend_request(self, to_user_id: int) -> dict:
+        """Method to create and send friend request to the user."""
+        data = {
+            "instanse": None,
+            "error": None
+        }
+        to_user = self.get_user(user_id=to_user_id)
+
+        if not to_user:
+            data["error"] = "There is no user with that id."
+            return data
+
+        if self._is_friend_request_exists(to_user):
+            data["error"] = "Friend request already exists"
+            return data
+
+        data["instanse"] = FriendRequest.objects.create(
+            from_user=self.user,
+            to_user=to_user,
+        )
+        return data
+
+    def accept_friend_request(self, to_user_id: int):
+        pass

@@ -3,18 +3,77 @@ import axios from 'axios';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
 
+interface cellsI {
+    name: string,
+    value: number,
+    width: string,
+    marginLeft: string
+}
+
+
+const getCommentList = async(userId: number) => {
+    let commentList: object[] | null | undefined = []
+
+    await axios.get("http://127.0.0.1:8000/api/v1/user/comments/" + userId + "/")
+        .then((response) => {
+            commentList = response.data
+        })
+        .catch((err) => {
+            console.error(err)
+        })
+
+    return commentList
+}
+
+
 const InfoUserCell = (props: any) => {
     const friends: number[] = props.user.friends;
+
+    const [commentList, setCommentList] = useState([])
+
+    const cells = [
+    {
+        name: "Друзья",
+        value: friends.length,
+        width: "120px",
+        marginLeft: "0px"
+    },
+    {
+        name: "Публикаций",
+        value: props.posts.length,
+        width: "120px",
+        marginLeft: "20px"
+    },
+    {
+        name: "Комментарий",
+        value: commentList.length,
+        width: "130px",
+        marginLeft: "20px"
+    }
+    ]
+
+    useEffect(() => {
+        getCommentList(props.user.id)
+            .then((result) => {
+                setCommentList(result)
+            })
+    }, [])
 
 
     return (
         <div className="row">
             <div className="col-12 col-sm-11 col-md-3 col-lg-3">
                 <img src={props.user.avatar.image} alt="avatar" className="rounded w-100"/>{"\n\n"}
-                {props.user.id == props.currentUser.id ?
-                <button type="button" className="btn btn-outline-secondary btn-block">Редактировать</button>
+                {
+                props.user.id == props.currentUser.id
+                ?
+                    <button type="button" className="btn btn-outline-secondary btn-block">Редактировать</button>
                 :
-                <button type="button" className="btn btn-outline-primary btn-block">Добавить в друзья</button>
+                    props.currentUser.friends.indexOf(props.user.id) == -1
+                    ?
+                        <button type="button" className="btn btn-outline-primary btn-block">Добавить в друзья</button>
+                    :
+                        <button type="button" className="btn btn-outline-danger btn-block">Удалить из друзей</button>
                 }
                 {"\n\n"}
             </div>
@@ -32,16 +91,12 @@ const InfoUserCell = (props: any) => {
                                             marginLeft: "1px",
                                             textAlign: "center"
                                        }}>
-
-
-                    <div className="card p-2" style={{height: "80%", width: "120px"}}>
-                        <b>Друзья</b>
-                        <p style={{fontSize: "35pt"}}>{friends.length}</p>
-                    </div>
-                    <div className="card p-2" style={{height: "80%", width: "120px", marginLeft: "20px"}}>
-                        <b>Публикаций</b>
-                        <p style={{fontSize: "35pt"}}>{props.posts.length}</p>
-                    </div>
+                    {cells.map((cell) => (
+                         <div className="card p-2" style={{height: "80%", width: cell.width, marginLeft: cell.marginLeft}}>
+                             <b>{cell.name}</b>
+                             <p style={{fontSize: "35pt"}}>{cell.value}</p>
+                         </div>
+                    ))}
                 </div>
             </div>
         </div>

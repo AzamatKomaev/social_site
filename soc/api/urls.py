@@ -17,11 +17,13 @@ urlpatterns = [
     path('user/find/<int:user_id>/', user_views.UserDetailAPIView.as_view()),
     path('user/find/<str:username>/', user_views.UserDetailAPIView.as_view()),
     path('user/find/<int:user_id>/friends/', user_views.UserFriendsAPIView.as_view()),
+    path('user/find/<int:to_user>/send_friend_request/', user_views.FriendRequestAPIView.as_view()),
 
     path('user/register/', user_views.RegistrationUserAPIView.as_view()),
     path('user/is_auth/', user_views.UserJwtAPIView.as_view()),
     path('user/accept/<str:token>/', user_views.AcceptUserAPIView.as_view()),
     path('user/posts/<int:user_id>/', user_views.UserDetailPostAPIView.as_view()),
+    path('user/comments/<int:user_id>/', user_views.UserDetailCommentAPIView.as_view()),
 
     path('chats/', chat_views.GroupChatListAPIView.as_view()),
     path('chats/<int:chat_id>/', chat_views.GroupChatDetailAPIView.as_view()),

@@ -1,3 +1,4 @@
+import serializer as serializer
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status, permissions
@@ -62,6 +63,18 @@ class UserDetailPostAPIView(APIView):
         return Response(serializer.data, status=status.HTTP_200_OK)
 
 
+class UserDetailCommentAPIView(APIView):
+    """API View to get all user comments."""
+    def get(self, request, user_id: int):
+        user_service = UserService(user_id)
+        comments = user_service.get_user_comments()
+        serializer = serializers.CommentSerializer(comments, many=True)
+        if not comments:
+            return Response({}, status=status.HTTP_204_NO_CONTENT)
+
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
+
 class UserFriendsAPIView(APIView):
     """API View to get all user friends."""
     def get(self, request, user_id: int) -> Response:
@@ -69,3 +82,17 @@ class UserFriendsAPIView(APIView):
         friends = user_service.get_user_friends()
         serializer = serializers.UserSerializer(friends, many=True)
         return Response(serializer.data)
+
+
+class FriendRequestAPIView(APIView):
+    permission_classes = [permissions.IsAuthenticated]
+
+    def post(self, request, to_user: int):
+        user_service = UserService(request.user.id)
+        data = user_service.create_friend_request(to_user)
+
+        if data["error"]:
+            return Response({"message": data["error"]}, status=status.HTTP_400_BAD_REQUEST)
+
+        serializer = serializers.FriendRequestSerializer(data["instanse"])
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
