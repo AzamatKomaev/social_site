@@ -53,7 +53,7 @@ const addPersonalMessageInDb = async(message, username) => {
 
 
 const MessageInput = (props) => {
-    const [message, setMessage] = useState()
+    const [message, setMessage] = useState("")
 
     const sendMessage = () => {
         if (message != "") {
@@ -84,6 +84,12 @@ const MessageInput = (props) => {
         setMessage("")
     }
 
+    const handleKeyPress = (e) => {
+        if (e.key == 'Enter') {
+           sendMessage()
+        }
+    }
+
     return (
         <div className="flex-grow-0 py-3 px-4 border-top">
             <div className="input-group">
@@ -93,6 +99,7 @@ const MessageInput = (props) => {
                     id="chat-message-input"
                     value={message}
                     onChange={(e) => setMessage(e.target.value)}
+                    onKeyPress={handleKeyPress}
                     placeholder="Type your message"
                  />
                 <button

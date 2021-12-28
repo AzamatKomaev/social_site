@@ -104,5 +104,3 @@ class PersonalChatConsumer(AsyncWebsocketConsumer):
             self.chat_group_name,
             self.channel_name
         )
-
-

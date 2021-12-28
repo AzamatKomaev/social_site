@@ -10,27 +10,8 @@ import MessageChatWindow from './include/message/MessageChatWindow';
 import { getCurrentUserData } from '../../services/service';
 import { WsConnect } from './include/message/websocket.jsx';
 
+import { getChatData } from './services';
 
-const getChatData = async(chatId) => {
-    let data = {
-        chat: null,
-        error: false
-    }
-
-    await axios.get("http://127.0.0.1:8000/api/v1/chats/" + chatId + "/", {
-        headers: {
-            Authorization: 'Bearer ' + localStorage.getItem("jwt")
-        }
-    })
-        .then((response) => {
-            data.chat = response.data
-        })
-        .catch((error) => {
-            data.error = error.response.status
-        })
-
-    return data;
-}
 
 const getChatMessages = async(chatId, pageNumber) => {
     let data =  {

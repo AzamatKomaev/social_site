@@ -18,6 +18,7 @@ urlpatterns = [
 
     path("chats/", views.index, name="chats"),
     path("chats/<int:chat_id>/", views.index, name="chat-messages"),
+    path("chats/<int:chat_id>/settings/", views.index, name="chat-settings"),
     path("personal_chats/<str:username>/", views.index),
 
     #path("main", views.show_all_categories, name='main'),

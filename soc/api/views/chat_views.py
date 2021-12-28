@@ -8,7 +8,6 @@ from django.core.exceptions import ObjectDoesNotExist
 
 from soc.api import serializers
 from soc.api.services import (
-    accept_password_to_reg,
     GroupChatService,
     PersonalChatService
 )
@@ -32,6 +31,18 @@ class GroupChatListAPIView(APIView):
     def get(self, request) -> Response:
         chats = GroupChat.objects.filter(users=request.user)
         serializer = serializers.GroupChatSerializer(chats, many=True)
+        return Response(serializer.data)
+
+
+class PersonalChatListAPIView(APIView):
+    permission_classes = [permissions.IsAuthenticated]
+
+    def get(self, request) -> Response:
+        chats = PersonalChat.objects.filter(users=request.user)
+        serializer = serializers.PersonalChatSerializer(
+            chats,
+            many=True,
+            context={"request": request})
         return Response(serializer.data)
 
 
@@ -110,7 +121,11 @@ class GroupChatMemberListAPIView(APIView):
             return Response({"message": "You don't have permissions to see this chat."},
                             status=status.HTTP_403_FORBIDDEN)
 
-        serializer = serializers.UserSerializer(chat_service.get_chat_members(), many=True)
+        serializer = serializers.GroupChatMembersSerializer(
+            chat_service.chat.groupchatrole_set.all(),
+            many=True,
+            context={"chat_id": chat_id}
+        )
         return Response(serializer.data)
 
 

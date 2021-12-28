@@ -18,7 +18,13 @@ const ChatWindow = (props) => {
                 <hr/>
                 <div className="row">
                     <div className="col-12">
-                        <ChatList chats={props.chats} key={uuidv4()}/>
+                        <ChatList chats={props.groupChats} type_is_group={true} userData={props.userData}/>
+                    </div>
+                </div>
+                {"\n"}
+                <div className="row">
+                    <div className="col-12">
+                        <ChatList chats={props.personalChats} type_is_group={false} userData={props.userData}/>
                     </div>
                 </div>
             </div>

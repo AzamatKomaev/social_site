@@ -2,39 +2,26 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status, permissions
 
-from django.db.utils import IntegrityError
-from django.core.paginator import Paginator, EmptyPage
 from django.core.exceptions import ObjectDoesNotExist
 
 from soc.api import serializers
-from soc.api.services import accept_password_to_reg, GroupChatService
-from soc.models import (
-    Category,
-    Post,
-    Comment,
-    User,
-    GroupChat
-)
+from soc.api.services import accept_password_to_reg, UserService
 
 
 class UserJwtAPIView(APIView):
+    """API View to get data about current user."""
     permission_classes = [permissions.IsAuthenticated]
 
     def get(self, request):
-        serilizer = serializers.UserSerializer(request.user)
-        return Response(serilizer.data, status=status.HTTP_200_OK)
+        serializer = serializers.UserSerializer(request.user)
+        return Response(serializer.data, status=status.HTTP_200_OK)
 
 
 class UserDetailAPIView(APIView):
-
+    """API View to get data about some user by his some data."""
     def get(self, request, username: str = None, user_id: int = None):
-        user = ""
-        try:
-            if username is not None:
-                user = User.objects.get(username=username)
-            elif user_id is not None:
-                user = User.objects.get(id=user_id)
-        except ObjectDoesNotExist:
+        user = UserService.get_user(user_id=user_id, username=username)
+        if not user:
             return Response({"error": "User not found with given data."}, status=status.HTTP_404_NOT_FOUND)
 
         serializer = serializers.UserSerializer(user)
@@ -42,7 +29,7 @@ class UserDetailAPIView(APIView):
 
 
 class RegistrationUserAPIView(APIView):
-    """Endpoint для регистраций пользователя."""
+    """API View for registration a user"""
     def post(self, request):
         serializer = serializers.RegistrationUserSerializer(data=request.data)
         if serializer.is_valid():
@@ -53,7 +40,7 @@ class RegistrationUserAPIView(APIView):
 
 
 class AcceptUserAPIView(APIView):
-    """Endpoint для подтверждения пользователя."""
+    """API View for accepting user by his token."""
     def get(self, request, token: str):
         try:
             accept_password_to_reg(token=token)
@@ -64,12 +51,21 @@ class AcceptUserAPIView(APIView):
 
 
 class UserDetailPostAPIView(APIView):
-
+    """API View to get all user posts."""
     def get(self, request, user_id: int) -> Response:
-        posts = Post.objects.filter(user_id=user_id)
+        user_service = UserService(user_id)
+        posts = user_service.get_user_posts()
         serializer = serializers.PostSerializer(posts, many=True)
         if not posts:
             return Response({}, status=status.HTTP_204_NO_CONTENT)
 
         return Response(serializer.data, status=status.HTTP_200_OK)
 
+
+class UserFriendsAPIView(APIView):
+    """API View to get all user friends."""
+    def get(self, request, user_id: int) -> Response:
+        user_service = UserService(user_id)
+        friends = user_service.get_user_friends()
+        serializer = serializers.UserSerializer(friends, many=True)
+        return Response(serializer.data)

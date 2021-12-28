@@ -17,6 +17,7 @@ from soc.models import (
     GroupChat,
     PersonalMessage,
     PersonalChat,
+    GroupChatRole
 )
 
 
@@ -37,7 +38,8 @@ class UserSerializer(ModelSerializer):
                   "username",
                   "email",
                   "group_data",
-                  "avatar"]
+                  "avatar",
+                  "friends"]
 
 
 class GroupSerializer(ModelSerializer):
@@ -76,7 +78,6 @@ class PostSerializer(ModelSerializer):
     class Meta:
         model = Post
         fields = "__all__"
-
 
 
 class CommentSerializer(ModelSerializer):
@@ -121,7 +122,7 @@ class GroupChatSerializer(ModelSerializer):
         fields = '__all__'
 
     def get_last_message(self, obj: GroupChat) -> dict:
-        return GroupMessageSerializer(obj.message_set.all().first()).data
+        return GroupMessageSerializer(obj.groupmessage_set.all().first()).data
 
 
 class GroupMessageSerializer(ModelSerializer):
@@ -152,6 +153,7 @@ class PersonalChatSerializer(ModelSerializer):
     user = HiddenField(default=CurrentUserDefault())
     last_message = SerializerMethodField('get_last_message')
     interlocutor = SerializerMethodField('get_interlocutor')
+    messages_count = SerializerMethodField('get_messages_count')
 
     class Meta:
         model = PersonalChat
@@ -165,3 +167,32 @@ class PersonalChatSerializer(ModelSerializer):
             personal_chat=obj,
             user=self.context['request'].user
         )).data
+
+    def get_messages_count(self, obj: PersonalChat) -> int:
+        return len(obj.personalmessage_set.all())
+
+
+class GroupChatRoleSerializer(ModelSerializer):
+    user_data = SerializerMethodField("get_user_data")
+
+    class Meta:
+        model = GroupChatRole
+        fields = "__all__"
+
+    def get_user_data(self, obj: GroupChatRole):
+        return UserSerializer()
+
+
+class GroupChatMembersSerializer(ModelSerializer):
+    user_data = SerializerMethodField('get_user_data')
+
+    def get_user_data(self, obj: GroupChatRole) -> dict:
+        return UserSerializer(obj.user).data
+
+    class Meta:
+        model = GroupChatRole
+        fields = ["id",
+                  "user_data",
+                  "name",
+                  "data_joined"
+                  ]

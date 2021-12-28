@@ -16,6 +16,8 @@ urlpatterns = [
 
     path('user/find/<int:user_id>/', user_views.UserDetailAPIView.as_view()),
     path('user/find/<str:username>/', user_views.UserDetailAPIView.as_view()),
+    path('user/find/<int:user_id>/friends/', user_views.UserFriendsAPIView.as_view()),
+
     path('user/register/', user_views.RegistrationUserAPIView.as_view()),
     path('user/is_auth/', user_views.UserJwtAPIView.as_view()),
     path('user/accept/<str:token>/', user_views.AcceptUserAPIView.as_view()),
@@ -26,6 +28,7 @@ urlpatterns = [
     path('chats/<int:chat_id>/messages/', chat_views.GroupMessageListAPIView.as_view()),
     path('chats/<int:chat_id>/members/', chat_views.GroupChatMemberListAPIView.as_view()),
 
+    path('personal_chats/', chat_views.PersonalChatListAPIView.as_view()),
     path('personal_chats/<str:to_user_username>/', chat_views.PersonalChatDetailAPIView.as_view()),
     path('personal_chats/<str:to_user_username>/messages/', chat_views.PersonalMessageListAPIView.as_view()),
 ]

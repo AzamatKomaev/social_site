@@ -12,7 +12,10 @@ import { getCurrentUserData } from '../../services/service';
 
 
 const getUserChats = async() => {
-    let userChats = []
+    let chats = {
+        personal: [],
+        group: []
+    }
 
     await axios.get("http://127.0.0.1:8000/api/v1/chats/", {
         headers: {
@@ -20,7 +23,7 @@ const getUserChats = async() => {
         }
     })
         .then((response) => {
-            userChats = response.data
+            chats.group = response.data
         })
         .catch((error) => {
             if (error.response.status != 401) {
@@ -28,14 +31,30 @@ const getUserChats = async() => {
             }
         })
 
-    return userChats
+    await axios.get("http://127.0.0.1:8000/api/v1/personal_chats/", {
+        headers: {
+            Authorization: 'Bearer ' + localStorage.getItem("jwt")
+        }
+    })
+        .then((response) => {
+            chats.personal = response.data
+        })
+        .catch((error) => {
+            if (error.response.status != 401) {
+                alert(error.response.status + " error")
+            }
+        })
+
+    return chats
 }
 
 
 const ChatListPage = () => {
     const [isAuth, setIsAuth] = useState()
     const [userData, setUserData] = useState()
-    const [chats, setChats] = useState([])
+
+    const [groupChats, setGroupChats] = useState([])
+    const [personalChats, setPersonalChats] = useState([])
 
     useEffect(() => {
         getCurrentUserData()
@@ -48,7 +67,8 @@ const ChatListPage = () => {
     useEffect(() => {
         getUserChats()
             .then((result) => {
-                setChats(result)
+                setGroupChats(result.group)
+                setPersonalChats(result.personal)
             })
     }, [])
 
@@ -56,7 +76,12 @@ const ChatListPage = () => {
         return (
             <div>
                 <Header isAuth={isAuth}/>
-                <ChatWindow chats={chats}/>
+                <ChatWindow
+                    groupChats={groupChats}
+                    personalChats={personalChats}
+                    userData={userData}
+                 />
+                {"\n"}
             </div>
         )
     } else {

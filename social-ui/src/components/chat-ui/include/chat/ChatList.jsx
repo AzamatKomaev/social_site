@@ -8,7 +8,12 @@ const ChatList = (props) => {
     return (
         <div>
             {props.chats.map((chat) => (
-                <Chat chat={chat} key={chat.id}/>
+                <Chat
+                    key={chat.id}
+                    chat={chat}
+                    type_is_group={props.type_is_group}
+                    userData={props.userData}
+                 />
             ))}
         </div>
     )

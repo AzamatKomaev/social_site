@@ -23,6 +23,7 @@ import AcceptAccountPage from './components/auth-ui/AcceptAccountPage';
 
 import ChatListPage from './components/chat-ui/ChatListPage';
 import PersonalMessageChatPage from './components/chat-ui/PersonalMessageChatPage';
+import ChatSettingPage from './components/chat-ui/ChatSettingPage';
 import GroupMessageChatPage from './components/chat-ui/GroupMessageChatPage';
 
 import UserPage from './components/profile-ui/UserPage';
@@ -47,6 +48,7 @@ const App = (props: any) => {
 
                 <Route exact path='/chats/' component={ChatListPage}/>
                 <Route exact path='/chats/:chatId/' component={GroupMessageChatPage}/>
+                <Route exact path='/chats/:chatId/settings/' component={ChatSettingPage}/>
                 <Route exact path='/personal_chats/:username/' component={PersonalMessageChatPage}/>
 
                 <Redirect from='/' to='/categories'/>

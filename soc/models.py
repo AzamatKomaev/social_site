@@ -1,8 +1,5 @@
-from uuid import uuid4
-
 from django.db import models
 from django.contrib.auth.models import AbstractUser
-from django.utils import timezone
 
 from polymorphic.models import PolymorphicModel
 
@@ -13,7 +10,8 @@ class User(AbstractUser):
 		error_messages={
 			'unique': 'Пользователь с такой почтой уже существует.'
 		}
-)
+	)
+	friends = models.ManyToManyField("User")
 
 
 class Category(models.Model):
@@ -122,19 +120,19 @@ class Message(models.Model):
 
 class GroupChatRole(models.Model):
 	CHAT_ROLES = [
-		("Adm",'Администратор'),
-		("Mod", 'Модератор'),
-		("Mem", 'Участник'),
+		("Администратор", 'Creator'),
+		("Модератор", 'Moderator'),
+		("Участник", 'Member'),
 	]
 
 	name = models.CharField(
-		max_length=3,
+		max_length=30,
 		choices=CHAT_ROLES,
-		default="Mem"
+		default="Участник"
 	)
 	data_joined = models.DateTimeField(auto_now_add=True)
 	user = models.ForeignKey(User, on_delete=models.CASCADE)
-chat = models.ForeignKey(GroupChat, on_delete=models.CASCADE)
+	chat = models.ForeignKey(GroupChat, on_delete=models.CASCADE)
 
 
 class PersonalChat(models.Model):

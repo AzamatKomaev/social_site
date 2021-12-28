@@ -21,7 +21,6 @@ const UserPage = (props) => {
     const [user, setUser] = useState()
     const [currentUser, setCurrentUser] = useState()
     const [isAuth, setIsAuth] = useState()
-    const [userPosts, setUserPosts] = useState(null)
 
     useEffect(() => {
         findUserAndGetData(username)
@@ -46,7 +45,10 @@ const UserPage = (props) => {
                     <SwitchMenu/>
                     <div className="tab-content">
                         {"\n"}
-                        <InfoTab user={user} currentUser={currentUser}/>
+                        <InfoTab
+                            user={user}
+                            currentUser={currentUser}
+                         />
                         <SettingTab/>
                     </div>
                 </div>

@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
+import axios from 'axios';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
 import '../style.css';
@@ -10,8 +11,38 @@ import ChatHeader from '../chat/ChatHeader';
 import ChatUserList from '../user/ChatUserList';
 
 
+const getChatMembers = async(chatId) => {
+    let members = []
+
+    await axios.get("http://127.0.0.1:8000/api/v1/chats/" + chatId + "/members/", {
+        headers: {
+            Authorization: 'Bearer ' + localStorage.getItem("jwt")
+        }
+    })
+        .then((response) => {
+            members = response.data
+        })
+        .catch((error) => {
+            console.error(error)
+        })
+
+    return members
+}
+
+
 const MessageChatWindow = (props) => {
+    const [members, setMembers] = useState([])
+
     const messageRef = useRef();
+
+    useEffect(() => {
+        if (props.type_is_group) {
+            getChatMembers(props.chat.id)
+                .then((result) => {
+                    setMembers(result)
+                })
+        }
+    }, [])
 
     useEffect(() => {
         if (messageRef.current) {
@@ -31,7 +62,7 @@ const MessageChatWindow = (props) => {
                     <div className="card">
                         <div className="row g-0">
                             {props.type_is_group
-                                ? <ChatUserList users={[]}/>
+                                ? <ChatUserList users={members}/>
                                 : ""
                             }
                             <hr className="d-block d-lg-none mt-1 mb-0"/>
