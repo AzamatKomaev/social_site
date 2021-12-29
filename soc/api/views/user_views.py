@@ -87,6 +87,23 @@ class UserFriendsAPIView(APIView):
 class FriendRequestAPIView(APIView):
     permission_classes = [permissions.IsAuthenticated]
 
+    def get(self, request, to_user: int):
+        user_service = UserService(request.user.id)
+        to_user_object = UserService.get_user(user_id=to_user)
+
+        if not to_user_object:
+            return Response({"message": "User with this id doesnt exists."}, status=status.HTTP_404_NOT_FOUND)
+
+        if not user_service.is_friend_request_exists(to_user_object):
+            return Response({"message": "Friend Request with this data doesnt exists."}, status=status.HTTP_404_NOT_FOUND)
+
+        friend_request = UserService.get_friend_request(request.user, to_user_object)
+        if not friend_request:
+            return Response({"message": "Bad request."}, status=status.HTTP_400_BAD_REQUEST)
+
+        serializer = serializers.FriendRequestSerializer(friend_request)
+        return Response(serializer.data)
+
     def post(self, request, to_user: int):
         user_service = UserService(request.user.id)
         data = user_service.create_friend_request(to_user)

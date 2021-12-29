@@ -3,7 +3,6 @@ import string
 from typing import Union
 
 from django.contrib.auth.models import Group
-from django.core.exceptions import ObjectDoesNotExist
 from django.core.mail import send_mail
 from django.db.models import QuerySet
 from django.shortcuts import get_object_or_404
@@ -178,7 +177,7 @@ class UserService:
         """Method to get all user comments."""
         return self.user.comment_set.all()
 
-    def _is_friend_request_exists(self, to_user: User) -> bool:
+    def is_friend_request_exists(self, to_user: User) -> bool:
         """Method to check is friend request exists with the user."""
         return bool(
             FriendRequest.objects.filter(to_user=to_user, from_user=self.user)
@@ -198,7 +197,7 @@ class UserService:
             data["error"] = "There is no user with that id."
             return data
 
-        if self._is_friend_request_exists(to_user):
+        if self.is_friend_request_exists(to_user):
             data["error"] = "Friend request already exists"
             return data
 
@@ -210,3 +209,17 @@ class UserService:
 
     def accept_friend_request(self, to_user_id: int):
         pass
+
+    @staticmethod
+    def get_friend_request(first_user: User, second_user: User) -> Union[FriendRequest, None]:
+        friends_requests = {
+            "first": FriendRequest.objects.filter(from_user=first_user, to_user=second_user),
+            "second": FriendRequest.objects.filter(from_user=second_user, to_user=first_user)
+        }
+
+        if friends_requests['first'].exists():
+            return friends_requests['first'].first()
+        elif friends_requests['second'].exists():
+            return friends_requests['second'].first()
+
+        return None

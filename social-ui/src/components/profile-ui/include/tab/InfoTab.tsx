@@ -42,6 +42,7 @@ const InfoTab = (props: any) => {
                 user={props.user}
                 currentUser={props.currentUser}
                 posts={userPosts}
+                isAuth={props.isAuth}
              />
 			{"\n\n"}
 			{userPosts ?

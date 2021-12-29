@@ -48,6 +48,7 @@ const UserPage = (props) => {
                         <InfoTab
                             user={user}
                             currentUser={currentUser}
+                            isAuth={isAuth}
                          />
                         <SettingTab/>
                     </div>
