@@ -7,13 +7,10 @@ from django.core.paginator import Paginator, EmptyPage
 from django.core.exceptions import ObjectDoesNotExist
 
 from soc.api import serializers
-from soc.api.services import accept_password_to_reg, GroupChatService
 from soc.models import (
     Category,
     Post,
-    Comment,
-    User,
-    GroupChat
+    Comment
 )
 
 

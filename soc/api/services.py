@@ -81,14 +81,16 @@ class CreationUser:
         Group.objects.all().last().user_set.add(self.user)
         self._insert_token_in_table()
 
-
-def accept_password_to_reg(token: str) -> None:
-    """Function to accept user by token, sent him by email. If token is valid we do is_active = True and delete token."""
-    token_from_db = AcceptAuthToken.objects.get(token=token)
-    user = User.objects.get(id=token_from_db.user_id)
-    user.is_active = True
-    user.save()
-    token_from_db.delete()
+    @staticmethod
+    def accept_password_to_reg(token: str) -> None:
+        """
+        Static method to accept user by token, sent him by email. If token is valid we do is_active = True and delete token.
+        """
+        token_from_db = AcceptAuthToken.objects.get(token=token)
+        user = User.objects.get(id=token_from_db.user_id)
+        user.is_active = True
+        user.save()
+        token_from_db.delete()
 
 
 class GroupChatService:
@@ -177,41 +179,37 @@ class UserService:
         """Method to get all user comments."""
         return self.user.comment_set.all()
 
-    def is_friend_request_exists(self, to_user: User) -> bool:
-        """Method to check is friend request exists with the user."""
-        return bool(
-            FriendRequest.objects.filter(to_user=to_user, from_user=self.user)
-            or
-            FriendRequest.objects.filter(to_user=self.user, from_user=to_user)
-        )
 
-    def create_friend_request(self, to_user_id: int) -> dict:
-        """Method to create and send friend request to the user."""
-        data = {
-            "instanse": None,
-            "error": None
-        }
-        to_user = self.get_user(user_id=to_user_id)
+class FriendRequestService:
+    user: User
 
-        if not to_user:
-            data["error"] = "There is no user with that id."
-            return data
+    def __init__(self, user: User):
+        self.user = user
 
-        if self.is_friend_request_exists(to_user):
-            data["error"] = "Friend request already exists"
-            return data
+    @staticmethod
+    def _add_both_users_in_each_other_friends_list(friend_request: FriendRequest) -> bool:
+        """
+        Protected static method for adding both users in friends list of each other.
+        """
+        from_user, to_user = friend_request.from_user, friend_request.to_user
 
-        data["instanse"] = FriendRequest.objects.create(
-            from_user=self.user,
-            to_user=to_user,
-        )
-        return data
+        from_user.friends.add(to_user)
+        to_user.friends.add(from_user)
+        return bool(from_user and to_user)
 
-    def accept_friend_request(self, to_user_id: int):
-        pass
+    @staticmethod
+    def _remove_both_users_from_each_other_friend_list(friend_request: FriendRequest) -> None:
+        """
+        Protected static method for removing both users from each other friend lists.
+        """
+        from_user, to_user = friend_request.from_user, friend_request.to_user
+
+        from_user.friends.remove(to_user)
+        to_user.friends.remove(from_user)
 
     @staticmethod
     def get_friend_request(first_user: User, second_user: User) -> Union[FriendRequest, None]:
+        """Method to get friend request by two users. If friend requests was not found, it will be return None."""
         friends_requests = {
             "first": FriendRequest.objects.filter(from_user=first_user, to_user=second_user),
             "second": FriendRequest.objects.filter(from_user=second_user, to_user=first_user)
@@ -223,3 +221,64 @@ class UserService:
             return friends_requests['second'].first()
 
         return None
+
+    def is_friend_request_exists(self, second_user: User) -> bool:
+        """Method to check is friend request exists with the user."""
+        return bool(
+            FriendRequest.objects.filter(to_user=self.user, from_user=second_user).exists()
+            or
+            FriendRequest.objects.filter(to_user=second_user, from_user=self.user).exists()
+        )
+
+    def create_friend_request(self, to_user_id: int) -> dict:
+        """Method to create and send friend request to the user."""
+        data = {
+            "instance": None,
+            "error": None
+        }
+        to_user = UserService.get_user(user_id=to_user_id)
+
+        if not to_user:
+            data["error"] = "There is no user with that id."
+            return data
+
+        if self.is_friend_request_exists(to_user):
+            data["error"] = "Friend request already exists"
+            return data
+
+        data["instance"] = FriendRequest.objects.create(
+            from_user=self.user,
+            to_user=to_user,
+        )
+        return data
+
+    def delete_friend_request(self, second_user: User) -> bool:
+        """Method for deleting friend request."""
+        if not self.is_friend_request_exists(second_user):
+            return False
+
+        friend_request = self.get_friend_request(self.user, second_user)
+
+        if self.user != friend_request.from_user:
+            return False
+
+        self._remove_both_users_from_each_other_friend_list(friend_request)
+        return bool(friend_request.delete())
+
+    def accept_friend_request(self, second_user: User, is_accepted: bool) -> Union[FriendRequest or None]:
+        """Method for accepting friend request making is_accepted True or False."""
+        if not self.is_friend_request_exists(second_user):
+            return
+
+        friend_request = self.get_friend_request(self.user, second_user)
+
+        if self.user == friend_request.from_user:
+            return
+
+        friend_request.is_accepted = is_accepted
+        friend_request.save()
+
+        if not self._add_both_users_in_each_other_friends_list(friend_request):
+            return
+
+        return friend_request

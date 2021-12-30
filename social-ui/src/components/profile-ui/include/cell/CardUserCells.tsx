@@ -40,9 +40,16 @@ const CardUserCells = (props: any) => {
                                         textAlign: "center"
                                    }}>
                 {cells.map((cell) => (
-                     <div className="card p-2" style={{height: "80%", width: cell.width, marginLeft: cell.marginLeft}}>
-                         <b>{cell.name}</b>
-                         <p style={{fontSize: "35pt"}}>{cell.value}</p>
+                     <div>
+                         <div className="p-2 card d-none d-lg-block" style={{height: "80%", width: cell.width, marginLeft: cell.marginLeft}}>
+                             <b>{cell.name}</b>
+                             <p style={{fontSize: "35pt"}}>{cell.value}</p>
+                         </div>
+
+                         <div className="p-2 card d-lg-none" style={{height: "auto", width: "auto", marginLeft: cell.marginLeft}}>
+                             <b>{cell.name}</b>
+                             <p style={{fontSize: "35pt"}}>{cell.value}</p>
+                         </div>
                      </div>
                 ))}
             </div>

@@ -33,5 +33,7 @@ urlpatterns = [
     path('personal_chats/', chat_views.PersonalChatListAPIView.as_view()),
     path('personal_chats/<str:to_user_username>/', chat_views.PersonalChatDetailAPIView.as_view()),
     path('personal_chats/<str:to_user_username>/messages/', chat_views.PersonalMessageListAPIView.as_view()),
+
+    path("test/", user_views.TestAPIView.as_view()),
 ]
 

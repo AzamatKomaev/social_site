@@ -2,54 +2,13 @@ import React, { useState, useEffect } from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import axios from 'axios';
 
-
-interface friendRequestI {
-    friendRequest: object | null,
-    error: number | null
-}
-
-const getFriendRequest = async(currentUser: any, user: any) => {
-    let data: friendRequestI = {
-        friendRequest: null,
-        error: null
-    }
-
-    await axios.get("http://127.0.0.1:8000/api/v1/user/find/" + user.id + "/friend_request/", {
-        headers: {
-            Authorization: 'Bearer ' + localStorage.getItem("jwt")
-        }
-    })
-        .then((response) => {
-            data.friendRequest = response.data
-        })
-        .catch((err) => {
-            data.error = err.response.status
-        })
-
-    return data
-}
-
-
-const sendFriendRequest = async(currentUser: any, user: any) => {
-    let data: friendRequestI = {
-        friendRequest: null,
-        error: null
-    };
-
-    await axios.post("http://127.0.0.1:8000/api/v1/user/find/" + user.id + "/friend_request/", {}, {
-        headers: {
-            Authorization: 'Bearer ' + localStorage.getItem("jwt")
-        }
-    })
-        .then((response) => {
-            data.friendRequest = response.data
-        })
-        .catch((err) => {
-            data.error = err.response.status
-        })
-
-    return data;
-}
+import './style.css';
+import {
+    getFriendRequest,
+    sendFriendRequest,
+    deleteFriendRequest,
+    patchFriendRequest
+} from './service';
 
 
 const ButtonVariants = (props: any) => {
@@ -58,12 +17,30 @@ const ButtonVariants = (props: any) => {
         error: null
     })
 
-    const handleDeleteFriendRequest = (e: any) => {
-        alert("загулшка хуле")
+    const handleSendFriendRequest = (e: any) => {
+        sendFriendRequest(props.user)
+            .then((result) => {
+                setFriendRequest({
+                    data: result.friendRequest,
+                    error: result.error
+                })
+            })
     }
 
-    const handleSendFriendRequest = (e: any) => {
-        sendFriendRequest(props.currentUser, props.user)
+    const handleDeleteFriendRequest = (e: any) => {
+        deleteFriendRequest(props.user)
+            .then((result) => {
+                if (result == 204) {
+                    setFriendRequest({
+                        data: null,
+                        error: null
+                    })
+                }
+            })
+    }
+
+    const handleAcceptFriendRequest = (e: any) => {
+        patchFriendRequest(props.user, 1)
             .then((result) => {
                 setFriendRequest({
                     data: result.friendRequest,
@@ -73,7 +50,7 @@ const ButtonVariants = (props: any) => {
     }
 
     useEffect(() => {
-        getFriendRequest(props.currentUser, props.user)
+        getFriendRequest(props.user)
             .then((result) => {
                 setFriendRequest({
                     data: result.friendRequest,
@@ -86,34 +63,33 @@ const ButtonVariants = (props: any) => {
     if (!props.isAuth) {
         return (
             <div>
-                <a href="/auth/login/"  className="btn btn-outline-primary btn-block">Хотите войти?</a>
+                <a href="/auth/login/"  className="btn btn-outline-primary btn-block default-button">Хотите войти?</a>
             </div>
         )
     } else if (props.user.id == props.currentUser.id) {
         return (
             <div>
-                <a href="/redac/" className="btn btn-outline-secondary btn-block">Редактировать</a>
+                <a href="/redac/" className="btn btn-outline-secondary btn-block default-button">Редактировать</a>
             </div>
         )
-    } else if (friendRequest.data && !friendRequest.error) {
+    } else if ((friendRequest.data) && (friendRequest.data.is_accepted == false) && (!friendRequest.error)) {
         return (
             <div>
                 {friendRequest.data.to_user == props.user.id
                     ?
                         <button
                             type="button"
-                            className="btn btn-warning"
+                            className="btn btn-warning default-button"
                             onClick={handleDeleteFriendRequest}
                             style={{width: "100%"}}
                          >
-                            Отозвать запрос..
+                            Отозвать запрос.
                         </button>
                     :
                         <button
                             type="button"
-                            className="btn btn-success"
-                            onClick={handleDeleteFriendRequest}
-                            style={{width: "100%"}}
+                            className="btn btn-success default-button"
+                            onClick={handleAcceptFriendRequest}
                          >
                             Принять заявку в друзья.
                         </button>
@@ -125,11 +101,24 @@ const ButtonVariants = (props: any) => {
             <div>
                 <button
                     type="button"
-                    className="btn btn-outline-primary btn-block"
+                    className="btn btn-outline-primary btn-block default-button"
                     onClick={handleSendFriendRequest}
                     style={{width: "100%"}}
                  >
                     Добавить в друзья.
+                </button>
+            </div>
+        )
+    } else if (props.currentUser.friends.indexOf(props.user.id) != -1) {
+        return (
+            <div>
+                <button
+                    type="button"
+                    className="btn btn-outline-primary btn-block default-button"
+                    onClick={handleDeleteFriendRequest}
+                    style={{width: "100%"}}
+                 >
+                    Удалить из друзей.
                 </button>
             </div>
         )
