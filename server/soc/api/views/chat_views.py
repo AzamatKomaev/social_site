@@ -9,7 +9,8 @@ from django.core.exceptions import ObjectDoesNotExist
 from soc.api import serializers
 from soc.api.services import (
     GroupChatService,
-    PersonalChatService
+    PersonalChatService,
+    ChatRequestService
 )
 from soc.models import (
     GroupChat,
@@ -174,3 +175,20 @@ class PersonalMessageListAPIView(APIView):
             return Response(message_serializer.data, status=status.HTTP_201_CREATED)
 
         return Response(message_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+class ChatRequestAPIView(APIView):
+    permissions_classes = [permissions.IsAuthenticated]
+
+    def get(self, request, chat_id: int):
+        if "to_user" not in request.query_params:
+            return Response({"message": "Bad request: not found to_user in params."}, status=status.HTTP_400_BAD_REQUEST)
+
+        chat_request_service = ChatRequestService(chat_id=chat_id)
+        chat_request = chat_request_service.get_chat_request(user_id=request.query_params['to_user'])
+
+        if not chat_request:
+            return Response({"message": "Not found chat request with given data."}, status=status.HTTP_404_NOT_FOUND)
+
+        serializer = serializers.ChatRequestSerializer(chat_request)
+        return Response(serializer.data)

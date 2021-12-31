@@ -8,7 +8,7 @@ import Friend from './Friend';
 
 const FriendList = (props: any) => {
     return (
-        <div className="container">
+        <div className="container" style={{padding: "10px"}}>
             {props.friends.map((friend) => (
                 <Friend friendData={friend}/>
             ))}

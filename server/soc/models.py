@@ -11,11 +11,7 @@ class User(AbstractUser):
 			'unique': 'Пользователь с такой почтой уже существует.'
 		}
 	)
-	friends = models.ManyToManyField("User")
-
-	def add_friend(self, user):
-		"""Method to add the user in another user's friend list."""
-		self.friends.add(user)
+	friends = models.ManyToManyField("User", blank=True)
 
 
 class FriendRequest(models.Model):
@@ -120,6 +116,21 @@ class GroupChat(models.Model):
 	class Meta:
 		verbose_name = "Чат"
 		verbose_name_plural = "Чаты"
+
+
+class ChatRequest(models.Model):
+	user = models.ForeignKey(User, on_delete=models.CASCADE)
+	chat = models.ForeignKey(GroupChat, on_delete=models.CASCADE)
+	is_accepted = models.BooleanField(default=False)
+	created_at = models.DateTimeField(auto_now_add=True)
+	changed_at = models.DateTimeField(auto_now=True)
+
+	class Meta:
+		verbose_name = "Приглашение в чат"
+		verbose_name_plural = "Приглашения в чат"
+
+	def __str__(self):
+		return f"Request from {self.chat} chat to {self.user} user."
 
 
 class Message(models.Model):

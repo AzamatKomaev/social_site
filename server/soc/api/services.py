@@ -13,9 +13,12 @@ from soc.models import (
     GroupChat,
     PersonalChat,
     Post,
-    FriendRequest
+    FriendRequest,
+    ChatRequest
 )
 from server.settings import EMAIL_HOST_USER
+
+from server.soc.models import ChatRequest
 
 
 class CreationUser:
@@ -282,3 +285,20 @@ class FriendRequestService:
             return
 
         return friend_request
+
+
+class ChatRequestService:
+    chat: GroupChat
+
+    def __init__(self, chat_id: int):
+        self.chat = get_object_or_404(GroupChat, id=chat_id)
+
+    def get_chat_request(self, user_id: int) -> Union[ChatRequest, None]:
+        """Method to get chat request."""
+        user = get_object_or_404(User, id=user_id)
+        chat_request = ChatRequest.objects.filter(chat=self.chat, user=user)
+
+        if not chat_request.exists():
+            return None
+
+        return chat_request

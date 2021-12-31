@@ -16,9 +16,11 @@ from soc.models import (
     GroupChat,
     PersonalMessage,
     PersonalChat,
-    GroupChatRole, FriendRequest
+    GroupChatRole,
+    FriendRequest,
+    ChatRequest
 )
-from soc.models import User, GroupMessage
+from soc.models import User, GroupMessage, ChatRequest
 
 
 class UserSerializer(ModelSerializer):
@@ -202,3 +204,9 @@ class GroupChatMembersSerializer(ModelSerializer):
                   "name",
                   "data_joined"
                   ]
+
+
+class ChatRequestSerializer(ModelSerializer):
+    class Meta:
+        model = ChatRequest
+        fields = "__all__"
