@@ -1,6 +1,6 @@
 import random
 import string
-from typing import Union
+from typing import Union, Optional
 
 from django.contrib.auth.models import Group
 from django.core.mail import send_mail
@@ -18,7 +18,7 @@ from soc.models import (
 )
 from server.settings import EMAIL_HOST_USER
 
-from server.soc.models import ChatRequest
+from soc.models import ChatRequest
 
 
 class CreationUser:
@@ -48,7 +48,7 @@ class CreationUser:
         errors[1] = User.objects.filter(email=self.email).exists()
         return errors
 
-    def send_message_with_code(self) -> None:
+    def _send_message_with_code(self) -> None:
         """Method to send message with token in email."""
         self._generate_code()
         content = f"Дарова {self.username}.\n" \
@@ -71,7 +71,7 @@ class CreationUser:
 
     def create_user(self) -> None:
         """Method to create new user."""
-        self.send_message_with_code()
+        self._send_message_with_code()
 
         self.user = User.objects.create_user(
             username=self.username,
@@ -211,7 +211,7 @@ class FriendRequestService:
         to_user.friends.remove(from_user)
 
     @staticmethod
-    def get_friend_request(first_user: User, second_user: User) -> Union[FriendRequest, None]:
+    def get_friend_request(first_user: User, second_user: User) -> Optional[FriendRequest]:
         """Method to get friend request by two users. If friend requests was not found, it will be return None."""
         friends_requests = {
             "first": FriendRequest.objects.filter(from_user=first_user, to_user=second_user),
@@ -268,7 +268,7 @@ class FriendRequestService:
         self._remove_both_users_from_each_other_friend_list(friend_request)
         return bool(friend_request.delete())
 
-    def accept_friend_request(self, second_user: User, is_accepted: bool) -> Union[FriendRequest or None]:
+    def accept_friend_request(self, second_user: User, is_accepted: bool) -> Optional[FriendRequest]:
         """Method for accepting friend request making is_accepted True or False."""
         if not self.is_friend_request_exists(second_user):
             return
@@ -293,7 +293,7 @@ class ChatRequestService:
     def __init__(self, chat_id: int):
         self.chat = get_object_or_404(GroupChat, id=chat_id)
 
-    def get_chat_request(self, user_id: int) -> Union[ChatRequest, None]:
+    def get_chat_request(self, user_id: int) -> Optional[ChatRequest]:
         """Method to get chat request."""
         user = get_object_or_404(User, id=user_id)
         chat_request = ChatRequest.objects.filter(chat=self.chat, user=user)
@@ -301,4 +301,4 @@ class ChatRequestService:
         if not chat_request.exists():
             return None
 
-        return chat_request
+        return chat_request.first()

@@ -1,7 +1,6 @@
-import serializer as serializer
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from rest_framework import status, permissions
+from rest_framework import status, permissions, viewsets
 
 from django.core.exceptions import ObjectDoesNotExist
 
@@ -14,18 +13,11 @@ from soc.api.services import (
 from soc.models import User
 
 
-class UserJwtAPIView(APIView):
-    """API View to get data about current user."""
-    permission_classes = [permissions.IsAuthenticated]
+class UserViewSet(viewsets.ViewSet):
+    permissions_classes = [permissions.IsAuthenticatedOrReadOnly]
 
-    def get(self, request):
-        serializer = serializers.UserSerializer(request.user)
-        return Response(serializer.data, status=status.HTTP_200_OK)
-
-
-class UserDetailAPIView(APIView):
-    """API View to get data about some user by his some data."""
-    def get(self, request, username: str = None, user_id: int = None):
+    def retrieve(self, request, username: str = None, user_id: int = None):
+        """The action to get data about user by his username or id."""
         user = UserService.get_user(user_id=user_id, username=username)
         if not user:
             return Response({"error": "User not found with given data."}, status=status.HTTP_404_NOT_FOUND)
@@ -33,10 +25,13 @@ class UserDetailAPIView(APIView):
         serializer = serializers.UserSerializer(user)
         return Response(serializer.data, status=status.HTTP_200_OK)
 
+    def retrieve_current_user(self, request):
+        """The action to get data about current user."""
+        serializer = serializers.UserSerializer(request.user)
+        return Response(serializer.data, status=status.HTTP_200_OK)
 
-class RegistrationUserAPIView(APIView):
-    """API View for registration a user"""
-    def post(self, request):
+    def create_registration_user(self, request):
+        """The action to create user with is_active=False."""
         serializer = serializers.RegistrationUserSerializer(data=request.data)
         if serializer.is_valid():
             serializer.save()
@@ -44,10 +39,8 @@ class RegistrationUserAPIView(APIView):
 
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-
-class AcceptUserAPIView(APIView):
-    """API View for accepting user by his token."""
-    def get(self, request, token: str):
+    def accept_registration_user(self, request, token: str):
+        """The action to accept registration user by his token."""
         try:
             CreationUser.accept_password_to_reg(token=token)
         except (ObjectDoesNotExist, NameError):
@@ -55,10 +48,8 @@ class AcceptUserAPIView(APIView):
 
         return Response({"message": "Accepted successfully."}, status=status.HTTP_200_OK)
 
-
-class UserDetailPostAPIView(APIView):
-    """API View to get all user posts."""
-    def get(self, request, user_id: int) -> Response:
+    def list_of_user_posts(self, request, user_id: int):
+        """The action to get all user posts by his id."""
         user_service = UserService(user_id)
         posts = user_service.get_user_posts()
         serializer = serializers.PostSerializer(posts, many=True)
@@ -66,6 +57,28 @@ class UserDetailPostAPIView(APIView):
             return Response({}, status=status.HTTP_204_NO_CONTENT)
 
         return Response(serializer.data, status=status.HTTP_200_OK)
+
+    def list_of_user_comments(self, request, user_id: int):
+        """The action to get all user comments by his id."""
+        user_service = UserService(user_id)
+        comments = user_service.get_user_comments()
+        serializer = serializers.CommentSerializer(comments, many=True)
+        if not comments:
+            return Response({}, status=status.HTTP_204_NO_CONTENT)
+
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
+    def get_permissions(self):
+        """
+        Instantiates and returns the list of permissions that this view requires.
+        """
+        if self.action == 'list':
+            permission_classes = [permissions.IsAuthenticatedOrReadOnly]
+        elif self.action == 'retrieve_current_user':
+            permission_classes = [permissions.IsAuthenticated]
+        else:
+            permission_classes = [permissions.AllowAny]
+        return [permission() for permission in permission_classes]
 
 
 class UserDetailCommentAPIView(APIView):

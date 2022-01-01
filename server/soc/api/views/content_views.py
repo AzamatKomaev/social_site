@@ -1,10 +1,11 @@
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from rest_framework import status, permissions
+from rest_framework import status, permissions, viewsets
 
 from django.db.utils import IntegrityError
 from django.core.paginator import Paginator, EmptyPage
 from django.core.exceptions import ObjectDoesNotExist
+from django.shortcuts import get_object_or_404
 
 from soc.api import serializers
 from soc.models import (
@@ -15,22 +16,17 @@ from soc.models import (
 
 
 class CategoryListAPIView(APIView):
-
     def get(self, request) -> Response:
         categories = Category.objects.all()
         serializer = serializers.CategorySerializer(categories, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
 
 
-class PostListAPIVIew(APIView):
+class PostViewSet(viewsets.ViewSet):
     permission_classes = [permissions.IsAuthenticatedOrReadOnly]
 
-    def get(self, request, category_id: int):
-        try:
-            category = Category.objects.get(id=category_id)
-        except ObjectDoesNotExist:
-            return Response({"error": f"Category {category_id} does not exists."}, status=status.HTTP_404_NOT_FOUND)
-
+    def list(self, request, category_id: int):
+        category = get_object_or_404(Category, id=category_id)
         page_number = request.query_params.get('page_number') or 1
         page_size = 30
 
@@ -43,7 +39,12 @@ class PostListAPIVIew(APIView):
         except EmptyPage:
             return Response({}, status=status.HTTP_204_NO_CONTENT)
 
-    def post(self, request, category_id: int):
+    def retrieve(self, request, post_id: int):
+        post = get_object_or_404(Post, id=post_id)
+        serializer = serializers.PostSerializer(post)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
+    def create(self, request, category_id: int):
         serializer = serializers.PostSerializer(data=request.data, context={'request': request})
 
         if serializer.is_valid():
@@ -56,32 +57,23 @@ class PostListAPIVIew(APIView):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
-class PostDetailAPIView(APIView):
+class CommentViewSet(viewsets.ViewSet):
     permission_classes = [permissions.IsAuthenticatedOrReadOnly]
 
-    def get(self, request, category_id: int, post_id: int):
-        try:
-            post = Post.objects.get(category=category_id, id=post_id)
-        except ObjectDoesNotExist:
-            return Response({"error": f"Post {post_id} in category {category_id} does not exists."},
-                            status=status.HTTP_404_NOT_FOUND)
-
-        serializer = serializers.PostSerializer(post)
-        return Response(serializer.data, status=status.HTTP_200_OK)
-
-
-class CommentListAPIView(APIView):
-    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
-
-    def get(self, request, category_id: int, post_id: int) -> Response:
+    def list(self, request, post_id: int):
         comments = Comment.objects.filter(post_id=post_id)
         if not comments:
-            return Response({"error": f"Comments for post {post_id} in category {category_id} does not exists."}, status=status.HTTP_404_NOT_FOUND)
+            return Response({}, status=status.HTTP_204_NO_CONTENT)
 
         serializer = serializers.CommentSerializer(comments, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
 
-    def post(self, request, category_id: int, post_id: int) -> Response:
+    def retrieve(self, request, comment_id: int):
+        comment = get_object_or_404(Comment, id=comment_id)
+        serializer = serializers.CommentSerializer(comment)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
+    def create(self, request, post_id: int):
         comment_data = {**request.data, **{"post": post_id}}
         serializer = serializers.CommentSerializer(data=comment_data, context={"request": request})
 
@@ -95,18 +87,3 @@ class CommentListAPIView(APIView):
             return Response(serializer.data, status=status.HTTP_201_CREATED)
 
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
-
-class CommentDetailAPIView(APIView):
-
-    def get(self, request, category_id: int, post_id: int, comment_id: int):
-        try:
-            comment = Comment.objects.get(id=comment_id, post_id=post_id)
-        except ObjectDoesNotExist:
-            return Response({"error": f"Comment {comment_id} for post {post_id} does not exists."},
-                            status=status.HTTP_404_NOT_FOUND)
-
-        serializer = serializers.CommentSerializer(comment)
-        return Response(serializer.data, status=status.HTTP_200_OK)
-
-
