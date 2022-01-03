@@ -73,7 +73,7 @@ const PostPage = (props) => {
     if (!error) {
         return (
             <div>
-                <Header isAuth={isAuth}/>
+                <Header/>
                 {"\n\n"}
                 <PostList
                     posts={posts}
@@ -85,14 +85,14 @@ const PostPage = (props) => {
     } else if (error.response == 404) {
         return (
             <div>
-                <Header isAuth={isAuth}/>
+                <Header/>
                 <Error404NotFound style={{marginTop: "25px"}}/>
             </div>
         )
     } else if (error.response == 429) {
         return (
             <div>
-                <Header isAuth={isAuth}/>
+                <Header/>
                 {"\n"}
                 <Error429TooManyRequests/>
             </div>

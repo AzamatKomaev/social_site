@@ -138,14 +138,14 @@ const PersonalMessageChatPage = (props: any) => {
     if (!isAuth || error) {
         return (
             <div>
-                <Header isAuth={isAuth}/>
+                <Header/>
                 <Error404NotFound/>
             </div>
         )
     } else {
         return (
             <div>
-                <Header isAuth={isAuth}/>
+                <Header/>
                 <MessageChatWindow
                     type_is_group={false}
                     messages={messages}

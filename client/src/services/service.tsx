@@ -17,7 +17,10 @@ const getReadableDateFormat = (dateString: Date) => {
 
 
 const getCurrentUserData = async() => {
-    let data = null
+    let data: any = {
+        info: null,
+        isAuth: false
+    }
 
     await axios.get("http://127.0.0.1:8000/api/v1/user/is_auth/", {
         headers: {

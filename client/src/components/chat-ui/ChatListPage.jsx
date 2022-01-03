@@ -75,7 +75,7 @@ const ChatListPage = () => {
     if (isAuth) {
         return (
             <div>
-                <Header isAuth={isAuth}/>
+                <Header/>
                 <ChatWindow
                     groupChats={groupChats}
                     personalChats={personalChats}
@@ -87,7 +87,7 @@ const ChatListPage = () => {
     } else {
         return (
             <div>
-                <Header isAuth={isAuth}/>
+                <Header/>
                 <Error404NotFound/>
             </div>
         )

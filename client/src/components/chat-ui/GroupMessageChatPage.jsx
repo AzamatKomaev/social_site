@@ -158,7 +158,7 @@ const GroupMessageChatPage = (props) => {
     if (error == 404 || error == 403) {
         return (
             <div>
-                <Header isAuth={isAuth}/>
+                <Header/>
                 <Error404NotFound/>
             </div>
         )
@@ -173,7 +173,7 @@ const GroupMessageChatPage = (props) => {
 
         return (
             <div>
-                <Header isAuth={isAuth}/>
+                <Header/>
                 <MessageChatWindow
                     type_is_group={true}
                     messages={messages}

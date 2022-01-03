@@ -61,7 +61,7 @@ const AcceptAccountPage = (props: any) => {
 
     return (
         <div>
-            <Header isAuth={isAuth}/>
+            <Header/>
             {accepted ?
             <AcceptedPasswordAlert/>
             :

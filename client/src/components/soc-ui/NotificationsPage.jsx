@@ -24,14 +24,14 @@ const NotificationsPage = (props: any) => {
     if (isAuth && userData) {
         return (
             <div>
-                <Header isAuth={isAuth}/>
+                <Header/>
                 <NotificationWindow userData={userData}/>
             </div>
         )
     } else {
         return (
             <div>
-                <Header isAuth={isAuth}/>
+                <Header/>
                 <Error404NotFound/>
             </div>
         )

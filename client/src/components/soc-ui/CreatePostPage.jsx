@@ -1,9 +1,11 @@
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
+import { useDispatch, useSelector } from 'react-redux';
 
 import 'bootstrap/dist/css/bootstrap.min.css';
 import '../../App.css';
-import { getCurrentUserData, getCategories } from '../../services/service';
+
+import { getCategories } from '../../services/service';
+import { fetchUserData } from '../../store/user/actions';
 
 import CreatePostForm from './include/post/CreatePostForm';
 
@@ -16,6 +18,11 @@ const CreatePostPage = (props) => {
     const [categories, setCategories] = useState([])
     const [isAuth, setIsAuth] = useState()
 
+    const dispatch = useDispatch()
+    const userData = useSelector(state => state)
+
+
+
     useEffect(() => {
         getCategories()
             .then((result) => {
@@ -23,24 +30,17 @@ const CreatePostPage = (props) => {
             })
     }, [])
 
-    useEffect(() => {
-        getCurrentUserData()
-            .then((result) => {
-                setIsAuth(result.isAuth)
-            })
-    }, [])
-
-    if (isAuth) {
+    if (userData.isAuth) {
         return (
             <div>
-                <Header isAuth={isAuth}/>{"\n"}
+                <Header/>{"\n"}
                 <CreatePostForm categories={categories} />
             </div>
         )
     } else if (!isAuth) {
         return (
             <div>
-                <Header isAuth={isAuth}/>
+                <Header/>
                 {"\n"}
                 <Error404NotFound/>
             </div>

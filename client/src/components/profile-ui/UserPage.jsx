@@ -40,7 +40,7 @@ const UserPage = (props) => {
     if (user && currentUser !== undefined) {
         return (
             <div>
-                <Header isAuth={isAuth}/>
+                <Header/>
                 <div className="container">
                     <SwitchMenu/>
                     <div className="tab-content">
@@ -58,7 +58,7 @@ const UserPage = (props) => {
     } else {
         return (
             <div>
-                <Header isAuth={isAuth}/>
+                <Header/>
                 <Error404NotFound/>
             </div>
         )

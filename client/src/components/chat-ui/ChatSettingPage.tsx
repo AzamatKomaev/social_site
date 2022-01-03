@@ -44,14 +44,14 @@ const ChatSettingPage = (props: any) => {
     if (isAuth && chatData.error != 403) {
         return (
             <div>
-                <Header isAuth={isAuth}/>
+                <Header/>
                 <SettingWindow chatData={chatData} currentUserData={currentUserData}/>
             </div>
         )
     } else {
         return (
             <div>
-                <Header isAuth={isAuth}/>
+                <Header/>
                 <Error404NotFound/>
             </div>
         )

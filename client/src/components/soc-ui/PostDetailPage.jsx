@@ -45,7 +45,7 @@ const PostDetailPage = (props) => {
     if (error.response == 404) {
         return (
             <div>
-                <Header isAuth={isAuth}/>
+                <Header/>
                 {"\n"}
                 <Error404NotFound/>
             </div>
@@ -53,7 +53,7 @@ const PostDetailPage = (props) => {
     } else if (error.response == 429) {
         return (
             <div>
-                <Header isAuth={isAuth}/>
+                <Header/>
                 {"\n"}
                 <Error429TooManyRequests/>
             </div>
@@ -61,7 +61,7 @@ const PostDetailPage = (props) => {
     } else if (!error && post) {
         return (
             <div>
-                <Header isAuth={isAuth}/>
+                <Header/>
                 {"\n"}
                 <div class="container">
                     <Post
