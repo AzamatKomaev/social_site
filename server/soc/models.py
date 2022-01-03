@@ -24,6 +24,7 @@ class FriendRequest(models.Model):
 	class Meta:
 		verbose_name = "Заявка в друзья"
 		verbose_name_plural = "Заявки в друзья"
+		ordering = ("-created_at",)
 
 	def __str__(self):
 		return f"From {self.from_user} to {self.to_user}"

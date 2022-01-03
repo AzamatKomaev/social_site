@@ -1,3 +1,4 @@
+from rest_framework.decorators import permission_classes
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status, permissions, viewsets
@@ -81,18 +82,6 @@ class UserViewSet(viewsets.ViewSet):
         return [permission() for permission in permission_classes]
 
 
-class UserDetailCommentAPIView(APIView):
-    """API View to get all user comments."""
-    def get(self, request, user_id: int):
-        user_service = UserService(user_id)
-        comments = user_service.get_user_comments()
-        serializer = serializers.CommentSerializer(comments, many=True)
-        if not comments:
-            return Response({}, status=status.HTTP_204_NO_CONTENT)
-
-        return Response(serializer.data, status=status.HTTP_200_OK)
-
-
 class UserFriendsAPIView(APIView):
     """API View to get all user friends."""
     def get(self, request, user_id: int) -> Response:
@@ -102,8 +91,7 @@ class UserFriendsAPIView(APIView):
         return Response(serializer.data)
 
 
-class FriendRequestAPIView(APIView):
-    """API View to get, send, accept or delete friend request."""
+class FriendRequestViewSet(viewsets.ViewSet):
     permission_classes = [permissions.IsAuthenticatedOrReadOnly]
 
     @staticmethod
@@ -126,7 +114,13 @@ class FriendRequestAPIView(APIView):
                 "status_code": status.HTTP_404_NOT_FOUND
             }
 
-    def get(self, request, to_user: int):
+    def list(self, request, user_id: int):
+        friend_request_service = FriendRequestService(request.user)
+        chat_requests = friend_request_service.get_current_friend_requests()
+        serializer = serializers.FriendRequestSerializer(chat_requests, many=True)
+        return Response(serializer.data)
+
+    def retrieve(self, request, to_user: int):
         friend_request_service = FriendRequestService(request.user)
         to_user_object = UserService.get_user(user_id=to_user)
 
@@ -145,7 +139,7 @@ class FriendRequestAPIView(APIView):
         serializer = serializers.FriendRequestSerializer(friend_request)
         return Response(serializer.data)
 
-    def post(self, request, to_user: int):
+    def create(self, request, to_user: int):
         friend_request_service = FriendRequestService(request.user)
         data = friend_request_service.create_friend_request(to_user)
 
@@ -155,7 +149,7 @@ class FriendRequestAPIView(APIView):
         serializer = serializers.FriendRequestSerializer(data["instance"])
         return Response(serializer.data, status=status.HTTP_201_CREATED)
 
-    def delete(self, request, to_user: int):
+    def destroy(self, request, to_user: int):
         friend_request_service = FriendRequestService(request.user)
         to_user_object = UserService.get_user(user_id=to_user)
 
@@ -172,7 +166,7 @@ class FriendRequestAPIView(APIView):
 
         return Response({"message": "Request was deleted successfully."}, status=status.HTTP_204_NO_CONTENT)
 
-    def patch(self, request, to_user: int):
+    def update(self, request, to_user: int):
         if "is_accepted" not in request.query_params:
             return Response({
                 "message": "Bad request: there is not is_accepted value in query params"
@@ -198,4 +192,3 @@ class FriendRequestAPIView(APIView):
 
         serializer = serializers.FriendRequestSerializer(friend_request)
         return Response(serializer.data, status=status.HTTP_200_OK)
-

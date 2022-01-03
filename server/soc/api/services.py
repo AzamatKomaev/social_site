@@ -225,6 +225,16 @@ class FriendRequestService:
 
         return None
 
+    def get_current_friend_requests(self) -> QuerySet[ChatRequest]:
+        """
+        Method to get current friend request, filtering FriendRequest by user_id=user_id and accepted=False.
+        """
+        chat_requests = FriendRequest.objects.filter(
+            to_user=self.user,
+            is_accepted=False
+        )
+        return chat_requests
+
     def is_friend_request_exists(self, second_user: User) -> bool:
         """Method to check is friend request exists with the user."""
         return bool(
@@ -258,11 +268,12 @@ class FriendRequestService:
     def delete_friend_request(self, second_user: User) -> bool:
         """Method for deleting friend request."""
         if not self.is_friend_request_exists(second_user):
+            print('IM HERE 1')
             return False
 
         friend_request = self.get_friend_request(self.user, second_user)
 
-        if self.user != friend_request.from_user:
+        if self.user not in (friend_request.from_user, friend_request.to_user):
             return False
 
         self._remove_both_users_from_each_other_friend_list(friend_request)

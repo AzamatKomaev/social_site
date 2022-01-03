@@ -45,9 +45,18 @@ class UserSerializer(ModelSerializer):
 
 
 class FriendRequestSerializer(ModelSerializer):
+    to_user = SerializerMethodField("get_to_user_data")
+    from_user = SerializerMethodField("get_from_user_data")
+
     class Meta:
         model = FriendRequest
         fields = "__all__"
+
+    def get_to_user_data(self, obj: ChatRequest) -> dict:
+        return UserSerializer(obj.to_user).data
+
+    def get_from_user_data(self, obj: ChatRequest) -> dict:
+        return UserSerializer(obj.from_user).data
 
 
 class GroupSerializer(ModelSerializer):
@@ -210,3 +219,5 @@ class ChatRequestSerializer(ModelSerializer):
     class Meta:
         model = ChatRequest
         fields = "__all__"
+
+

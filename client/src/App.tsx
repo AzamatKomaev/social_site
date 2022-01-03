@@ -16,6 +16,7 @@ import CategoryPage from './components/soc-ui/CategoryPage';
 import PostPage from './components/soc-ui/PostPage';
 import PostDetailPage from './components/soc-ui/PostDetailPage';
 import CreatePostPage from './components/soc-ui/CreatePostPage';
+import NotificationsPage from './components/soc-ui/NotificationsPage';
 
 import LoginPage from './components/auth-ui/LoginPage';
 import SignUpPage from './components/auth-ui/SignUpPage';
@@ -39,6 +40,8 @@ const App = (props: any) => {
                 <Route exact path='/categories/create/' component={CreatePostPage} />
                 <Route exact path='/categories/c_id/:categoryId/' component={PostPage} />
                 <Route exact path='/categories/c_id/:categoryId/:postId/' component={PostDetailPage} />
+
+                <Route exact path='/notifications/' component={NotificationsPage} />
 
                 <Route exact path='/auth/login/' component={LoginPage} />
                 <Route exact path='/auth/sign_up/' component={SignUpPage} />

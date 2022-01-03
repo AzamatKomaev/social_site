@@ -18,7 +18,11 @@ urlpatterns = [
     path('user/find/<int:user_id>/', user_views.UserViewSet.as_view({"get": "retrieve"})),
     path('user/find/<str:username>/', user_views.UserViewSet.as_view({"get": "retrieve"})),
     path('user/find/<int:user_id>/friends/', user_views.UserFriendsAPIView.as_view()),
-    path('user/find/<int:to_user>/friend_request/', user_views.FriendRequestAPIView.as_view()),
+    path('user/find/<int:to_user>/friend_request/', user_views.FriendRequestViewSet.as_view(
+                                                            {"get": "retrieve", "post": "create",
+                                                             "delete": "destroy", "patch": "update"}
+    )),
+    path('user/find/<int:user_id>/request-notifications/', user_views.FriendRequestViewSet.as_view({"get": "list"})),
 
     path('user/register/', user_views.UserViewSet.as_view({"post": "create_registration_user"})),
     path('user/is_auth/', user_views.UserViewSet.as_view({"get": "retrieve_current_user"})),

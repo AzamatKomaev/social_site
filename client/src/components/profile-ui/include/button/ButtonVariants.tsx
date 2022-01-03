@@ -8,7 +8,7 @@ import {
     sendFriendRequest,
     deleteFriendRequest,
     patchFriendRequest
-} from './service';
+} from '../../../../services/friendRequestService';
 
 
 const ButtonVariants = (props: any) => {

@@ -46,8 +46,8 @@ const CreatePostForm = (props) => {
         axios.post("http://127.0.0.1:8000/api/v1/category/" + category + "/", dataForm,
             {
                 headers: {
-                    Authorization: 'Bearer ' + localStorage.getItem("jwt")
-                    //'Content-Type': 'multipart/form-data'
+                    Authorization: 'Bearer ' + localStorage.getItem("jwt"),
+                    'Content-Type': 'multipart/form-data'
                 }
             }
         )

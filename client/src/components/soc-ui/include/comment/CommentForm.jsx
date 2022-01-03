@@ -10,7 +10,7 @@ const CommentForm = (props) => {
     const [error, setError] = useState(null)
 
     const createComment = () => {
-        axios.post("http://127.0.0.1:8000/api/v1/category/" + props.categoryId + "/" + props.postId + "/comment/", {
+        axios.post("http://127.0.0.1:8000/api/v1/post/" + props.postId + "/comment/", {
                 text: content
             },
             {

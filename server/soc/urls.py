@@ -11,6 +11,8 @@ urlpatterns = [
     path("categories/c_id/<int:category_id>/", views.index, name="all_posts"),
     path("categories/c_id/<int:category_id>/<int:post_id>/", views.index, name="detail_post"),
 
+    path("notifications/", views.index),
+
     path("auth/login/", views.index, name="login"),
     path("auth/sign_up/", views.index, name="signup"),
     path("auth/accept/<str:token>/", views.index, name="signup"),

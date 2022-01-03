@@ -13,6 +13,7 @@ import AcceptedPasswordAlert from './include/information/AcceptedPasswordAlert';
 
 const acceptAccount = async(token: string, isAuth: boolean) => {
     let accepted: any;
+    console.log("IM HERE 1")
 
     if (isAuth) {
         accepted = false;
@@ -20,7 +21,7 @@ const acceptAccount = async(token: string, isAuth: boolean) => {
         return accepted;
     }
 
-    await axios.get("http://127.0.0.1:8000/api/v1/user/accept/" + token + "/")
+    await axios.patch("http://127.0.0.1:8000/api/v1/user/accept/" + token + "/" , {}, {})
         .then((response) => {
             accepted = true
         })
@@ -37,8 +38,6 @@ const acceptAccount = async(token: string, isAuth: boolean) => {
 
 
 const AcceptAccountPage = (props: any) => {
-    console.log(props)
-
     const [accepted, setAccepted] = useState(false)
     const [isAuth, setIsAuth] = useState()
 
@@ -53,12 +52,11 @@ const AcceptAccountPage = (props: any) => {
 
 
     useEffect(() => {
-        if (typeof isAuth !== "undefined") {
-            acceptAccount(token, isAuth)
-                .then((data) => {
-                    setAccepted(data)
-                })
-        }
+        acceptAccount(token, isAuth)
+            .then((data) => {
+                console.log(data)
+                setAccepted(data)
+            })
     }, [])
 
     return (

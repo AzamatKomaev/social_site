@@ -21,7 +21,7 @@ const PostDetailPage = (props) => {
     const [error, setError] = useState(false);
 
     useEffect(() => {
-        axios.get("http://127.0.0.1:8000/api/v1/category/" + categoryId + "/" + postId + "/")
+        axios.get("http://127.0.0.1:8000/api/v1/post/" + postId + "/")
             .then(response => {
                 setPost(response.data);
             })
