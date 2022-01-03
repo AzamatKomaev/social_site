@@ -4,6 +4,8 @@ import 'bootstrap/dist/js/bootstrap.js';
 
 
 const SettingMenu = (props: any) => {
+    console.log("PEDIC")
+
     return (
         <div>
             <nav>
