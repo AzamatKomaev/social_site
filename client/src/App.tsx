@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
-import { v4 as uuidv4 } from 'uuid';
+import { useDispatch, useSelector } from 'react-redux';
+import 'bootstrap/dist/css/bootstrap.min.css';
+import 'bootstrap/dist/js/bootstrap.js';
 
 import {
     Route,
@@ -10,7 +11,7 @@ import {
 } from "react-router-dom";
 
 import './App.css';
-import { getCurrentUserData, getCategories } from './services/service';
+import { fetchUserData } from './store/user/actions';
 
 import CategoryPage from './components/soc-ui/CategoryPage';
 import PostPage from './components/soc-ui/PostPage';
@@ -32,6 +33,13 @@ import UserPage from './components/profile-ui/UserPage';
 
 const App = (props: any) => {
     const { history } = props;
+
+    const dispatch = useDispatch()
+    const userData = useSelector(state => state)
+
+    useEffect(() => {
+       dispatch(fetchUserData())
+    }, [dispatch])
 
     return (
         <div className="App">

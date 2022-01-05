@@ -1,19 +1,15 @@
 import React, { useState, useEffect} from 'react';
 import axios from 'axios';
-import { v4 as uuidv4 } from 'uuid';
 
 import Header from '../extend/Header';
 import Error404NotFound from '../extend/Error404NotFound';
 import Error429TooManyRequests from '../extend/Error429TooManyRequests';
-import '../../App.css';
-import { getCurrentUserData } from '../../services/service';
 
 import Post from './include/post/Post';
 import PostList from './include/post/PostList';
 
 
 const PostPage = (props) => {
-    const [isAuth, setIsAuth] = useState()
     const [posts, setPosts] = useState([]);
     const [currentPage, setCurrentPage] = useState(1);
     const [fetching, setFetching] = useState(true)
@@ -63,13 +59,6 @@ const PostPage = (props) => {
         }
     }
 
-    useEffect(() => {
-        getCurrentUserData()
-            .then((result) => {
-                setIsAuth(result.isAuth)
-            })
-    }, [])
-
     if (!error) {
         return (
             <div>
@@ -78,7 +67,6 @@ const PostPage = (props) => {
                 <PostList
                     posts={posts}
                     categoryId={categoryId}
-                    key={uuidv4()}
                  />
             </div>
         )

@@ -1,14 +1,12 @@
 import React from 'react';
-import 'bootstrap/dist/css/bootstrap.min.css';
-
 import Message from './Message';
 
-const MessageList = (props) => {
 
+const MessageList = (props) => {
     return (
         <div>
             {props.messages.map((message) => (
-                <Message message={message} currentUserData={props.currentUserData} new={props.new}/>
+                <Message message={message} new={props.new}/>
             ))}
         </div>
     )

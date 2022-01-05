@@ -1,9 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import 'bootstrap/dist/css/bootstrap.min.css';
 import axios from 'axios';
-import { v4 as uuidv4 } from 'uuid';
-
-import '../../../../App.css';
 
 
 const CreatePostForm = (props) => {
@@ -36,13 +32,8 @@ const CreatePostForm = (props) => {
         return formData
     }
 
-
-    const createPost = () => {
-        if (category == undefined || category == "Выбери категорию") {
-            alert("Вы не указали категорию. Куда добавлять пост? -_-")
-        }
+    const fetchPost = (title, content, category, photo) => {
         let dataForm = getPostDataInForm(title, content, category, photo)
-        console.log(dataForm)
         axios.post("http://127.0.0.1:8000/api/v1/category/" + category + "/", dataForm,
             {
                 headers: {
@@ -59,6 +50,23 @@ const CreatePostForm = (props) => {
                     setError(error.response.data)
                 }
             })
+    }
+
+
+    const createPost = () => {
+        if (!category || category == "Выбери категорию") {
+            alert("Вы не указали категорию. Куда добавлять пост? -_-")
+            return
+        }
+        if (!title || !content) {
+            setError({
+                title: title,
+                text: content
+            })
+            return
+        }
+        fetchPost(title, content, category, photo)
+
     }
 
 
@@ -88,7 +96,12 @@ const CreatePostForm = (props) => {
                     placeholder="У меня есть мечта..."
                  />
                 <p className="form-text text-muted" style={{fontSize:"10pt"}}>Опишите основной смысл поста в двух словах.</p>
-                <p className="text-danger" style={{marginTop: "-15px"}}>{error.title}</p>
+                {error.title
+                ?
+                    <p className="text-danger" style={{marginTop: "-15px"}}>Заголовок не может быть пустым</p>
+                :
+                    <p></p>
+                }
             </div>
             {"\n"}
             <div className="form-group">
@@ -105,7 +118,12 @@ const CreatePostForm = (props) => {
                 {content}
                 </textarea>
                 <p className="form-text text-muted" style={{fontSize: "10pt"}}>А теперь полностью излейте свою душу.</p>
-                <p className="text-danger" style={{marginTop: "-15px"}}>{error.text}</p>
+                {error.text
+                ?
+                    <p className="text-danger" style={{marginTop: "-15px"}}>Содержимое не может быть пустым</p>
+                :
+                    <p></p>
+                }
             </div>
             {"\n"}
             <div className="input-group mb-3">

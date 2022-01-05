@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 
-import 'bootstrap/dist/css/bootstrap.min.css';
+
 import 'simple-line-icons';
 import '../../style.css';
 import '../../../../App.css';

@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useSelector } from 'react-redux';
 import axios from 'axios';
 
 import NotificationList from '../list/NotificationList';
@@ -32,8 +33,12 @@ const FriendNotificationTab = (props: any) => {
         error: null
     })
 
+
+    const userData = useSelector(state => state)
+
+
     useEffect(() => {
-        getFriendNotifications(props.userData.id)
+        getFriendNotifications(userData.info.id)
             .then((result) => {
                 if (result.error) {
                     alert(result.error + " error")
@@ -54,7 +59,7 @@ const FriendNotificationTab = (props: any) => {
     } else {
         return (
             <div className="tab-pane fade show active" id="friends" role="tabpanel" aria-labelledby="nav-home-tab">
-                There is no notifications for you. :( you are alone.
+                There are not notifications for you. :( you are alone.
             </div>
         )
     }

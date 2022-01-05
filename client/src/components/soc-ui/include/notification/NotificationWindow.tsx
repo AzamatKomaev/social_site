@@ -5,7 +5,7 @@ import FriendNotificationTab from './tab/FriendNotificationTab';
 import ChatNotificationTab from './tab/ChatNotificationTab';
 
 
-const NotificationsWindow = (props: any) => {
+const NotificationsWindow = () => {
     return (
         <div className="container">
             <div>
@@ -13,8 +13,8 @@ const NotificationsWindow = (props: any) => {
             </div>
             <div className="card" style={{marginTop: "5px"}}>
                 <div className="tab-content" id="nav-tabContent">
-                    <FriendNotificationTab userData={props.userData}/>
-                    <ChatNotificationTab userData={props.userData}/>
+                    <FriendNotificationTab/>
+                    <ChatNotificationTab/>
                 </div>
             </div>
         </div>

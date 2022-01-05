@@ -1,18 +1,16 @@
 import React, { useState, useEffect } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import 'bootstrap/dist/css/bootstrap.min.css';
+import { useSelector } from 'react-redux';
 
 import Header from '../extend/Header';
 import CategoryList from './include/category/CategoryList';
 import { WelcomeAuthBox, WelcomeAnonBox } from './include/welcome_box/WelcomeBox';
 
-import { getCurrentUserData, getCategories } from '../../services/service';
+import { getCategories } from '../../services/service';
 
 
 const CategoryPage = (props) => {
     const [categories, setCategories] = useState([])
 
-    const dispatch = useDispatch()
     const userData = useSelector(state => state)
 
     useEffect(() => {

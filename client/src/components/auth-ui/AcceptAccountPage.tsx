@@ -1,10 +1,6 @@
 import React, { useState, useEffect, SetStateAction } from 'react';
-import 'bootstrap/dist/css/bootstrap.min.css';
+import { useSelector } from 'react-redux';
 import axios from 'axios';
-import { v4 as uuidv4 } from 'uuid';
-
-import '../../App.css';
-import { getCurrentUserData } from '../../services/service'
 
 import Header from '../extend/Header';
 import Error404NotFound from '../extend/Error404NotFound';
@@ -12,8 +8,7 @@ import AcceptedPasswordAlert from './include/information/AcceptedPasswordAlert';
 
 
 const acceptAccount = async(token: string, isAuth: boolean) => {
-    let accepted: any;
-    console.log("IM HERE 1")
+    let accepted: boolean | undefined;
 
     if (isAuth) {
         accepted = false;
@@ -39,22 +34,13 @@ const acceptAccount = async(token: string, isAuth: boolean) => {
 
 const AcceptAccountPage = (props: any) => {
     const [accepted, setAccepted] = useState(false)
-    const [isAuth, setIsAuth] = useState()
+    const userData = useSelector(state => state)
 
     const token: string = props.match.params.token;
 
     useEffect(() => {
-        getCurrentUserData()
-            .then((result: any) => {
-                setIsAuth(result.isAuth)
-            })
-    }, [])
-
-
-    useEffect(() => {
-        acceptAccount(token, isAuth)
+        acceptAccount(token, userData.isAuth)
             .then((data) => {
-                console.log(data)
                 setAccepted(data)
             })
     }, [])

@@ -1,21 +1,17 @@
 import React from 'react';
-import 'bootstrap/dist/css/bootstrap.min.css';
+import { useSelector } from 'react-redux';
 
 import '../style.css';
 import { getReadableDateFormat } from '../../../../services/service';
 
 
 const Message = (props) => {
-    if (props.new) {
-        console.log(props)
-    }
-
-    //console.log(props)
+    const currentUserData = useSelector(state => state)
 
     if (props.message.user_data !== undefined) {
         return (
             <div>
-                {props.currentUserData.id == props.message.user_data.id
+                {currentUserData.info.id == props.message.user_data.id
                 ?
                     <div className="chat-message-right pb-4" style={{width: "70%"}}>
                         <div>

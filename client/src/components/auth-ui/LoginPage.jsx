@@ -1,9 +1,6 @@
-import React, { useState, useEffect} from 'react';
-import 'bootstrap/dist/css/bootstrap.min.css';
-
+import React from 'react';
+import { useSelector } from 'react-redux';
 import './style.css';
-import '../../App.css';
-import { getCurrentUserData, getCategories } from '../../services/service';
 
 import Header from '../extend/Header';
 import Error404NotFound from '../extend/Error404NotFound';
@@ -11,26 +8,13 @@ import LoginForm from "./include/forms/LoginForm";
 
 
 const LoginPage = () => {
-    const [isAuth, setIsAuth] = useState()
-
-    useEffect(() => {
-        getCurrentUserData()
-            .then((result) => {
-                setIsAuth(result.isAuth)
-            })
-    }, [])
-
+    const userData = useSelector(state => state)
 
     return (
         <div>
             <Header/>
             {"\n"}
-            {isAuth
-            ?
-            <Error404NotFound/>
-            :
-            <LoginForm/>
-            }
+            {userData.isAuth ? <Error404NotFound/> : <LoginForm/>}
         </div>
     )
 }

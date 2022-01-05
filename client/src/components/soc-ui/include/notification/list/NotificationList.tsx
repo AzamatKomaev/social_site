@@ -5,9 +5,6 @@ import ChatNotificationCell from '../cell/ChatNotificationCell';
 
 
 const NotificationList = (props: any) => {
-    console.log(props)
-
-
     if (props.type == "friend") {
         return (
             <div>

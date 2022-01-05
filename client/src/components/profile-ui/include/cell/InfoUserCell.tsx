@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import 'bootstrap/dist/css/bootstrap.min.css';
+
 
 import ButtonVariants from '../button/ButtonVariants';
 import CardUserCells from './CardUserCells';
@@ -47,9 +47,7 @@ const InfoUserCell = (props: any) => {
             <div className="col-12 col-sm-11 col-md-3 col-lg-3">
                 <img src={props.user.avatar.image} alt="avatar" className="rounded w-100"/>{"\n\n"}
                 <ButtonVariants
-                    isAuth={props.isAuth}
                     user={props.user}
-                    currentUser={props.currentUser}
                  />
                 {"\n\n"}
             </div>

@@ -1,26 +1,19 @@
 import React, { useState, useEffect } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-
-import 'bootstrap/dist/css/bootstrap.min.css';
-import '../../App.css';
+import { useSelector } from 'react-redux';
 
 import { getCategories } from '../../services/service';
-import { fetchUserData } from '../../store/user/actions';
 
 import CreatePostForm from './include/post/CreatePostForm';
 
 import Header from '../extend/Header';
 import Error404NotFound from '../extend/Error404NotFound';
-import Error429TooManyRequests from '../extend/Error429TooManyRequests';
 
 
 const CreatePostPage = (props) => {
     const [categories, setCategories] = useState([])
-    const [isAuth, setIsAuth] = useState()
 
-    const dispatch = useDispatch()
+
     const userData = useSelector(state => state)
-
 
 
     useEffect(() => {
@@ -37,7 +30,7 @@ const CreatePostPage = (props) => {
                 <CreatePostForm categories={categories} />
             </div>
         )
-    } else if (!isAuth) {
+    } else if (!userData.isAuth) {
         return (
             <div>
                 <Header/>

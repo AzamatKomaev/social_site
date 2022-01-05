@@ -1,6 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
 import axios from 'axios';
-import 'bootstrap/dist/css/bootstrap.min.css';
 
 import '../style.css';
 
@@ -88,7 +87,6 @@ const MessageChatWindow = (props) => {
                                     <div className="chat-messages p-4" id="chat-window" onScroll={props.scrollHandler} ref={messageRef} style={{height: "550px"}}>
                                         <MessageList
                                             messages={props.messages}
-                                            currentUserData={props.currentUserData}
                                             new={false}
                                          />
                                         {"\n"}
@@ -98,7 +96,6 @@ const MessageChatWindow = (props) => {
                                         </center>
                                         <MessageList
                                             messages={props.newMessages}
-                                            currentUserData={props.currentUserData}
                                             new={true}
                                          />
                                     </div>
@@ -106,7 +103,6 @@ const MessageChatWindow = (props) => {
                                 <MessageInput
                                     chat={props.chat}
                                     ws={props.ws}
-                                    currentUserData={props.currentUserData}
                                     type_is_group={props.type_is_group}
                                  />
                             </div>

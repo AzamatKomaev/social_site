@@ -1,12 +1,11 @@
 import React, { useState, useEffect } from 'react';
-import 'bootstrap/dist/css/bootstrap.min.css';
-
-import '../../../../App.css';
+import { useSelector } from 'react-redux';
 import { getReadableDateFormat } from '../../../../services/service';
 
 
 const Chat = (props) => {
     const [lastMessage, setLastMessage] = useState(props.chat.last_message)
+    const userData = useSelector(state => state)
 
     useEffect(() => {
         let ws = new WebSocket(
@@ -55,7 +54,7 @@ const Chat = (props) => {
                                 ?
                                     <div>
                                         <b>
-                                            {props.userData.id == lastMessage.user_data.id ? "Вы" : lastMessage.user_data.username}
+                                            {userData.info.id == lastMessage.user_data.id ? "Вы" : lastMessage.user_data.username}
                                         </b>{"\n"}
                                         {lastMessage.text.substr(0, 20) + "..."}{"\n"}
                                         {getReadableDateFormat(props.chat.last_message.created_at)}

@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import 'bootstrap/dist/css/bootstrap.min.css';
+import { useSelector } from 'react-redux';
+
 import axios from 'axios';
 
 import './style.css';
@@ -16,6 +17,9 @@ const ButtonVariants = (props: any) => {
         data: null,
         error: null
     })
+
+
+    const currentUserData = useSelector(state => state)
 
     const handleSendFriendRequest = (e: any) => {
         sendFriendRequest(props.user)
@@ -60,13 +64,13 @@ const ButtonVariants = (props: any) => {
     }, [])
 
 
-    if (!props.isAuth) {
+    if (!currentUserData.isAuth) {
         return (
             <div>
                 <a href="/auth/login/"  className="btn btn-outline-primary btn-block default-button">Хотите войти?</a>
             </div>
         )
-    } else if (props.user.id == props.currentUser.id) {
+    } else if (props.user.id == currentUserData.info.id) {
         return (
             <div>
                 <a href="/redac/" className="btn btn-outline-secondary btn-block default-button">Редактировать</a>
@@ -75,7 +79,7 @@ const ButtonVariants = (props: any) => {
     } else if ((friendRequest.data) && (friendRequest.data.is_accepted == false) && (!friendRequest.error)) {
         return (
             <div>
-                {friendRequest.data.to_user == props.user.id
+                {friendRequest.data.to_user.id == props.user.id
                     ?
                         <button
                             type="button"
@@ -96,7 +100,7 @@ const ButtonVariants = (props: any) => {
                 }
             </div>
         )
-    } else if (props.currentUser.friends.indexOf(props.user.id) == -1) {
+    } else if (currentUserData.info.friends.indexOf(props.user.id) == -1) {
         return (
             <div>
                 <button
@@ -109,7 +113,7 @@ const ButtonVariants = (props: any) => {
                 </button>
             </div>
         )
-    } else if (props.currentUser.friends.indexOf(props.user.id) != -1) {
+    } else if (currentUserData.info.friends.indexOf(props.user.id) != -1) {
         return (
             <div>
                 <button

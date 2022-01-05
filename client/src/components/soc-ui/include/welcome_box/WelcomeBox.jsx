@@ -1,12 +1,12 @@
 import React, { useEffect } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import 'bootstrap/dist/css/bootstrap.min.css';
+import { useSelector } from 'react-redux';
+
 
 import '../../../../App.css';
 
 
 const WelcomeAuthBox = (props) => {
-    const dispatch = useDispatch()
+
     const userData = useSelector(state => state)
 
 

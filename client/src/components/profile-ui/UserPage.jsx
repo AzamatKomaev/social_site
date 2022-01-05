@@ -1,10 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
-import 'bootstrap/dist/css/bootstrap.min.css';
-import 'bootstrap/dist/js/bootstrap.js';
+import { useSelector } from 'react-redux';
 
-import '../../App.css';
-import { findUserAndGetData, getCurrentUserData } from '../../services/service';
+import { findUserAndGetData } from '../../services/service';
 
 import Header from '../extend/Header';
 import Error404NotFound from '../extend/Error404NotFound';
@@ -19,8 +16,10 @@ const UserPage = (props) => {
     let username = props.match.params.username;
 
     const [user, setUser] = useState()
-    const [currentUser, setCurrentUser] = useState()
-    const [isAuth, setIsAuth] = useState()
+
+
+    const currentUserData = useSelector(state => state)
+
 
     useEffect(() => {
         findUserAndGetData(username)
@@ -29,15 +28,7 @@ const UserPage = (props) => {
             })
     }, [])
 
-    useEffect(() => {
-        getCurrentUserData()
-            .then((result) => {
-                setCurrentUser(result.info)
-                setIsAuth(result.isAuth)
-            })
-    }, [])
-
-    if (user && currentUser !== undefined) {
+    if (user && currentUserData !== undefined) {
         return (
             <div>
                 <Header/>
@@ -45,11 +36,7 @@ const UserPage = (props) => {
                     <SwitchMenu/>
                     <div className="tab-content">
                         {"\n"}
-                        <InfoTab
-                            user={user}
-                            currentUser={currentUser}
-                            isAuth={isAuth}
-                         />
+                        <InfoTab user={user}/>
                         <SettingTab/>
                     </div>
                 </div>

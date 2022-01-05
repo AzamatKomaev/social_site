@@ -1,18 +1,10 @@
 import React, { useState, useEffect} from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import 'bootstrap/dist/css/bootstrap.min.css';
-
-import { fetchUserData } from '../../store/user/actions';
-
+import { useSelector } from 'react-redux';
 
 
 const Header = (props) => {
-    const dispatch = useDispatch()
-    const userData = useSelector(state => state)
 
-    useEffect(() => {
-       dispatch(fetchUserData())
-    }, [dispatch])
+    const userData = useSelector(state => state)
 
     return (
         <div className="d-flex flex-column flex-md-row align-items-center p-3 px-md-4 mb-3 bg-white border-bottom box-shadow">

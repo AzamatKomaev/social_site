@@ -1,9 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import 'bootstrap/dist/css/bootstrap.min.css';
-import 'bootstrap/dist/js/bootstrap.js';
 
-import '../../../../App.css';
 import PostList from '../../../soc-ui/include/post/PostList';
 import InfoUserCell from '../cell/InfoUserCell';
 
@@ -40,9 +37,7 @@ const InfoTab = (props: any) => {
         <div className="tab-pane fade show active" id="home">
             <InfoUserCell
                 user={props.user}
-                currentUser={props.currentUser}
                 posts={userPosts}
-                isAuth={props.isAuth}
              />
 			{"\n\n"}
 			{userPosts ?
@@ -51,7 +46,8 @@ const InfoTab = (props: any) => {
                 categoryId={"#"}
              />
 			:
-			"Нет постов"}
+			"Нет постов"
+			}
 	    </div>
     )
 }

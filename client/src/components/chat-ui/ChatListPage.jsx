@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import 'bootstrap/dist/css/bootstrap.min.css';
+import { useSelector } from 'react-redux'
 import axios from 'axios';
 
 import Header from '../extend/Header';
@@ -7,8 +7,6 @@ import Error404NotFound from '../extend/Error404NotFound';
 import Error429TooManyRequests from '../extend/Error429TooManyRequests';
 
 import ChatWindow from './include/chat/ChatWindow';
-
-import { getCurrentUserData } from '../../services/service';
 
 
 const getUserChats = async() => {
@@ -50,19 +48,11 @@ const getUserChats = async() => {
 
 
 const ChatListPage = () => {
-    const [isAuth, setIsAuth] = useState()
-    const [userData, setUserData] = useState()
+    const userData = useSelector(state => state)
 
     const [groupChats, setGroupChats] = useState([])
     const [personalChats, setPersonalChats] = useState([])
 
-    useEffect(() => {
-        getCurrentUserData()
-            .then((result) => {
-                setIsAuth(result.isAuth)
-                setUserData(result.info)
-            })
-    }, [])
 
     useEffect(() => {
         getUserChats()
@@ -72,14 +62,13 @@ const ChatListPage = () => {
             })
     }, [])
 
-    if (isAuth) {
+    if (userData.isAuth) {
         return (
             <div>
                 <Header/>
                 <ChatWindow
                     groupChats={groupChats}
                     personalChats={personalChats}
-                    userData={userData}
                  />
                 {"\n"}
             </div>
