@@ -7,7 +7,7 @@ import '../../../../App.css';
 
 const WelcomeAuthBox = (props) => {
 
-    const userData = useSelector(state => state)
+    const userData = useSelector(state => state.user)
 
 
     const handleExitButton = (e) => {

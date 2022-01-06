@@ -7,7 +7,7 @@ import SignUpForm from "./include/forms/SignUpForm";
 
 
 const SignUpPage = () => {
-    const userData = useSelector(state => state)
+    const userData = useSelector(state => state.user)
 
     return (
         <div>

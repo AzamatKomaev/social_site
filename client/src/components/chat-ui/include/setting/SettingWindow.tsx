@@ -1,6 +1,5 @@
 import React from 'react';
-
-
+import { useSelector } from 'react-redux';
 
 import SettingMenu from './SettingMenu';
 import InformationTab from '../tab/InformationTab';
@@ -8,7 +7,9 @@ import AddFriendTab from '../tab/AddFriendTab';
 
 
 const SettingWindow = (props: any) => {
-    if (props.chatData && props.currentUserData) {
+    const currentUserData = useSelector(state => state.user)
+
+    if (props.chatData && currentUserData.info) {
         return (
             <div className="container">
                 <div>
@@ -16,8 +17,8 @@ const SettingWindow = (props: any) => {
                 </div>
                 <div className="card" style={{marginTop: "5px"}}>
                     <div className="tab-content" id="nav-tabContent">
-                        <InformationTab chatData={props.chatData} currentUserData={props.currentUserData}/>
-                        <AddFriendTab chatData={props.chatData} currentUserData={props.currentUserData}/>
+                        <InformationTab chatData={props.chatData}/>
+                        <AddFriendTab chatData={props.chatData}/>
                     </div>
                 </div>
             </div>

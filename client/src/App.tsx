@@ -35,7 +35,6 @@ const App = (props: any) => {
     const { history } = props;
 
     const dispatch = useDispatch()
-    const userData = useSelector(state => state)
 
     useEffect(() => {
        dispatch(fetchUserData())

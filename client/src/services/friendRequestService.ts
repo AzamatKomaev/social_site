@@ -6,13 +6,13 @@ interface friendRequestI {
     error: number | null
 }
 
-const getFriendRequest = async(user: any) => {
+const getFriendRequest = async(userId: number) => {
     let data: friendRequestI = {
         friendRequest: null,
         error: null
     }
 
-    await axios.get("http://127.0.0.1:8000/api/v1/user/find/" + user.id + "/friend_request/", {
+    await axios.get("http://127.0.0.1:8000/api/v1/user/find/" + userId + "/friend_request/", {
         headers: {
             Authorization: 'Bearer ' + localStorage.getItem("jwt")
         }
@@ -27,14 +27,35 @@ const getFriendRequest = async(user: any) => {
     return data
 }
 
+const getAllFriendNotifications = async(userId: number) => {
+    let data: any = {
+        notifications: null,
+        error: null
+    }
 
-const sendFriendRequest = async(user: any) => {
+    await axios.get("http://127.0.0.1:8000/api/v1/user/find/" + userId + "/request-notifications/", {
+        headers: {
+            Authorization: 'Bearer ' + localStorage.getItem("jwt")
+        }
+    })
+        .then((response) => {
+            data.notifications = response.data
+        })
+        .catch((error) => {
+            data.error = error.response.status
+        })
+
+    return data
+}
+
+
+const sendFriendRequest = async(userId: number) => {
     let data: friendRequestI = {
         friendRequest: null,
         error: null
     };
 
-    await axios.post("http://127.0.0.1:8000/api/v1/user/find/" + user.id + "/friend_request/", {}, {
+    await axios.post("http://127.0.0.1:8000/api/v1/user/find/" + userId + "/friend_request/", {}, {
         headers: {
             Authorization: 'Bearer ' + localStorage.getItem("jwt")
         }
@@ -49,10 +70,10 @@ const sendFriendRequest = async(user: any) => {
     return data;
 }
 
-const deleteFriendRequest = async(user: any) => {
+const deleteFriendRequest = async(userId: number) => {
     let statusCode: number | undefined;
 
-    await axios.delete("http://127.0.0.1:8000/api/v1/user/find/" + user.id + "/friend_request/", {
+    await axios.delete("http://127.0.0.1:8000/api/v1/user/find/" + userId + "/friend_request/", {
         headers: {
             Authorization: 'Bearer ' + localStorage.getItem("jwt")
         }
@@ -67,13 +88,13 @@ const deleteFriendRequest = async(user: any) => {
     return statusCode
 }
 
-const patchFriendRequest = async(user: any, isAccepted: number) => {
+const patchFriendRequest = async(userId: number, isAccepted: number) => {
     let data: friendRequestI = {
         friendRequest: null,
         error: null
     };
 
-    await axios.patch("http://127.0.0.1:8000/api/v1/user/find/" + user.id + "/friend_request/?is_accepted=" + isAccepted, {}, {
+    await axios.patch("http://127.0.0.1:8000/api/v1/user/find/" + userId + "/friend_request/?is_accepted=" + isAccepted, {}, {
         headers: {
             Authorization: 'Bearer ' + localStorage.getItem("jwt")
         }
@@ -91,6 +112,7 @@ const patchFriendRequest = async(user: any, isAccepted: number) => {
 
 export {
     getFriendRequest,
+    getAllFriendNotifications,
     sendFriendRequest,
     deleteFriendRequest,
     patchFriendRequest

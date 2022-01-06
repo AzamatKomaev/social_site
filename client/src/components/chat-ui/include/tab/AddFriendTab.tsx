@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
+import { useSelector } from 'react-redux'
 import axios from 'axios';
-
-
 
 import FriendList from '../friend/FriendList';
 
@@ -34,9 +33,11 @@ const AddFriendTab = (props: any) => {
         list: [],
         error: null
     })
+    const currentUserData = useSelector(state => state.user)
+
 
     useEffect(() => {
-        getFriends(props.currentUserData.id)
+        getFriends(currentUserData.info.id)
             .then((result) => {
                 setFriendsData({
                     list: result.friends,
@@ -45,7 +46,7 @@ const AddFriendTab = (props: any) => {
             })
     }, [])
 
-    if (friendsData.list.length > 0 && !friendsData.error && props.currentUserData) {
+    if (friendsData.list.length > 0 && !friendsData.error && currentUserData.info) {
         return (
             <div className="tab-pane fade" id="friend-tab" role="tabpanel" aria-labelledby="nav-home-tab">
                 <FriendList friends={friendsData.list}/>

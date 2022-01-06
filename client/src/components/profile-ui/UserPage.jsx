@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 
 import { findUserAndGetData } from '../../services/service';
+import { fetchGettingFriendRequest } from '../../store/friend/actions';
 
 import Header from '../extend/Header';
 import Error404NotFound from '../extend/Error404NotFound';
@@ -15,11 +16,16 @@ import SettingTab from './include/tab/SettingTab'
 const UserPage = (props) => {
     let username = props.match.params.username;
 
+    const dispatch = useDispatch()
     const [user, setUser] = useState()
+    const currentUserData = useSelector(state => state.user)
 
-
-    const currentUserData = useSelector(state => state)
-
+    useEffect(() => {
+        if (user) {
+            dispatch(fetchGettingFriendRequest(user.id))
+            console.log('I WAS WORKING!!')
+        }
+    }, [dispatch, user])
 
     useEffect(() => {
         findUserAndGetData(username)

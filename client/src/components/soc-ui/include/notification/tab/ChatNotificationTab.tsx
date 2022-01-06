@@ -11,7 +11,7 @@ const ChatNotificationTab = (props: any) => {
     })
 
 
-    const userData = useSelector(state => state)
+    const userData = useSelector(state => state.user)
 
 
     return (

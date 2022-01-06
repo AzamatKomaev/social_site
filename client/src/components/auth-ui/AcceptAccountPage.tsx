@@ -34,7 +34,7 @@ const acceptAccount = async(token: string, isAuth: boolean) => {
 
 const AcceptAccountPage = (props: any) => {
     const [accepted, setAccepted] = useState(false)
-    const userData = useSelector(state => state)
+    const userData = useSelector(state => state.user)
 
     const token: string = props.match.params.token;
 

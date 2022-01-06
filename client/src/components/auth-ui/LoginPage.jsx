@@ -8,7 +8,7 @@ import LoginForm from "./include/forms/LoginForm";
 
 
 const LoginPage = () => {
-    const userData = useSelector(state => state)
+    const userData = useSelector(state => state.user)
 
     return (
         <div>

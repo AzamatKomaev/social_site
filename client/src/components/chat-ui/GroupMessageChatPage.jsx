@@ -1,10 +1,11 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { useSelector } from 'react-redux';
 import axios from 'axios';
 
 import Header from '../extend/Header';
 import Error404NotFound from '../extend/Error404NotFound';
 import MessageChatWindow from './include/message/MessageChatWindow';
+
+import { getCurrentUserData } from '../../services/service';
 import { getChatData } from './services';
 
 
@@ -36,9 +37,12 @@ const getChatMessages = async(chatId, pageNumber) => {
 
 const GroupMessageChatPage = (props) => {
     const chatId = props.match.params.chatId;
-    const currentUserData = useSelector(state => state)
+
+    const [isAuth, setIsAuth] = useState()
+    const [currentUserData, setCurrentUserData] = useState()
 
     const [messages, setMessages] = useState([])
+
     const [newMessages, setNewMessages] = useState([])
 
     const [chat, setChat] = useState(null)
@@ -72,6 +76,11 @@ const GroupMessageChatPage = (props) => {
     }, [])
 
     useEffect(() => {
+        getCurrentUserData()
+            .then((result) => {
+                setIsAuth(result.isAuth)
+                setCurrentUserData(result.info)
+            })
         getChatMessages(chatId, 1)
             .then((result) => {
                 setMessages(result.messages.reverse())
@@ -119,12 +128,8 @@ const GroupMessageChatPage = (props) => {
 
     useEffect(() => {
         if (messages && messages.length > 0) {
-            try {
-                let chatHistory = document.getElementById('chat-window')
-                setScrollHeights([...scrollHeights, chatHistory.scrollHeight])
-            } catch (e) {
-                console.log(e)
-            }
+            let chatHistory = document.getElementById('chat-window')
+            setScrollHeights([...scrollHeights, chatHistory.scrollHeight])
         }
     }, [messages])
 
@@ -153,9 +158,11 @@ const GroupMessageChatPage = (props) => {
                 <Error404NotFound/>
             </div>
         )
-    } else if ((messages || newMessages) && currentUserData.info) {
+    } else if ((messages || newMessages) && currentUserData) {
+
         try {
             let chatHistory = document.getElementById('chat-window')
+            //setCurrentHeight(chatHistory.scrollHeight)
         } catch (e) {
             console.log("pass")
         }
@@ -169,6 +176,7 @@ const GroupMessageChatPage = (props) => {
                     newMessages={newMessages}
                     chat={chat}
                     ws={ws.current}
+                    currentUserData={currentUserData}
                     scrollHandler={scrollHandler}
                  />
             </div>

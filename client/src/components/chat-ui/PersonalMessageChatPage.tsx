@@ -1,12 +1,12 @@
 import React, { useState, useEffect, useRef } from 'react';
 import axios from 'axios';
 
-
 import Header from '../extend/Header';
 import Error404NotFound from '../extend/Error404NotFound';
 
 import MessageChatWindow from './include/message/MessageChatWindow';
 import { getCurrentUserData } from '../../services/service';
+
 
 interface personalChatDataI {
     info: object | null,

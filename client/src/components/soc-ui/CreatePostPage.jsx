@@ -13,7 +13,7 @@ const CreatePostPage = (props) => {
     const [categories, setCategories] = useState([])
 
 
-    const userData = useSelector(state => state)
+    const userData = useSelector(state => state.user)
 
 
     useEffect(() => {

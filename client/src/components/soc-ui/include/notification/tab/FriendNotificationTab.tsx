@@ -5,27 +5,6 @@ import axios from 'axios';
 import NotificationList from '../list/NotificationList';
 
 
-const getFriendNotifications = async(userId: number) => {
-    let data: any = {
-        notifications: null,
-        error: null
-    }
-
-    await axios.get("http://127.0.0.1:8000/api/v1/user/find/" + userId + "/request-notifications/", {
-        headers: {
-            Authorization: 'Bearer ' + localStorage.getItem("jwt")
-        }
-    })
-        .then((response) => {
-            data.notifications = response.data
-        })
-        .catch((error) => {
-            data.error = error.response.status
-        })
-
-    return data
-}
-
 
 const FriendNotificationTab = (props: any) => {
     const [notifications, setNotifications] = useState({
@@ -34,7 +13,7 @@ const FriendNotificationTab = (props: any) => {
     })
 
 
-    const userData = useSelector(state => state)
+    const userData = useSelector(state => state.user)
 
 
     useEffect(() => {

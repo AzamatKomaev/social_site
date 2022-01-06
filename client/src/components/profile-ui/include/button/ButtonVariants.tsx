@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 
 import axios from 'axios';
 
@@ -11,57 +11,34 @@ import {
     patchFriendRequest
 } from '../../../../services/friendRequestService';
 
+import {
+    fetchGettingFriendRequest,
+    fetchSendingFriendRequest,
+    fetchDeletingFriendRequest,
+    fetchPatchingFriendRequest
+} from '../../../../store/friend/actions';
+import { fetchUserData } from '../../../../store/user/actions';
+
+
 
 const ButtonVariants = (props: any) => {
-    const [friendRequest, setFriendRequest] = useState({
-        data: null,
-        error: null
-    })
+    const friendRequest = useSelector(state => state.friend)
+    const currentUserData = useSelector(state => state.user)
+    const dispatch = useDispatch()
 
 
-    const currentUserData = useSelector(state => state)
-
-    const handleSendFriendRequest = (e: any) => {
-        sendFriendRequest(props.user)
-            .then((result) => {
-                setFriendRequest({
-                    data: result.friendRequest,
-                    error: result.error
-                })
-            })
-    }
 
     const handleDeleteFriendRequest = (e: any) => {
-        deleteFriendRequest(props.user)
-            .then((result) => {
-                if (result == 204) {
-                    setFriendRequest({
-                        data: null,
-                        error: null
-                    })
-                }
-            })
+        dispatch(fetchDeletingFriendRequest(props.user.id))
+        dispatch(fetchGettingFriendRequest(props.user.id))
+        dispatch(fetchUserData())
     }
 
     const handleAcceptFriendRequest = (e: any) => {
-        patchFriendRequest(props.user, 1)
-            .then((result) => {
-                setFriendRequest({
-                    data: result.friendRequest,
-                    error: result.error
-                })
-            })
+        dispatch(fetchPatchingFriendRequest(props.user.id, 1))
+        dispatch(fetchGettingFriendRequest(props.user.id))
+        dispatch(fetchUserData())
     }
-
-    useEffect(() => {
-        getFriendRequest(props.user)
-            .then((result) => {
-                setFriendRequest({
-                    data: result.friendRequest,
-                    error: result.error
-                })
-            })
-    }, [])
 
 
     if (!currentUserData.isAuth) {
@@ -76,10 +53,10 @@ const ButtonVariants = (props: any) => {
                 <a href="/redac/" className="btn btn-outline-secondary btn-block default-button">Редактировать</a>
             </div>
         )
-    } else if ((friendRequest.data) && (friendRequest.data.is_accepted == false) && (!friendRequest.error)) {
+    } else if ((friendRequest.detail) && (friendRequest.detail.is_accepted == false)) {
         return (
             <div>
-                {friendRequest.data.to_user.id == props.user.id
+                {friendRequest.detail.to_user.id == props.user.id
                     ?
                         <button
                             type="button"
@@ -106,7 +83,7 @@ const ButtonVariants = (props: any) => {
                 <button
                     type="button"
                     className="btn btn-outline-primary btn-block default-button"
-                    onClick={handleSendFriendRequest}
+                    onClick={() => dispatch(fetchSendingFriendRequest(props.user.id))}
                     style={{width: "100%"}}
                  >
                     Добавить в друзья.

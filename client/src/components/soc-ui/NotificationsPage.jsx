@@ -10,7 +10,7 @@ const NotificationsPage = (props: any) => {
     const [categories, setCategories] = useState([])
 
 
-    const userData = useSelector(state => state)
+    const userData = useSelector(state => state.user)
 
 
     if (userData.isAuth && userData.info) {

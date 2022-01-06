@@ -48,7 +48,7 @@ const getUserChats = async() => {
 
 
 const ChatListPage = () => {
-    const userData = useSelector(state => state)
+    const userData = useSelector(state => state.user)
 
     const [groupChats, setGroupChats] = useState([])
     const [personalChats, setPersonalChats] = useState([])

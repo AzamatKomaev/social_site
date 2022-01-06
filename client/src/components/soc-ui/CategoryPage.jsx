@@ -11,7 +11,7 @@ import { getCategories } from '../../services/service';
 const CategoryPage = (props) => {
     const [categories, setCategories] = useState([])
 
-    const userData = useSelector(state => state)
+    const userData = useSelector(state => state.user)
 
     useEffect(() => {
         getCategories()
