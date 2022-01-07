@@ -1,16 +1,7 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
-import axios from 'axios';
-
 import './style.css';
-import {
-    getFriendRequest,
-    sendFriendRequest,
-    deleteFriendRequest,
-    patchFriendRequest
-} from '../../../../services/friendRequestService';
-
 import {
     fetchGettingFriendRequest,
     fetchSendingFriendRequest,
@@ -25,7 +16,6 @@ const ButtonVariants = (props: any) => {
     const friendRequest = useSelector(state => state.friend)
     const currentUserData = useSelector(state => state.user)
     const dispatch = useDispatch()
-
 
 
     const handleDeleteFriendRequest = (e: any) => {
@@ -47,16 +37,16 @@ const ButtonVariants = (props: any) => {
                 <a href="/auth/login/"  className="btn btn-outline-primary btn-block default-button">Хотите войти?</a>
             </div>
         )
-    } else if (props.user.id == currentUserData.info.id) {
+    } else if (props.user.id === currentUserData.info.id) {
         return (
             <div>
                 <a href="/redac/" className="btn btn-outline-secondary btn-block default-button">Редактировать</a>
             </div>
         )
-    } else if ((friendRequest.detail) && (friendRequest.detail.is_accepted == false)) {
+    } else if ((friendRequest.detail) && (friendRequest.detail.is_accepted === false)) {
         return (
             <div>
-                {friendRequest.detail.to_user.id == props.user.id
+                {friendRequest.detail.to_user.id === props.user.id
                     ?
                         <button
                             type="button"
@@ -77,7 +67,7 @@ const ButtonVariants = (props: any) => {
                 }
             </div>
         )
-    } else if (currentUserData.info.friends.indexOf(props.user.id) == -1) {
+    } else if (currentUserData.info.friends.indexOf(props.user.id) === -1) {
         return (
             <div>
                 <button
@@ -90,7 +80,7 @@ const ButtonVariants = (props: any) => {
                 </button>
             </div>
         )
-    } else if (currentUserData.info.friends.indexOf(props.user.id) != -1) {
+    } else if (currentUserData.info.friends.indexOf(props.user.id) !== -1) {
         return (
             <div>
                 <button

@@ -1,6 +1,7 @@
 import {
     GET_FRIEND_REQUEST,
     GET_FRIEND_REQUESTS,
+    REMOVE_FRIEND_REQUEST_FROM_LIST,
     SEND_FRIEND_REQUEST,
     ACCEPT_FRIEND_REQUEST,
     DELETE_FRIEND_REQUEST
@@ -87,3 +88,14 @@ export const fetchPatchingFriendRequest = (userId: number, isAccepted: number) =
     }
 }
 
+export const deleteFriendRequestFromList = (friendRequestList: Array<Any>, userId: number) => {
+    return function (dispatch) {
+        let newFriendRequestList = friendRequestList.filter(friendRequest => friendRequest.from_user.id !== userId)
+        dispatch({
+            type: DELETE_FRIEND_REQUEST,
+            payload: {
+                list: newFriendRequestList
+            }
+        })
+    }
+}

@@ -28,6 +28,9 @@ const ChatNotificationTab = (props: any) => {
                         <button>
                             Вступить
                         </button>
+                        <button>
+                            Отклонить
+                        </button>
                    </div>
                 </div>
             </a>

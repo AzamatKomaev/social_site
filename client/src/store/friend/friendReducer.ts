@@ -1,9 +1,10 @@
 import {
     GET_FRIEND_REQUEST,
     GET_FRIEND_REQUESTS,
+    REMOVE_FRIEND_REQUEST_FROM_LIST,
     SEND_FRIEND_REQUEST,
     ACCEPT_FRIEND_REQUEST,
-    DELETE_FRIEND_REQUEST
+    DELETE_FRIEND_REQUEST,
 } from './actionTypes';
 
 
@@ -19,6 +20,8 @@ export const friendReducer = (state: any = defaultState, action: any) => {
         case GET_FRIEND_REQUEST:
             return {...state, ...action.payload}
         case GET_FRIEND_REQUESTS:
+            return {...state, ...action.payload}
+        case REMOVE_FRIEND_REQUEST_FROM_LIST:
             return {...state, ...action.payload}
         case SEND_FRIEND_REQUEST:
             return {...state, ...action.payload}
