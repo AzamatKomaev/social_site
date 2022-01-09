@@ -1,12 +1,5 @@
 from django.shortcuts import render
 
 
-def index(
-    request,
-    category_id=None,
-    post_id=None,
-    token=None,
-    username=None,
-    chat_id=None
-):
+def index(request, *args, **kwargs):
     return render(request, "index.html", {})

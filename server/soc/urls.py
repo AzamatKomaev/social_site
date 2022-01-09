@@ -16,7 +16,9 @@ urlpatterns = [
     path("auth/login/", views.index, name="login"),
     path("auth/sign_up/", views.index, name="signup"),
     path("auth/accept/<str:token>/", views.index, name="signup"),
+
     path("users/<str:username>/", views.index, name="user-profile"),
+    path("users/<str:username>/friends/", views.index),
 
     path("chats/", views.index, name="chats"),
     path("chats/<int:chat_id>/", views.index, name="chat-messages"),
