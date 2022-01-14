@@ -7,7 +7,7 @@ import Error404NotFound from '../extend/Error404NotFound';
 import NotificationWindow from './include/notification/NotificationWindow';
 
 
-const NotificationsPage = (props: any) => {
+const NotificationsPage = (props) => {
     const [categories, setCategories] = useState([])
 
     const dispatch = useDispatch()

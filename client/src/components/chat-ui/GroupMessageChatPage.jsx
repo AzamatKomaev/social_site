@@ -21,7 +21,7 @@ const getChatMessages = async(chatId, pageNumber) => {
         }
     })
         .then((response) => {
-            if (response.status != 204) {
+            if (response.status !== 204) {
                 data.messages = response.data
             } else {
                 data.error = true
@@ -106,7 +106,7 @@ const GroupMessageChatPage = (props) => {
     }, [])
 
     useEffect(() => {
-        if (fetching & currentPage != -1) {
+        if (fetching && currentPage !== -1) {
             console.log("fetching")
             getChatMessages(chatId, currentPage)
                 .then((result) => {
@@ -137,7 +137,7 @@ const GroupMessageChatPage = (props) => {
     const scrollHandler = (e) => {
         if (
             e.target.scrollTop < 10 &&
-            currentPage != -1
+            currentPage !== -1
         ) {
             setFetching(true)
             console.log(scrollHeights)
@@ -151,7 +151,7 @@ const GroupMessageChatPage = (props) => {
     }
 
 
-    if (error == 404 || error == 403) {
+    if (error === 404 || error === 403) {
         return (
             <div>
                 <Header/>

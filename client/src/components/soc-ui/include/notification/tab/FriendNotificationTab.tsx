@@ -7,15 +7,9 @@ import NotificationList from '../list/NotificationList';
 
 
 const FriendNotificationTab = (props: any) => {
-    const [notifications, setNotifications] = useState({
-        list: null,
-        error: null
-    })
-    const friendRequest = useSelector(state => state.friend)
+    const friendRequest = useSelector((state: any) => state.friendRequest)
 
-    const userData = useSelector(state => state.user)
-
-    if (friendRequest.list && friendRequest.list.length > 0) {
+    if (friendRequest && friendRequest.list && friendRequest.list.length > 0) {
         return (
             <div className="tab-pane fade show active" id="friends" role="tabpanel" aria-labelledby="nav-home-tab">
                 <NotificationList type={"friend"}/>

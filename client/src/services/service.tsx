@@ -1,8 +1,14 @@
-import { useState } from 'react';
 import axios from 'axios';
+import {CategoryI, UserI} from "../interfaces";
 
 
-const getReadableDateFormat = (dateString: Date) => {
+interface CurrentUserDataI {
+    info: UserI,
+    isAuth: boolean
+}
+
+
+const getReadableDateFormat = (dateString: Date): string => {
     let dateJs = new Date(dateString);
     let readableDateFormat = dateJs.toLocaleString('ru', {
         year: 'numeric',
@@ -16,8 +22,8 @@ const getReadableDateFormat = (dateString: Date) => {
 }
 
 
-const getCurrentUserData = async() => {
-    let data: any = {
+const getCurrentUserData = async(): Promise<CurrentUserDataI> => {
+    let data: CurrentUserDataI = {
         info: null,
         isAuth: false
     }
@@ -46,23 +52,22 @@ const getCurrentUserData = async() => {
     return data;
 }
 
-const getCategories = async() => {
-    let categories: object[] | null = []
+const getCategories = async(): Promise<Array<CategoryI>> => {
+    let categories: Array<CategoryI> = []
 
-    await axios.get("http://127.0.0.1:8000/api/v1/category/").
-        then((response => {
+    await axios.get("http://127.0.0.1:8000/api/v1/category/")
+        .then((response) => {
             categories = response.data;
-        }))
+        })
         .catch((error) => {
             alert(error.response.status + " error")
-            categories = null;
         })
 
     return categories;
 }
 
-const findUserAndGetData = async(username: string) => {
-    let data = null;
+const findUserAndGetData = async(username: string): Promise<UserI | null> => {
+    let data: UserI | null = null;
 
     await axios.get("http://127.0.0.1:8000/api/v1/user/find/" + username + "/")
         .then((response) => {
@@ -70,7 +75,7 @@ const findUserAndGetData = async(username: string) => {
         })
         .catch((err) => {
             data = null
-            if (err.response.status != 404) {
+            if (err.response.status !== 404) {
                 alert(err.response.status + " error")
             }
         })

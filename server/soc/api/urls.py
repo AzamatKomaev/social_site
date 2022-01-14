@@ -34,7 +34,8 @@ urlpatterns = [
     path('chats/<int:chat_id>/', chat_views.GroupChatViewSet.as_view({"get": "retrieve", "post": "create_message"})),
     path('chats/<int:chat_id>/messages/', chat_views.GroupChatViewSet.as_view({"get": "list_message"})),
     path('chats/<int:chat_id>/members/', chat_views.GroupChatViewSet.as_view({"get": "list_members"})),
-    path('chats/<int:chat_id>/request/', chat_views.ChatRequestAPIView.as_view()),
+    path('chats/<int:chat_id>/request/', chat_views.GroupChatRequestViewSet.as_view({"get": "list_false_accepted_requests"})),
+    path('chats/<int:chat_id>/request/<int:user_id>/', chat_views.GroupChatRequestViewSet.as_view({"post": "create"})),
 
     path('personal_chats/', chat_views.PersonalChatViewSet.as_view({"get": "list"})),
     path('personal_chats/<str:to_user_username>/', chat_views.PersonalChatViewSet.as_view({"get": "retrieve"})),

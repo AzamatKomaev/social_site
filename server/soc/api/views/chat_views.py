@@ -1,5 +1,6 @@
-from typing import Union
+from typing import Union, Dict, Optional
 
+from django.shortcuts import get_object_or_404
 from rest_framework.decorators import permission_classes
 from rest_framework.views import APIView
 from rest_framework.response import Response
@@ -12,11 +13,11 @@ from soc.api import serializers
 from ..services import (
     GroupChatService,
     PersonalChatService,
-    ChatRequestService
+    GroupChatRequestService
 )
 from soc.models import (
     GroupChat,
-    PersonalChat
+    PersonalChat, User
 )
 
 
@@ -136,23 +137,26 @@ class PersonalChatViewSet(viewsets.ViewSet):
 
     def retrieve(self, request, to_user_username: str):
         try:
-            chat_service = PersonalChatService(from_user_username=request.user.username, to_user_username=to_user_username)
+            chat_service = PersonalChatService(from_user_username=request.user.username,
+                                               to_user_username=to_user_username)
             if not chat_service.is_chat_exists():
                 chat_service.create()
                 return Response({"message": f"Chat was created successfully."})
         except ObjectDoesNotExist:
-            return Response({"error": f"User with username {to_user_username} is not exists."}, status=status.HTTP_404_NOT_FOUND)
+            return Response({"error": f"User with username {to_user_username} is not exists."},
+                            status=status.HTTP_404_NOT_FOUND)
 
         serializer = serializers.PersonalChatSerializer(
             chat_service.get_chat_with_both_users(),
             context={"request": request}
-            )
+        )
         return Response(serializer.data)
 
     def list_message(self, request, to_user_username: str):
         chat_service = PersonalChatService(from_user_username=request.user.username, to_user_username=to_user_username)
         if not chat_service.is_chat_exists():
-            return Response({"message": f"Chat with {to_user_username} doesnt exists."}, status=status.HTTP_404_NOT_FOUND)
+            return Response({"message": f"Chat with {to_user_username} doesnt exists."},
+                            status=status.HTTP_404_NOT_FOUND)
 
         serializer = serializers.PersonalMessageSerializer(chat_service.get_messages(), many=True)
         return Response(serializer.data)
@@ -160,7 +164,8 @@ class PersonalChatViewSet(viewsets.ViewSet):
     def create_message(self, request, to_user_username: str):
         chat_service = PersonalChatService(from_user_username=request.user.username, to_user_username=to_user_username)
         if not chat_service.is_chat_exists():
-            return Response({"message": f"Chat with {to_user_username} doesnt exists."}, status=status.HTTP_404_NOT_FOUND)
+            return Response({"message": f"Chat with {to_user_username} doesnt exists."},
+                            status=status.HTTP_404_NOT_FOUND)
 
         message_serializer = serializers.PersonalMessageSerializer(
             data={**request.data, **{"chat": chat_service.get_chat_with_both_users().id}},
@@ -174,33 +179,57 @@ class PersonalChatViewSet(viewsets.ViewSet):
         return Response(message_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
-class ChatRequestAPIView(APIView):
-    permissions_classes = [permissions.IsAuthenticated]
+class GroupChatRequestViewSet(viewsets.ViewSet):
+    permission_classes = [permissions.IsAuthenticated]
 
     def check_possible_errors(self,
-                              request,
-                              chat_id: int) -> dict:
-        if "to_user" not in request.query_params:
+                              request_user: User,
+                              user: Optional[User],
+                              group_chat_request_service: GroupChatRequestService,
+                              group_chat_service: Optional[GroupChatService],
+                              ) -> Optional[Dict[str, int]]:
+        if not group_chat_request_service.is_user_admin(request_user):
             return {
-                "message": "Bad request: not found to_user in params.",
+                "message": "You dont have a permission to do it.",
+                "status_code": status.HTTP_403_FORBIDDEN
+            }
+
+        if user is not None and group_chat_service.is_user_member(user):
+            return {
+                "message": "The user already in chat.",
                 "status_code": status.HTTP_400_BAD_REQUEST
             }
 
-        chat_request_service = ChatRequestService(chat_id=chat_id)
-        chat_request = chat_request_service.get_chat_request(user_id=request.query_params['to_user'])
+    def list_false_accepted_requests(self, request, chat_id: int):
+        group_chat_request_service = GroupChatRequestService(chat_id)
 
-        if not chat_request:
-            return {
-                "message": "Not found chat request with given data.",
-                "status_code": status.HTTP_404_NOT_FOUND
-            }
+        possible_error = self.check_possible_errors(
+            request_user=request.user,
+            user=None,
+            group_chat_request_service=group_chat_request_service,
+            group_chat_service=None
+        )
 
-        serializer = serializers.ChatRequestSerializer(chat_request)
-        return {
-            "message": serializer.data,
-            "status_code": status.HTTP_200_OK
-        }
+        if possible_error:
+            return Response({"message": possible_error['message']}, status=possible_error['status_code'])
 
-    def get(self, request, chat_id: int):
-        data = self.check_possible_errors(request, chat_id)
-        return Response(data["message"], status=data["status_code"])
+        all_chat_requests = group_chat_request_service.get_all_chat_requests(is_accepted=False)
+        serializer = serializers.GroupChatRequestSerializer(all_chat_requests, many=True)
+        return Response(serializer.data)
+
+    def create(self, request, chat_id: int, user_id: int):
+        group_chat_request_service = GroupChatRequestService(chat_id)  # request service
+        group_chat_service = GroupChatService(group_chat_request_service.chat)  # chat service
+
+        possible_errors = self.check_possible_errors(
+            request_user=request.user,
+            user=get_object_or_404(User, id=user_id),
+            group_chat_request_service=group_chat_request_service,
+            group_chat_service=group_chat_service,
+        )
+        if possible_errors:
+            return Response({"message": possible_errors['message']}, status=possible_errors['status_code'])
+
+        new_chat_request = group_chat_request_service.create_chat_request(user_id)
+        serializer = serializers.GroupChatRequestSerializer(new_chat_request)
+        return Response(serializer.data)

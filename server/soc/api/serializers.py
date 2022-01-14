@@ -18,9 +18,9 @@ from soc.models import (
     PersonalChat,
     GroupChatRole,
     FriendRequest,
-    ChatRequest
+    GroupChatRequest
 )
-from soc.models import User, GroupMessage, ChatRequest
+from soc.models import User, GroupMessage, GroupChatRequest
 
 
 class UserSerializer(ModelSerializer):
@@ -52,10 +52,10 @@ class FriendRequestSerializer(ModelSerializer):
         model = FriendRequest
         fields = "__all__"
 
-    def get_to_user_data(self, obj: ChatRequest) -> dict:
+    def get_to_user_data(self, obj: GroupChatRequest) -> dict:
         return UserSerializer(obj.to_user).data
 
-    def get_from_user_data(self, obj: ChatRequest) -> dict:
+    def get_from_user_data(self, obj: GroupChatRequest) -> dict:
         return UserSerializer(obj.from_user).data
 
 
@@ -215,9 +215,9 @@ class GroupChatMembersSerializer(ModelSerializer):
                   ]
 
 
-class ChatRequestSerializer(ModelSerializer):
+class GroupChatRequestSerializer(ModelSerializer):
     class Meta:
-        model = ChatRequest
+        model = GroupChatRequest
         fields = "__all__"
 
 

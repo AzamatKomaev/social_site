@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import { useSelector } from 'react-redux';
 
 import SettingMenu from './SettingMenu';
@@ -7,7 +7,7 @@ import AddFriendTab from '../tab/AddFriendTab';
 
 
 const SettingWindow = (props: any) => {
-    const currentUserData = useSelector(state => state.user)
+    const currentUserData = useSelector((state: any) => state.user)
 
     if (props.chatData && currentUserData.info) {
         return (

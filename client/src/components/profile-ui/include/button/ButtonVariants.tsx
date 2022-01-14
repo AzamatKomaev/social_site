@@ -13,8 +13,8 @@ import { fetchUserData } from '../../../../store/user/actions';
 
 
 const ButtonVariants = (props: any) => {
-    const friendRequest = useSelector(state => state.friend)
-    const currentUserData = useSelector(state => state.user)
+    const friendRequest = useSelector((state: any) => state.friendRequest)
+    const currentUserData = useSelector((state: any) => state.user)
     const dispatch = useDispatch()
 
 

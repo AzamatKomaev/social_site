@@ -1,11 +1,11 @@
 import React, { useState, useEffect, useRef } from 'react';
+import { useSelector } from 'react-redux';
 import axios from 'axios';
 
 import Header from '../extend/Header';
 import Error404NotFound from '../extend/Error404NotFound';
 
 import MessageChatWindow from './include/message/MessageChatWindow';
-import { getCurrentUserData } from '../../services/service';
 
 
 interface personalChatDataI {
@@ -47,7 +47,7 @@ const getPersonalChatMessages = async(username: string, pageNumber: number) => {
         }
     })
         .then((response) => {
-            if (response.status != 204) {
+            if (response.status !== 204) {
                 data.messages = response.data
             } else {
                 data.error = true
@@ -64,8 +64,7 @@ const getPersonalChatMessages = async(username: string, pageNumber: number) => {
 const PersonalMessageChatPage = (props: any) => {
     const interlocutorUsername = props.match.params.username
 
-    const [isAuth, setIsAuth] = useState<boolean | null>()
-    const [currentUserData, setCurrentUserData] = useState()
+    const userData = useSelector((state: any) => state.user)
 
     const [messages, setMessages] = useState([])
     const [chat, setChat] = useState<any>()
@@ -87,14 +86,6 @@ const PersonalMessageChatPage = (props: any) => {
             chatHistory.scrollTop = chatHistory.scrollHeight;
         }
     }
-
-    useEffect(() => {
-        getCurrentUserData()
-            .then((result) => {
-                setIsAuth(result.isAuth)
-                setCurrentUserData(result.info)
-            })
-    }, [])
 
     useEffect(() => {
         getPersonalChat(interlocutorUsername)
@@ -135,7 +126,7 @@ const PersonalMessageChatPage = (props: any) => {
     }
 
 
-    if (!isAuth || error) {
+    if (!userData.isAuth || error) {
         return (
             <div>
                 <Header/>
@@ -152,7 +143,6 @@ const PersonalMessageChatPage = (props: any) => {
                     newMessages={newMessages}
                     chat={chat}
                     ws={ws.current}
-                    currentUserData={currentUserData}
                     scrollHandler={scrollHandler}
                  />
             </div>

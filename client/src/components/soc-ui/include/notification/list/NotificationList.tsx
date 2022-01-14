@@ -6,7 +6,7 @@ import ChatNotificationCell from '../cell/ChatNotificationCell';
 
 
 const NotificationList = (props: any) => {
-    const friendRequest = useSelector(state => state.friend)
+    const friendRequest = useSelector((state: any) => state.friendRequest)
 
     if (props.type === "friend") {
         return (

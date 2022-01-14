@@ -1,55 +1,29 @@
 import React, { useState, useEffect } from 'react';
-import { useSelector } from 'react-redux'
-import axios from 'axios';
+import {useDispatch, useSelector} from 'react-redux'
 
 import FriendList from '../friend/FriendList';
+import {fetchGettingAllUserFriends} from "../../../../store/friend/actions";
 
 
-interface friendsDataI {
-    friends: Array<any>,
-    error: number | null
-}
-
-const getFriends = async(userId: number) => {
-    let data: friendsDataI = {
-        friends: [],
-        error: null
-    }
-
-    await axios.get("http://127.0.0.1:8000/api/v1/user/find/" + userId + "/friends/")
-        .then((response) => {
-            data.friends = response.data;
-        })
-        .catch((err) => {
-            data.error = err.response.status;
-        })
-
-    return data;
-}
 
 
 const AddFriendTab = (props: any) => {
-    const [friendsData, setFriendsData] = useState({
-        list: [],
-        error: null
-    })
-    const currentUserData = useSelector(state => state.user)
+    const dispatch = useDispatch()
 
+    const currentUserData = useSelector((state: any) => state.user)
+    const friendListData = useSelector((state: any) => state.friendList)
 
     useEffect(() => {
-        getFriends(currentUserData.info.id)
-            .then((result) => {
-                setFriendsData({
-                    list: result.friends,
-                    error: result.error
-                })
-            })
-    }, [])
+        if (currentUserData.isAuth) {
+            dispatch(fetchGettingAllUserFriends(currentUserData.info.id))
+        }
+    }, [dispatch, currentUserData])
 
-    if (friendsData.list.length > 0 && !friendsData.error && currentUserData.info) {
+
+    if (friendListData.list.length > 0 && currentUserData.isAuth) {
         return (
             <div className="tab-pane fade" id="friend-tab" role="tabpanel" aria-labelledby="nav-home-tab">
-                <FriendList friends={friendsData.list}/>
+                <FriendList chatData={props.chatData}/>
             </div>
         )
     } else {

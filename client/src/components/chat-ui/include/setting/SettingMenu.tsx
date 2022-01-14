@@ -4,7 +4,6 @@ import React from 'react';
 
 
 const SettingMenu = (props: any) => {
-    console.log("PEDIC")
 
     return (
         <div>

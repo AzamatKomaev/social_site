@@ -6,7 +6,6 @@ import { fetchGettingFriendRequest } from '../../store/friend/actions';
 
 import Header from '../extend/Header';
 import Error404NotFound from '../extend/Error404NotFound';
-import PostList from '../soc-ui/include/post/PostList';
 
 import SwitchMenu from './include/menu/SwitchMenu';
 import InfoTab from './include/tab/InfoTab';
@@ -23,7 +22,6 @@ const UserPage = (props) => {
     useEffect(() => {
         if (user) {
             dispatch(fetchGettingFriendRequest(user.id))
-            console.log('I WAS WORKING!!')
         }
     }, [dispatch, user])
 

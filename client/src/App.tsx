@@ -29,6 +29,7 @@ import ChatSettingPage from './components/chat-ui/ChatSettingPage';
 import GroupMessageChatPage from './components/chat-ui/GroupMessageChatPage';
 
 import UserPage from './components/profile-ui/UserPage';
+import FriendListUser from "./components/profile-ui/FriendListUser";
 
 
 const App = (props: any) => {
@@ -55,6 +56,7 @@ const App = (props: any) => {
                 <Route exact path='/auth/accept/:token/' component={AcceptAccountPage} />
 
                 <Route exact path='/users/:username' component={UserPage} />
+                <Route exact path='/users/:username/friends/' component={FriendListUser}/>
 
                 <Route exact path='/chats/' component={ChatListPage}/>
                 <Route exact path='/chats/:chatId/' component={GroupMessageChatPage}/>

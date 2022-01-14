@@ -13,12 +13,11 @@ from soc.models import (
     GroupChat,
     PersonalChat,
     Post,
-    FriendRequest,
-    ChatRequest
+    FriendRequest
 )
 from server.settings import EMAIL_HOST_USER
 
-from soc.models import ChatRequest
+from soc.models import GroupChatRequest
 
 
 class CreationUser:
@@ -225,7 +224,7 @@ class FriendRequestService:
 
         return None
 
-    def get_current_friend_requests(self) -> QuerySet[ChatRequest]:
+    def get_current_friend_requests(self) -> QuerySet[GroupChatRequest]:
         """
         Method to get current friend request, filtering FriendRequest by user_id=user_id and accepted=False.
         """
@@ -298,18 +297,41 @@ class FriendRequestService:
         return friend_request
 
 
-class ChatRequestService:
+class GroupChatRequestService:
     chat: GroupChat
 
     def __init__(self, chat_id: int):
         self.chat = get_object_or_404(GroupChat, id=chat_id)
 
-    def get_chat_request(self, user_id: int) -> Optional[ChatRequest]:
+    def get_chat_request(self, user_id: int) -> Optional[GroupChatRequest]:
         """Method to get chat request."""
         user = get_object_or_404(User, id=user_id)
-        chat_request = ChatRequest.objects.filter(chat=self.chat, user=user)
+
+        chat_request = GroupChatRequest.objects.filter(chat=self.chat, user=user)
 
         if not chat_request.exists():
             return None
 
         return chat_request.first()
+
+    def get_all_chat_requests(self, is_accepted: Optional[bool] = None) -> QuerySet[GroupChatRequest]:
+        chat_requests: QuerySet[GroupChatRequest]
+
+        if is_accepted is None:
+            chat_requests = GroupChatRequest.objects.filter(from_chat=self.chat)
+        else:
+            chat_requests = GroupChatRequest.objects.filter(from_chat=self.chat, is_accepted=is_accepted)
+
+        return chat_requests
+
+    def create_chat_request(self, user_id: int) -> bool:
+        user = get_object_or_404(User, id=user_id)
+        new_chat_request = GroupChat.objects.create(
+            to_user=user,
+            from_chat=self.chat
+        )
+        return bool(new_chat_request)
+
+    def is_user_admin(self, user: User) -> bool:
+        return user == self.chat.creator
+

@@ -8,19 +8,22 @@ const CardUserCells = (props: any) => {
             name: "Друзья",
             value: props.friends.length,
             width: "120px",
-            marginLeft: "0px"
+            marginLeft: "0px",
+            href: "/users/" + props.user.username + "/friends/"
         },
         {
             name: "Публикаций",
             value: props.posts.length,
             width: "120px",
-            marginLeft: "20px"
+            marginLeft: "20px",
+            href: "#"
         },
         {
             name: "Комментарий",
             value: props.commentList.length,
             width: "130px",
-            marginLeft: "20px"
+            marginLeft: "20px",
+            href: "#"
         }
     ]
 
@@ -40,7 +43,7 @@ const CardUserCells = (props: any) => {
                                         textAlign: "center"
                                    }}>
                 {cells.map((cell) => (
-                     <div>
+                    <a href={cell.href} className="text-dark" style={{textDecoration: "none"}}>
                          <div className="p-2 card d-none d-lg-block" style={{height: "80%", width: cell.width, marginLeft: cell.marginLeft}}>
                              <b>{cell.name}</b>
                              <p style={{fontSize: "35pt"}}>{cell.value}</p>
@@ -50,7 +53,7 @@ const CardUserCells = (props: any) => {
                              <b>{cell.name}</b>
                              <p style={{fontSize: "35pt"}}>{cell.value}</p>
                          </div>
-                     </div>
+                    </a>
                 ))}
             </div>
         </div>

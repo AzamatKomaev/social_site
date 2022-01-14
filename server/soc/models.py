@@ -14,12 +14,20 @@ class User(AbstractUser):
 	friends = models.ManyToManyField("User", blank=True)
 
 
-class FriendRequest(models.Model):
-	from_user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="from_user")
-	to_user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="to_user")
+class BaseMessage(PolymorphicModel):
+	text = models.TextField()
+	created_at = models.DateTimeField(auto_now_add=True)
+
+
+class BaseRequest(PolymorphicModel):
+	to_user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="to_user", default=None)
 	is_accepted = models.BooleanField(default=False)
 	created_at = models.DateTimeField(auto_now_add=True)
 	changed_at = models.DateTimeField(auto_now=True)
+
+
+class FriendRequest(BaseRequest):
+	from_user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="from_user")
 
 	class Meta:
 		verbose_name = "Заявка в друзья"
@@ -28,6 +36,18 @@ class FriendRequest(models.Model):
 
 	def __str__(self):
 		return f"From {self.from_user} to {self.to_user}"
+
+
+class GroupChatRequest(BaseRequest):
+	from_chat = models.ForeignKey("GroupChat", on_delete=models.CASCADE, related_name="from_chat")
+
+	class Meta:
+		verbose_name = "Приглашение в чат"
+		verbose_name_plural = "Приглашения в чат"
+		ordering = ("-created_at",)
+
+	def __str__(self):
+		return f"From {self.from_chat} chat to {self.to_user}"
 
 
 class Category(models.Model):
@@ -119,21 +139,6 @@ class GroupChat(models.Model):
 		verbose_name_plural = "Чаты"
 
 
-class ChatRequest(models.Model):
-	user = models.ForeignKey(User, on_delete=models.CASCADE)
-	chat = models.ForeignKey(GroupChat, on_delete=models.CASCADE)
-	is_accepted = models.BooleanField(default=False)
-	created_at = models.DateTimeField(auto_now_add=True)
-	changed_at = models.DateTimeField(auto_now=True)
-
-	class Meta:
-		verbose_name = "Приглашение в чат"
-		verbose_name_plural = "Приглашения в чат"
-
-	def __str__(self):
-		return f"Request from {self.chat} chat to {self.user} user."
-
-
 class Message(models.Model):
 	text = models.TextField()
 	created_at = models.DateTimeField(auto_now_add=True)
@@ -173,14 +178,9 @@ class PersonalChat(models.Model):
 		return str(self.id)
 
 
-class PolymorphicMessage(PolymorphicModel):
-	text = models.TextField()
-	created_at = models.DateTimeField(auto_now_add=True)
-	user = models.ForeignKey(User, on_delete=models.CASCADE, default=None)
-
-
-class GroupMessage(PolymorphicMessage):
+class GroupMessage(BaseMessage):
 	chat = models.ForeignKey(GroupChat, on_delete=models.CASCADE, default=None)
+	user = models.ForeignKey(User, on_delete=models.CASCADE, default=None)
 
 	def __str__(self):
 		return self.text
@@ -191,8 +191,9 @@ class GroupMessage(PolymorphicMessage):
 		ordering = ('-created_at',)
 
 
-class PersonalMessage(PolymorphicMessage):
+class PersonalMessage(BaseMessage):
 	chat = models.ForeignKey(PersonalChat, on_delete=models.CASCADE, default=None)
+	user = models.ForeignKey(User, on_delete=models.CASCADE, default=None)
 
 	def __str__(self):
 		return self.text

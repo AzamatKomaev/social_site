@@ -1,7 +1,6 @@
 from jwt import decode as jwt_decode
 from typing import Union
 
-from channels.auth import AuthMiddlewareStack
 from channels.db import database_sync_to_async, close_old_connections
 
 from django.contrib.auth.models import AnonymousUser
@@ -12,8 +11,7 @@ from rest_framework_simplejwt.tokens import UntypedToken
 from rest_framework_simplejwt.exceptions import InvalidToken, TokenError
 from rest_framework import exceptions
 
-from soc.models import User, GroupChat
-from soc.api.services import GroupChatService
+from soc.models import User
 
 
 @database_sync_to_async

@@ -22,7 +22,7 @@ const acceptAccount = async(token: string, isAuth: boolean) => {
         })
         .catch((error) => {
             accepted = false
-            if (error.response.status == 404) {
+            if (error.response.status === 404) {
                 alert("Token doesnt exists")
             } else {
                 alert(error.response.status + " error")
@@ -34,7 +34,7 @@ const acceptAccount = async(token: string, isAuth: boolean) => {
 
 const AcceptAccountPage = (props: any) => {
     const [accepted, setAccepted] = useState(false)
-    const userData = useSelector(state => state.user)
+    const userData = useSelector((state: any) => state.user)
 
     const token: string = props.match.params.token;
 

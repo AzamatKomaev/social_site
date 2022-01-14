@@ -8,24 +8,7 @@ import MessageInput from './MessageInput';
 import ChatHeader from '../chat/ChatHeader';
 import ChatUserList from '../user/ChatUserList';
 
-
-const getChatMembers = async(chatId) => {
-    let members = []
-
-    await axios.get("http://127.0.0.1:8000/api/v1/chats/" + chatId + "/members/", {
-        headers: {
-            Authorization: 'Bearer ' + localStorage.getItem("jwt")
-        }
-    })
-        .then((response) => {
-            members = response.data
-        })
-        .catch((error) => {
-            console.error(error)
-        })
-
-    return members
-}
+import {getChatMembers} from "../../../../services/chatSerivce";
 
 
 const MessageChatWindow = (props) => {

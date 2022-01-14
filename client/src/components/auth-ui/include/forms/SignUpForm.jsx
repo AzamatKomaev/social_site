@@ -34,7 +34,7 @@ const SignUpForm = () => {
                 window.location.href = "http://127.0.0.1:8000/auth/login/";
             })
             .catch(err => {
-                if (err.response.status == 400) {
+                if (err.response.status === 400) {
                     setErrorReg(err.response.data)
                 } else {
                     alert(err.response.status + " error")

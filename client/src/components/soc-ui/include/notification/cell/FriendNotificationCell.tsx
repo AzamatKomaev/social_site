@@ -11,7 +11,7 @@ import {
 const FriendNotificationCell = (props: any) => {
     const fromUserData = props.notification.from_user;
     const dispatch = useDispatch()
-    const friendRequest = useSelector(state => state.friend)
+    const friendRequest = useSelector((state: any) => state.friendRequest)
 
     const handleAcceptFriendRequest = () => {
         dispatch(fetchPatchingFriendRequest(fromUserData.id, 1))
@@ -62,14 +62,14 @@ const FriendNotificationCell = (props: any) => {
                     </div>
                 </div>
                 <div className="d-none d-block d-sm-none" style={{marginTop: "10px"}}>
-                    <center>
+                    <div style={{textAlign: "center"}}>
                         <button className="btn btn-primary" style={{width: "75%"}} onClick={handleAcceptFriendRequest}>
                             Принять
                         </button>
                         <button className="btn btn-warning" style={{width: "75%"}} onClick={handleDeleteFriendRequest}>
                             Отклонить
                         </button>
-                    </center>
+                    </div>
                 </div>
             </div>
         </div>
