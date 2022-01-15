@@ -1,7 +1,14 @@
-import {getAllChatRequest, getChatMembers} from "../../services/chatSerivce";
-import {CHECK_IS_REQUEST_EXISTS, GET_ALL_CHAT_MEMBERS, GET_ALL_CHAT_REQUESTS, GET_REQUEST} from "./actionTypes";
+import {createRequest, deleteRequest, getAllChatRequest, getChatMembers, getRequest} from "../../services/chatSerivce";
+import {
+    CHECK_IS_REQUEST_EXISTS,
+    CREATE_REQUEST, DELETE_REQUEST,
+    GET_ALL_CHAT_MEMBERS,
+    GET_ALL_CHAT_REQUESTS,
+    GET_REQUEST
+} from "./actionTypes";
 import axios from "axios";
 import {GroupChatRequestI} from "../../interfaces";
+import {DELETE_FRIEND_REQUEST} from "../friend/actionTypes";
 
 
 export const fetchGettingAllChatMembers = (chatId: number) => {
@@ -51,5 +58,38 @@ export const setIsRequestExists = (requestList: Array<GroupChatRequestI>, userId
                 }
             }
         })
+    }
+}
+
+export const fetchCreatingRequest = (chatId: number, userId: number) => {
+    return function (dispatch) {
+        createRequest(chatId, userId)
+            .then((result) => {
+                dispatch({
+                    type: CREATE_REQUEST,
+                    payload: {
+                        newRequest: result
+                    }
+                })
+            })
+    }
+}
+
+export const fetchDeletingRequest = (chatId: number, userId: number) => {
+    return function (dispatch) {
+        let request: GroupChatRequestI
+
+        getRequest(chatId, userId)
+            .then((result) => {
+                deleteRequest(chatId, userId)
+                    .then((status) => {
+                        dispatch({
+                            type: DELETE_REQUEST,
+                            payload: {
+                                deletingRequestId: result.id
+                            }
+                        })
+                    })
+            })
     }
 }

@@ -3,18 +3,14 @@ import Friend from './Friend';
 import {useSelector} from "react-redux";
 
 
-const FriendList = () => {
+const FriendList = (props) => {
     const friendListData = useSelector((state: any) => state.friendList)
     const chatRed = useSelector((state: any) => state.requestList)
-
-    useEffect(() => {
-        console.log(chatRed)
-    }, [])
 
     return (
         <div className="container" style={{padding: "10px"}}>
             {friendListData.list.map((friend) => (
-                <Friend friendData={friend}/>
+                <Friend friendData={friend} chatData={props.chatData}/>
             ))}
         </div>
     )

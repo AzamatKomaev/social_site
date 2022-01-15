@@ -1,5 +1,5 @@
 import {
-    CHECK_IS_REQUEST_EXISTS,
+    CHECK_IS_REQUEST_EXISTS, CREATE_REQUEST, DELETE_REQUEST,
     GET_ALL_CHAT_MEMBERS,
     GET_ALL_CHAT_REQUESTS, GET_REQUEST
 } from "./actionTypes";
@@ -13,18 +13,16 @@ interface RequestState {
 
 interface RequestListState {
     requestList: Array<GroupChatRequestI>,
+    newRequest: GroupChatRequestI,
+    deletingRequestId: number,
     requestListState: Array<RequestState>
     members: any
 }
 
-interface RequestDetailState {
-    request: GroupChatRequestI | null,
-    isUserMember: boolean,
-    isRequestSent: boolean
-}
-
 const defaultRequestListState: RequestListState = {
     requestList: [],
+    newRequest: null,
+    deletingRequestId: null,
     requestListState: [],
     members: []
 }
@@ -35,6 +33,11 @@ export const requestListReducer = (state: RequestListState = defaultRequestListS
             return {...state, ...action.payload}
         case GET_ALL_CHAT_MEMBERS:
             return {...state, ...action.payload}
+        case CREATE_REQUEST:
+            return {...state, ...action.payload, requestList: [...state.requestList, action.payload.newRequest]}
+        case DELETE_REQUEST:
+            let requestListWithoutDeletedRequest = state.requestList.filter(request => request.id !== action.payload.deletingRequestId)
+            return {...state, ...action.payload, requestList: requestListWithoutDeletedRequest}
         default:
             return state
     }

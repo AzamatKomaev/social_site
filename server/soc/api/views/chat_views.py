@@ -200,7 +200,7 @@ class GroupChatRequestViewSet(viewsets.ViewSet):
                 "status_code": status.HTTP_400_BAD_REQUEST
             }
 
-    def list_false_accepted_requests(self, request, chat_id: int):
+    def list_requests(self, request, chat_id: int):
         group_chat_request_service = GroupChatRequestService(chat_id)
 
         possible_error = self.check_possible_errors(
@@ -213,8 +213,19 @@ class GroupChatRequestViewSet(viewsets.ViewSet):
         if possible_error:
             return Response({"message": possible_error['message']}, status=possible_error['status_code'])
 
-        all_chat_requests = group_chat_request_service.get_all_chat_requests(is_accepted=False)
+        all_chat_requests = group_chat_request_service.get_all_chat_requests()
         serializer = serializers.GroupChatRequestSerializer(all_chat_requests, many=True)
+        return Response(serializer.data)
+
+    def detail_request(self, request, chat_id: int, user_id: int):
+        group_chat_request_service = GroupChatRequestService(chat_id)
+        to_user = get_object_or_404(User, id=user_id)
+        request = group_chat_request_service.get_request_or_none(to_user)
+
+        if not request:
+            return Response({"message": "Not found: there is not so request"}, status=status.HTTP_404_NOT_FOUND)
+
+        serializer = serializers.GroupChatRequestSerializer(request)
         return Response(serializer.data)
 
     def create(self, request, chat_id: int, user_id: int):
@@ -233,3 +244,26 @@ class GroupChatRequestViewSet(viewsets.ViewSet):
         new_chat_request = group_chat_request_service.create_chat_request(user_id)
         serializer = serializers.GroupChatRequestSerializer(new_chat_request)
         return Response(serializer.data)
+
+    def update(self, request, chat_id: int):
+        group_chat_request_service = GroupChatRequestService(chat_id)  # request service
+        chat_request = group_chat_request_service.get_request_or_none(request.user)
+
+        if not chat_request:
+            return Response({
+                "message": "Not found: request does not exist."
+            }, status=status.HTTP_404_NOT_FOUND)
+
+        accepted_chat_request = group_chat_request_service.accept_chat_request(chat_request)
+        serializer = serializers.GroupChatRequestSerializer(accepted_chat_request)
+        return Response(serializer.data)
+
+    def destroy(self, request, chat_id: int, user_id: int):
+        group_chat_request_service = GroupChatRequestService(chat_id)
+
+        deleting_request_data = group_chat_request_service.delete_chat_request(request.user, user_id)
+
+        if not deleting_request_data['is_deleted']:
+            return Response({"message": deleting_request_data['message']}, status=deleting_request_data['status'])
+
+        return Response({"message": "The chat request was deleted successfully!"}, status.HTTP_204_NO_CONTENT)

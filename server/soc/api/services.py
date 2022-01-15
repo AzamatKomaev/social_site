@@ -1,11 +1,12 @@
 import random
 import string
-from typing import Union, Optional
+from typing import Union, Optional, Dict
 
 from django.contrib.auth.models import Group
 from django.core.mail import send_mail
 from django.db.models import QuerySet
 from django.shortcuts import get_object_or_404
+from rest_framework import status
 
 from soc.models import AcceptAuthToken
 from soc.models import (
@@ -267,7 +268,6 @@ class FriendRequestService:
     def delete_friend_request(self, second_user: User) -> bool:
         """Method for deleting friend request."""
         if not self.is_friend_request_exists(second_user):
-            print('IM HERE 1')
             return False
 
         friend_request = self.get_friend_request(self.user, second_user)
@@ -303,35 +303,61 @@ class GroupChatRequestService:
     def __init__(self, chat_id: int):
         self.chat = get_object_or_404(GroupChat, id=chat_id)
 
-    def get_chat_request(self, user_id: int) -> Optional[GroupChatRequest]:
-        """Method to get chat request."""
-        user = get_object_or_404(User, id=user_id)
-
-        chat_request = GroupChatRequest.objects.filter(chat=self.chat, user=user)
-
-        if not chat_request.exists():
-            return None
-
-        return chat_request.first()
-
-    def get_all_chat_requests(self, is_accepted: Optional[bool] = None) -> QuerySet[GroupChatRequest]:
-        chat_requests: QuerySet[GroupChatRequest]
-
-        if is_accepted is None:
-            chat_requests = GroupChatRequest.objects.filter(from_chat=self.chat)
-        else:
-            chat_requests = GroupChatRequest.objects.filter(from_chat=self.chat, is_accepted=is_accepted)
-
+    def get_all_chat_requests(self) -> QuerySet[GroupChatRequest]:
+        chat_requests = GroupChatRequest.objects.filter(from_chat=self.chat)
         return chat_requests
 
-    def create_chat_request(self, user_id: int) -> bool:
+    def create_chat_request(self, user_id: int) -> GroupChat:
         user = get_object_or_404(User, id=user_id)
-        new_chat_request = GroupChat.objects.create(
+        new_chat_request = GroupChatRequest.objects.create(
             to_user=user,
             from_chat=self.chat
         )
-        return bool(new_chat_request)
+        return new_chat_request
 
     def is_user_admin(self, user: User) -> bool:
         return user == self.chat.creator
 
+    def get_request_or_none(self, user: User) -> Optional[GroupChatRequest]:
+        return GroupChatRequest.objects.filter(
+            to_user=user,
+            from_chat=self.chat,
+            is_accepted=False
+        ).first()
+
+    @staticmethod
+    def get_request_by_id(self, request_id: int) -> Optional[GroupChatRequest]:
+        return GroupChatRequest.objects.filter(id=request_id).first()
+
+    def accept_chat_request(self, chat_request: GroupChatRequest) -> GroupChatRequest:
+        """Method to accept a chat request."""
+        chat_request.is_accepted = True
+        chat_request.save()
+        return chat_request
+
+    def _delete_friend_request(self, chat_request: GroupChatRequest) -> bool:
+        return bool(chat_request.delete())
+
+    def delete_chat_request(self, request_user: User, user_id: int) -> dict:
+        to_user = get_object_or_404(User, id=user_id)
+        chat_request = self.get_request_or_none(to_user)
+
+        if not chat_request:
+            return {
+                "is_deleted": False,
+                "message": "Not found. Chat request doesnt exists.",
+                "status": status.HTTP_404_NOT_FOUND
+            }
+
+        if request_user == chat_request.to_user or request_user == chat_request.from_chat.creator:
+            return {
+                "is_deleted": self._delete_friend_request(chat_request),
+                "message": "Success",
+                "status": status.HTTP_204_NO_CONTENT
+            }
+
+        return {
+            "is_deleted": False,
+            "message": "Bad request",
+            "status": status.HTTP_400_BAD_REQUEST
+        }
