@@ -3,7 +3,8 @@ import requests
 
 from django.test import TestCase
 
-from soc.models import User, GroupChat
+from soc.models import User
+from soc.models_dir import group_chat as group_chat_models
 
 
 class GroupChatTestCase(TestCase):
@@ -27,7 +28,7 @@ class GroupChatTestCase(TestCase):
         return users
 
     def create_few_chats(self, creator: User) -> list:
-        chats = [GroupChat.objects.create(
+        chats = [group_chat_models.GroupChat.objects.create(
             name=self.generate_name(),
             creator=creator,
         ) for _ in range(0, 10)]

@@ -77,8 +77,6 @@ export const fetchCreatingRequest = (chatId: number, userId: number) => {
 
 export const fetchDeletingRequest = (chatId: number, userId: number) => {
     return function (dispatch) {
-        let request: GroupChatRequestI
-
         getRequest(chatId, userId)
             .then((result) => {
                 deleteRequest(chatId, userId)

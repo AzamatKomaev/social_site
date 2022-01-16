@@ -1,29 +1,23 @@
 from jwt import decode as jwt_decode
 import json
-from typing import Union
+from typing import Union, Optional
 
 from asgiref.sync import sync_to_async
 from django.core.exceptions import ObjectDoesNotExist
-from django.contrib.auth.models import AnonymousUser
-from django.conf import settings
-from django.shortcuts import get_object_or_404
 
 from rest_framework.exceptions import PermissionDenied
-from rest_framework_simplejwt.tokens import UntypedToken
-from rest_framework_simplejwt.exceptions import InvalidToken, TokenError
-
 from channels.generic.websocket import AsyncWebsocketConsumer
-from channels.db import database_sync_to_async
 
-from . import serializers
-from soc.models import GroupChat, GroupMessage, User
+from soc.models import User
+from soc.models_dir import group_chat as group_chat_models
+from soc.models_dir import personal_chat as personal_chat_models
 from soc.api.services import GroupChatService, PersonalChatService
 
 
 class GroupChatConsumer(AsyncWebsocketConsumer):
     @sync_to_async
-    def get_chat(self, chat_id: int) -> Union[None or GroupChat]:
-        return GroupChat.objects.filter(id=chat_id).first()
+    def get_chat(self, chat_id: int) -> Optional[group_chat_models.GroupChat]:
+        return group_chat_models.GroupChat.objects.filter(id=chat_id).first()
 
     async def connect(self):
         chat_id = self.scope['url_route']['kwargs']['chat_id']
@@ -65,7 +59,11 @@ class GroupChatConsumer(AsyncWebsocketConsumer):
 
 class PersonalChatConsumer(AsyncWebsocketConsumer):
     @sync_to_async
-    def get_personal_chat(self, from_user_username: str, to_user_username: str) -> Union[GroupChat or None]:
+    def get_personal_chat(
+                self,
+                from_user_username: str,
+                to_user_username: str
+            ) -> Optional[personal_chat_models.PersonalChat]:
         chat_service = PersonalChatService(from_user_username=from_user_username, to_user_username=to_user_username)
         if not chat_service.is_chat_exists():
             return None

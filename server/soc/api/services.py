@@ -8,17 +8,16 @@ from django.db.models import QuerySet
 from django.shortcuts import get_object_or_404
 from rest_framework import status
 
-from soc.models import AcceptAuthToken
-from soc.models import (
-    User,
-    GroupChat,
-    PersonalChat,
-    Post,
-    FriendRequest
+from soc.models import User
+from soc.models_dir import (
+    user as user_models,
+    content as content_models,
+    group_chat as group_chat_models,
+    personal_chat as personal_chat_models,
+    friend as friend_models
 )
-from server.settings import EMAIL_HOST_USER
 
-from soc.models import GroupChatRequest
+from server.settings import EMAIL_HOST_USER
 
 
 class CreationUser:
@@ -39,7 +38,7 @@ class CreationUser:
 
     def _insert_token_in_table(self) -> None:
         """Method to add token in table."""
-        AcceptAuthToken.objects.create(token=self.token, user_id=self.user.id)
+        user_models.AcceptAuthToken.objects.create(token=self.token, user_id=self.user.id)
 
     def check_form_on_uniqueness(self) -> list:
         """Method to check email and login on uniqueness."""
@@ -89,7 +88,7 @@ class CreationUser:
         """
         Static method to accept user by token, sent him by email. If token is valid we do is_active = True and delete token.
         """
-        token_from_db = AcceptAuthToken.objects.get(token=token)
+        token_from_db = user_models.AcceptAuthToken.objects.get(token=token)
         user = User.objects.get(id=token_from_db.user_id)
         user.is_active = True
         user.save()
@@ -97,9 +96,9 @@ class CreationUser:
 
 
 class GroupChatService:
-    chat: GroupChat
+    chat: group_chat_models.GroupChat
 
-    def __init__(self, chat: GroupChat):
+    def __init__(self, chat: group_chat_models.GroupChat):
         self.chat = chat
 
     def get_chat_messages(self) -> QuerySet:
@@ -127,18 +126,18 @@ class PersonalChatService:
 
     def create(self) -> None:
         """Method to create personal chat among two users"""
-        chat = PersonalChat.objects.create()
+        chat = personal_chat_models.PersonalChat.objects.create()
         chat.users.add(self.from_user, self.to_user)
 
     @staticmethod
-    def get_interlocutor(personal_chat: PersonalChat, user: User) -> User:
+    def get_interlocutor(personal_chat: personal_chat_models.PersonalChat, user: User) -> User:
         """Method to get interlocutor of personal chat."""
         members_of_personal_chat = personal_chat.users.all()
         return members_of_personal_chat.exclude(username=user.username).get()
 
     def get_chat_with_both_users(self):
         """Method to get chat with both users."""
-        return PersonalChat.objects.filter(users=self.from_user).filter(users=self.to_user).first()
+        return personal_chat_models.PersonalChat.objects.filter(users=self.from_user).filter(users=self.to_user).first()
 
     def get_messages(self):
         """Method to get messages in chat with both users."""
@@ -172,7 +171,7 @@ class UserService:
 
     def get_user_posts(self) -> QuerySet:
         """Method to get user posts."""
-        return Post.objects.filter(user_id=self.user.id)
+        return content_models.Post.objects.filter(user_id=self.user.id)
 
     def get_user_friends(self) -> QuerySet:
         """Method to get all user friends."""
@@ -190,7 +189,7 @@ class FriendRequestService:
         self.user = user
 
     @staticmethod
-    def _add_both_users_in_each_other_friends_list(friend_request: FriendRequest) -> bool:
+    def _add_both_users_in_each_other_friends_list(friend_request: friend_models.FriendRequest) -> bool:
         """
         Protected static method for adding both users in friends list of each other.
         """
@@ -201,7 +200,7 @@ class FriendRequestService:
         return bool(from_user and to_user)
 
     @staticmethod
-    def _remove_both_users_from_each_other_friend_list(friend_request: FriendRequest) -> None:
+    def _remove_both_users_from_each_other_friend_list(friend_request: friend_models.FriendRequest) -> None:
         """
         Protected static method for removing both users from each other friend lists.
         """
@@ -211,11 +210,11 @@ class FriendRequestService:
         to_user.friends.remove(from_user)
 
     @staticmethod
-    def get_friend_request(first_user: User, second_user: User) -> Optional[FriendRequest]:
+    def get_friend_request(first_user: User, second_user: User) -> Optional[friend_models.FriendRequest]:
         """Method to get friend request by two users. If friend requests was not found, it will be return None."""
         friends_requests = {
-            "first": FriendRequest.objects.filter(from_user=first_user, to_user=second_user),
-            "second": FriendRequest.objects.filter(from_user=second_user, to_user=first_user)
+            "first": friend_models.FriendRequest.objects.filter(from_user=first_user, to_user=second_user),
+            "second": friend_models.FriendRequest.objects.filter(from_user=second_user, to_user=first_user)
         }
 
         if friends_requests['first'].exists():
@@ -225,11 +224,11 @@ class FriendRequestService:
 
         return None
 
-    def get_current_friend_requests(self) -> QuerySet[GroupChatRequest]:
+    def get_current_friend_requests(self) -> QuerySet[group_chat_models.GroupChatRequest]:
         """
         Method to get current friend request, filtering FriendRequest by user_id=user_id and accepted=False.
         """
-        chat_requests = FriendRequest.objects.filter(
+        chat_requests = friend_models.FriendRequest.objects.filter(
             to_user=self.user,
             is_accepted=False
         )
@@ -238,9 +237,9 @@ class FriendRequestService:
     def is_friend_request_exists(self, second_user: User) -> bool:
         """Method to check is friend request exists with the user."""
         return bool(
-            FriendRequest.objects.filter(to_user=self.user, from_user=second_user).exists()
+            friend_models.FriendRequest.objects.filter(to_user=self.user, from_user=second_user).exists()
             or
-            FriendRequest.objects.filter(to_user=second_user, from_user=self.user).exists()
+            friend_models.FriendRequest.objects.filter(to_user=second_user, from_user=self.user).exists()
         )
 
     def create_friend_request(self, to_user_id: int) -> dict:
@@ -259,7 +258,7 @@ class FriendRequestService:
             data["error"] = "Friend request already exists"
             return data
 
-        data["instance"] = FriendRequest.objects.create(
+        data["instance"] = friend_models.FriendRequest.objects.create(
             from_user=self.user,
             to_user=to_user,
         )
@@ -278,7 +277,7 @@ class FriendRequestService:
         self._remove_both_users_from_each_other_friend_list(friend_request)
         return bool(friend_request.delete())
 
-    def accept_friend_request(self, second_user: User, is_accepted: bool) -> Optional[FriendRequest]:
+    def accept_friend_request(self, second_user: User, is_accepted: bool) -> Optional[friend_models.FriendRequest]:
         """Method for accepting friend request making is_accepted True or False."""
         if not self.is_friend_request_exists(second_user):
             return
@@ -298,18 +297,18 @@ class FriendRequestService:
 
 
 class GroupChatRequestService:
-    chat: GroupChat
+    chat: group_chat_models.GroupChat
 
     def __init__(self, chat_id: int):
-        self.chat = get_object_or_404(GroupChat, id=chat_id)
+        self.chat = get_object_or_404(group_chat_models.GroupChat, id=chat_id)
 
-    def get_all_chat_requests(self) -> QuerySet[GroupChatRequest]:
-        chat_requests = GroupChatRequest.objects.filter(from_chat=self.chat)
+    def get_all_chat_requests(self) -> QuerySet[group_chat_models.GroupChatRequest]:
+        chat_requests = group_chat_models.GroupChatRequest.objects.filter(from_chat=self.chat)
         return chat_requests
 
-    def create_chat_request(self, user_id: int) -> GroupChat:
+    def create_chat_request(self, user_id: int) -> group_chat_models.GroupChat:
         user = get_object_or_404(User, id=user_id)
-        new_chat_request = GroupChatRequest.objects.create(
+        new_chat_request = group_chat_models.GroupChatRequest.objects.create(
             to_user=user,
             from_chat=self.chat
         )
@@ -318,24 +317,23 @@ class GroupChatRequestService:
     def is_user_admin(self, user: User) -> bool:
         return user == self.chat.creator
 
-    def get_request_or_none(self, user: User) -> Optional[GroupChatRequest]:
-        return GroupChatRequest.objects.filter(
+    def get_request_or_none(self, user: User) -> Optional[group_chat_models.GroupChatRequest]:
+        return group_chat_models.GroupChatRequest.objects.filter(
             to_user=user,
-            from_chat=self.chat,
-            is_accepted=False
+            from_chat=self.chat
         ).first()
 
     @staticmethod
-    def get_request_by_id(self, request_id: int) -> Optional[GroupChatRequest]:
-        return GroupChatRequest.objects.filter(id=request_id).first()
+    def get_request_by_id(self, request_id: int) -> Optional[group_chat_models.GroupChatRequest]:
+        return group_chat_models.GroupChatRequest.objects.filter(id=request_id).first()
 
-    def accept_chat_request(self, chat_request: GroupChatRequest) -> GroupChatRequest:
+    def accept_chat_request(self, chat_request: group_chat_models.GroupChatRequest) -> group_chat_models.GroupChatRequest:
         """Method to accept a chat request."""
         chat_request.is_accepted = True
         chat_request.save()
         return chat_request
 
-    def _delete_friend_request(self, chat_request: GroupChatRequest) -> bool:
+    def _delete_friend_request(self, chat_request: group_chat_models.GroupChatRequest) -> bool:
         return bool(chat_request.delete())
 
     def delete_chat_request(self, request_user: User, user_id: int) -> dict:

@@ -8,16 +8,12 @@ from django.core.exceptions import ObjectDoesNotExist
 from django.shortcuts import get_object_or_404
 
 from soc.api import serializers
-from soc.models import (
-    Category,
-    Post,
-    Comment
-)
+from soc.models_dir import content as content_models
 
 
 class CategoryListAPIView(APIView):
     def get(self, request) -> Response:
-        categories = Category.objects.all()
+        categories = content_models.Category.objects.all()
         serializer = serializers.CategorySerializer(categories, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
 
@@ -26,11 +22,11 @@ class PostViewSet(viewsets.ViewSet):
     permission_classes = [permissions.IsAuthenticatedOrReadOnly]
 
     def list(self, request, category_id: int):
-        category = get_object_or_404(Category, id=category_id)
+        category = get_object_or_404(content_models.Category, id=category_id)
         page_number = request.query_params.get('page_number') or 1
         page_size = 30
 
-        posts = Post.objects.filter(category=category)
+        posts = content_models.Post.objects.filter(category=category)
         paginator = Paginator(posts, page_size)
 
         try:
@@ -40,7 +36,7 @@ class PostViewSet(viewsets.ViewSet):
             return Response({}, status=status.HTTP_204_NO_CONTENT)
 
     def retrieve(self, request, post_id: int):
-        post = get_object_or_404(Post, id=post_id)
+        post = get_object_or_404(content_models.Post, id=post_id)
         serializer = serializers.PostSerializer(post)
         return Response(serializer.data, status=status.HTTP_200_OK)
 
@@ -61,7 +57,7 @@ class CommentViewSet(viewsets.ViewSet):
     permission_classes = [permissions.IsAuthenticatedOrReadOnly]
 
     def list(self, request, post_id: int):
-        comments = Comment.objects.filter(post_id=post_id)
+        comments = content_models.Comment.objects.filter(post_id=post_id)
         if not comments:
             return Response({}, status=status.HTTP_204_NO_CONTENT)
 
@@ -69,7 +65,7 @@ class CommentViewSet(viewsets.ViewSet):
         return Response(serializer.data, status=status.HTTP_200_OK)
 
     def retrieve(self, request, comment_id: int):
-        comment = get_object_or_404(Comment, id=comment_id)
+        comment = get_object_or_404(content_models.Comment, id=comment_id)
         serializer = serializers.CommentSerializer(comment)
         return Response(serializer.data, status=status.HTTP_200_OK)
 

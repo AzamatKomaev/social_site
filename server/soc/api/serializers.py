@@ -8,19 +8,14 @@ from rest_framework.serializers import (
 )
 
 from soc.api.services import CreationUser, PersonalChatService
-from soc.models import (
-    Post,
-    Category,
-    Comment,
-    Avatar,
-    GroupChat,
-    PersonalMessage,
-    PersonalChat,
-    GroupChatRole,
-    FriendRequest,
-    GroupChatRequest
+from soc.models import User
+from soc.models_dir import (
+    user as user_models,
+    content as content_models,
+    group_chat as group_chat_models,
+    personal_chat as personal_chat_models,
+    friend as friend_models
 )
-from soc.models import User, GroupMessage, GroupChatRequest
 
 
 class UserSerializer(ModelSerializer):
@@ -49,13 +44,13 @@ class FriendRequestSerializer(ModelSerializer):
     from_user = SerializerMethodField("get_from_user_data")
 
     class Meta:
-        model = FriendRequest
+        model = friend_models.FriendRequest
         fields = "__all__"
 
-    def get_to_user_data(self, obj: GroupChatRequest) -> dict:
+    def get_to_user_data(self, obj: group_chat_models.GroupChatRequest) -> dict:
         return UserSerializer(obj.to_user).data
 
-    def get_from_user_data(self, obj: GroupChatRequest) -> dict:
+    def get_from_user_data(self, obj: group_chat_models.GroupChatRequest) -> dict:
         return UserSerializer(obj.from_user).data
 
 
@@ -71,10 +66,10 @@ class CategorySerializer(ModelSerializer):
     count = SerializerMethodField('get_count_of_posts')
 
     class Meta:
-        model = Category
+        model = content_models.Category
         fields = '__all__'
 
-    def get_count_of_posts(self, obj) -> int:
+    def get_count_of_posts(self, obj: content_models.Category) -> int:
         return obj.post_set.all().count()
 
 
@@ -84,16 +79,16 @@ class PostSerializer(ModelSerializer):
     user_data = SerializerMethodField('get_data_about_user')
     comments = SerializerMethodField('get_comments')
 
-    def get_data_about_user(self, obj: Post) -> dict:
+    def get_data_about_user(self, obj: content_models.Post) -> dict:
         return UserSerializer(obj.user).data
 
-    def get_comments(self, obj: Post) -> list:
-        comments = Comment.objects.filter(post_id=obj.id)
+    def get_comments(self, obj: content_models.Post) -> list:
+        comments = content_models.Comment.objects.filter(post_id=obj.id)
         comments_list = [CommentSerializer(comment).data for comment in comments]
         return comments_list
 
     class Meta:
-        model = Post
+        model = content_models.Post
         fields = "__all__"
 
 
@@ -103,17 +98,17 @@ class CommentSerializer(ModelSerializer):
     user_data = SerializerMethodField("get_user_data")
     text = CharField()
 
-    def get_user_data(self, obj: Comment):
+    def get_user_data(self, obj: content_models.Comment):
         return UserSerializer(obj.user).data
 
     class Meta:
-        model = Comment
+        model = content_models.Comment
         fields = "__all__"
 
 
 class AvatarSerializer(ModelSerializer):
     class Meta:
-        model = Avatar
+        model = user_models.Avatar
         fields = ["image"]
 
 
@@ -135,10 +130,10 @@ class GroupChatSerializer(ModelSerializer):
     last_message = SerializerMethodField('get_last_message')
 
     class Meta:
-        model = GroupChat
+        model = group_chat_models.GroupChat
         fields = '__all__'
 
-    def get_last_message(self, obj: GroupChat) -> dict:
+    def get_last_message(self, obj: group_chat_models.GroupChat) -> dict:
         return GroupMessageSerializer(obj.groupmessage_set.all().first()).data
 
 
@@ -147,10 +142,10 @@ class GroupMessageSerializer(ModelSerializer):
     user_data = SerializerMethodField("get_user_data")
 
     class Meta:
-        model = GroupMessage
+        model = group_chat_models.GroupMessage
         fields = "__all__"
 
-    def get_user_data(self, obj: GroupMessage) -> dict:
+    def get_user_data(self, obj: group_chat_models.GroupMessage) -> dict:
         return UserSerializer(obj.user).data
 
 
@@ -159,10 +154,10 @@ class PersonalMessageSerializer(ModelSerializer):
     user_data = SerializerMethodField("get_user_data")
 
     class Meta:
-        model = PersonalMessage
+        model = personal_chat_models.PersonalMessage
         fields = "__all__"
 
-    def get_user_data(self, obj: PersonalMessage) -> dict:
+    def get_user_data(self, obj: personal_chat_models.PersonalMessage) -> dict:
         return UserSerializer(obj.user).data
 
 
@@ -173,19 +168,19 @@ class PersonalChatSerializer(ModelSerializer):
     messages_count = SerializerMethodField('get_messages_count')
 
     class Meta:
-        model = PersonalChat
+        model = personal_chat_models.PersonalChat
         fields = "__all__"
 
-    def get_last_message(self, obj: PersonalChat) -> dict:
+    def get_last_message(self, obj: personal_chat_models.PersonalChat) -> dict:
         return GroupMessageSerializer(obj.personalmessage_set.all().first()).data
 
-    def get_interlocutor(self, obj: PersonalChat) -> dict:
+    def get_interlocutor(self, obj: personal_chat_models.PersonalChat) -> dict:
         return UserSerializer(PersonalChatService.get_interlocutor(
             personal_chat=obj,
             user=self.context['request'].user
         )).data
 
-    def get_messages_count(self, obj: PersonalChat) -> int:
+    def get_messages_count(self, obj: personal_chat_models.PersonalChat) -> int:
         return len(obj.personalmessage_set.all())
 
 
@@ -193,21 +188,21 @@ class GroupChatRoleSerializer(ModelSerializer):
     user_data = SerializerMethodField("get_user_data")
 
     class Meta:
-        model = GroupChatRole
+        model = group_chat_models.GroupChatRole
         fields = "__all__"
 
-    def get_user_data(self, obj: GroupChatRole):
+    def get_user_data(self, obj: group_chat_models.GroupChatRole):
         return UserSerializer()
 
 
 class GroupChatMembersSerializer(ModelSerializer):
     user_data = SerializerMethodField('get_user_data')
 
-    def get_user_data(self, obj: GroupChatRole) -> dict:
+    def get_user_data(self, obj: group_chat_models.GroupChatRole) -> dict:
         return UserSerializer(obj.user).data
 
     class Meta:
-        model = GroupChatRole
+        model = group_chat_models.GroupChatRole
         fields = ["id",
                   "user_data",
                   "name",
@@ -217,7 +212,5 @@ class GroupChatMembersSerializer(ModelSerializer):
 
 class GroupChatRequestSerializer(ModelSerializer):
     class Meta:
-        model = GroupChatRequest
+        model = group_chat_models.GroupChatRequest
         fields = "__all__"
-
-

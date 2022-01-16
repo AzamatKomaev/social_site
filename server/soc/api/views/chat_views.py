@@ -1,8 +1,6 @@
 from typing import Union, Dict, Optional
 
 from django.shortcuts import get_object_or_404
-from rest_framework.decorators import permission_classes
-from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status, permissions, viewsets
 
@@ -15,14 +13,15 @@ from ..services import (
     PersonalChatService,
     GroupChatRequestService
 )
-from soc.models import (
-    GroupChat,
-    PersonalChat, User
+from soc.models import User
+from soc.models_dir import (
+    group_chat as group_chat_models,
+    personal_chat as personal_chat_models
 )
 
 
 def get_chat_by_id(chat_id: int) -> dict:
-    chat = GroupChat.objects.filter(id=chat_id)
+    chat = group_chat_models.GroupChat.objects.filter(id=chat_id)
     return {
         "chat": chat.first(),
         "exists": chat.exists()
@@ -57,7 +56,7 @@ class GroupChatViewSet(viewsets.ViewSet):
     permission_classes = [permissions.IsAuthenticated]
 
     def list(self, request):
-        chats = GroupChat.objects.filter(users=request.user)
+        chats = group_chat_models.GroupChat.objects.filter(users=request.user)
         serializer = serializers.GroupChatSerializer(chats, many=True)
         return Response(serializer.data)
 
@@ -88,7 +87,7 @@ class GroupChatViewSet(viewsets.ViewSet):
         except EmptyPage:
             return Response({}, status=status.HTTP_204_NO_CONTENT)
 
-    def list_members(self, request, chat_id):
+    def list_members(self, request, chat_id: int):
         """The action to get members of group chat."""
         chat_data = get_chat_by_id(chat_id)
         if not chat_data["exists"]:
@@ -128,7 +127,7 @@ class PersonalChatViewSet(viewsets.ViewSet):
     permission_classes = [permissions.IsAuthenticated]
 
     def list(self, request):
-        chats = PersonalChat.objects.filter(users=request.user)
+        chats = personal_chat_models.PersonalChat.objects.filter(users=request.user)
         serializer = serializers.PersonalChatSerializer(
             chats,
             many=True,
@@ -218,6 +217,7 @@ class GroupChatRequestViewSet(viewsets.ViewSet):
         return Response(serializer.data)
 
     def detail_request(self, request, chat_id: int, user_id: int):
+        """Action to get detail chat request by chat id and user id."""
         group_chat_request_service = GroupChatRequestService(chat_id)
         to_user = get_object_or_404(User, id=user_id)
         request = group_chat_request_service.get_request_or_none(to_user)
