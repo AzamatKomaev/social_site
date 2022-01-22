@@ -200,6 +200,7 @@ class GroupChatRequestViewSet(viewsets.ViewSet):
             }
 
     def list_requests(self, request, chat_id: int):
+        """Action to get list of chat requests by chat id."""
         group_chat_request_service = GroupChatRequestService(chat_id)
 
         possible_error = self.check_possible_errors(
@@ -214,6 +215,16 @@ class GroupChatRequestViewSet(viewsets.ViewSet):
 
         all_chat_requests = group_chat_request_service.get_all_chat_requests()
         serializer = serializers.GroupChatRequestSerializer(all_chat_requests, many=True)
+        return Response(serializer.data)
+
+    def list_user_chat_requests(self, request, user_id: int):
+        """Action to get list of chat requests to user by his id."""
+        all_user_chat_requests = GroupChatRequestService.get_all_user_chat_requests(user_id)
+
+        if not all_user_chat_requests:
+            return Response({}, status=status.HTTP_204_NO_CONTENT)
+
+        serializer = serializers.GroupChatRequestSerializer(all_user_chat_requests, many=True)
         return Response(serializer.data)
 
     def detail_request(self, request, chat_id: int, user_id: int):
@@ -238,8 +249,12 @@ class GroupChatRequestViewSet(viewsets.ViewSet):
             group_chat_request_service=group_chat_request_service,
             group_chat_service=group_chat_service,
         )
+
         if possible_errors:
             return Response({"message": possible_errors['message']}, status=possible_errors['status_code'])
+
+        if group_chat_request_service.is_request_exists(user_id):
+            return Response({"message": "Request with this user already exists"}, status=status.HTTP_400_BAD_REQUEST)
 
         new_chat_request = group_chat_request_service.create_chat_request(user_id)
         serializer = serializers.GroupChatRequestSerializer(new_chat_request)

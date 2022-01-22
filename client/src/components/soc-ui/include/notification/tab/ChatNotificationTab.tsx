@@ -1,25 +1,24 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import { useSelector } from 'react-redux';
-
-import NotificationList from '../list/NotificationList';
+import ChatNotificationList from "../list/ChatNotificationList";
 
 
 const ChatNotificationTab = (props: any) => {
-    const [notifications, setNotifications] = useState({
-        list: null,
-        error: null
-    })
+    const userData = useSelector((state: any) => state.user)
 
-
-    const userData = useSelector(state => state.user)
-
-
-    return (
-        <div className="tab-pane fade" id="chats" role="tabpanel" aria-labelledby="nav-home-tab">
-            Loading...
-            {/*<NotificationList notifications={notifications}/>*/}
-        </div>
-    )
+    if (userData.chatRequestNotifications && userData.chatRequestNotifications.length > 0) {
+        return (
+            <div className="tab-pane fade" id="chats" role="tabpanel" aria-labelledby="nav-home-tab">
+                <ChatNotificationList/>
+            </div>
+        )
+    } else {
+        return (
+            <div className="tab-pane fade" id="chats" role="tabpanel" aria-labelledby="nav-home-tab">
+                There are not notifications for you :((
+            </div>
+        )
+    }
 }
 
 export default ChatNotificationTab;

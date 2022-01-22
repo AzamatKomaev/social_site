@@ -18,6 +18,7 @@ from soc.models_dir import (
 )
 
 from server.settings import EMAIL_HOST_USER
+from soc.models_dir.group_chat import GroupChatRole
 
 
 class CreationUser:
@@ -302,9 +303,33 @@ class GroupChatRequestService:
     def __init__(self, chat_id: int):
         self.chat = get_object_or_404(group_chat_models.GroupChat, id=chat_id)
 
+    def _delete_chat_request(self, chat_request: group_chat_models.GroupChatRequest) -> bool:
+        chat_request.from_chat.users.remove(chat_request.to_user)
+        GroupChatRole.objects.filter(user=chat_request.to_user, chat=chat_request.from_chat).first().delete()
+        return bool(chat_request.delete())
+
+    def _add_user_in_chat(self, chat_request: group_chat_models.GroupChatRequest) -> None:
+        """
+        Method to finally add user in chat. Here we add user in users list of chat and
+        also create Role model for user in the chat
+        """
+        chat_request.from_chat.users.add(chat_request.to_user)
+        group_chat_models.GroupChatRole.objects.create(
+            user=chat_request.to_user,
+            chat=chat_request.from_chat
+        )
+
+    def is_request_exists(self, user_id: int) -> bool:
+        return group_chat_models.GroupChatRequest.objects.filter(from_chat=self.chat, to_user=user_id).exists()
+
     def get_all_chat_requests(self) -> QuerySet[group_chat_models.GroupChatRequest]:
         chat_requests = group_chat_models.GroupChatRequest.objects.filter(from_chat=self.chat)
         return chat_requests
+
+    @staticmethod
+    def get_all_user_chat_requests(user_id: int) -> QuerySet[group_chat_models.GroupChatRequest]:
+        user_chat_requests = group_chat_models.GroupChatRequest.objects.filter(to_user=user_id, is_accepted=False)
+        return user_chat_requests
 
     def create_chat_request(self, user_id: int) -> group_chat_models.GroupChat:
         user = get_object_or_404(User, id=user_id)
@@ -330,11 +355,9 @@ class GroupChatRequestService:
     def accept_chat_request(self, chat_request: group_chat_models.GroupChatRequest) -> group_chat_models.GroupChatRequest:
         """Method to accept a chat request."""
         chat_request.is_accepted = True
+        self._add_user_in_chat(chat_request)
         chat_request.save()
         return chat_request
-
-    def _delete_friend_request(self, chat_request: group_chat_models.GroupChatRequest) -> bool:
-        return bool(chat_request.delete())
 
     def delete_chat_request(self, request_user: User, user_id: int) -> dict:
         to_user = get_object_or_404(User, id=user_id)
@@ -349,7 +372,7 @@ class GroupChatRequestService:
 
         if request_user == chat_request.to_user or request_user == chat_request.from_chat.creator:
             return {
-                "is_deleted": self._delete_friend_request(chat_request),
+                "is_deleted": self._delete_chat_request(chat_request),
                 "message": "Success",
                 "status": status.HTTP_204_NO_CONTENT
             }

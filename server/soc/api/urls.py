@@ -12,23 +12,28 @@ urlpatterns = [
     path('category/<int:category_id>/', content_views.PostViewSet.as_view({"get": "list", "post": "create"})),
     path('post/<int:post_id>/', content_views.PostViewSet.as_view({"get": "retrieve"})),
 
+
     path('post/<int:post_id>/comment/', content_views.CommentViewSet.as_view({"get": "list", "post": "create"})),
     path('comment/<int:comment_id>/', content_views.CommentViewSet.as_view({"get": "retrieve"})),
+
 
     path('user/find/<int:user_id>/', user_views.UserViewSet.as_view({"get": "retrieve"})),
     path('user/find/<str:username>/', user_views.UserViewSet.as_view({"get": "retrieve"})),
     path('user/find/<int:user_id>/friends/', user_views.UserFriendsAPIView.as_view()),
     path('user/find/<int:to_user>/friend_request/', user_views.FriendRequestViewSet.as_view(
                                                             {"get": "retrieve", "post": "create",
-                                                             "delete": "destroy", "patch": "update"}
-    )),
+                                                             "delete": "destroy", "patch": "update"})),
+    path('user/find/<int:user_id>/chat_request/', chat_views.GroupChatRequestViewSet.as_view(
+                                                            {"get": "list_user_chat_requests"})),
     path('user/find/<int:user_id>/request-notifications/', user_views.FriendRequestViewSet.as_view({"get": "list"})),
+
 
     path('user/register/', user_views.UserViewSet.as_view({"post": "create_registration_user"})),
     path('user/is_auth/', user_views.UserViewSet.as_view({"get": "retrieve_current_user"})),
     path('user/accept/<str:token>/', user_views.UserViewSet.as_view({"patch": "accept_registration_user"})),
     path('user/posts/<int:user_id>/', user_views.UserViewSet.as_view({"get": "list_of_user_posts"})),
     path('user/comments/<int:user_id>/', user_views.UserViewSet.as_view({"get": "list_of_user_comments"})),
+
 
     path('chats/', chat_views.GroupChatViewSet.as_view({"get": "list"})),
     path('chats/<int:chat_id>/', chat_views.GroupChatViewSet.as_view({"get": "retrieve", "post": "create_message"})),
@@ -43,6 +48,7 @@ urlpatterns = [
                                                                                             "post": "create",
                                                                                             "delete": "destroy"
                                                                                         })),
+
 
     path('personal_chats/', chat_views.PersonalChatViewSet.as_view({"get": "list"})),
     path('personal_chats/<str:to_user_username>/', chat_views.PersonalChatViewSet.as_view({"get": "retrieve"})),

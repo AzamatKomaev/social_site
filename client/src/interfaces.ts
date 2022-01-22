@@ -22,6 +22,25 @@ export interface CategoryI {
     avatar: string
 }
 
+interface MessageI {
+    id: number,
+    user_data: UserI,
+    text: string,
+    created_at: string,
+    polymorphic_ctype?: number,
+    chat: number
+}
+
+interface GroupChatI {
+    id: number,
+    last_message: MessageI,
+    name: string,
+    created_at: string,
+    avatar: string,
+    creator: number,
+    users: number[]
+}
+
 export interface FriendRequestI {
     id: number,
     to_user: UserI,
@@ -33,8 +52,8 @@ export interface FriendRequestI {
 
 export interface GroupChatRequestI {
     id: number,
-    to_user: number,
-    from_chat: number,
+    to_user: UserI,
+    from_chat: GroupChatI,
     is_accepted: boolean,
     created_at: string,
     updated_at: string

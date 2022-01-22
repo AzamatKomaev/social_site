@@ -5,7 +5,7 @@ import { getReadableDateFormat } from '../../../../services/service';
 
 const Chat = (props) => {
     const [lastMessage, setLastMessage] = useState(props.chat.last_message)
-    const userData = useSelector((state: any) => state.user)
+    const userData = useSelector(state => state.user)
 
     useEffect(() => {
         let ws = new WebSocket(
@@ -54,7 +54,7 @@ const Chat = (props) => {
                                 ?
                                     <div>
                                         <b>
-                                            {userData.info.id == lastMessage.user_data.id ? "Вы" : lastMessage.user_data.username}
+                                            {userData.info.id === lastMessage.user_data.id ? "Вы" : lastMessage.user_data.username}
                                         </b>{"\n"}
                                         {lastMessage.text.substr(0, 20) + "..."}{"\n"}
                                         {getReadableDateFormat(props.chat.last_message.created_at)}

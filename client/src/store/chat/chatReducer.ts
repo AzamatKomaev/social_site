@@ -15,7 +15,8 @@ interface RequestListState {
     requestList: Array<GroupChatRequestI>,
     newRequest: GroupChatRequestI,
     deletingRequestId: number,
-    requestListState: Array<RequestState>
+    requestListState: Array<RequestState>,
+    userChatRequestList: Array<GroupChatRequestI>,
     members: any
 }
 
@@ -24,6 +25,7 @@ const defaultRequestListState: RequestListState = {
     newRequest: null,
     deletingRequestId: null,
     requestListState: [],
+    userChatRequestList: [],
     members: []
 }
 

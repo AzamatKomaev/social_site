@@ -91,3 +91,20 @@ export const deleteRequest = async(chatId: number, userId: number): Promise<numb
 
     return statusCode
 }
+
+export const acceptChatRequest = async(fromChatId: number): Promise<GroupChatRequestI> => {
+    let acceptedRequest: GroupChatRequestI
+
+    try {
+        const response = await axios.patch(`http://127.0.0.1:8000/api/v1/chats/${fromChatId}/request/`, {}, {
+            headers: {
+                Authorization: 'Bearer ' + localStorage.getItem("jwt")
+            }
+        })
+        acceptedRequest = response.data
+    } catch (err) {
+        console.error(err)
+    }
+
+    return acceptedRequest
+}

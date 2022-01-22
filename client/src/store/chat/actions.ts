@@ -1,4 +1,10 @@
-import {createRequest, deleteRequest, getAllChatRequest, getChatMembers, getRequest} from "../../services/chatSerivce";
+import {
+    createRequest,
+    deleteRequest,
+    getAllChatRequest,
+    getChatMembers,
+    getRequest
+} from "../../services/chatService";
 import {
     CHECK_IS_REQUEST_EXISTS,
     CREATE_REQUEST, DELETE_REQUEST,
@@ -6,9 +12,7 @@ import {
     GET_ALL_CHAT_REQUESTS,
     GET_REQUEST
 } from "./actionTypes";
-import axios from "axios";
 import {GroupChatRequestI} from "../../interfaces";
-import {DELETE_FRIEND_REQUEST} from "../friend/actionTypes";
 
 
 export const fetchGettingAllChatMembers = (chatId: number) => {
@@ -44,10 +48,8 @@ export const setIsRequestExists = (requestList: Array<GroupChatRequestI>, userId
         let isRequestExists: boolean = false
 
         requestList.forEach(chatRequest => {
-            if (userId === chatRequest.to_user && !chatRequest.is_accepted) isRequestExists = true
+            if (userId === chatRequest.to_user.id && !chatRequest.is_accepted) isRequestExists = true
         })
-
-        console.log(`isRequestsExists is ${isRequestExists} for ${userId}`)
 
         dispatch({
             type: CHECK_IS_REQUEST_EXISTS,
@@ -89,5 +91,11 @@ export const fetchDeletingRequest = (chatId: number, userId: number) => {
                         })
                     })
             })
+    }
+}
+
+export const fetchAcceptingChatRequest = (fromChatId: number) => {
+    return async function (dispatch) {
+
     }
 }

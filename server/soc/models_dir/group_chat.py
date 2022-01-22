@@ -36,7 +36,6 @@ class GroupChatRole(models.Model):
     chat = models.ForeignKey(GroupChat, on_delete=models.CASCADE)
 
 
-
 class GroupMessage(BaseMessage):
     chat = models.ForeignKey(GroupChat, on_delete=models.CASCADE, default=None)
     user = models.ForeignKey(AUTH_USER_MODEL, on_delete=models.CASCADE, default=None)

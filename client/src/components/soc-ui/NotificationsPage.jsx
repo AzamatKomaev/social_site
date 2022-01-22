@@ -5,11 +5,10 @@ import { fetchGettingAllFriendRequests } from '../../store/friend/actions';
 import Header from '../extend/Header';
 import Error404NotFound from '../extend/Error404NotFound';
 import NotificationWindow from './include/notification/NotificationWindow';
+import {fetchGettingAllChatRequestsToUser} from "../../store/user/actions";
 
 
 const NotificationsPage = (props) => {
-    const [categories, setCategories] = useState([])
-
     const dispatch = useDispatch()
     const userData = useSelector(state => state.user)
 
@@ -17,7 +16,12 @@ const NotificationsPage = (props) => {
         if (userData.info) {
             dispatch(fetchGettingAllFriendRequests(userData.info.id))
         }
-    }, [dispatch, userData])
+    }, [userData.info])
+
+
+    useEffect(() => {
+        if (userData?.info?.id) dispatch(fetchGettingAllChatRequestsToUser(userData.info.id));
+    }, [userData?.info, userData?.chatRequestNotifications.length])
 
     if (userData.isAuth && userData.info) {
         return (

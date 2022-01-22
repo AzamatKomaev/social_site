@@ -211,6 +211,16 @@ class GroupChatMembersSerializer(ModelSerializer):
 
 
 class GroupChatRequestSerializer(ModelSerializer):
+    to_user = SerializerMethodField('get_to_user_data')
+    from_chat = SerializerMethodField('get_from_chat_data')
+
     class Meta:
         model = group_chat_models.GroupChatRequest
         fields = "__all__"
+
+    def get_to_user_data(self, obj) -> dict:
+        return UserSerializer(obj.to_user).data
+
+    def get_from_chat_data(self, obj) -> dict:
+        return GroupChatSerializer(obj.from_chat).data
+

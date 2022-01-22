@@ -8,7 +8,7 @@ import MessageInput from './MessageInput';
 import ChatHeader from '../chat/ChatHeader';
 import ChatUserList from '../user/ChatUserList';
 
-import {getChatMembers} from "../../../../services/chatSerivce";
+import {getChatMembers} from "../../../../services/chatService";
 
 
 const MessageChatWindow = (props) => {
