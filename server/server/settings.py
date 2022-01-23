@@ -37,7 +37,10 @@ SIMPLE_JWT = {
 
 
 INSTALLED_APPS = [
-    'soc',
+    'content_app',
+    'user_app',
+    'group_chat_app',
+    'personal_chat_app',
 
     'channels',
     'polymorphic',
@@ -60,8 +63,6 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-
-    #'soc_auth.middleware.RegisteredUserMiddleware',
 ]
 
 ROOT_URLCONF = 'server.urls'
@@ -111,7 +112,7 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-AUTH_USER_MODEL = "soc.User"
+AUTH_USER_MODEL = "user_app.User"
 
 
 LANGUAGE_CODE = 'ru'
