@@ -54,33 +54,6 @@ class GroupChatViewSet(viewsets.ViewSet):
         serializer = GroupChatSerializer(chats, many=True)
         return Response(serializer.data)
 
-    def retrieve(self, request, chat_id: int):
-        chat_data = get_chat_by_id(chat_id)
-        possible_errors = check_possible_errors(chat_data, chat_id, request)
-
-        if possible_errors['status_code'] != 200:
-            return Response({"message": possible_errors['message']}, status=possible_errors['status_code'])
-
-        chat_serializer = GroupChatSerializer(chat_data['chat'])
-        return Response(chat_serializer.data)
-
-    def list_message(self, request, chat_id: int):
-        chat_data = get_chat_by_id(chat_id)
-        possible_errors = check_possible_errors(chat_data, chat_id, request)
-
-        if possible_errors['status_code'] != 200:
-            return Response({"message": possible_errors['message']}, status=possible_errors['status_code'])
-
-        page_number = request.query_params.get('page_number') or 1
-        page_size = 15
-        paginator = Paginator(possible_errors['chat_service'].get_chat_messages(), page_size)
-
-        try:
-            serializer = GroupMessageSerializer(paginator.page(page_number), many=True)
-            return Response(serializer.data, status=status.HTTP_200_OK)
-        except EmptyPage:
-            return Response({}, status=status.HTTP_204_NO_CONTENT)
-
     def list_members(self, request, chat_id: int):
         """The action to get members of group chat."""
         chat_data = get_chat_by_id(chat_id)
@@ -99,7 +72,55 @@ class GroupChatViewSet(viewsets.ViewSet):
         )
         return Response(serializer.data)
 
-    def create_message(self, request, chat_id: int):
+    def retrieve(self, request, chat_id: int):
+        chat_data = get_chat_by_id(chat_id)
+        possible_errors = check_possible_errors(chat_data, chat_id, request)
+
+        if possible_errors['status_code'] != 200:
+            return Response({"message": possible_errors['message']}, status=possible_errors['status_code'])
+
+        chat_serializer = GroupChatSerializer(chat_data['chat'])
+        return Response(chat_serializer.data)
+
+    def create(self, request):
+        data_for_serializer = {
+            "name": request.data.get('name', None),
+            "creator": request.user.id,
+            "users": [request.user.id]
+        }
+
+        if 'avatar' in request.data:
+            data_for_serializer = {**data_for_serializer, "avatar": request.data['avatar']}
+
+        serializer = GroupChatSerializer(data=data_for_serializer, context={"request": request})
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+class GroupChatMessageViewSet(viewsets.ViewSet):
+    permission_classes = [permissions.IsAuthenticated]
+
+    def list(self, request, chat_id: int):
+        chat_data = get_chat_by_id(chat_id)
+        possible_errors = check_possible_errors(chat_data, chat_id, request)
+
+        if possible_errors['status_code'] != 200:
+            return Response({"message": possible_errors['message']}, status=possible_errors['status_code'])
+
+        page_number = request.query_params.get('page_number') or 1
+        page_size = 15
+        paginator = Paginator(possible_errors['chat_service'].get_chat_messages(), page_size)
+
+        try:
+            serializer = GroupMessageSerializer(paginator.page(page_number), many=True)
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        except EmptyPage:
+            return Response({}, status=status.HTTP_204_NO_CONTENT)
+
+    def create(self, request, chat_id: int):
         chat_data = get_chat_by_id(chat_id)
         possible_errors = check_possible_errors(chat_data, chat_id, request)
 

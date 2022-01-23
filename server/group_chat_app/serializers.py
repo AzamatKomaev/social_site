@@ -1,6 +1,7 @@
 from rest_framework.serializers import (
     ModelSerializer, HiddenField,
-    CurrentUserDefault, SerializerMethodField
+    CurrentUserDefault, SerializerMethodField,
+    ManyRelatedField
 )
 
 from user_app.serializers import UserSerializer
@@ -8,11 +9,13 @@ from .models import (
     GroupChat, GroupMessage,
     GroupChatRole, GroupChatRequest
 )
+from .services import GroupChatService
 
 
 class GroupChatSerializer(ModelSerializer):
     user = HiddenField(default=CurrentUserDefault())
     last_message = SerializerMethodField('get_last_message')
+
 
     class Meta:
         model = GroupChat
@@ -20,6 +23,13 @@ class GroupChatSerializer(ModelSerializer):
 
     def get_last_message(self, obj: GroupChat) -> dict:
         return GroupMessageSerializer(obj.groupmessage_set.all().first()).data
+
+    def create(self, validated_data):
+        if 'avatar' not in validated_data:
+            validated_data['avatar'] = None
+
+        chat = GroupChatService.create_chat(**validated_data)
+        return chat
 
 
 class GroupMessageSerializer(ModelSerializer):

@@ -23,10 +23,5 @@ urlpatterns = [
     path("chats/", views.index, name="chats"),
     path("chats/<int:chat_id>/", views.index, name="chat-messages"),
     path("chats/<int:chat_id>/settings/", views.index, name="chat-settings"),
-    path("personal_chats/<str:username>/", views.index),
-
-    #path("main", views.show_all_categories, name='main'),
-    #path("<str:category>", views.show_all_posts, name='all_posts'),
-    #path("test/<int:category_id>/<int:id>/", views.show_post, name="post"),
-    #path("<str:category>/create_post", views.create_post, name="create_post"),
+    path("personal_chats/<str:username>/", views.index)
     ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

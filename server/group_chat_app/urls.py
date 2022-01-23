@@ -8,9 +8,11 @@ urlpatterns = [
         "get": "list_user_chat_requests"
     })),
 
-    path('chats/', views.GroupChatViewSet.as_view({"get": "list"})),
-    path('chats/<int:chat_id>/', views.GroupChatViewSet.as_view({"get": "retrieve", "post": "create_message"})),
-    path('chats/<int:chat_id>/messages/', views.GroupChatViewSet.as_view({"get": "list_message"})),
+    path('chats/', views.GroupChatViewSet.as_view({"get": "list", "post": "create"})),
+    path('chats/<int:chat_id>/', views.GroupChatViewSet.as_view({"get": "retrieve"})),
+    path('chats/<int:chat_id>/messages/', views.GroupChatMessageViewSet.as_view({
+        "get": "list", "post": "create"
+    })),
     path('chats/<int:chat_id>/members/', views.GroupChatViewSet.as_view({"get": "list_members"})),
     path('chats/<int:chat_id>/request/', views.GroupChatRequestViewSet.as_view({
         "get": "list_requests",

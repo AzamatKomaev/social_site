@@ -1,4 +1,4 @@
-from typing import Optional
+from typing import Optional, List
 
 from django.db.models import QuerySet
 from django.shortcuts import get_object_or_404
@@ -29,6 +29,30 @@ class GroupChatService:
         """Method to get all chat members."""
         members = self.chat.users.all()
         return members
+
+    @staticmethod
+    def create_chat(creator: User, name: str, avatar, users: List[User], *args, **kwargs) -> GroupChat:
+        chat: GroupChat
+
+        if not avatar:
+            chat = GroupChat.objects.create(
+                creator=creator,
+                name=name
+            )
+        else:
+            chat = GroupChat.objects.create(
+                creator=creator,
+                name=name,
+                avatar=avatar
+            )
+
+        GroupChatRole.objects.create(
+            name="Администратор",
+            user=creator,
+            chat=chat
+        )
+        chat.users.add(users[0])
+        return chat
 
 
 class GroupChatRequestService:
