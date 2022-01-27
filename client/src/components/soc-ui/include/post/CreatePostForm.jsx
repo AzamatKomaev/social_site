@@ -54,7 +54,7 @@ const CreatePostForm = (props) => {
 
 
     const createPost = () => {
-        if (!category || category == "Выбери категорию") {
+        if (!category || category === "Выбери категорию") {
             alert("Вы не указали категорию. Куда добавлять пост? -_-")
             return
         }
@@ -75,7 +75,7 @@ const CreatePostForm = (props) => {
             <h2 style={{margin: "0 35%", fontSize:"35px"}}>Добавить пост</h2>{"\n\n"}
 
             <label htmlFor="select-category">Категория</label>{"\n"}
-            <select class="browser-default custom-select" id="select-category" onChange={e => setCategory(e.target.value)}>
+            <select className="browser-default custom-select" id="select-category" onChange={e => setCategory(e.target.value)}>
                 <option value={null} selected>Выбери категорию</option>
                 {props.categories.map((category) => (
                     <option value={category.id}>{category.name}</option>

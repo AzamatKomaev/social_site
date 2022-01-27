@@ -63,7 +63,11 @@ class GroupChatRequestService:
 
     def _delete_chat_request(self, chat_request: GroupChatRequest) -> bool:
         chat_request.from_chat.users.remove(chat_request.to_user)
-        GroupChatRole.objects.filter(user=chat_request.to_user, chat=chat_request.from_chat).first().delete()
+        try:
+            GroupChatRole.objects.filter(user=chat_request.to_user, chat=chat_request.from_chat).first().delete()
+        except AttributeError:
+            pass
+
         return bool(chat_request.delete())
 
     def _add_user_in_chat(self, chat_request: GroupChatRequest) -> None:
@@ -141,3 +145,12 @@ class GroupChatRequestService:
             "status": status.HTTP_400_BAD_REQUEST
         }
 
+
+class GroupChatRoleService:
+    chat_role: GroupChatRole
+
+    def __init__(self, chat_id: int, user_id: int):
+        self.chat_role = get_object_or_404(GroupChatRole, chat=chat_id, user=user_id)
+
+    def print_role(self):
+        return self.chat_role

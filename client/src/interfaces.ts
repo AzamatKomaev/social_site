@@ -31,7 +31,7 @@ interface MessageI {
     chat: number
 }
 
-interface GroupChatI {
+export interface GroupChatI {
     id: number,
     last_message: MessageI,
     name: string,

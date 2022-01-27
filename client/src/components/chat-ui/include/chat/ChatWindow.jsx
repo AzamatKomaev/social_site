@@ -1,5 +1,6 @@
 import React from 'react';
 import ChatList from './ChatList';
+import CreateChatWindow from "./CreateChatWindow";
 
 
 const ChatWindow = (props) => {
@@ -15,6 +16,10 @@ const ChatWindow = (props) => {
                 <hr/>
                 <div className="row">
                     <div className="col-12">
+                        <button type="button" className="btn btn-primary" data-toggle="modal"
+                                data-target=".bd-example-modal-lg">Большое модальное окно
+                        </button>
+                        <CreateChatWindow/>
                         <ChatList chats={props.groupChats} type_is_group={true}/>
                     </div>
                 </div>

@@ -1,55 +1,6 @@
 import React, { useState } from 'react';
 import axios from 'axios';
-
-
-const addGroupMessageInDb = async(message, chatId) => {
-    let data = {
-        info: null,
-        error: null
-    }
-    let url = "http://127.0.0.1:8000/api/v1/chats/" + chatId + "/"
-
-    await axios.post(url, {
-        text: message
-    }, {
-        headers: {
-            Authorization: 'Bearer ' + localStorage.getItem("jwt")
-        }
-    })
-    .then((response) => {
-        data.info = response.data
-    })
-    .catch((error) => {
-        data.error = error.response.status
-    })
-
-    return data
-}
-
-const addPersonalMessageInDb = async(message, username) => {
-    let data = {
-        info: null,
-        error: null
-    }
-    let url = "http://127.0.0.1:8000/api/v1/personal_chats/" + username + "/messages/"
-
-    await axios.post(url, {
-        text: message
-    }, {
-        headers: {
-            Authorization: 'Bearer ' + localStorage.getItem("jwt")
-        }
-    })
-    .then((response) => {
-        data.info = response.data
-    })
-    .catch((error) => {
-        data.error = error.response.status
-    })
-
-    return data
-}
-
+import {createGroupMessage, createPersonalMessage} from "../../../../services/messageService";
 
 const MessageInput = (props) => {
     const [message, setMessage] = useState("")
@@ -57,7 +8,7 @@ const MessageInput = (props) => {
     const sendMessage = () => {
         if (message != "") {
             if (props.type_is_group) {
-                addGroupMessageInDb(message, props.chat.id)
+                createGroupMessage(message, props.chat.id)
                     .then((result) => {
                         props.ws.send((JSON.stringify({
                             type: "send_message",
@@ -68,7 +19,7 @@ const MessageInput = (props) => {
                         console.error(error)
                     })
             } else {
-                addPersonalMessageInDb(message, props.chat.interlocutor.username)
+                createPersonalMessage(message, props.chat.interlocutor.username)
                     .then((result) => {
                         props.ws.send((JSON.stringify({
                             type: "send_message",

@@ -1,5 +1,5 @@
 import axios from "axios";
-import {GroupChatRequestI} from "../interfaces";
+import {GroupChatI, GroupChatRequestI} from "../interfaces";
 
 
 export const getChatMembers = async(chatId) => {
@@ -107,4 +107,25 @@ export const acceptChatRequest = async(fromChatId: number): Promise<GroupChatReq
     }
 
     return acceptedRequest
+}
+
+export const createChat = async(dataForm): Promise<GroupChatI> => {
+    let chatData: GroupChatI;
+
+    const headers = {
+        Authorization: 'Bearer ' + localStorage.getItem("jwt"),
+        'Content-Type': 'multipart/form-data'
+    }
+
+    try {
+        const response = await axios.post('http://127.0.0.1:8000/api/v1/chats/', dataForm, {
+            headers: headers
+        })
+        chatData = response.data
+    } catch (err) {
+        console.error(err)
+        return err.response.data
+    }
+
+    return chatData;
 }
