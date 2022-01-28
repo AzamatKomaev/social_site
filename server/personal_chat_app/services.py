@@ -12,10 +12,11 @@ class PersonalChatService:
         self.from_user = get_object_or_404(User, username=from_user_username)
         self.to_user = get_object_or_404(User, username=to_user_username)
 
-    def create(self) -> None:
+    def create(self) -> PersonalChat:
         """Method to create personal chat among two users"""
         chat = PersonalChat.objects.create()
         chat.users.add(self.from_user, self.to_user)
+        return chat
 
     @staticmethod
     def get_interlocutor(personal_chat: PersonalChat, user: User) -> User:

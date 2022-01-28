@@ -38,7 +38,25 @@ class PersonalChatViewSet(viewsets.ViewSet):
         )
         return Response(serializer.data)
 
-    def list_message(self, request, to_user_username: str):
+    def create(self, request, to_user_username: str):
+        chat_service = PersonalChatService(from_user_username=request.user.username, to_user_username=to_user_username)
+        if chat_service.is_chat_exists():
+            return Response({"message": "Bad request: chat with this user already exists."},
+                            status=status.HTTP_400_BAD_REQUEST)
+
+        new_chat = chat_service.create()
+        if not new_chat:
+            return Response({"message": "Bad request: cannot create personal chat with this user."},
+                            status=status.HTTP_400_BAD_REQUEST)
+
+        serializer = PersonalChatSerializer(new_chat, context={'request': request})
+        return Response(serializer.data)
+
+
+class PersonalMessageViewSet(viewsets.ViewSet):
+    permission_classes = [permissions.IsAuthenticated]
+
+    def list(self, request, to_user_username: str):
         chat_service = PersonalChatService(from_user_username=request.user.username, to_user_username=to_user_username)
         if not chat_service.is_chat_exists():
             return Response({"message": f"Chat with {to_user_username} doesnt exists."},
@@ -47,7 +65,7 @@ class PersonalChatViewSet(viewsets.ViewSet):
         serializer = PersonalMessageSerializer(chat_service.get_messages(), many=True)
         return Response(serializer.data)
 
-    def create_message(self, request, to_user_username: str):
+    def create(self, request, to_user_username: str):
         chat_service = PersonalChatService(from_user_username=request.user.username, to_user_username=to_user_username)
         if not chat_service.is_chat_exists():
             return Response({"message": f"Chat with {to_user_username} doesnt exists."},

@@ -10,7 +10,7 @@ urlpatterns = [
 
     path('chats/', views.GroupChatViewSet.as_view({"get": "list", "post": "create"})),
     path('chats/<int:chat_id>/', views.GroupChatViewSet.as_view({"get": "retrieve"})),
-    path('chats/<int:chat_id>/messages/', views.GroupChatMessageViewSet.as_view({
+    path('chats/<int:chat_id>/messages/', views.GroupMessageViewSet.as_view({
         "get": "list", "post": "create"
     })),
     path('chats/<int:chat_id>/members/', views.GroupChatRoleViewSet.as_view({"get": "list"})),

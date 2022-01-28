@@ -1,4 +1,5 @@
 from typing import Dict, Optional
+from datetime import datetime
 
 from django.shortcuts import get_object_or_404
 from rest_framework.response import Response
@@ -26,10 +27,21 @@ def get_chat_by_id(chat_id: int) -> dict:
 class GroupChatViewSet(viewsets.ViewSet):
     permission_classes = [permissions.IsAuthenticated]
 
+    def sort_chat_list(self, serializer_data):
+        for chat in serializer_data:
+            if 'created_at' in chat['last_message']:
+                chat['last_message']['created_at'] = datetime.timestamp(
+                    datetime.strptime(chat['last_message']['created_at'], '%Y-%m-%dT%H:%M:%S.%f')
+                )
+
+        sorted_list = sorted(serializer_data, key=lambda x: x['last_message']['created_at'] if 'created_at' in x['last_message'] else 0, reverse=True)
+        return sorted_list
+
     def list(self, request):
-        chats = GroupChat.objects.filter(users=request.user)
+        chats = GroupChat.objects.filter(users=request.user).order_by('-id')
         serializer = GroupChatSerializer(chats, many=True)
-        return Response(serializer.data)
+        sorted_list = self.sort_chat_list(serializer.data)
+        return Response(sorted_list)
 
     def retrieve(self, request, chat_id: int):
         chat = get_object_or_404(GroupChat, id=chat_id)
@@ -54,7 +66,7 @@ class GroupChatViewSet(viewsets.ViewSet):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
-class GroupChatMessageViewSet(viewsets.ViewSet):
+class GroupMessageViewSet(viewsets.ViewSet):
     permission_classes = [permissions.IsAuthenticated]
 
     def list(self, request, chat_id: int):

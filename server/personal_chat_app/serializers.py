@@ -3,6 +3,7 @@ from rest_framework.fields import (
 )
 from rest_framework.serializers import ModelSerializer
 from .models import PersonalChat, PersonalMessage
+from .services import PersonalChatService
 from user_app.serializers import UserSerializer
 
 

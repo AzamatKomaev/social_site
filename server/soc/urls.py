@@ -15,13 +15,13 @@ urlpatterns = [
 
     path("auth/login/", views.index, name="login"),
     path("auth/sign_up/", views.index, name="signup"),
-    path("auth/accept/<str:token>/", views.index, name="signup"),
+    path("auth/accept/<str:token>/", views.index, name="accept"),
 
     path("users/<str:username>/", views.index, name="user-profile"),
     path("users/<str:username>/friends/", views.index),
 
     path("chats/", views.index, name="chats"),
-    path("chats/<int:chat_id>/", views.index, name="chat-messages"),
-    path("chats/<int:chat_id>/settings/", views.index, name="chat-settings"),
-    path("personal_chats/<str:username>/", views.index)
+    path("chats/group/<int:chat_id>/", views.index, name="chat-messages"),
+    path("chats/group/<int:chat_id>/settings/", views.index, name="chat-settings"),
+    path("chats/personal/<str:username>/", views.index)
     ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
