@@ -8,8 +8,11 @@ from django.db.models import QuerySet
 from django.shortcuts import get_object_or_404
 
 from .models import User, AcceptAuthToken, FriendRequest
-from server.settings import EMAIL_HOST_USER
 from content_app.models import Post
+try:
+    from server.settings import EMAIL_HOST_USER
+except ImportError:
+    EMAIL_HOST_USER = ""
 
 
 class CreationUser:
@@ -22,6 +25,17 @@ class CreationUser:
         self.username = data['username']
         self.email = data['email']
         self.password = data['password']
+
+    def _create_and_setting_user(self):
+        self.user = User.objects.create_user(
+            username=self.username,
+            email=self.email,
+            password=self.password,
+            is_active=False
+        )
+
+        self.user.avatar_set.create()
+        Group.objects.all().last().user_set.add(self.user)
 
     def _generate_code(self) -> None:
         """Method to generate code, sending to user by email."""
@@ -41,7 +55,6 @@ class CreationUser:
 
     def _send_message_with_code(self) -> None:
         """Method to send message with token in email."""
-        self._generate_code()
         content = f"Дарова {self.username}.\n" \
                   "Чтобы успешно пройти регистрацию перейди по данной ссылке:\n" \
                   f"Ссылка: http://127.0.0.1:8000/auth/accept/{self.token}\n" \
@@ -62,26 +75,18 @@ class CreationUser:
 
     def create_user(self) -> None:
         """Method to create new user."""
+        self._generate_code()
         self._send_message_with_code()
-
-        self.user = User.objects.create_user(
-            username=self.username,
-            email=self.email,
-            password=self.password,
-            is_active=False
-        )
-
-        self.user.avatar_set.create()
-        Group.objects.all().last().user_set.add(self.user)
+        self._create_and_setting_user()
         self._insert_token_in_table()
 
     @staticmethod
     def accept_password_to_reg(token: str) -> None:
         """
-        Static method to accept user by token, sent him by email. If token is valid we do is_active = True and delete token.
+        Static method to accept user by token, sent him by email. If token is valid we make is_active = True and delete token.
         """
-        token_from_db = AcceptAuthToken.objects.get(token=token)
-        user = User.objects.get(id=token_from_db.user_id)
+        token_from_db = get_object_or_404(AcceptAuthToken, token=token)
+        user = get_object_or_404(User, id=token_from_db.user_id)
         user.is_active = True
         user.save()
         token_from_db.delete()

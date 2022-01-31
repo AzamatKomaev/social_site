@@ -26,8 +26,13 @@ class PersonalChatViewSet(viewsets.ViewSet):
             chat_service = PersonalChatService(from_user_username=request.user.username,
                                                to_user_username=to_user_username)
             if not chat_service.is_chat_exists():
-                chat_service.create()
-                return Response({"message": f"Chat was created successfully."})
+                new_chat = chat_service.create()
+                serializer = PersonalChatSerializer(
+                    new_chat,
+                    context={"request": request}
+                )
+                return Response(serializer.data, status=status.HTTP_201_CREATED)
+
         except ObjectDoesNotExist:
             return Response({"error": f"User with username {to_user_username} is not exists."},
                             status=status.HTTP_404_NOT_FOUND)

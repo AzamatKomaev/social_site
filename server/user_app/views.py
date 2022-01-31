@@ -40,17 +40,13 @@ class UserViewSet(viewsets.ViewSet):
         serializer = RegistrationUserSerializer(data=request.data)
         if serializer.is_valid():
             serializer.save()
-            return Response(serializer.data)
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
 
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
     def accept_registration_user(self, request, token: str):
         """The action to accept registration user by his token."""
-        try:
-            CreationUser.accept_password_to_reg(token=token)
-        except (ObjectDoesNotExist, NameError):
-            return Response({"message": "Token doesnt exists."}, status=status.HTTP_404_NOT_FOUND)
-
+        CreationUser.accept_password_to_reg(token=token)
         return Response({"message": "Accepted successfully."}, status=status.HTTP_200_OK)
 
     def list_of_user_posts(self, request, user_id: int):

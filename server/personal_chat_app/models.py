@@ -8,7 +8,7 @@ class PersonalChat(models.Model):
     users = models.ManyToManyField(AUTH_USER_MODEL)
 
     def __str__(self):
-        return str(self.id)
+        return f"Chat between {self.users.first()} and {self.users.last()}."
 
 
 class PersonalMessage(BaseMessage):

@@ -1,3 +1,4 @@
+#!/bin/sh
 import os
 import sys
 
