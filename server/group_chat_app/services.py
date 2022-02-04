@@ -1,3 +1,4 @@
+from datetime import datetime
 from typing import Optional, List
 
 from django.db.models import QuerySet
@@ -8,6 +9,17 @@ from .models import (
     GroupChat, GroupChatRequest, GroupChatRole
 )
 from user_app.models import User
+
+
+def sort_chat_list(serializer_data) -> list:
+    sorted_list = sorted(serializer_data,
+                         key=lambda x: (
+                             int(datetime.timestamp(datetime.strptime(x['last_message']['created_at'], '%Y-%m-%dT%H:%M:%S.%f')))
+                             if 'created_at' in x['last_message'] else 0
+                         ),
+                         reverse=True)
+
+    return sorted_list if len(sorted_list) < 5 else sorted_list[0:5]
 
 
 class GroupChatService:

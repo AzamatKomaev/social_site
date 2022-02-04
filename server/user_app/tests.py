@@ -1,11 +1,12 @@
 import json
 import uuid
+from typing import Union
 
 from django.contrib.auth.models import Group
 from django.urls import reverse
 
 from rest_framework import status
-from rest_framework.test import APITestCase
+from rest_framework.test import APITestCase, APIClient
 from rest_framework.response import Response
 
 from server.settings import BASE_DIR
@@ -28,6 +29,41 @@ class UserAPITestCase(APITestCase):
     def _accept_user(self, token) -> Response:
         url = reverse('accept-user', args=[token])
         response = self.client.patch(url)
+        return response
+
+    def _accept_all_users(self, users: list[User]) -> None:
+        for user in users:
+            user.is_active = True
+            user.save()
+
+    def _login_user(self, username=None, password=None) -> Response:
+        client = APIClient()
+        url = reverse("token_obtain_pair")
+        if username and password:
+            data = {"username": username, "password": password}
+        else:
+            data = {}
+
+        response = client.post(url, data=data, format='json')
+        return response
+
+    def _login_many_users(self, users: list[User]):
+        responses = []
+        for user in users:
+            response = self._login_user(user.username, "the_same_password")
+            responses.append({
+                user.id: {
+                    "data": response.json(),
+                    "status_code": response.status_code
+                }
+            })
+
+        return responses
+
+    def _get_current_user_response(self, jwt: str) -> Response:
+        url = reverse('current-user-data')
+        client = APIClient()
+        response = client.get(url, data=None, follow=False, HTTP_AUTHORIZATION=f'Bearer {jwt}')
         return response
 
     def test_creating_users(self):
@@ -54,3 +90,34 @@ class UserAPITestCase(APITestCase):
         self.assertEqual(is_active_list, [0 for _ in range(5)])
         self.assertEqual(wrong_requests_statuses, [404 for _ in range(5)])
         self.assertEqual(correct_requests_statuses, [200 for _ in range(5)])
+
+    def test_login_users(self):
+        self._create_users(self.users_dict)
+        users = User.objects.all()
+        self._accept_all_users(users)
+
+        worst_response1 = self._login_user('Invalid User', 'invalid_password')
+        worst_response2 = self._login_user()
+        correct_responses = self._login_many_users(users)
+
+        self.assertEqual(worst_response1.status_code, 401)
+        self.assertIn('detail', worst_response1.json())
+
+        self.assertEqual(worst_response2.status_code, 400)
+        self.assertEqual('username' in worst_response2.json() and 'password' in worst_response2.json(), True)
+
+        self.assertEqual(len(correct_responses), len(users))
+
+        for response in correct_responses:
+            for user_id, value in response.items():
+                response = self._get_current_user_response(value['data']['access'])
+
+                self.assertEqual(len(response.json()), 6)
+                self.assertEqual(response.json()['id'], user_id)
+                self.assertEqual(response.status_code, 200)
+
+    def test_searching_user(self):
+        self._create_users(self.users_dict)
+        users = User.objects.all()
+        self._accept_all_users(users)
+

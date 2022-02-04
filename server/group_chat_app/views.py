@@ -9,7 +9,7 @@ from django.core.paginator import Paginator, EmptyPage
 
 from user_app.models import User
 from .models import GroupChat
-from .services import GroupChatService, GroupChatRequestService, GroupChatRoleService
+from .services import GroupChatService, GroupChatRequestService, GroupChatRoleService, sort_chat_list
 from .serializers import (
     GroupChatSerializer, GroupMessageSerializer,
     GroupChatMembersSerializer, GroupChatRequestSerializer
@@ -27,20 +27,10 @@ def get_chat_by_id(chat_id: int) -> dict:
 class GroupChatViewSet(viewsets.ViewSet):
     permission_classes = [permissions.IsAuthenticated]
 
-    def sort_chat_list(self, serializer_data):
-        for chat in serializer_data:
-            if 'created_at' in chat['last_message']:
-                chat['last_message']['created_at'] = datetime.timestamp(
-                    datetime.strptime(chat['last_message']['created_at'], '%Y-%m-%dT%H:%M:%S.%f')
-                )
-
-        sorted_list = sorted(serializer_data, key=lambda x: x['last_message']['created_at'] if 'created_at' in x['last_message'] else 0, reverse=True)
-        return sorted_list
-
     def list(self, request):
         chats = GroupChat.objects.filter(users=request.user).order_by('-id')
         serializer = GroupChatSerializer(chats, many=True)
-        sorted_list = self.sort_chat_list(serializer.data)
+        sorted_list = sort_chat_list(serializer.data)
         return Response(sorted_list)
 
     def retrieve(self, request, chat_id: int):

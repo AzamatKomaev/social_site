@@ -3,6 +3,7 @@ from rest_framework import status, permissions, viewsets
 
 from django.core.exceptions import ObjectDoesNotExist
 
+from group_chat_app.services import sort_chat_list
 from .models import PersonalChat
 from .serializers import (
     PersonalMessageSerializer, PersonalChatSerializer
@@ -19,7 +20,9 @@ class PersonalChatViewSet(viewsets.ViewSet):
             chats,
             many=True,
             context={"request": request})
-        return Response(serializer.data)
+
+        sorted_list = sort_chat_list(serializer.data)
+        return Response(sorted_list)
 
     def retrieve(self, request, to_user_username: str):
         try:
