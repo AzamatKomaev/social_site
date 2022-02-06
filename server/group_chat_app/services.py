@@ -1,6 +1,7 @@
 from datetime import datetime
-from typing import Optional, List
+from typing import Optional, List, Union
 
+from django.core.paginator import Paginator, EmptyPage
 from django.db.models import QuerySet
 from django.shortcuts import get_object_or_404
 from rest_framework import status
@@ -9,6 +10,48 @@ from .models import (
     GroupChat, GroupChatRequest, GroupChatRole
 )
 from user_app.models import User
+
+
+def get_and_sort_chat_list(sort_by: Optional[str], request, chat_model, chat_serializer, page) -> dict:
+    chat_data: dict[str, Union[dict, int]]
+    chats = chat_model.objects.filter(users=request.user)
+
+    if sort_by == "last_message":
+        if chat_model == GroupChat:
+            chat_qs = chats.order_by("-groupmessage__created_at").exclude(groupmessage=None)
+        else:
+            chat_qs = chats.order_by("-personalmessage__created_at").exclude(personalmessage=None)
+
+        serializer = chat_serializer(chat_qs, many=True, context={'request': request})
+        chat_data = {
+            "list": serializer.data if len(chat_qs) < 5 else serializer.data[:5],
+            "status_code": status.HTTP_200_OK
+        }
+
+    elif sort_by == "-name" and page:
+        page_size = 15
+        paginator = Paginator(chats.order_by('-name'), page_size)
+
+        try:
+            serializer = chat_serializer(paginator.page(page), many=True, context={'request': request})
+            chat_data = {
+                "list": serializer.data,
+                "status_code": status.HTTP_200_OK
+            }
+        except EmptyPage:
+            chat_data = {
+                "list": [],
+                "status_code": status.HTTP_204_NO_CONTENT
+            }
+
+    else:
+        serializer = chat_serializer(chats, many=True, context={'request': request})
+        chat_data = {
+            "list": serializer.data,
+            "status_code": status.HTTP_200_OK
+        }
+
+    return chat_data
 
 
 def sort_chat_list(serializer_data) -> list:

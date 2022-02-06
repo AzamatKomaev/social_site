@@ -9,7 +9,10 @@ from django.core.paginator import Paginator, EmptyPage
 
 from user_app.models import User
 from .models import GroupChat
-from .services import GroupChatService, GroupChatRequestService, GroupChatRoleService, sort_chat_list
+from .services import (
+    GroupChatService, GroupChatRequestService, GroupChatRoleService,
+    get_and_sort_chat_list
+)
 from .serializers import (
     GroupChatSerializer, GroupMessageSerializer,
     GroupChatMembersSerializer, GroupChatRequestSerializer
@@ -28,10 +31,10 @@ class GroupChatViewSet(viewsets.ViewSet):
     permission_classes = [permissions.IsAuthenticated]
 
     def list(self, request):
-        chats = GroupChat.objects.filter(users=request.user).order_by('-id')
-        serializer = GroupChatSerializer(chats, many=True)
-        sorted_list = sort_chat_list(serializer.data)
-        return Response(sorted_list)
+        sort_by = request.query_params.get('sort_by', None)
+        page = request.query_params.get('page', None)
+        chat_data = get_and_sort_chat_list(sort_by, request, GroupChat, GroupChatSerializer, page)
+        return Response(chat_data['list'], status=chat_data['status_code'])
 
     def retrieve(self, request, chat_id: int):
         chat = get_object_or_404(GroupChat, id=chat_id)
@@ -60,10 +63,12 @@ class GroupMessageViewSet(viewsets.ViewSet):
     permission_classes = [permissions.IsAuthenticated]
 
     def list(self, request, chat_id: int):
-        chat = get_object_or_404(GroupChat, id=chat_id)
-        chat_service = GroupChatService(chat)
         page_number = request.query_params.get('page_number') or 1
         page_size = 15
+
+        chat = get_object_or_404(GroupChat, id=chat_id)
+        chat_service = GroupChatService(chat)
+
         paginator = Paginator(chat_service.get_chat_messages(), page_size)
 
         try:

@@ -22,7 +22,7 @@ class GroupChatSerializer(ModelSerializer):
         fields = '__all__'
 
     def get_last_message(self, obj: GroupChat) -> dict:
-        return GroupMessageSerializer(obj.groupmessage_set.all().first()).data
+        return GroupMessageSerializer(obj.groupmessage_set.first()).data
 
     def create(self, validated_data):
         if 'avatar' not in validated_data:
