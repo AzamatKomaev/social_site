@@ -6,7 +6,7 @@ const MessageInput = (props) => {
     const [message, setMessage] = useState("")
 
     const sendMessage = () => {
-        if (message != "") {
+        if (message !== "") {
             if (props.type_is_group) {
                 createGroupMessage(message, props.chat.id)
                     .then((result) => {
@@ -35,7 +35,7 @@ const MessageInput = (props) => {
     }
 
     const handleKeyPress = (e) => {
-        if (e.key == 'Enter') {
+        if (e.key === 'Enter') {
            sendMessage()
         }
     }

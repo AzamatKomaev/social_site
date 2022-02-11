@@ -2,7 +2,7 @@ import axios from 'axios';
 import {CategoryI, UserI} from "../interfaces";
 
 
-interface CurrentUserDataI {
+export interface CurrentUserDataI {
     info: UserI,
     isAuth: boolean
 }

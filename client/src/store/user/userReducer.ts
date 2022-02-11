@@ -1,4 +1,9 @@
-import {ACCEPT_CHAT_NOTIFICATION, GET_USER_CHAT_NOTIFICATIONS, GET_USER_DATA} from './actionType';
+import {
+    ACCEPT_CHAT_NOTIFICATION,
+    GET_USER_CHAT_NOTIFICATIONS,
+    GET_USER_DATA,
+    DELETE_CHAT_NOTIFICATION
+} from './actionType';
 import {GroupChatRequestI, UserI} from "../../interfaces";
 
 
@@ -22,8 +27,11 @@ export const userReducer = (state = defaultState, action: any) => {
         case GET_USER_CHAT_NOTIFICATIONS:
             return {...state, ...action.payload}
         case ACCEPT_CHAT_NOTIFICATION:
-            const newRequestList = state.chatRequestNotifications.filter(request => request.id !== action.payload.acceptedRequest.id)
-            return {...state, ...action.payload, chatRequestNotifications: newRequestList}
+            const newRequestListWithAcceptedRequest = state.chatRequestNotifications.filter(request => request.id !== action.payload.acceptedRequest.id)
+            return {...state, ...action.payload, chatRequestNotifications: newRequestListWithAcceptedRequest}
+        case DELETE_CHAT_NOTIFICATION:
+            let newRequestListWithoutDeletedRequest = state.chatRequestNotifications.filter(request => request.id !== action.payload.deletedRequestId)
+            return {...state, ...action.payload, chatRequestNotifications: newRequestListWithoutDeletedRequest}
         default:
             return state
     }

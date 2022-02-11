@@ -6,10 +6,13 @@ from django.db.models import QuerySet
 from django.shortcuts import get_object_or_404
 from rest_framework import status
 
+from personal_chat_app.models import PersonalChat
 from .models import (
     GroupChat, GroupChatRequest, GroupChatRole
 )
 from user_app.models import User
+from group_chat_app.sql.commands import get_ordered_group_chats
+from personal_chat_app.sql.commands import get_ordered_personal_chats
 
 
 def get_and_sort_chat_list(sort_by: Optional[str], request, chat_model, chat_serializer, page) -> dict:
@@ -18,9 +21,9 @@ def get_and_sort_chat_list(sort_by: Optional[str], request, chat_model, chat_ser
 
     if sort_by == "last_message":
         if chat_model == GroupChat:
-            chat_qs = chats.order_by("-groupmessage__created_at").exclude(groupmessage=None)
+            chat_qs = GroupChat.objects.raw(get_ordered_group_chats, (request.user.id,))
         else:
-            chat_qs = chats.order_by("-personalmessage__created_at").exclude(personalmessage=None)
+            chat_qs = PersonalChat.objects.raw(get_ordered_personal_chats, (request.user.id,))
 
         serializer = chat_serializer(chat_qs, many=True, context={'request': request})
         chat_data = {

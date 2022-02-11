@@ -4,9 +4,10 @@ import axios from 'axios';
 
 import Header from '../extend/Header';
 import Error404NotFound from '../extend/Error404NotFound';
-import Error429TooManyRequests from '../extend/Error429TooManyRequests';
 
 import ChatWindow from './include/chat/ChatWindow';
+import {getGroupChats} from "../../services/chatService";
+import {getPersonalChats} from "../../services/personalChatService";
 
 
 const getUserChats = async() => {
@@ -15,34 +16,11 @@ const getUserChats = async() => {
         group: []
     }
 
-    await axios.get("http://127.0.0.1:8000/api/v1/chats/", {
-        headers: {
-            Authorization: 'Bearer ' + localStorage.getItem("jwt")
-        }
-    })
-        .then((response) => {
-            chats.group = response.data
-        })
-        .catch((error) => {
-            if (error.response.status != 401) {
-                alert(error.response.status + " error")
-            }
-        })
+    const groupResponse = await getGroupChats('last_message', 0)
+    const personalResponse = await getPersonalChats('last_message', 0);
 
-    await axios.get("http://127.0.0.1:8000/api/v1/personal_chats/", {
-        headers: {
-            Authorization: 'Bearer ' + localStorage.getItem("jwt")
-        }
-    })
-        .then((response) => {
-            chats.personal = response.data
-        })
-        .catch((error) => {
-            if (error.response.status != 401) {
-                alert(error.response.status + " error")
-            }
-        })
-
+    chats.group = groupResponse.data
+    chats.personal = personalResponse.data
     return chats
 }
 
@@ -53,14 +31,24 @@ const ChatListPage = () => {
     const [groupChats, setGroupChats] = useState([])
     const [personalChats, setPersonalChats] = useState([])
 
+    const [update, setUpdate] = useState(0);
+
+    useEffect(() => {
+        setInterval(() => {
+            setUpdate(prevState => prevState+=1)
+        }, 5000)
+    }, [])
+
+
+
 
     useEffect(() => {
         getUserChats()
             .then((result) => {
                 setGroupChats(result.group)
                 setPersonalChats(result.personal)
-            })
-    }, [])
+        })
+    }, [update])
 
     if (userData.isAuth) {
         return (

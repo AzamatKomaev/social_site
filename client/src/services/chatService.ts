@@ -2,6 +2,20 @@ import axios from "axios";
 import {GroupChatI, GroupChatRequestI} from "../interfaces";
 
 
+export const getGroupChats = async(sortBy: string, page: number) => {
+    try {
+        return await axios.get(`http://127.0.0.1:8000/api/v1/chats?sort_by=${sortBy}&page=${page}`, {
+            headers: {
+                Authorization: 'Bearer ' + localStorage.getItem("jwt")
+            }
+        })
+    } catch (error) {
+        if (error.response.status !== 401) {
+            alert(error.response.status + " error")
+        }
+    }
+}
+
 export const getChatMembers = async(chatId) => {
     let members = []
 

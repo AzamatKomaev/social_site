@@ -6,13 +6,14 @@ import {
     getRequest
 } from "../../services/chatService";
 import {
+    ADD_NEW_GROUP_CHATS_IN_GROUP_CHAT_LIST, ADD_NEW_PERSONAL_CHATS_IN_PERSONAL_CHAT_LIST,
     CHECK_IS_REQUEST_EXISTS,
     CREATE_REQUEST, DELETE_REQUEST,
     GET_ALL_CHAT_MEMBERS,
     GET_ALL_CHAT_REQUESTS,
     GET_REQUEST
 } from "./actionTypes";
-import {GroupChatRequestI} from "../../interfaces";
+import {GroupChatI, GroupChatRequestI, PersonalChatI} from "../../interfaces";
 
 
 export const fetchGettingAllChatMembers = (chatId: number) => {
@@ -94,8 +95,15 @@ export const fetchDeletingRequest = (chatId: number, userId: number) => {
     }
 }
 
-export const fetchAcceptingChatRequest = (fromChatId: number) => {
-    return async function (dispatch) {
 
+export const addNewChatsInChatList = (newChats: Array<GroupChatI | PersonalChatI>, type: string) => {
+    return function (dispatch) {
+        dispatch({
+            type: type==="group" ? ADD_NEW_GROUP_CHATS_IN_GROUP_CHAT_LIST : ADD_NEW_PERSONAL_CHATS_IN_PERSONAL_CHAT_LIST,
+            payload: {
+                newLoadedChatList: newChats
+            }
+        })
     }
 }
+

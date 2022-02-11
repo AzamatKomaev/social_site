@@ -15,7 +15,7 @@ const getChatMessages = async(chatId, pageNumber) => {
         error: null
     }
 
-    await axios.get("http://127.0.0.1:8000/api/v1/chats/" + chatId + "/messages/?page_number=" + pageNumber, {
+    await axios.get(`http://127.0.0.1:8000/api/v1/chats/${chatId}/messages/?page_number=${pageNumber}`, {
         headers: {
             Authorization: 'Bearer ' + localStorage.getItem("jwt")
         }
@@ -38,7 +38,6 @@ const getChatMessages = async(chatId, pageNumber) => {
 const GroupMessageChatPage = (props) => {
     const chatId = props.match.params.chatId;
 
-    const [isAuth, setIsAuth] = useState()
     const [currentUserData, setCurrentUserData] = useState()
 
     const [messages, setMessages] = useState([])
@@ -46,7 +45,7 @@ const GroupMessageChatPage = (props) => {
     const [newMessages, setNewMessages] = useState([])
 
     const [chat, setChat] = useState(null)
-    const [scrollHeights, setScrollHeights] = useState([])
+    const [scrollHeights, setScrollHeights] = useState([1355])
     const [error, setError] = useState(false)
 
     const [currentPage, setCurrentPage] = useState(2);
@@ -78,13 +77,11 @@ const GroupMessageChatPage = (props) => {
     useEffect(() => {
         getCurrentUserData()
             .then((result) => {
-                setIsAuth(result.isAuth)
-                setCurrentUserData(result.info)
+                setCurrentUserData(result)
             })
         getChatMessages(chatId, 1)
             .then((result) => {
                 setMessages(result.messages.reverse())
-
                 let chatHistory = document.getElementById('chat-window')
                 chatHistory.scrollTop = chatHistory.scrollHeight;
             })
@@ -140,13 +137,10 @@ const GroupMessageChatPage = (props) => {
             currentPage !== -1
         ) {
             setFetching(true)
+            let elem = document.getElementById('chat-window')
+            console.log(`Scroll top is ${elem.scrollTop}`)
             console.log(scrollHeights)
-
-            if (scrollHeights.length === 1) {
-                e.target.scrollTop = 3705
-            } else {
-                e.target.scrollTop = e.target.scrollHeight - scrollHeights[scrollHeights.length - 2]
-            }
+            elem.scrollTop = e.target.scrollHeight - scrollHeights[scrollHeights.length - 2]
         }
     }
 
@@ -159,14 +153,6 @@ const GroupMessageChatPage = (props) => {
             </div>
         )
     } else if ((messages || newMessages) && currentUserData) {
-
-        try {
-            let chatHistory = document.getElementById('chat-window')
-            //setCurrentHeight(chatHistory.scrollHeight)
-        } catch (e) {
-            console.log("pass")
-        }
-
         return (
             <div>
                 <Header/>
@@ -182,9 +168,12 @@ const GroupMessageChatPage = (props) => {
             </div>
         )
     } else {
+        console.log(messages)
+        console.log(newMessages)
+        console.log(currentUserData)
         return (
             <div>
-                errorrrr
+                лох
             </div>
         )
     }

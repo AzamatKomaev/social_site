@@ -36,7 +36,7 @@ const MessageChatWindow = (props) => {
             )}
     })
 
-    if (props.chat != undefined) {
+    if (props.chat !== undefined) {
         return (
             <main className="content">
                 <div className="container p-0">

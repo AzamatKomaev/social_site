@@ -1,9 +1,15 @@
 import {
-    CHECK_IS_REQUEST_EXISTS, CREATE_REQUEST, DELETE_REQUEST,
+    ADD_NEW_GROUP_CHATS_IN_GROUP_CHAT_LIST,
+    CREATE_REQUEST,
+    DELETE_REQUEST,
     GET_ALL_CHAT_MEMBERS,
-    GET_ALL_CHAT_REQUESTS, GET_REQUEST
+    GET_ALL_CHAT_REQUESTS,
+    GET_GROUP_CHAT_LIST,
+    GET_GROUP_CHAT_LIST_WITHOUT_MESSAGES,
+    GET_GROUP_CHAT_LIST_WITH_MESSAGES,
+    GET_CURRENT_USER_CHAT_LIST, FILTER_CHAT_LIST_BY_STRING, CLEAR_FILTERED_CHAT_LIST
 } from "./actionTypes";
-import {GroupChatRequestI} from "../../interfaces";
+import {GroupChatI, GroupChatRequestI} from "../../interfaces";
 
 
 interface RequestState {
@@ -40,6 +46,60 @@ export const requestListReducer = (state: RequestListState = defaultRequestListS
         case DELETE_REQUEST:
             let requestListWithoutDeletedRequest = state.requestList.filter(request => request.id !== action.payload.deletingRequestId)
             return {...state, ...action.payload, requestList: requestListWithoutDeletedRequest}
+        default:
+            return state
+    }
+}
+
+
+interface ChatListStateI {
+    groupChats: Array<GroupChatI>,
+    groupChatsByName: Array<GroupChatI>,
+    groupChatsByEmptyMessages: Array<GroupChatI>,
+    groupChatsByLastMessages: Array<GroupChatI>,
+    groupChatsCurrentUser: Array<GroupChatI>,
+    groupChatsByFilterString: Array<GroupChatI>
+}
+
+const defaultChatListState = {
+    groupChats: [],
+    groupChatsByName: [],
+    groupChatsByEmptyMessages: [],
+    groupChatsByLastMessages: [],
+    groupChatsCurrentUser: [],
+    groupChatsByFilterString: []
+}
+
+export const chatListReducer = (state: ChatListStateI = defaultChatListState, action: any) => {
+
+    switch (action.type) {
+        case GET_GROUP_CHAT_LIST:
+            const groupChats1 = state.groupChatsByName
+            return {...state, groupChats: groupChats1}
+
+        case GET_GROUP_CHAT_LIST_WITHOUT_MESSAGES:
+            const groupChats2 = state.groupChats.filter(groupChat => groupChat.last_message.text === "")
+            return {...state, groupChats: groupChats2, groupChatsByEmptyMessages: groupChats2}
+
+        case GET_GROUP_CHAT_LIST_WITH_MESSAGES:
+            const groupChats3 = state.groupChats.filter(groupChat => groupChat.last_message?.created_at != null)
+            return {...state, groupChats: groupChats3, groupChatsByLastMessages: groupChats3}
+
+        case GET_CURRENT_USER_CHAT_LIST:
+            const userId = action.payload.userId
+            const groupChats4 = state.groupChats.filter(groupChat => groupChat.creator === userId)
+            return {...state, groupChats: groupChats4, groupChatsCurrentUser: groupChats4}
+
+        case FILTER_CHAT_LIST_BY_STRING:
+            const string = action.payload.string;
+            return {...state, groupChatsByFilterString: state.groupChats.filter(groupChat => groupChat.name.indexOf(string) !== -1)};
+
+        case CLEAR_FILTERED_CHAT_LIST:
+            return {...state, groupChatsByFilterString: []}
+
+        case ADD_NEW_GROUP_CHATS_IN_GROUP_CHAT_LIST:
+            const newGroupChatList = [...state.groupChats, ...action.payload.newLoadedChatList]
+            return {...state, groupChats: newGroupChatList, groupChatsByName: newGroupChatList}
         default:
             return state
     }

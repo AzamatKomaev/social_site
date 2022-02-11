@@ -1,76 +1,32 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useSelector } from 'react-redux';
-import axios from 'axios';
 
 import Header from '../extend/Header';
 import Error404NotFound from '../extend/Error404NotFound';
 
 import MessageChatWindow from './include/message/MessageChatWindow';
+import {getPersonalChat, getPersonalChatMessages} from "../../services/personalChatService";
+import {CurrentUserDataI, getCurrentUserData} from "../../services/service";
 
-
-interface personalChatDataI {
-    info: object | null,
-    error: number | null
-}
-
-
-const getPersonalChat = async(username: string) => {
-    let data: personalChatDataI = {
-        info: null,
-        error: null
-    }
-
-    await axios.get("http://127.0.0.1:8000/api/v1/personal_chats/" + username + "/", {
-        headers: {
-            Authorization: 'Bearer ' + localStorage.getItem("jwt")
-        }
-    })
-        .then((response) => {
-            data.info = response.data
-        })
-        .catch((error) => {
-            data.error = error.response.status
-        })
-
-    return data;
-}
-
-const getPersonalChatMessages = async(username: string, pageNumber: number) => {
-    let data =  {
-        messages: null,
-        error: null
-    }
-
-    await axios.get("http://127.0.0.1:8000/api/v1/personal_chats/" + username + "/messages/?page_number=" + pageNumber, {
-        headers: {
-            Authorization: 'Bearer ' + localStorage.getItem("jwt")
-        }
-    })
-        .then((response) => {
-            if (response.status !== 204) {
-                data.messages = response.data
-            } else {
-                data.error = true
-            }
-        })
-        .catch((error) => {
-            data.error = true
-        })
-
-    return data
-}
 
 
 const PersonalMessageChatPage = (props: any) => {
     const interlocutorUsername = props.match.params.username
 
-    const userData = useSelector((state: any) => state.user)
+    const [currentUserData, setCurrentUserData] = useState<CurrentUserDataI>({
+        info: null,
+        isAuth: false
+    })
 
     const [messages, setMessages] = useState([])
     const [chat, setChat] = useState<any>()
     const [error, setError] = useState<any>(false)
 
     const [newMessages, setNewMessages] = useState([])
+
+    const [currentPage, setCurrentPage] = useState(2);
+    const [fetching, setFetching] = useState(false)
+    const [scrollHeights, setScrollHeights] = useState([1355])
 
     const ws: any = useRef()
 
@@ -96,6 +52,11 @@ const PersonalMessageChatPage = (props: any) => {
     }, [])
 
     useEffect(() => {
+        getCurrentUserData()
+            .then((result) => {
+                setCurrentUserData(result)
+            })
+
         getPersonalChatMessages(interlocutorUsername, 1)
             .then((result) => {
                 setMessages(result.messages.reverse())
@@ -103,6 +64,7 @@ const PersonalMessageChatPage = (props: any) => {
                 chatHistory.scrollTop = chatHistory.scrollHeight;
             })
     }, [])
+
 
     useEffect(() => {
         ws.current = new WebSocket(
@@ -121,12 +83,49 @@ const PersonalMessageChatPage = (props: any) => {
         }
     }, [])
 
+    useEffect(() => {
+        if (fetching && currentPage !== -1) {
+            console.log("fetching")
+            getPersonalChatMessages(interlocutorUsername, currentPage)
+                .then((result) => {
+                    if (!result.error) {
+                        setMessages([...result.messages.reverse(), ...messages])
+                        setCurrentPage(prevState => prevState + 1)
+                    } else {
+                        setCurrentPage(-1)
+                    }
+                })
+                .catch(err => {
+                    console.log(err);
+                })
+                .finally(() => {
+                    setFetching(false)
+                })
+        }
+    }, [fetching])
+
+    useEffect(() => {
+        if (messages && messages.length > 0) {
+            let chatHistory = document.getElementById('chat-window')
+            setScrollHeights([...scrollHeights, chatHistory.scrollHeight])
+        }
+    }, [messages])
 
     const scrollHandler = (e) => {
+        if (
+            e.target.scrollTop < 10 &&
+            currentPage !== -1
+        ) {
+            setFetching(true)
+            let elem = document.getElementById('chat-window')
+            console.log(`Scroll top is ${elem.scrollTop}`)
+            console.log(scrollHeights)
+            elem.scrollTop = e.target.scrollHeight - scrollHeights[scrollHeights.length - 2]
+        }
     }
 
 
-    if (!userData.isAuth || error) {
+    if (!currentUserData.isAuth || error) {
         return (
             <div>
                 <Header/>
@@ -143,6 +142,7 @@ const PersonalMessageChatPage = (props: any) => {
                     newMessages={newMessages}
                     chat={chat}
                     ws={ws.current}
+                    currentUserData={currentUserData}
                     scrollHandler={scrollHandler}
                  />
             </div>

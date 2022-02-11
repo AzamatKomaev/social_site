@@ -18,7 +18,7 @@ const PostPage = (props) => {
     let categoryId = props.match.params.categoryId;
 
     useEffect(() => {
-        if (fetching & currentPage != -1) {
+        if (fetching && currentPage != -1) {
             console.log("fetching")
             axios.get("http://127.0.0.1:8000/api/v1/category/" + categoryId + "/?page_number=" + currentPage)
                 .then(response => {
@@ -52,8 +52,8 @@ const PostPage = (props) => {
     }, [])
 
     const scrollHandler = (e) => {
-        if (e.target.documentElement.scrollHeight - (e.target.documentElement.scrollTop + window.innerHeight) < 100 &
-            currentPage != -1
+        if (e.target.documentElement.scrollHeight - (e.target.documentElement.scrollTop + window.innerHeight) < 100 &&
+            currentPage !== -1
         ) {
             setFetching(true)
         }
@@ -70,14 +70,14 @@ const PostPage = (props) => {
                  />
             </div>
         )
-    } else if (error.response == 404) {
+    } else if (error.response === 404) {
         return (
             <div>
                 <Header/>
                 <Error404NotFound style={{marginTop: "25px"}}/>
             </div>
         )
-    } else if (error.response == 429) {
+    } else if (error.response === 429) {
         return (
             <div>
                 <Header/>

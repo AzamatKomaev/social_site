@@ -1,6 +1,9 @@
 import React from 'react';
 import {useDispatch} from "react-redux";
-import {fetchAcceptingChatRequest} from "../../../../../store/user/actions";
+import {fetchAcceptingChatRequest, fetchDeletingChatRequestNotification} from "../../../../../store/user/actions";
+import {fetchDeletingRequest} from "../../../../../store/chat/actions";
+import {DELETE_CHAT_NOTIFICATION} from "../../../../../store/user/actionType";
+
 
 const ChatNotificationCell = (props: any) => {
     const dispatch = useDispatch()
@@ -10,7 +13,8 @@ const ChatNotificationCell = (props: any) => {
     }
 
     const handleDeleteChatRequestButton = () => {
-
+        dispatch(fetchDeletingChatRequestNotification(props.notification.from_chat.id, props.notification.to_user.id, props.notification.id))
+        //dispatch(fetchDeletingRequest(props.notification.from_chat.id, props.notification.to_user.id))
     }
 
     return (
@@ -39,7 +43,7 @@ const ChatNotificationCell = (props: any) => {
                         <button className="btn btn-primary" onClick={() => handleAcceptChatRequestButton()}>
                             Вступить
                         </button>
-                        <button className="btn btn-danger" style={{marginLeft: "10px"}}>
+                        <button className="btn btn-danger" style={{marginLeft: "10px"}} onClick={() => handleDeleteChatRequestButton()}>
                             Отклонить
                         </button>
                     </div>
@@ -47,7 +51,7 @@ const ChatNotificationCell = (props: any) => {
                         <button className="btn btn-primary" style={{width: "100%"}} onClick={() => handleAcceptChatRequestButton()}>
                             Вступить
                         </button>
-                        <button className="btn btn-danger" style={{width: "100%"}}>
+                        <button className="btn btn-danger" style={{width: "100%"}} onClick={() => handleDeleteChatRequestButton()}>
                             Отклонить
                         </button>
                     </div>
@@ -57,7 +61,7 @@ const ChatNotificationCell = (props: any) => {
                         <button className="btn btn-primary" style={{width: "75%"}} onClick={() => handleAcceptChatRequestButton()}>
                             Вступить
                         </button>
-                        <button className="btn btn-danger" style={{width: "75%"}}>
+                        <button className="btn btn-danger" style={{width: "75%"}} onClick={() => handleDeleteChatRequestButton()}>
                             Отклонить
                         </button>
                     </div>

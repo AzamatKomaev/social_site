@@ -28,7 +28,8 @@ interface MessageI {
     text: string,
     created_at: string,
     polymorphic_ctype?: number,
-    chat: number
+    chat: number,
+
 }
 
 export interface GroupChatI {
@@ -38,6 +39,14 @@ export interface GroupChatI {
     created_at: string,
     avatar: string,
     creator: number,
+    users: number[]
+}
+
+export interface PersonalChatI {
+    id: number,
+    last_message: MessageI,
+    interlocutor: UserI,
+    messages_count: number,
     users: number[]
 }
 

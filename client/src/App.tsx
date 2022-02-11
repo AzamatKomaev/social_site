@@ -30,6 +30,8 @@ import GroupMessageChatPage from './components/chat-ui/GroupMessageChatPage';
 
 import UserPage from './components/profile-ui/UserPage';
 import FriendListUser from "./components/profile-ui/FriendListUser";
+import GroupChatListPage from "./components/chat-ui/GroupChatListPage";
+import PersonalChatListPage from "./components/chat-ui/PersonalChatListPage";
 
 
 const App = (props: any) => {
@@ -59,9 +61,12 @@ const App = (props: any) => {
                 <Route exact path='/users/:username/friends/' component={FriendListUser}/>
 
                 <Route exact path='/chats/' component={ChatListPage}/>
-                <Route exact path='/chats/:chatId/' component={GroupMessageChatPage}/>
-                <Route exact path='/chats/:chatId/settings/' component={ChatSettingPage}/>
-                <Route exact path='/personal_chats/:username/' component={PersonalMessageChatPage}/>
+                <Route exact path='/chats/group/' component={GroupChatListPage}/>
+                <Route exact path='/chats/personal/' component={PersonalChatListPage}/>
+
+                <Route exact path='/chats/group/:chatId/' component={GroupMessageChatPage}/>
+                <Route exact path='/chats/group/:chatId/settings/' component={ChatSettingPage}/>
+                <Route exact path='/chats/personal/:username/' component={PersonalMessageChatPage}/>
 
                 <Redirect from='/' to='/categories'/>
             </Switch>

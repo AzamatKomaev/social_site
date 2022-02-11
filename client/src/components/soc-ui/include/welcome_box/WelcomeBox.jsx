@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { useSelector } from 'react-redux';
 
 
@@ -16,7 +16,6 @@ const WelcomeAuthBox = (props) => {
     }
 
     if (userData) {
-        console.log(userData)
         return (
             <div className="container">
                 <div className="jumbotron">

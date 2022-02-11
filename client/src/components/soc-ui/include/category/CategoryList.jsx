@@ -1,8 +1,5 @@
 import React from 'react';
-
-
 import Category from './Category';
-import '../../../../App.css';
 
 
 const CategoryList = (props) => {

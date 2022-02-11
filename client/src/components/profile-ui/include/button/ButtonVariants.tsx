@@ -46,6 +46,13 @@ const ButtonVariants = (props: any) => {
     } else if ((friendRequest.detail) && (friendRequest.detail.is_accepted === false)) {
         return (
             <div>
+                <a
+                    href={`/chats/personal/${props.user.username}/`}
+                    className="btn btn-info default-button"
+                >
+                    Отправить сообщение
+                </a>
+                {'\n'}
                 {friendRequest.detail.to_user.id === props.user.id
                     ?
                         <button
@@ -70,6 +77,13 @@ const ButtonVariants = (props: any) => {
     } else if (currentUserData.info.friends.indexOf(props.user.id) === -1) {
         return (
             <div>
+                <a
+                    href={`/chats/personal/${props.user.username}/`}
+                    className="btn btn-info default-button"
+                >
+                    Отправить сообщение
+                </a>
+                {'\n'}
                 <button
                     type="button"
                     className="btn btn-outline-primary btn-block default-button"
@@ -83,6 +97,12 @@ const ButtonVariants = (props: any) => {
     } else if (currentUserData.info.friends.indexOf(props.user.id) !== -1) {
         return (
             <div>
+                <a
+                    href={`/chats/personal/${props.user.username}/`}
+                    className="btn btn-info default-button"
+                >
+                    Отправить сообщение
+                </a>
                 <button
                     type="button"
                     className="btn btn-outline-primary btn-block default-button"

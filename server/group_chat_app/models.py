@@ -1,7 +1,8 @@
 from django.db import models
+from datetime import datetime
 
 from server.settings import AUTH_USER_MODEL
-from user_app.base_models import BaseMessage, BaseRequest
+from user_app.base_models import BaseRequest
 
 
 class GroupChat(models.Model):
@@ -36,7 +37,9 @@ class GroupChatRole(models.Model):
     chat = models.ForeignKey(GroupChat, on_delete=models.CASCADE)
 
 
-class GroupMessage(BaseMessage):
+class GroupMessage(models.Model):
+    text = models.TextField()
+    created_at = models.DateTimeField(auto_now_add=True)
     chat = models.ForeignKey(GroupChat, on_delete=models.CASCADE, default=None)
     user = models.ForeignKey(AUTH_USER_MODEL, on_delete=models.CASCADE, default=None)
 

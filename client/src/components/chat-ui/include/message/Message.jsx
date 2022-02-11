@@ -4,10 +4,10 @@ import { getReadableDateFormat } from '../../../../services/service';
 
 
 const Message = (props) => {
-    if (props.message.user_data !== undefined) {
+    if (props?.message?.user_data) {
         return (
             <div>
-                {props.currentUserData.id == props.message.user_data.id
+                {props.currentUserData.info.id === props.message.user_data.id
                 ?
                     <div className="chat-message-right pb-4" style={{width: "70%"}}>
                         <div>

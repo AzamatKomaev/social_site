@@ -3,14 +3,17 @@ import thunk from 'redux-thunk'
 
 import { userReducer } from './user/userReducer';
 import { friendRequestReducer, friendListReducer } from './friend/friendReducer';
-import {requestListReducer} from "./chat/chatReducer";
+import {chatListReducer, requestListReducer} from "./chat/chatReducer";
+import {personalChatReducer} from "./chat/personalChatReducer";
 
 
 const rootReducer = combineReducers({
     user: userReducer,
     friendRequest: friendRequestReducer,
     friendList: friendListReducer,
-    requestList: requestListReducer
+    requestList: requestListReducer,
+    chatList: chatListReducer,
+    personalChatList: personalChatReducer
 })
 
 

@@ -8,4 +8,5 @@ geckodriver
 geckodriver.log
 google_api
 node_modules
-static/*
+server/static/*
+!server/static/img
