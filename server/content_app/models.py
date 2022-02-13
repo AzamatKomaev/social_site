@@ -16,10 +16,8 @@ class Category(models.Model):
 
 
 class Post(models.Model):
-    """Таблица для хранения поста"""
     user = models.ForeignKey(AUTH_USER_MODEL, on_delete=models.CASCADE)
     category = models.ForeignKey(Category, on_delete=models.CASCADE)
-
     title = models.CharField(max_length=200)
     text = models.TextField()
     photo = models.ImageField(null=True, blank=True, upload_to="media/post_photo")
@@ -50,4 +48,24 @@ class Comment(models.Model):
         return self.text
 
 
+class Group(models.Model):
+    name = models.CharField(max_length=255)
+    description = models.TextField()
+    avatar = models.FileField(upload_to="media/group_avatars")
+    interests = models.ManyToManyField('Interest')
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
 
+    class Meta:
+        verbose_name = "Группа"
+        verbose_name_plural = "Группы"
+
+    def __str__(self):
+        return f"Group {self.name}"
+
+
+class Interest(models.Model):
+    name = models.CharField(max_length=200)
+
+    def __str__(self):
+        return self.name

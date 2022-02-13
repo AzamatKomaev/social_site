@@ -83,13 +83,16 @@ class GroupChatService:
         """Method to check is this user member of group chat."""
         return bool(user in self.chat.users.all())
 
+    def is_user_admin(self, user: User):
+        return self.chat.creator.id == user.id
+
     def get_chat_members(self) -> QuerySet:
         """Method to get all chat members."""
         members = self.chat.users.all()
         return members
 
     @staticmethod
-    def create_chat(creator: User, name: str, avatar, users: List[User], *args, **kwargs) -> GroupChat:
+    def create_chat(creator: User, name: str, avatar: Optional[str], users: list[User], *args, **kwargs) -> GroupChat:
         chat: GroupChat
 
         if not avatar:
@@ -111,6 +114,10 @@ class GroupChatService:
         )
         chat.users.add(users[0])
         return chat
+
+    def delete_chat(self):
+        print("I WAS WORKED3")
+        self.chat.delete()
 
 
 class GroupChatRequestService:
@@ -190,17 +197,18 @@ class GroupChatRequestService:
                 "status": status.HTTP_404_NOT_FOUND
             }
 
-        if request_user == chat_request.to_user or request_user == chat_request.from_chat.creator:
+        if not (request_user == chat_request.to_user or request_user == chat_request.from_chat.creator):
             return {
-                "is_deleted": self._delete_chat_request(chat_request),
-                "message": "Success",
-                "status": status.HTTP_204_NO_CONTENT
+                "is_deleted": False,
+                "message": "You dont have a permission to do it.",
+                "status": status.HTTP_403_FORBIDDEN
             }
 
+        is_deleted = self._delete_chat_request(chat_request)
         return {
-            "is_deleted": False,
-            "message": "Bad request",
-            "status": status.HTTP_400_BAD_REQUEST
+            "is_deleted": is_deleted,
+            "message": "Success" if is_deleted else "Bad request",
+            "status": status.HTTP_200_OK if is_deleted else status.HTTP_400_BAD_REQUEST
         }
 
 

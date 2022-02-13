@@ -1,11 +1,9 @@
 from typing import Dict, Optional
-from datetime import datetime
 
+from django.core.paginator import Paginator, EmptyPage
 from django.shortcuts import get_object_or_404
 from rest_framework.response import Response
 from rest_framework import status, permissions, viewsets
-
-from django.core.paginator import Paginator, EmptyPage
 
 from user_app.models import User
 from .models import GroupChat
@@ -37,7 +35,9 @@ class GroupChatViewSet(viewsets.ViewSet):
         return Response(chat_data['list'], status=chat_data['status_code'])
 
     def retrieve(self, request, chat_id: int):
+        print("I WAS WORKED4")
         chat = get_object_or_404(GroupChat, id=chat_id)
+        print("I WAS WORKED5")
         chat_serializer = GroupChatSerializer(chat)
         return Response(chat_serializer.data)
 
@@ -57,6 +57,18 @@ class GroupChatViewSet(viewsets.ViewSet):
             return Response(serializer.data, status=status.HTTP_201_CREATED)
 
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    def destroy(self, request, chat_id: int):
+        print("I WAS WORKED1")
+        chat = get_object_or_404(GroupChat, id=chat_id)
+        print("I WAS WORKED2")
+        chat_service = GroupChatService(chat)
+
+        if not chat_service.is_user_admin(request.user):
+            return Response({"text": "You dont have permission to do it."}, status=status.HTTP_403_FORBIDDEN)
+
+        chat_service.delete_chat()
+        return Response({"text": "The chat was deleted successfully!"}, status=status.HTTP_200_OK)
 
 
 class GroupMessageViewSet(viewsets.ViewSet):
@@ -144,6 +156,9 @@ class GroupChatRequestViewSet(viewsets.ViewSet):
     def create(self, request, chat_id: int, user_id: int):
         group_chat_request_service = GroupChatRequestService(chat_id)  # request service
         group_chat_service = GroupChatService(group_chat_request_service.chat)  # chat service
+
+        if not group_chat_request_service.is_user_admin(request.user):
+            return Response({"message": "You dont have permission to do it."}, status=status.HTTP_403_FORBIDDEN)
 
         if group_chat_request_service.is_request_exists(user_id):
             return Response({"message": "Request with this user already exists"}, status=status.HTTP_400_BAD_REQUEST)

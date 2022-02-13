@@ -20,7 +20,7 @@ class GroupChatMiddleware:
 
     def _change_response(self, response, content, status_code):
         response.content = json.dumps(content)
-        response.status = status_code
+        response.status_code = status_code
         return response
 
     def __init__(self, get_response):
@@ -30,14 +30,13 @@ class GroupChatMiddleware:
         response = self.get_response(request)
 
         if (
-            re.match(self.prefixes['chat_retrieve'], request.path) or
+            (re.match(self.prefixes['chat_retrieve'], request.path) and request.method != "DELETE") or
             re.match(self.prefixes['chat_messages'], request.path) or
             re.match(self.prefixes['chat_members'], request.path) or
             (re.match(self.prefixes['chat_request_without_user_id'], request.path) and (request.method == "GET"))
         ):
             chat_id = int(request.path.split("/")[4])
             chat = get_object_or_404(GroupChat, id=chat_id)
-
             data_is_user_member = self.is_user_member(request, chat)
 
             if data_is_user_member['error_bool']:
