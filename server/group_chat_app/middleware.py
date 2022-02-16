@@ -35,6 +35,10 @@ class GroupChatMiddleware:
             re.match(self.prefixes['chat_members'], request.path) or
             (re.match(self.prefixes['chat_request_without_user_id'], request.path) and (request.method == "GET"))
         ):
+            """
+            Check is url belong to some of these prefix regex strings.
+            If it doesnt belong to these ones, just dont change a response.
+            """
             chat_id = int(request.path.split("/")[4])
             chat = get_object_or_404(GroupChat, id=chat_id)
             data_is_user_member = self.is_user_member(request, chat)
@@ -71,4 +75,3 @@ class GroupChatMiddleware:
             },
             "status_code": 200 if is_user_admin else 403
         }
-

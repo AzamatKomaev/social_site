@@ -84,7 +84,7 @@ class GroupChatService:
         return bool(user in self.chat.users.all())
 
     def is_user_admin(self, user: User):
-        return self.chat.creator.id == user.id
+        return self.chat.creator == user
 
     def get_chat_members(self) -> QuerySet:
         """Method to get all chat members."""
@@ -116,7 +116,6 @@ class GroupChatService:
         return chat
 
     def delete_chat(self):
-        print("I WAS WORKED3")
         self.chat.delete()
 
 

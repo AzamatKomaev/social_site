@@ -1,5 +1,6 @@
 from jwt import decode as jwt_decode
 from typing import Union
+from urllib.parse import urlparse, parse_qs
 
 from channels.db import database_sync_to_async, close_old_connections
 
@@ -38,11 +39,11 @@ class TokenAuthMiddleware:
     async def __call__(self, scope, receive, send):
         close_old_connections()
 
-        token = scope['query_string'].decode() \
-            .replace("token=", "") \
-            .replace("/", "") \
-            if scope['query_string'].decode() != "null" else "null"
-        scope['user'] = await get_user(token)
+        unparsed_token = scope['query_string']
+
+        list_with_token_or_none = parse_qs(unparsed_token).get(b'token', None)
+        parsed_token = list_with_token_or_none[0] if list_with_token_or_none else None
+        scope['user'] = await get_user(parsed_token)
 
         if scope['user'] == AnonymousUser():
             raise exceptions.AuthenticationFailed("AnonymousUser can't connect to chat ws.")

@@ -35,9 +35,7 @@ class GroupChatViewSet(viewsets.ViewSet):
         return Response(chat_data['list'], status=chat_data['status_code'])
 
     def retrieve(self, request, chat_id: int):
-        print("I WAS WORKED4")
         chat = get_object_or_404(GroupChat, id=chat_id)
-        print("I WAS WORKED5")
         chat_serializer = GroupChatSerializer(chat)
         return Response(chat_serializer.data)
 
@@ -59,9 +57,7 @@ class GroupChatViewSet(viewsets.ViewSet):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
     def destroy(self, request, chat_id: int):
-        print("I WAS WORKED1")
         chat = get_object_or_404(GroupChat, id=chat_id)
-        print("I WAS WORKED2")
         chat_service = GroupChatService(chat)
 
         if not chat_service.is_user_admin(request.user):
@@ -213,3 +209,10 @@ class GroupChatRoleViewSet(viewsets.ViewSet):
                             status=status.HTTP_400_BAD_REQUEST)
 
         chat_role_service = GroupChatRoleService(chat_id, user_id)
+
+    def destroy(self, request, chat_id: int):
+        user_id = request.data.get('user_id', None)
+
+        if not user_id:
+            return Response({"message": "Bad request: there is no necessary data in request body."},
+                            status=status.HTTP_400_BAD_REQUEST)

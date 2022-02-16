@@ -15,7 +15,7 @@ from .services import GroupChatService
 class GroupChatSerializer(ModelSerializer):
     user = HiddenField(default=CurrentUserDefault())
     last_message = SerializerMethodField('get_last_message')
-
+    creator = SerializerMethodField('get_creator')
 
     class Meta:
         model = GroupChat
@@ -23,6 +23,9 @@ class GroupChatSerializer(ModelSerializer):
 
     def get_last_message(self, obj: GroupChat) -> dict:
         return GroupMessageSerializer(obj.groupmessage_set.first()).data
+
+    def get_creator(self, obj: GroupChat) -> dict:
+        return UserSerializer(obj.creator).data
 
     def create(self, validated_data):
         if 'avatar' not in validated_data:
