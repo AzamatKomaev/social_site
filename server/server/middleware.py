@@ -1,6 +1,6 @@
 from jwt import decode as jwt_decode
 from typing import Union
-from urllib.parse import urlparse, parse_qs
+from urllib.parse import parse_qs
 
 from channels.db import database_sync_to_async, close_old_connections
 
