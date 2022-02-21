@@ -1,9 +1,10 @@
 import json
+import random
 import uuid
-from typing import Union
+from typing import  Optional
 
 from django.contrib.auth.models import Group
-from django.urls import reverse
+from django.urls import reverse, NoReverseMatch
 
 from rest_framework import status
 from rest_framework.test import APITestCase, APIClient
@@ -59,6 +60,17 @@ class UserAPITestCase(APITestCase):
             })
 
         return responses
+
+    def _find_user(self, user_id: Optional[int] = None, username: Optional[str] = None) -> Optional[Response]:
+        client = APIClient()
+
+        try:
+            url = reverse('user.find_by_id', args=[user_id]) if user_id else reverse('user.find_by_username', args=[username])
+            response = client.get(url)
+        except NoReverseMatch:
+            return
+
+        return response
 
     def _get_current_user_response(self, jwt: str) -> Response:
         url = reverse('current-user-data')
@@ -119,5 +131,14 @@ class UserAPITestCase(APITestCase):
     def test_searching_user(self):
         self._create_users(self.users_dict)
         users = User.objects.all()
-        self._accept_all_users(users)
 
+        found_users_by_id = [self._find_user(user_id=user.id) for user in users]
+        found_users_by_username = [self._find_user(username=user.username) for user in users]
+
+        self.assertEqual(users.count(), len(found_users_by_id))
+        self.assertEqual(users.count(), len(found_users_by_username))
+
+        for user in users:
+            print(user.id)
+
+        self.assertEqual(None, self._find_user(user_id=random.randint(users.last().id+1, users.count()*2)))

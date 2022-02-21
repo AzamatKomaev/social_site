@@ -4,8 +4,8 @@ from . import views
 
 
 urlpatterns = [
-    path('user/find/<int:user_id>/', views.UserViewSet.as_view({"get": "retrieve"})),
-    path('user/find/<str:username>/', views.UserViewSet.as_view({"get": "retrieve"})),
+    path('user/find/<int:user_id>/', views.UserViewSet.as_view({"get": "retrieve"}), name='user.find_by_id'),
+    path('user/find/<str:username>/', views.UserViewSet.as_view({"get": "retrieve"}), name='user.find_by_username'),
     path('user/find/<int:user_id>/friends/', views.UserFriendsAPIView.as_view()),
     path('user/find/<int:to_user>/friend_request/', views.FriendRequestViewSet.as_view(
         {"get": "retrieve", "post": "create",
