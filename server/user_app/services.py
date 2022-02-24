@@ -6,9 +6,10 @@ from django.contrib.auth.models import Group
 from django.core.mail import send_mail
 from django.db.models import QuerySet
 from django.shortcuts import get_object_or_404
+from rest_framework.request import Request
 
-from .models import User, AcceptAuthToken, FriendRequest
 from content_app.models import Post
+from .models import User, AcceptAuthToken, FriendRequest
 try:
     from server.settings import EMAIL_HOST_USER
 except ImportError:
@@ -35,7 +36,8 @@ class CreationUser:
         )
 
         self.user.avatar_set.create()
-        Group.objects.all().last().user_set.add(self.user)
+        group = get_object_or_404(Group, name='Пользователь')
+        group.user_set.add(self.user)
 
     def _generate_code(self) -> None:
         """Method to generate code, sending to user by email."""
@@ -99,30 +101,50 @@ class UserService:
         self.user = get_object_or_404(User, id=user_id)
 
     @staticmethod
-    def get_user(user_id: int = None, username: str = None) -> Optional[User]:
+    def get_user(user_id: int = None, username: str = None):
         """Method to get user by one of two params."""
-        user: Optional[User]
+        from .serializers import UserSerializer
+        serializer: UserSerializer
 
         if username is not None:
-            user = User.objects.filter(username=username).first()
+            serializer = UserSerializer(get_object_or_404(User, username=username))
         elif user_id is not None:
-            user = User.objects.filter(id=user_id).first()
+            serializer = UserSerializer(get_object_or_404(User, id=user_id))
         else:
-            user = None
+            return None
 
-        return user
+        return serializer
 
-    def get_user_posts(self) -> QuerySet:
+    @staticmethod
+    def create(request: Request) -> dict:
+        from .serializers import RegistrationUserSerializer
+        serializer = RegistrationUserSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return {'serializer': serializer, 'is_valid': True}
+
+        return {'serializer': serializer, 'is_valid': False}
+
+    def get_user_posts(self):
         """Method to get user posts."""
-        return Post.objects.filter(user_id=self.user.id)
+        from content_app.serializers import PostSerializer
+        posts = Post.objects.filter(user_id=self.user.id)
+        serializer = PostSerializer(posts, many=True)
+        return serializer
 
-    def get_user_friends(self) -> QuerySet:
+    def get_user_friends(self):
         """Method to get all user friends."""
-        return self.user.friends.all()
+        from .serializers import UserSerializer
+        friends = self.user.friends.all()
+        serializer = UserSerializer(friends, many=True)
+        return serializer
 
     def get_user_comments(self) -> QuerySet:
         """Method to get all user comments."""
-        return self.user.comment_set.all()
+        from content_app.serializers import CommentSerializer
+        comments = self.user.comment_set.all()
+        serializer = CommentSerializer(comments, many=True)
+        return serializer
 
 
 class FriendRequestService:
@@ -177,12 +199,12 @@ class FriendRequestService:
         )
         return chat_requests
 
-    def is_friend_request_exists(self, second_user: User) -> bool:
+    def is_friend_request_exists(self, second_user: int) -> bool:
         """Method to check is friend request exists with the user."""
         return bool(
-            FriendRequest.objects.filter(to_user=self.user, from_user=second_user).exists()
+            FriendRequest.objects.filter(to_user=self.user.id, from_user=second_user).exists()
             or
-            FriendRequest.objects.filter(to_user=second_user, from_user=self.user).exists()
+            FriendRequest.objects.filter(to_user=second_user, from_user=self.user.id).exists()
         )
 
     def create_friend_request(self, to_user_id: int) -> dict:
@@ -191,19 +213,19 @@ class FriendRequestService:
             "instance": None,
             "error": None
         }
-        to_user = UserService.get_user(user_id=to_user_id)
+        to_user_serializer = UserService.get_user(user_id=to_user_id)
 
-        if not to_user:
+        if not to_user_serializer:
             data["error"] = "There is no user with that id."
             return data
 
-        if self.is_friend_request_exists(to_user):
+        if self.is_friend_request_exists(to_user_serializer.data['id']):
             data["error"] = "Friend request already exists"
             return data
 
         data["instance"] = FriendRequest.objects.create(
             from_user=self.user,
-            to_user=to_user,
+            to_user_id=to_user_serializer.data['id'],
         )
         return data
 

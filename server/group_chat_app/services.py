@@ -92,24 +92,24 @@ class GroupChatService:
         return members
 
     @staticmethod
-    def create_chat(creator: User, name: str, avatar: Optional[str], users: list[User], *args, **kwargs) -> GroupChat:
+    def create_chat(name: str, avatar: Optional[str], users: list[User], user: User) -> GroupChat:
         chat: GroupChat
 
         if not avatar:
             chat = GroupChat.objects.create(
-                creator=creator,
+                creator=users[0],
                 name=name
             )
         else:
             chat = GroupChat.objects.create(
-                creator=creator,
+                creator=users[0],
                 name=name,
                 avatar=avatar
             )
 
         GroupChatRole.objects.create(
             name="Администратор",
-            user=creator,
+            user=users[0],
             chat=chat
         )
         chat.users.add(users[0])

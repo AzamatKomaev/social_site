@@ -1,8 +1,6 @@
 from django.db import models
-from datetime import datetime
 
 from server.settings import AUTH_USER_MODEL
-from user_app.base_models import BaseRequest
 
 
 class GroupChat(models.Model):
@@ -52,8 +50,12 @@ class GroupMessage(models.Model):
         ordering = ('-created_at',)
 
 
-class GroupChatRequest(BaseRequest):
-    from_chat = models.ForeignKey(GroupChat, on_delete=models.CASCADE, related_name="from_chat")
+class GroupChatRequest(models.Model):
+    to_user = models.ForeignKey(AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="group_request_to_user", default=None)
+    is_accepted = models.BooleanField(default=False)
+    created_at = models.DateTimeField(auto_now_add=True)
+    changed_at = models.DateTimeField(auto_now=True)
+    from_chat = models.ForeignKey(GroupChat, on_delete=models.CASCADE, related_name="group_request_from_chat")
 
     class Meta:
         verbose_name = "Приглашение в чат"

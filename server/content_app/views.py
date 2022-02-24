@@ -13,6 +13,7 @@ from .serializers import (
     CategorySerializer
 )
 from .models import Category, Comment, Post
+from .services import PostService, CommentService
 
 
 class CategoryListAPIView(APIView):
@@ -26,47 +27,45 @@ class PostViewSet(viewsets.ViewSet):
     permission_classes = [permissions.IsAuthenticatedOrReadOnly]
 
     def list(self, request, category_id: int):
-        category = get_object_or_404(Category, id=category_id)
-        page_number = request.query_params.get('page_number') or 1
         page_size = 30
+        serializer = PostService.get_paginated_post_list(category_id, request, page_size)
 
-        posts = Post.objects.filter(category=category)
-        paginator = Paginator(posts, page_size)
-
-        try:
-            serializer = PostSerializer(paginator.page(page_number), many=True)
-            return Response(serializer.data, status=status.HTTP_200_OK)
-        except EmptyPage:
+        if not serializer:
             return Response({}, status=status.HTTP_204_NO_CONTENT)
+
+        return Response(serializer.data, status=status.HTTP_200_OK)
 
     def retrieve(self, request, post_id: int):
         post = get_object_or_404(Post, id=post_id)
         serializer = PostSerializer(post)
         return Response(serializer.data, status=status.HTTP_200_OK)
 
+    def destroy(self, request, post_id):
+        post_service = PostService(post_id)
+        if not post_service.is_user_owner(request.user):
+            return Response({'message': 'You dont have a permission to do it.'}, status=status.HTTP_403_FORBIDDEN)
+
+        post_service.delete()
+        return Response({'message': 'The post was deleted successfully!'}, status=status.HTTP_200_OK)
+
     def create(self, request, category_id: int):
-        serializer = PostSerializer(data=request.data, context={'request': request})
+        serializer_data = PostService.create(request)
+        if not serializer_data:
+            return Response({"error": f"Category {category_id} does not exists."}, status=status.HTTP_400_BAD_REQUEST)
 
-        if serializer.is_valid():
-            try:
-                serializer.save()
-            except IntegrityError:
-                return Response({"error": f"Category {category_id} does not exists."}, status=status.HTTP_400_BAD_REQUEST)
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        if not serializer_data['is_valid']:
+            return Response(serializer_data['serializer'].errors, status=status.HTTP_400_BAD_REQUEST)
 
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        return Response(serializer_data['serializer'].data, status=status.HTTP_201_CREATED)
 
 
 class CommentViewSet(viewsets.ViewSet):
     permission_classes = [permissions.IsAuthenticatedOrReadOnly]
 
     def list(self, request, post_id: int):
-        comments = Comment.objects.filter(post_id=post_id)
-        if not comments:
-            return Response({}, status=status.HTTP_204_NO_CONTENT)
-
-        serializer = CommentSerializer(comments, many=True)
-        return Response(serializer.data, status=status.HTTP_200_OK)
+        comment_service = CommentService(post_id)
+        serializer = comment_service.get_list()
+        return Response(serializer.data)
 
     def retrieve(self, request, comment_id: int):
         comment = get_object_or_404(Comment, id=comment_id)
@@ -74,17 +73,13 @@ class CommentViewSet(viewsets.ViewSet):
         return Response(serializer.data, status=status.HTTP_200_OK)
 
     def create(self, request, post_id: int):
-        comment_data = {**request.data, **{"post": post_id}}
-        serializer = CommentSerializer(data=comment_data, context={"request": request})
+        comment_service = CommentService(post_id)
+        serializer_data = comment_service.create(request)
 
-        if serializer.is_valid():
-            try:
-                serializer.save()
-            except ObjectDoesNotExist:
-                return Response({"error": f"Post {post_id} does not exists."},
-                                status=status.HTTP_400_BAD_REQUEST)
+        if not serializer_data:
+            return Response({"error": f"Post {post_id} does not exists."}, status=status.HTTP_400_BAD_REQUEST)
 
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        if not serializer_data['is_valid']:
+            return Response(serializer_data['serializer'].errors, status=status.HTTP_400_BAD_REQUEST)
 
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
+        return Response(serializer_data['serializer'].data, status=status.HTTP_201_CREATED)

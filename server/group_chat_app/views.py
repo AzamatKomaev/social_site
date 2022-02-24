@@ -42,9 +42,9 @@ class GroupChatViewSet(viewsets.ViewSet):
     def create(self, request):
         data_for_serializer = {
             "name": request.data.get('name', None),
-            "creator": request.user.id,
             "users": [request.user.id]
         }
+        print(data_for_serializer)
 
         if 'avatar' in request.data:
             data_for_serializer = {**data_for_serializer, "avatar": request.data['avatar']}

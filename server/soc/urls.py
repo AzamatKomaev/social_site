@@ -15,6 +15,7 @@ urlpatterns = [
 
     path("auth/login/", views.index, name="login"),
     path("auth/sign_up/", views.index, name="signup"),
+    path("auth/send_message/", views.index, name="send_message"),
     path("auth/accept/<str:token>/", views.index, name="accept"),
 
     path("users/<str:username>/", views.index, name="user-profile"),

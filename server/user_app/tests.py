@@ -1,14 +1,14 @@
 import json
 import random
 import uuid
-from typing import  Optional
+from typing import Optional
 
 from django.contrib.auth.models import Group
 from django.urls import reverse, NoReverseMatch
+from requests import Response
 
 from rest_framework import status
 from rest_framework.test import APITestCase, APIClient
-from rest_framework.response import Response
 
 from server.settings import BASE_DIR
 from user_app.models import User
@@ -22,9 +22,14 @@ class UserAPITestCase(APITestCase):
         self.users_dict = json.loads(f.read())
         Group.objects.create(name='Пользователь')
 
-    def _create_users(self, json_users: dict) -> list[Response]:
+    def _create_user(self, user_data: dict) -> Response:
+        client = APIClient()
         url = reverse('register-user')
-        responses = [self.client.post(url, user_data, format='json') for user_data in json_users]
+        response = client.post(url, user_data, format='json')
+        return response
+
+    def _create_users(self, json_users: list) -> list[Response]:
+        responses = [self._create_user(user_data) for user_data in json_users]
         return responses
 
     def _accept_user(self, token) -> Response:
@@ -76,6 +81,12 @@ class UserAPITestCase(APITestCase):
         url = reverse('current-user-data')
         client = APIClient()
         response = client.get(url, data=None, follow=False, HTTP_AUTHORIZATION=f'Bearer {jwt}')
+        return response
+
+    def _send_friend_request(self, user_id: int, admin_jwt: str) ->  Response:
+        url = reverse('friend.view_set', args=[user_id])
+        client = APIClient()
+        response = client.post(url, HTTP_AUTHORIZATION=f'Bearer {admin_jwt}')
         return response
 
     def test_creating_users(self):
@@ -138,7 +149,25 @@ class UserAPITestCase(APITestCase):
         self.assertEqual(users.count(), len(found_users_by_id))
         self.assertEqual(users.count(), len(found_users_by_username))
 
-        for user in users:
-            print(user.id)
+        self.assertEqual(404, self._find_user(user_id=random.randint(users.last().id+1, 100)).status_code)
+        self.assertEqual(404, self._find_user(username="non-existing-username").status_code)
 
-        self.assertEqual(None, self._find_user(user_id=random.randint(users.last().id+1, users.count()*2)))
+    def test_friend_service(self):
+        self._create_users(self.users_dict)
+        self._create_user({"username": "admin", "email": "mail@mail.ru", "password": "admin12345678"})
+
+        users = User.objects.all()
+        admin = User.objects.get(username="admin")
+
+        self._accept_all_users(users)
+        self._accept_all_users([admin])
+
+        admin_auth_response = self._login_user(username="admin", password="admin12345678")
+
+        sent_friend_requests = [self._send_friend_request(user.id, admin_auth_response.json().get('access')) for user in users]
+
+        self.assertEqual(users.count(), len(sent_friend_requests))
+        self.assertEqual(
+            [201 for _ in range(0, users.count())],
+            [friend_request.status_code for friend_request in sent_friend_requests]
+        )

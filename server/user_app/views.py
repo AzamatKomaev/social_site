@@ -9,7 +9,6 @@ from .models import User
 from .services import UserService, CreationUser, FriendRequestService
 from .serializers import (
     UserSerializer,
-    RegistrationUserSerializer,
     FriendRequestSerializer
 )
 from content_app.serializers import (
@@ -23,11 +22,10 @@ class UserViewSet(viewsets.ViewSet):
 
     def retrieve(self, request, username: str = None, user_id: int = None):
         """The action to get data about user by his username or id."""
-        user = UserService.get_user(user_id=user_id, username=username)
-        if not user:
+        serializer = UserService.get_user(user_id=user_id, username=username)
+        if not serializer:
             return Response({"error": "User not found with given data."}, status=status.HTTP_404_NOT_FOUND)
 
-        serializer = UserSerializer(user)
         return Response(serializer.data, status=status.HTTP_200_OK)
 
     def retrieve_current_user(self, request):
@@ -35,38 +33,29 @@ class UserViewSet(viewsets.ViewSet):
         serializer = UserSerializer(request.user)
         return Response(serializer.data, status=status.HTTP_200_OK)
 
-    def create_registration_user(self, request):
+    def create(self, request):
         """The action to create user with is_active=False."""
-        serializer = RegistrationUserSerializer(data=request.data)
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        serializer_data = UserService.create(request)
+        if not serializer_data['is_valid']:
+            return Response(serializer_data['serializer'].errors, status=status.HTTP_400_BAD_REQUEST)
 
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        return Response(serializer_data['serializer'].data, status=status.HTTP_201_CREATED)
 
-    def accept_registration_user(self, request, token: str):
+    def accept(self, request, token: str):
         """The action to accept registration user by his token."""
         CreationUser.accept_password_to_reg(token=token)
         return Response({"message": "Accepted successfully."}, status=status.HTTP_200_OK)
 
-    def list_of_user_posts(self, request, user_id: int):
+    def list_user_posts(self, request, user_id: int):
         """The action to get all user posts by his id."""
         user_service = UserService(user_id)
-        posts = user_service.get_user_posts()
-        serializer = PostSerializer(posts, many=True)
-        if not posts:
-            return Response({}, status=status.HTTP_204_NO_CONTENT)
-
+        serializer = user_service.get_user_posts()
         return Response(serializer.data, status=status.HTTP_200_OK)
 
-    def list_of_user_comments(self, request, user_id: int):
+    def list_user_comments(self, request, user_id: int):
         """The action to get all user comments by his id."""
         user_service = UserService(user_id)
-        comments = user_service.get_user_comments()
-        serializer = CommentSerializer(comments, many=True)
-        if not comments:
-            return Response({}, status=status.HTTP_204_NO_CONTENT)
-
+        serializer = user_service.get_user_comments()
         return Response(serializer.data, status=status.HTTP_200_OK)
 
     def get_permissions(self):
@@ -86,8 +75,7 @@ class UserFriendsAPIView(APIView):
     """API View to get all user friends."""
     def get(self, request, user_id: int) -> Response:
         user_service = UserService(user_id)
-        friends = user_service.get_user_friends()
-        serializer = UserSerializer(friends, many=True)
+        serializer = user_service.get_user_friends()
         return Response(serializer.data)
 
 
@@ -108,7 +96,7 @@ class FriendRequestViewSet(viewsets.ViewSet):
                 "status_code": status.HTTP_404_NOT_FOUND
             }
 
-        if not friend_request_service.is_friend_request_exists(to_user_object):
+        if not friend_request_service.is_friend_request_exists(to_user_object.id):
             return {
                 "message": "Friend Request with this data doesnt exists.",
                 "status_code": status.HTTP_404_NOT_FOUND

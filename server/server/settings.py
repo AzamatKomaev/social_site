@@ -46,6 +46,7 @@ INSTALLED_APPS = [
     'polymorphic',
     'rest_framework',
     'rest_framework_simplejwt',
+    'django_extensions',
 
     'django.contrib.admin',
     'django.contrib.auth',
@@ -140,7 +141,7 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 LOGIN_REDIRECT_URL = '/main'
 
-if bool(os.getenv('TEST_MOD')):
+if os.getenv('TEST_MOD') == '1':
     EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 else:
     EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
@@ -153,7 +154,6 @@ EMAIL_USE_TLS = True
 EMAIL_USE_SSL = False
 
 ASGI_APPLICATION = 'server.asgi.application'
-
 
 CHANNEL_LAYERS = {
     'default': {

@@ -2,7 +2,6 @@ from django.db import models
 from django.contrib.auth.models import AbstractUser
 
 from server.settings import AUTH_USER_MODEL
-from .base_models import BaseRequest
 
 
 class User(AbstractUser):
@@ -41,8 +40,12 @@ class AcceptAuthToken(models.Model):
         return f"Token {self.token}"
 
 
-class FriendRequest(BaseRequest):
-    from_user = models.ForeignKey(AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="from_user")
+class FriendRequest(models.Model):
+    to_user = models.ForeignKey(AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="friend_request_to_user", default=None)
+    is_accepted = models.BooleanField(default=False)
+    created_at = models.DateTimeField(auto_now_add=True)
+    changed_at = models.DateTimeField(auto_now=True)
+    from_user = models.ForeignKey(AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="friend_request_from_user")
 
     class Meta:
         verbose_name = "Заявка в друзья"
