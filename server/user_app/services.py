@@ -8,7 +8,7 @@ from django.db.models import QuerySet
 from django.shortcuts import get_object_or_404
 from rest_framework.request import Request
 
-from content_app.models import Post
+from content_app.models import Post, Comment
 from .models import User, AcceptAuthToken, FriendRequest
 try:
     from server.settings import EMAIL_HOST_USER
@@ -101,19 +101,18 @@ class UserService:
         self.user = get_object_or_404(User, id=user_id)
 
     @staticmethod
-    def get_user(user_id: int = None, username: str = None):
+    def get_user(user_id: int = None, username: str = None) -> Optional[User]:
         """Method to get user by one of two params."""
-        from .serializers import UserSerializer
-        serializer: UserSerializer
+        user: User
 
         if username is not None:
-            serializer = UserSerializer(get_object_or_404(User, username=username))
+            user = get_object_or_404(User, username=username)
         elif user_id is not None:
-            serializer = UserSerializer(get_object_or_404(User, id=user_id))
+            user = get_object_or_404(User, id=user_id)
         else:
             return None
 
-        return serializer
+        return user
 
     @staticmethod
     def create(request: Request) -> dict:
@@ -125,26 +124,20 @@ class UserService:
 
         return {'serializer': serializer, 'is_valid': False}
 
-    def get_user_posts(self):
+    def get_user_posts(self) -> QuerySet[Post]:
         """Method to get user posts."""
-        from content_app.serializers import PostSerializer
         posts = Post.objects.filter(user_id=self.user.id)
-        serializer = PostSerializer(posts, many=True)
-        return serializer
+        return posts
 
-    def get_user_friends(self):
+    def get_user_friends(self) -> QuerySet[User]:
         """Method to get all user friends."""
-        from .serializers import UserSerializer
         friends = self.user.friends.all()
-        serializer = UserSerializer(friends, many=True)
-        return serializer
+        return friends
 
-    def get_user_comments(self) -> QuerySet:
+    def get_user_comments(self) -> QuerySet[Comment]:
         """Method to get all user comments."""
-        from content_app.serializers import CommentSerializer
         comments = self.user.comment_set.all()
-        serializer = CommentSerializer(comments, many=True)
-        return serializer
+        return comments
 
 
 class FriendRequestService:
@@ -213,25 +206,25 @@ class FriendRequestService:
             "instance": None,
             "error": None
         }
-        to_user_serializer = UserService.get_user(user_id=to_user_id)
+        user = UserService.get_user(user_id=to_user_id)
 
-        if not to_user_serializer:
+        if not user:
             data["error"] = "There is no user with that id."
             return data
 
-        if self.is_friend_request_exists(to_user_serializer.data['id']):
+        if self.is_friend_request_exists(user.id):
             data["error"] = "Friend request already exists"
             return data
 
         data["instance"] = FriendRequest.objects.create(
             from_user=self.user,
-            to_user_id=to_user_serializer.data['id'],
+            to_user_id=user.id,
         )
         return data
 
     def delete_friend_request(self, second_user: User) -> bool:
         """Method for deleting friend request."""
-        if not self.is_friend_request_exists(second_user):
+        if not self.is_friend_request_exists(second_user.id):
             return False
 
         friend_request = self.get_friend_request(self.user, second_user)

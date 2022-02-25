@@ -10,53 +10,29 @@ from requests import Response
 from rest_framework import status
 from rest_framework.test import APITestCase, APIClient
 
+from content_app.models import Comment
 from server.settings import BASE_DIR
-from user_app.models import User
+from user_app.models import User, FriendRequest
+from .tests_services import UserAuthAPITestService
 
 
 class UserAPITestCase(APITestCase):
     json_users_path = BASE_DIR / 'user_app/test_data/user_data.json'
+    default_password = 'the_same_password'
 
-    def setUp(self):
+    def setUp(self) -> None:
         f = open(self.json_users_path, 'r')
         self.users_dict = json.loads(f.read())
         Group.objects.create(name='Пользователь')
 
-    def _create_user(self, user_data: dict) -> Response:
-        client = APIClient()
-        url = reverse('register-user')
-        response = client.post(url, user_data, format='json')
-        return response
-
     def _create_users(self, json_users: list) -> list[Response]:
-        responses = [self._create_user(user_data) for user_data in json_users]
+        responses = [UserAuthAPITestService.create_user(user_data) for user_data in json_users]
         return responses
-
-    def _accept_user(self, token) -> Response:
-        url = reverse('accept-user', args=[token])
-        response = self.client.patch(url)
-        return response
-
-    def _accept_all_users(self, users: list[User]) -> None:
-        for user in users:
-            user.is_active = True
-            user.save()
-
-    def _login_user(self, username=None, password=None) -> Response:
-        client = APIClient()
-        url = reverse("token_obtain_pair")
-        if username and password:
-            data = {"username": username, "password": password}
-        else:
-            data = {}
-
-        response = client.post(url, data=data, format='json')
-        return response
 
     def _login_many_users(self, users: list[User]):
         responses = []
         for user in users:
-            response = self._login_user(user.username, "the_same_password")
+            response = UserAuthAPITestService.login_user(user.username, self.default_password)
             responses.append({
                 user.id: {
                     "data": response.json(),
@@ -68,9 +44,9 @@ class UserAPITestCase(APITestCase):
 
     def _find_user(self, user_id: Optional[int] = None, username: Optional[str] = None) -> Optional[Response]:
         client = APIClient()
-
         try:
-            url = reverse('user.find_by_id', args=[user_id]) if user_id else reverse('user.find_by_username', args=[username])
+            url = reverse('user.find_by_id', args=[user_id]) if user_id else reverse('user.find_by_username',
+                                                                                     args=[username])
             response = client.get(url)
         except NoReverseMatch:
             return
@@ -83,7 +59,7 @@ class UserAPITestCase(APITestCase):
         response = client.get(url, data=None, follow=False, HTTP_AUTHORIZATION=f'Bearer {jwt}')
         return response
 
-    def _send_friend_request(self, user_id: int, admin_jwt: str) ->  Response:
+    def _send_friend_request(self, user_id: int, admin_jwt: str) -> Response:
         url = reverse('friend.view_set', args=[user_id])
         client = APIClient()
         response = client.post(url, HTTP_AUTHORIZATION=f'Bearer {admin_jwt}')
@@ -107,8 +83,8 @@ class UserAPITestCase(APITestCase):
         users = User.objects.all()
 
         is_active_list = [user.is_active for user in users]
-        wrong_requests_statuses = [self._accept_user(uuid.uuid1()).status_code for _ in range(5)]
-        correct_requests_statuses = [self._accept_user(user.acceptauthtoken.token).status_code for user in users]
+        wrong_requests_statuses = [UserAuthAPITestService.accept_user(uuid.uuid1()).status_code for _ in range(5)]
+        correct_requests_statuses = [UserAuthAPITestService.accept_user(user.acceptauthtoken.token).status_code for user in users]
 
         self.assertEqual(is_active_list, [0 for _ in range(5)])
         self.assertEqual(wrong_requests_statuses, [404 for _ in range(5)])
@@ -117,10 +93,10 @@ class UserAPITestCase(APITestCase):
     def test_login_users(self):
         self._create_users(self.users_dict)
         users = User.objects.all()
-        self._accept_all_users(users)
+        UserAuthAPITestService.accept_all_users(users)
 
-        worst_response1 = self._login_user('Invalid User', 'invalid_password')
-        worst_response2 = self._login_user()
+        worst_response1 = UserAuthAPITestService.login_user('Invalid User', 'invalid_password')
+        worst_response2 = UserAuthAPITestService.login_user()
         correct_responses = self._login_many_users(users)
 
         self.assertEqual(worst_response1.status_code, 401)
@@ -154,20 +130,46 @@ class UserAPITestCase(APITestCase):
 
     def test_friend_service(self):
         self._create_users(self.users_dict)
-        self._create_user({"username": "admin", "email": "mail@mail.ru", "password": "admin12345678"})
+        UserAuthAPITestService.create_user({"username": "admin", "email": "mail@mail.ru", "password": "admin12345678"})
 
-        users = User.objects.all()
         admin = User.objects.get(username="admin")
+        users = User.objects.all().exclude(id=admin.id)
 
-        self._accept_all_users(users)
-        self._accept_all_users([admin])
+        UserAuthAPITestService.accept_all_users(users)
+        UserAuthAPITestService.accept_all_users([admin])
+        admin_auth_response = UserAuthAPITestService.login_user(username="admin", password="admin12345678")
 
-        admin_auth_response = self._login_user(username="admin", password="admin12345678")
-
-        sent_friend_requests = [self._send_friend_request(user.id, admin_auth_response.json().get('access')) for user in users]
+        sent_friend_requests = [
+            self._send_friend_request(user.id, admin_auth_response.json().get('access'))
+            for user in users
+        ]
+        invalid_trying_sent_exists_friend_request = self._send_friend_request(
+            users.order_by('?').first().id, admin_auth_response.json().get('access')
+        )
 
         self.assertEqual(users.count(), len(sent_friend_requests))
         self.assertEqual(
             [201 for _ in range(0, users.count())],
             [friend_request.status_code for friend_request in sent_friend_requests]
+        )
+        self.assertEqual(
+            invalid_trying_sent_exists_friend_request.json().get('message'), 'Friend request already exists'
+        )
+
+        invalid_accepting_friend_request_response = UserAuthAPITestService.accept_friend_request(
+            user_id=users.exclude(username='User1').order_by('?').first().id,
+            user_jwt=UserAuthAPITestService.login_user('User1', self.default_password).json().get('access', None),
+            is_accepted=1
+        )
+        invalid_deleting_friend_request_response = UserAuthAPITestService.delete_friend_request(
+            user_id=users.exclude(username='User1').order_by('?').first().id,
+            user_jwt=UserAuthAPITestService.login_user('User1', self.default_password).json().get('access', None)
+        )
+        print(invalid_deleting_friend_request_response.json(), invalid_deleting_friend_request_response.status_code)
+
+        self.assertEqual(
+            (invalid_accepting_friend_request_response.json().get('message'),
+             invalid_accepting_friend_request_response.status_code
+             ),
+            ('Friend Request with this data doesnt exists.', 404)
         )

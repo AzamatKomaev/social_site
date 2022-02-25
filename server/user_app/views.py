@@ -22,10 +22,11 @@ class UserViewSet(viewsets.ViewSet):
 
     def retrieve(self, request, username: str = None, user_id: int = None):
         """The action to get data about user by his username or id."""
-        serializer = UserService.get_user(user_id=user_id, username=username)
-        if not serializer:
+        user = UserService.get_user(user_id=user_id, username=username)
+        if not user:
             return Response({"error": "User not found with given data."}, status=status.HTTP_404_NOT_FOUND)
 
+        serializer = UserSerializer(user)
         return Response(serializer.data, status=status.HTTP_200_OK)
 
     def retrieve_current_user(self, request):
@@ -49,13 +50,15 @@ class UserViewSet(viewsets.ViewSet):
     def list_user_posts(self, request, user_id: int):
         """The action to get all user posts by his id."""
         user_service = UserService(user_id)
-        serializer = user_service.get_user_posts()
+        posts = user_service.get_user_posts()
+        serializer = PostSerializer(posts, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
 
     def list_user_comments(self, request, user_id: int):
         """The action to get all user comments by his id."""
         user_service = UserService(user_id)
-        serializer = user_service.get_user_comments()
+        comments = user_service.get_user_comments()
+        serializer = CommentSerializer(comments, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
 
     def get_permissions(self):
@@ -75,7 +78,8 @@ class UserFriendsAPIView(APIView):
     """API View to get all user friends."""
     def get(self, request, user_id: int) -> Response:
         user_service = UserService(user_id)
-        serializer = user_service.get_user_friends()
+        friends = user_service.get_user_friends()
+        serializer = UserSerializer(friends, many=True)
         return Response(serializer.data)
 
 
