@@ -4,13 +4,13 @@ import uuid
 from typing import Optional
 
 from django.contrib.auth.models import Group
+from django.db.models import QuerySet
 from django.urls import reverse, NoReverseMatch
 from requests import Response
 
 from rest_framework import status
 from rest_framework.test import APITestCase, APIClient
 
-from content_app.models import Comment
 from server.settings import BASE_DIR
 from user_app.models import User, FriendRequest
 from .tests_services import UserAuthAPITestService
@@ -60,10 +60,23 @@ class UserAPITestCase(APITestCase):
         return response
 
     def _send_friend_request(self, user_id: int, admin_jwt: str) -> Response:
-        url = reverse('friend.view_set', args=[user_id])
+        url = reverse('friend_request.view_set', args=[user_id])
         client = APIClient()
         response = client.post(url, HTTP_AUTHORIZATION=f'Bearer {admin_jwt}')
         return response
+
+    def _accept_several_users(self, users: QuerySet[User]) -> list[Response]:
+        responses = []
+
+        for user in users:
+            accept_friend_request_response = UserAuthAPITestService.accept_friend_request(
+                user_id=user.id,
+                user_jwt=UserAuthAPITestService.login_user('admin', 'admin12345678').json().get('access'),
+                is_accepted=1
+            )
+            responses.append(accept_friend_request_response)
+
+        return responses
 
     def test_creating_users(self):
         responses = self._create_users(self.users_dict)
@@ -165,11 +178,23 @@ class UserAPITestCase(APITestCase):
             user_id=users.exclude(username='User1').order_by('?').first().id,
             user_jwt=UserAuthAPITestService.login_user('User1', self.default_password).json().get('access', None)
         )
-        print(invalid_deleting_friend_request_response.json(), invalid_deleting_friend_request_response.status_code)
+
+        valid_accepting_friend_requests_responses = UserAuthAPITestService.accept_friend_request(
+            user_id=users.last().id,
+            user_jwt=UserAuthAPITestService.login_user(
+                users.last().username, self.default_password
+            ).json().get('access'),
+            is_accepted=1
+        )
 
         self.assertEqual(
             (invalid_accepting_friend_request_response.json().get('message'),
-             invalid_accepting_friend_request_response.status_code
-             ),
+             invalid_accepting_friend_request_response.status_code),
             ('Friend Request with this data doesnt exists.', 404)
         )
+        self.assertEqual(
+            (invalid_deleting_friend_request_response.json().get('message'),
+             invalid_deleting_friend_request_response.status_code),
+            ('Friend Request with this data doesnt exists.', 404)
+        )
+

@@ -1,21 +1,27 @@
 from django.urls import path
+from rest_framework_simplejwt.views import (
+    TokenObtainPairView,
+    TokenRefreshView,
+)
 
 from . import views
 
 
 urlpatterns = [
-    path('user/find/<int:user_id>/', views.UserViewSet.as_view({"get": "retrieve"}), name='user.find_by_id'),
-    path('user/find/<str:username>/', views.UserViewSet.as_view({"get": "retrieve"}), name='user.find_by_username'),
-    path('user/find/<int:user_id>/friends/', views.UserFriendsAPIView.as_view(), name='friend.list'),
-    path('user/find/<int:to_user>/friend_request/', views.FriendRequestViewSet.as_view(
+    path('friend_requests/', views.FriendRequestViewSet.as_view({"get": "list"}), name='friend_request.list'),
+    path('friend_requests/<to_user>/', views.FriendRequestViewSet.as_view(
         {"get": "retrieve", "post": "create",
-         "delete": "destroy", "patch": "update"}), name="friend.view_set"),
-    path('user/find/<int:user_id>/request-notifications/', views.FriendRequestViewSet.as_view({"get": "list"})),
+         "delete": "destroy", "patch": "update"}
+    ), name="friend_request.view_set"),
 
-    path('user/register/', views.UserViewSet.as_view({"post": "create"}), name="register-user"),
-    path('user/is_auth/', views.UserViewSet.as_view({"get": "retrieve_current_user"}), name='current-user-data'),
-    path('user/accept/<str:token>/', views.UserViewSet.as_view({"patch": "accept"}), name="accept-user"),
-    path('user/posts/<int:user_id>/', views.UserViewSet.as_view({"get": "list_user_posts"})),
-    path('user/comments/<int:user_id>/', views.UserViewSet.as_view({"get": "list_user_comments"})),
+    path('users/<int:user_id>/', views.UserViewSet.as_view({"get": "retrieve"}), name='user.find_by_id'),
+    path('users/<str:username>/', views.UserViewSet.as_view({"get": "retrieve"}), name='user.find_by_username'),
+    path('users/<int:user_id>/friends/', views.UserFriendsAPIView.as_view(), name='friend.list'),
+    path('users/<int:user_id>/posts/', views.UserViewSet.as_view({"get": "list_user_posts"})),
+    path('users/<int:user_id>/comments/', views.UserViewSet.as_view({"get": "list_user_comments"})),
 
+    path('auth/login/', TokenObtainPairView.as_view(), name='auth.login'),
+    path('auth/register/', views.AuthViewSet.as_view({"post": "create"}), name="auth.register"),
+    path('auth/current/', views.AuthViewSet.as_view({"get": "retrieve"}), name='current-user-data'),
+    path('auth/accept/<str:token>/', views.AuthViewSet.as_view({"patch": "partial_update"}), name="auth.accept"),
 ]

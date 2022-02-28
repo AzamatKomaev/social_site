@@ -33,7 +33,6 @@ class Post(models.Model):
 
 
 class Comment(models.Model):
-    """Таблица для хранения комментария к постам"""
     user = models.ForeignKey(AUTH_USER_MODEL, on_delete=models.CASCADE)
     post = models.ForeignKey(Post, on_delete=models.CASCADE)
     text = models.TextField(default=None)

@@ -17,19 +17,10 @@ from content_app.serializers import (
 )
 
 
-class UserViewSet(viewsets.ViewSet):
-    permissions_classes = [permissions.IsAuthenticatedOrReadOnly]
+class AuthViewSet(viewsets.ViewSet):
+    permission_classes = (permissions.AllowAny,)
 
-    def retrieve(self, request, username: str = None, user_id: int = None):
-        """The action to get data about user by his username or id."""
-        user = UserService.get_user(user_id=user_id, username=username)
-        if not user:
-            return Response({"error": "User not found with given data."}, status=status.HTTP_404_NOT_FOUND)
-
-        serializer = UserSerializer(user)
-        return Response(serializer.data, status=status.HTTP_200_OK)
-
-    def retrieve_current_user(self, request):
+    def retrieve(self, request):
         """The action to get data about current user."""
         serializer = UserSerializer(request.user)
         return Response(serializer.data, status=status.HTTP_200_OK)
@@ -42,10 +33,24 @@ class UserViewSet(viewsets.ViewSet):
 
         return Response(serializer_data['serializer'].data, status=status.HTTP_201_CREATED)
 
-    def accept(self, request, token: str):
+    def partial_update(self, request, token: str):
         """The action to accept registration user by his token."""
         CreationUser.accept_password_to_reg(token=token)
         return Response({"message": "Accepted successfully."}, status=status.HTTP_200_OK)
+
+
+
+class UserViewSet(viewsets.ViewSet):
+    permissions_classes = [permissions.IsAuthenticatedOrReadOnly]
+
+    def retrieve(self, request, username: str = None, user_id: int = None):
+        """The action to get data about user by his username or id."""
+        user = UserService.get_user(user_id=user_id, username=username)
+        if not user:
+            return Response({"error": "User not found with given data."}, status=status.HTTP_404_NOT_FOUND)
+
+        serializer = UserSerializer(user)
+        return Response(serializer.data, status=status.HTTP_200_OK)
 
     def list_user_posts(self, request, user_id: int):
         """The action to get all user posts by his id."""
@@ -67,8 +72,6 @@ class UserViewSet(viewsets.ViewSet):
         """
         if self.action == 'list':
             permission_classes = [permissions.IsAuthenticatedOrReadOnly]
-        elif self.action == 'retrieve_current_user':
-            permission_classes = [permissions.IsAuthenticated]
         else:
             permission_classes = [permissions.AllowAny]
         return [permission() for permission in permission_classes]
@@ -106,7 +109,7 @@ class FriendRequestViewSet(viewsets.ViewSet):
                 "status_code": status.HTTP_404_NOT_FOUND
             }
 
-    def list(self, request, user_id: int):
+    def list(self, request):
         friend_request_service = FriendRequestService(request.user)
         chat_requests = friend_request_service.get_current_friend_requests()
         serializer = FriendRequestSerializer(chat_requests, many=True)
@@ -165,10 +168,8 @@ class FriendRequestViewSet(viewsets.ViewSet):
             }, status=status.HTTP_400_BAD_REQUEST)
 
         is_accepted = bool(int(request.query_params['is_accepted']))
-
         friend_request_service = FriendRequestService(request.user)
         to_user_object = UserService.get_user(user_id=to_user)
-
         possible_errors = self.check_possible_errors(
             to_user_object=to_user_object,
             friend_request_service=friend_request_service
