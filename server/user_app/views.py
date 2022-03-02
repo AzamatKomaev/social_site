@@ -39,9 +39,8 @@ class AuthViewSet(viewsets.ViewSet):
         return Response({"message": "Accepted successfully."}, status=status.HTTP_200_OK)
 
 
-
 class UserViewSet(viewsets.ViewSet):
-    permissions_classes = [permissions.IsAuthenticatedOrReadOnly]
+    permissions_classes = (permissions.IsAuthenticatedOrReadOnly,)
 
     def retrieve(self, request, username: str = None, user_id: int = None):
         """The action to get data about user by his username or id."""
@@ -87,7 +86,7 @@ class UserFriendsAPIView(APIView):
 
 
 class FriendRequestViewSet(viewsets.ViewSet):
-    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
+    permission_classes = (permissions.IsAuthenticatedOrReadOnly,)
 
     @staticmethod
     def check_possible_errors(

@@ -6,34 +6,45 @@ import CategoryList from './include/category/CategoryList';
 import { WelcomeAuthBox, WelcomeAnonBox } from './include/welcome_box/WelcomeBox';
 
 import { getCategories } from '../../services/service';
+import {ContentService} from "../../services/contentService";
+import Error404NotFound from "../extend/Error404NotFound";
 
 
 const CategoryPage = (props) => {
-    const [categories, setCategories] = useState([])
+    const [categoriesData, setCategoriesData] = useState({
+        list: [],
+        statusCode: null
+    })
 
     const userData = useSelector(state => state.user)
 
     useEffect(() => {
-        getCategories()
-            .then((result) => {
-                setCategories(result)
+        const fetchData = async() => {
+            const response = await ContentService.getCategoryList()
+            setCategoriesData({
+                list: response.data,
+                statusCode: response.status
             })
+        }
+        fetchData()
     }, [])
 
     if (userData.isAuth) {
         return (
             <div>
                 <Header/>{"\n"}
-                <WelcomeAuthBox/>{"\n\n"}
-                <CategoryList categories={categories}/>
+                {categoriesData.statusCode < 400 && categoriesData.list?.length > 0 ?
+                    <CategoryList categories={categoriesData.list}/>
+                :
+                    <b>There is no categories!</b>
+                }
             </div>
         )
     } else {
         return (
             <div>
                 <Header/>{"\n"}
-                <WelcomeAnonBox/>{"\n\n"}
-                <CategoryList categories={categories}/>
+                <Error404NotFound/>
             </div>
         )
     }

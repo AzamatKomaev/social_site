@@ -186,6 +186,8 @@ class UserAPITestCase(APITestCase):
             ).json().get('access'),
             is_accepted=1
         )
+        for req in FriendRequest.objects.all():
+            print(req.to_user.id, req.to_user.username)
 
         self.assertEqual(
             (invalid_accepting_friend_request_response.json().get('message'),

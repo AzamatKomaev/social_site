@@ -237,7 +237,7 @@ class FriendRequestService:
 
     def accept_friend_request(self, second_user: User, is_accepted: bool) -> Optional[FriendRequest]:
         """Method for accepting friend request making is_accepted True or False."""
-        if not self.is_friend_request_exists(second_user):
+        if not self.is_friend_request_exists(second_user.id):
             return
 
         friend_request = self.get_friend_request(self.user, second_user)
