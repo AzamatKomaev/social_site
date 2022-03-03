@@ -7,6 +7,7 @@ import CreatePostForm from './include/post/CreatePostForm';
 
 import Header from '../extend/Header';
 import Error404NotFound from '../extend/Error404NotFound';
+import {ContentService} from "../../services/contentService";
 
 
 const CreatePostPage = (props) => {
@@ -17,10 +18,11 @@ const CreatePostPage = (props) => {
 
 
     useEffect(() => {
-        getCategories()
-            .then((result) => {
-                setCategories(result)
-            })
+        const fetchData = async() => {
+            const response = await ContentService.getCategoryList()
+            setCategories(response.status === 200 ? response.data : [])
+        }
+        fetchData()
     }, [])
 
     if (userData.isAuth) {

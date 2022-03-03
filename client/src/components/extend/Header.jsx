@@ -44,7 +44,7 @@ const Header = (props) => {
                                     </a>
                                 </li>
                                 {userData.isAuth ?
-                                    <div>
+                                    <div style={{marginTop: "20px"}}>
                                         {"\n\n"}
                                         <li className={"nav-item"}>
                                             <a className={"nav-link text-danger"} aria-current="page" href={"#"}>
@@ -53,7 +53,7 @@ const Header = (props) => {
                                         </li>
                                     </div>
                                     :
-                                    <div>
+                                    <div style={{marginTop: "20px"}}>
                                         <li className={"nav-item"}>
                                             <a className={"nav-link text-danger"} aria-current="page" href={"#"}>
                                                 Вход

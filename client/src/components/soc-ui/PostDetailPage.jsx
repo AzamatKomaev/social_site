@@ -9,6 +9,7 @@ import Error429TooManyRequests from '../extend/Error429TooManyRequests';
 import Post from './include/post/Post';
 import CommentList from './include/comment/CommentList';
 import CommentForm from './include/comment/CommentForm';
+import {ContentService} from "../../services/contentService";
 
 
 const PostDetailPage = (props) => {
@@ -19,21 +20,19 @@ const PostDetailPage = (props) => {
     const [error, setError] = useState(false);
 
     useEffect(() => {
-        axios.get("http://127.0.0.1:8000/api/v1/post/" + postId + "/")
-            .then(response => {
-                setPost(response.data);
-            })
-            .catch(err => {
-                if (err.response.status) {
-                    setError(
-                    {
-                        response: err.response.status
-                    });
-                }
-            })
+        const fetchData = async() => {
+            const response = await ContentService.getPostDetail(postId)
+            if (response.status === 200) {
+                setPost(response.data)
+            } else {
+                setError(response.status)
+            }
+
+        }
+        fetchData()
     }, []);
 
-    if (error.response == 404) {
+    if (error === 404) {
         return (
             <div>
                 <Header/>
@@ -41,7 +40,7 @@ const PostDetailPage = (props) => {
                 <Error404NotFound/>
             </div>
         )
-    } else if (error.response == 429) {
+    } else if (error === 429) {
         return (
             <div>
                 <Header/>
@@ -54,7 +53,7 @@ const PostDetailPage = (props) => {
             <div>
                 <Header/>
                 {"\n"}
-                <div class="container">
+                <div className="container">
                     <Post
                         id={post.id}
                         title={post.title}

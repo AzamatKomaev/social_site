@@ -27,7 +27,7 @@ const FriendCell = (props) => {
                         height="60"
                         style={{marginLeft: "-10px"}}
                     />
-                    <div className="flex-grow-1 ml-3">
+                    <div className="flex-grow-1 ms-3">
                         <a href={"/users/" + props.friend.username + "/"}>
                             <p style={{fontSize: "14pt"}}>{props.friend.username}</p>
                         </a>

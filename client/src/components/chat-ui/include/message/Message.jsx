@@ -24,7 +24,7 @@ const Message = (props) => {
                         <div>
                             <img src={props.message.user_data.avatar.image} className="rounded-circle mr-1" alt="..." width="40" height="40"/>
                         </div>
-                        <div className="flex-shrink-1 bg-light rounded py-2 px-3 ml-3">
+                        <div className="flex-shrink-1 bg-light rounded py-2 px-3 ms-3">
                             <div className="font-weight-bold mb-1">
                                 <a href={"/users/" + props.message.user_data.username + "/"} style={{textDecoration: "none", color: "black"}}>{props.message.user_data.username}</a>
                             </div>

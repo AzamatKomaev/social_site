@@ -38,6 +38,16 @@ class AuthViewSet(viewsets.ViewSet):
         CreationUser.accept_password_to_reg(token=token)
         return Response({"message": "Accepted successfully."}, status=status.HTTP_200_OK)
 
+    def get_permissions(self):
+        """
+        Instantiates and returns the list of permissions that this view requires.
+        """
+        if self.action == 'retrieve':
+            permission_classes = (permissions.IsAuthenticated,)
+        else:
+            permission_classes = (permissions.AllowAny,)
+        return [permission() for permission in permission_classes]
+
 
 class UserViewSet(viewsets.ViewSet):
     permissions_classes = (permissions.IsAuthenticatedOrReadOnly,)

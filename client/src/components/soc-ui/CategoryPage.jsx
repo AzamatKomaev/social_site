@@ -15,6 +15,7 @@ const CategoryPage = (props) => {
         list: [],
         statusCode: null
     })
+    const [showCategoryList, setShowCategoryList] = useState()
 
     const userData = useSelector(state => state.user)
 
@@ -29,11 +30,15 @@ const CategoryPage = (props) => {
         fetchData()
     }, [])
 
+    useEffect(() => {
+        setShowCategoryList(categoriesData.statusCode < 400 && categoriesData.list?.length > 0)
+    }, [categoriesData])
+
     if (userData.isAuth) {
         return (
             <div>
                 <Header/>{"\n"}
-                {categoriesData.statusCode < 400 && categoriesData.list?.length > 0 ?
+                {showCategoryList ?
                     <CategoryList categories={categoriesData.list}/>
                 :
                     <b>There is no categories!</b>
@@ -44,7 +49,11 @@ const CategoryPage = (props) => {
         return (
             <div>
                 <Header/>{"\n"}
-                <Error404NotFound/>
+                {showCategoryList ?
+                    <CategoryList categories={categoriesData.list}/>
+                    :
+                    <b>There is no categories!</b>
+                }
             </div>
         )
     }

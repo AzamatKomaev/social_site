@@ -7,6 +7,8 @@ import Error429TooManyRequests from '../extend/Error429TooManyRequests';
 
 import Post from './include/post/Post';
 import PostList from './include/post/PostList';
+import {ContentPath} from "../../backpaths/contentPaths";
+import {ContentService} from "../../services/contentService";
 
 
 const PostPage = (props) => {
@@ -18,29 +20,22 @@ const PostPage = (props) => {
     let categoryId = props.match.params.categoryId;
 
     useEffect(() => {
-        if (fetching && currentPage != -1) {
+        const fetchData = async() => {
+            const response = await ContentService.getPostList(categoryId)
+            if (response.status === 204) {
+                setCurrentPage(-1)
+            } else if (response.status === 200) {
+                setCurrentPage(prevState => prevState + 1)
+                setPosts([...posts, ...response.data])
+            } else {
+                setError(response.status) && alert('error!!')
+            }
+            setFetching(false)
+        }
+
+        if (fetching && currentPage !== -1) {
             console.log("fetching")
-            axios.get("http://127.0.0.1:8000/api/v1/category/" + categoryId + "/?page_number=" + currentPage)
-                .then(response => {
-                    setPosts([...posts, ...response.data]);
-                    if (response.status === 204) {
-                        setCurrentPage(-1)
-                    } else {
-                        setCurrentPage(prevState => prevState + 1)
-                    }
-                })
-                .catch(err => {
-                    console.log(err.response);
-                    if (err.response.status) {
-                        setError(
-                        {
-                            response: err.response.status
-                        });
-                    }
-                })
-                .finally(() => {
-                    setFetching(false)
-                })
+            fetchData()
         }
     }, [fetching])
 

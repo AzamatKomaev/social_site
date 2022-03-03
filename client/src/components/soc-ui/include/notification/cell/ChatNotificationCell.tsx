@@ -32,7 +32,7 @@ const ChatNotificationCell = (props: any) => {
                         height="60"
                         style={{marginLeft: "-10px"}}
                      />
-                    <div className="flex-grow-1 ml-3">
+                    <div className="flex-grow-1 ms-3">
                        <p style={{fontSize: "14pt"}}>{props.notification.from_chat.name}</p>
                        <div className="small" style={{marginTop: "-15px"}}>
                            <p className="text-info">pass</p>

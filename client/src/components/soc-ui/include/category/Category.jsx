@@ -10,7 +10,7 @@ const Category = (props) => {
             <a href={"/categories/c_id/" + props.id} className="list-group-item list-group-item-action border-0">
                 <div className="d-flex align-items-start" style={{marginLeft: "-10px"}}>
                     <img src={props.avatar} className="rounded-circle mr-1" alt="user1" width="65" height="65" style={{marginLeft: "-10px"}}/>
-                    <div className="flex-grow-1 ml-3">
+                    <div className="flex-grow-1 ms-3">
                         <p className="category-name">{props.name}</p>
                         <div className="small">
                             Всего постов: { props.count }

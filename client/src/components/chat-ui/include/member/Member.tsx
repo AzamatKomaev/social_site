@@ -17,7 +17,7 @@ const Member = (props: any) => {
                         height="60"
                         style={{marginLeft: "-10px"}}
                     />
-                    <a href={"/users/" + props.member.user_data.username + "/"} className="flex-grow-1 ml-3 text-dark" style={{textDecoration: "none"}}>
+                    <a href={"/users/" + props.member.user_data.username + "/"} className="flex-grow-1 ms-3 text-dark" style={{textDecoration: "none"}}>
                         <p style={{fontSize: "14pt"}}>{props.member.user_data.username}</p>
                         <div className="small" style={{marginTop: "-15px"}}>
                             <p className="text-info">{props.member.name}</p>

@@ -8,14 +8,15 @@ import {getCurrentUserData} from '../../services/service'
 import {getAllUserChatRequests} from "../../services/userService";
 import {acceptChatRequest, deleteRequest, getRequest} from "../../services/chatService";
 import {DELETE_REQUEST} from "../chat/actionTypes";
+import {AuthService} from "../../services/authService";
 
 
 export const fetchUserData = () => {
-    return function(dispatch) {
-        getCurrentUserData()
-            .then((result) => {
-                dispatch({type: GET_USER_DATA, payload: result})
-            })
+    return async function(dispatch) {
+        const response = await AuthService.getCurrentUser()
+        if (response.status === 200) {
+            dispatch({type: GET_USER_DATA, payload: {info: response.data, isAuth: response.status === 200}})
+        }
     }
 }
 

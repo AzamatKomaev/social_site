@@ -27,7 +27,7 @@ const Chat = (props) => {
                         height="60"
                         style={{marginLeft: "-10px"}}
                      />
-                    <div className="flex-grow-1 ml-3" id={props.chat.id}>
+                    <div className="flex-grow-1 ms-3" id={props.chat.id}>
                         <p style={{fontSize: "14pt"}}>{props.type_is_group ? props.chat.name : props.chat.interlocutor.username}</p>
                         <div className="small" style={{marginTop: "-10px"}}>
                             <p>

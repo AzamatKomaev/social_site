@@ -42,4 +42,8 @@ export class ContentService {
             return err.response
         }
     }
+
+    static createPost = () => {}
+
+    }
 }
