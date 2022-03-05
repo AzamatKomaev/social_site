@@ -10,3 +10,4 @@ google_api
 node_modules
 server/static/*
 !server/static/img
+runserver.sh

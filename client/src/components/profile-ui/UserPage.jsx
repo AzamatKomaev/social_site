@@ -10,6 +10,7 @@ import Error404NotFound from '../extend/Error404NotFound';
 import SwitchMenu from './include/menu/SwitchMenu';
 import InfoTab from './include/tab/InfoTab';
 import SettingTab from './include/tab/SettingTab'
+import {UserService} from "../../services/userService";
 
 
 const UserPage = (props) => {
@@ -26,11 +27,12 @@ const UserPage = (props) => {
     }, [dispatch, user])
 
     useEffect(() => {
-        findUserAndGetData(username)
-            .then((result) => {
-                setUser(result)
-            })
-    }, [])
+        const fetchData = async() => {
+            const response = await UserService.getUser(username)
+            if (response.status === 200) setUser(response.data)
+        }
+        fetchData()
+    }, [username])
 
     if (user && currentUserData !== undefined) {
         return (

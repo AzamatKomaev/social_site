@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import {CreatingPost} from "../../../../services/contentService";
+import {CategoryFrontPath} from "../../../../frontpaths/frontPath";
 
 
 const CreatePostForm = (props) => {
@@ -21,54 +23,24 @@ const CreatePostForm = (props) => {
         }
     }
 
-    const getPostDataInForm = (title, content, category, photo) => {
-        let formData = new FormData()
-        formData.append("title", title)
-        formData.append("text", content)
-        formData.append("category", category)
-        if (photo != null) {
-            formData.append("photo", photo)
-        }
-        return formData
-    }
-
-    const fetchPost = (title, content, category, photo) => {
-        let dataForm = getPostDataInForm(title, content, category, photo)
-        axios.post("http://127.0.0.1:8000/api/v1/category/" + category + "/", dataForm,
-            {
-                headers: {
-                    Authorization: 'Bearer ' + localStorage.getItem("jwt"),
-                    'Content-Type': 'multipart/form-data'
-                }
-            }
-        )
-            .then((result) => {
-                window.location.href = 'http://127.0.0.1:8000/categories/c_id/' + category + "/";
-            })
-            .catch((error) => {
-                if (error.response.status == 400) {
-                    setError(error.response.data)
-                }
-            })
-    }
-
-
-    const createPost = () => {
+    const handleCreatePostButton = async() => {
         if (!category || category === "Выбери категорию") {
             alert("Вы не указали категорию. Куда добавлять пост? -_-")
-            return
+            return ;
         }
-        if (!title || !content) {
-            setError({
-                title: title,
-                text: content
-            })
-            return
-        }
-        fetchPost(title, content, category, photo)
 
+        const creatingPost = new CreatingPost(title, content, category, photo)
+        const response = await creatingPost.createPost()
+
+        switch (response.status) {
+            case 201:
+                window.location.href = CategoryFrontPath.postList(category)
+                break;
+            case 400:
+                setError(response.data)
+                break;
+        }
     }
-
 
     return (
         <div className="container">
@@ -126,29 +98,21 @@ const CreatePostForm = (props) => {
                 }
             </div>
             {"\n"}
-            <div className="input-group mb-3">
-                <div className="custom-file">
-                    <div className="custom-file">
-                        <label htmlFor="id_image" className="custom-file-label">Выберите файл</label>
-                        <input
-                            type="file"
-                            className="custom-file-input"
-                            id="id_image"
-                            accept=".png, .jpg, .jpeg"
-                            name="image"
-                            onChange={changePhoto}
-                         />
-                    </div>
-                    <div className="input-group-append">
-                        <span className="input-group-text" id="">Upload</span>
-                    </div>
-                </div>
+            <div className="mb-3">
+                <label htmlFor="formFile" className="form-label">Default file input example</label>
+                <input
+                    type="file"
+                    id="id_image"
+                    accept=".png, .jpg, .jpeg"
+                    name="image"
+                    onChange={changePhoto}
+                    className="form-control"/>
             </div>
             <p className="form-text text-muted" style={{fontSize: "10pt"}}>И наконец-то продемонстрируйте это на фотографий!</p>
             {"\n"}
             <div className="form-group row">
                 <div className="col-sm-10">
-                    <button onClick={createPost} className="btn btn-primary">Добавить</button>
+                    <button onClick={handleCreatePostButton} className="btn btn-primary">Добавить</button>
                 </div>
             </div>
         </div>

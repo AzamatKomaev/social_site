@@ -1,15 +1,21 @@
 import React, { useState, useEffect} from 'react';
 import { useSelector } from 'react-redux';
+import {AuthFrontPath, CategoryFrontPath, ChatFrontPath, UserFrontPath} from "../../frontpaths/frontPath";
+import {AuthService} from "../../services/authService";
+import {generalTabs} from "./tabs";
 
 
 const Header = (props) => {
     const userData = useSelector(state => state.user)
 
+
+
+
     return (
         <div>
             <nav className="navbar navbar-light bg-light fixed-top">
                 <div className="container-fluid">
-                    <a className="navbar-brand" href="/categories/">In The Game</a>
+                    <a className="navbar-brand" href={CategoryFrontPath.categoryList()}>In The Game</a>
                     <button className="navbar-toggler" type="button" data-bs-toggle="offcanvas"
                             data-bs-target="#offcanvasNavbar" aria-controls="offcanvasNavbar">
                         <span className="navbar-toggler-icon"></span>
@@ -23,31 +29,23 @@ const Header = (props) => {
                         </div>
                         <div className="offcanvas-body">
                             <ul className="navbar-nav justify-content-end flex-grow-1 pe-3">
-                                <li className={"nav-item"}>
-                                    <a className={"nav-link active"} aria-current="page" href={"#"}>
-                                        Категорий
-                                    </a>
-                                </li>
-                                <li className={"nav-item"}>
-                                    <a className={"nav-link"} aria-current="page" href={"#"}>
-                                        Создать пост
-                                    </a>
-                                </li>
-                                <li className={"nav-item"}>
-                                    <a className={"nav-link"} aria-current="page" href={"#"}>
-                                        Чаты
-                                    </a>
-                                </li>
-                                <li className={"nav-item"}>
-                                    <a className={"nav-link"} aria-current="page" href={"#"}>
-                                        Уведомления
-                                    </a>
-                                </li>
+                                {generalTabs.map((tab) => (
+                                    <li className={"nav-item"}>
+                                        <a className={tab.className} aria-current={"page"} href={tab.href}>
+                                            {tab.value}
+                                        </a>
+                                    </li>
+                                ))}
                                 {userData.isAuth ?
                                     <div style={{marginTop: "20px"}}>
                                         {"\n\n"}
                                         <li className={"nav-item"}>
-                                            <a className={"nav-link text-danger"} aria-current="page" href={"#"}>
+                                            <a className={"nav-link"} href={UserFrontPath.userDetail(userData.info.username)}>
+                                                Мой профиль
+                                            </a>
+                                        </li>
+                                        <li className={"nav-item"}>
+                                            <a className={"nav-link text-danger"} onClick={AuthService.logout} aria-current="page">
                                                 Выйти
                                             </a>
                                         </li>
@@ -55,12 +53,12 @@ const Header = (props) => {
                                     :
                                     <div style={{marginTop: "20px"}}>
                                         <li className={"nav-item"}>
-                                            <a className={"nav-link text-danger"} aria-current="page" href={"#"}>
+                                            <a className={"nav-link text-danger"} aria-current="page" href={AuthFrontPath.login()}>
                                                 Вход
                                             </a>
                                         </li>
                                         <li className={"nav-item"}>
-                                            <a className={"nav-link text-danger"} aria-current="page" href={"#"}>
+                                            <a className={"nav-link text-danger"} aria-current="page" href={AuthFrontPath.register()}>
                                                 Регистрация
                                             </a>
                                         </li>

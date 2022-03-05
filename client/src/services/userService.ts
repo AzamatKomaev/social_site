@@ -1,6 +1,17 @@
-import axios from "axios";
+import axios, {AxiosResponse} from "axios";
 import {GroupChatRequestI} from "../interfaces";
+import {UserPath} from "../backpaths/authPaths";
 
+
+export class UserService {
+    static getUser = async(username: string): Promise<AxiosResponse> => {
+        try {
+            return await axios.get(UserPath.userDetail(username))
+        } catch (err: any) {
+            return err.response
+        }
+    }
+}
 
 
 export const getAllUserChatRequests = async(userId: number) => {

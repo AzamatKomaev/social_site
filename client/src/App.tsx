@@ -32,6 +32,7 @@ import UserPage from './components/profile-ui/UserPage';
 import FriendListUser from "./components/profile-ui/FriendListUser";
 import GroupChatListPage from "./components/chat-ui/GroupChatListPage";
 import PersonalChatListPage from "./components/chat-ui/PersonalChatListPage";
+import {AuthFrontPath, CategoryFrontPath, ChatFrontPath, UserFrontPath} from "./frontpaths/frontPath";
 
 
 const App = (props: any) => {
@@ -43,32 +44,34 @@ const App = (props: any) => {
        dispatch(fetchUserData())
     }, [dispatch])
 
+    console.log(CategoryFrontPath.postList(':categoryId'))
+
     return (
         <div className="App">
             <Switch>
-                <Route exact path='/categories/' component={CategoryPage} />
-                <Route exact path='/categories/create/' component={CreatePostPage} />
-                <Route exact path='/categories/c_id/:categoryId/' component={PostPage} />
-                <Route exact path='/categories/c_id/:categoryId/:postId/' component={PostDetailPage} />
+                <Route exact path={CategoryFrontPath.categoryList()} component={CategoryPage} />
+                <Route exact path={CategoryFrontPath.postCreate()} component={CreatePostPage} />
+                <Route exact path={CategoryFrontPath.postList(':categoryId')} component={PostPage} />
+                <Route exact path={CategoryFrontPath.postDetail(':categoryId', ':postId')} component={PostDetailPage} />
 
-                <Route exact path='/notifications/' component={NotificationsPage} />
+                <Route exact path={CategoryFrontPath.notificationList()} component={NotificationsPage} />
 
-                <Route exact path='/auth/login/' component={LoginPage} />
-                <Route exact path='/auth/sign_up/' component={SignUpPage} />
-                <Route exact path='/auth/accept/:token/' component={AcceptAccountPage} />
+                <Route exact path={AuthFrontPath.login()} component={LoginPage} />
+                <Route exact path={AuthFrontPath.register()} component={SignUpPage} />
+                <Route exact path={AuthFrontPath.acceptEmail(':token')} component={AcceptAccountPage} />
 
-                <Route exact path='/users/:username' component={UserPage} />
-                <Route exact path='/users/:username/friends/' component={FriendListUser}/>
+                <Route exact path={UserFrontPath.userDetail(':username')} component={UserPage} />
+                <Route exact path={UserFrontPath.friendList(':username')} component={FriendListUser}/>
 
-                <Route exact path='/chats/' component={ChatListPage}/>
-                <Route exact path='/chats/group/' component={GroupChatListPage}/>
-                <Route exact path='/chats/personal/' component={PersonalChatListPage}/>
+                <Route exact path={ChatFrontPath.chatList()} component={ChatListPage}/>
+                <Route exact path={ChatFrontPath.groupChatList()} component={GroupChatListPage}/>
+                <Route exact path={ChatFrontPath.personalChatList()} component={PersonalChatListPage}/>
 
-                <Route exact path='/chats/group/:chatId/' component={GroupMessageChatPage}/>
-                <Route exact path='/chats/group/:chatId/settings/' component={ChatSettingPage}/>
-                <Route exact path='/chats/personal/:username/' component={PersonalMessageChatPage}/>
+                <Route exact path={ChatFrontPath.groupChatMessages(':chatId')} component={GroupMessageChatPage}/>
+                <Route exact path={ChatFrontPath.groupChatSettings(':chatId')} component={ChatSettingPage}/>
+                <Route exact path={ChatFrontPath.personalChatMessages(':username')} component={PersonalMessageChatPage}/>
 
-                <Redirect from='/' to='/categories'/>
+                <Redirect from='/' to={CategoryFrontPath.categoryList()}/>
             </Switch>
         </div>
     );

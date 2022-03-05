@@ -4,10 +4,8 @@ import {
     GET_USER_CHAT_NOTIFICATIONS,
     GET_USER_DATA
 } from './actionType';
-import {getCurrentUserData} from '../../services/service'
 import {getAllUserChatRequests} from "../../services/userService";
 import {acceptChatRequest, deleteRequest, getRequest} from "../../services/chatService";
-import {DELETE_REQUEST} from "../chat/actionTypes";
 import {AuthService} from "../../services/authService";
 
 
