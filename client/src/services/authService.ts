@@ -25,8 +25,34 @@ export class AuthService {
         }
     }
 
+    static createUser = async(username: string, email: string, password: string): Promise<AxiosResponse> => {
+        try {
+            return await axios.post(AuthPath.register(), {
+                username: username,
+                email: email,
+                password: password
+            })
+        } catch (err: any) {
+            return err.response
+        }
+    }
+
+    static acceptUser = async(token: string, isAuth: boolean): Promise<boolean> => {
+        let response: AxiosResponse
+
+        if (isAuth) return false
+        try {
+            response = await axios.patch(AuthPath.accept(token))
+        } catch (err: any) {
+            response = err.response
+        }
+
+        return response.status === 200
+    }
+
     static logout = () => {
         localStorage.clear()
         window.location.href = AuthFrontPath.login()
     }
 }
+

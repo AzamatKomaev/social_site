@@ -20,11 +20,11 @@ const UserPage = (props) => {
     const [user, setUser] = useState()
     const currentUserData = useSelector(state => state.user)
 
-    useEffect(() => {
-        if (user) {
-            dispatch(fetchGettingFriendRequest(user.id))
-        }
-    }, [dispatch, user])
+    // useEffect(() => {
+    //     if (user) {
+    //         dispatch(fetchGettingFriendRequest(user.id))
+    //     }
+    // }, [dispatch, user])
 
     useEffect(() => {
         const fetchData = async() => {

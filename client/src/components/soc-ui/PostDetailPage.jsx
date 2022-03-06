@@ -67,7 +67,7 @@ const PostDetailPage = (props) => {
                     <CommentForm postId={postId} categoryId={categoryId}/>
                 </div>
                 {"\n\n\n"}
-                <div className="comments">
+                <div>
                     <CommentList comments={post.comments}/>
                 </div>
             </div>

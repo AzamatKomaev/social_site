@@ -3,6 +3,8 @@ import axios from 'axios';
 
 
 import '../../../../App.css';
+import {ContentService} from "../../../../services/contentService";
+import {AuthFrontPath} from "../../../../frontpaths/frontPath";
 
 
 const CommentForm = (props) => {
@@ -31,6 +33,29 @@ const CommentForm = (props) => {
                 }
             })
     }
+
+    const handleCommentCreateButton = async() => {
+        const response = await ContentService.createComment(props.postId, content)
+
+        switch (response.status) {
+            case 201:
+                window.location.reload()
+                break;
+
+            case 400:
+                setError("Комментарий не может быть пустым!")
+                break;
+
+            case 401:
+                window.location.href = AuthFrontPath.login()
+                break;
+
+            default:
+                alert(`${response.status} error`)
+                break;
+        }
+
+    }
     
     return (
         <div>
@@ -52,7 +77,7 @@ const CommentForm = (props) => {
             <div className="form-group row">
                 <div className="col-sm-10">
                     <button
-                        onClick={createComment}
+                        onClick={handleCommentCreateButton}
                         className="btn btn-primary"
                      >
                         Добавить

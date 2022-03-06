@@ -14,7 +14,7 @@ export class AuthPath {
         return `${defaultUrl}/auth/current/`
     }
 
-    static accept = (token: number): string => {
+    static accept = (token: string): string => {
         return `${defaultUrl}/auth/accept/${token}/`
     }
 }

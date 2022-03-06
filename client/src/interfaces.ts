@@ -27,7 +27,6 @@ interface MessageI {
     user_data: UserI,
     text: string,
     created_at: string,
-    polymorphic_ctype?: number,
     chat: number,
 
 }

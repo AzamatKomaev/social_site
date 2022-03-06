@@ -1,6 +1,7 @@
 import axios, {AxiosResponse} from "axios";
 import {ContentPath} from "../backpaths/contentPaths";
 import {defaultConfig} from "./authData";
+import {CategoryFrontPath} from "../frontpaths/frontPath";
 
 
 export class ContentService {
@@ -43,6 +44,16 @@ export class ContentService {
             return err.response
         }
     }
+
+    static createComment = async(postId: number, content: string): Promise<AxiosResponse> => {
+        try {
+            return await axios.post(ContentPath.commentList(postId), {
+                text: content
+            }, defaultConfig)
+        } catch (err: any) {
+            return err.response
+        }
+    }
 }
 
 export class CreatingPost {
@@ -77,5 +88,4 @@ export class CreatingPost {
             return err.response
         }
     }
-
 }

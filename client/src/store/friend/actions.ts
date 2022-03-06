@@ -16,6 +16,7 @@ import {
 } from '../../services/friendRequestService';
 import axios from "axios";
 import {UserI} from "../../interfaces";
+import {UserService} from "../../services/userService";
 
 
 export const fetchGettingFriendRequest = (userId: number) => {
@@ -35,16 +36,16 @@ export const fetchGettingFriendRequest = (userId: number) => {
 
 export const fetchGettingAllFriendRequests = (userId: number) => {
     //action to get all friend requests by user id.
-    return function(dispatch) {
-        getAllFriendNotifications(userId)
-            .then((result) => {
-                dispatch({
-                    type: GET_FRIEND_REQUESTS,
-                    payload: {
-                        list: result.notifications
-                    }
-                })
+    return async function(dispatch) {
+        const response = await UserService.getFriendRequests(userId)
+        if (response.status === 200) {
+            dispatch({
+                type: GET_FRIEND_REQUESTS,
+                payload: {
+                    list: response.data
+                }
             })
+        }
     }
 }
 

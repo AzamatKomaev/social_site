@@ -33,6 +33,7 @@ import FriendListUser from "./components/profile-ui/FriendListUser";
 import GroupChatListPage from "./components/chat-ui/GroupChatListPage";
 import PersonalChatListPage from "./components/chat-ui/PersonalChatListPage";
 import {AuthFrontPath, CategoryFrontPath, ChatFrontPath, UserFrontPath} from "./frontpaths/frontPath";
+import SendMailPage from "./components/auth-ui/SendMailPage";
 
 
 const App = (props: any) => {
@@ -56,6 +57,7 @@ const App = (props: any) => {
 
                 <Route exact path={CategoryFrontPath.notificationList()} component={NotificationsPage} />
 
+                <Route exact path={AuthFrontPath.sendMessage()} component={SendMailPage}/>
                 <Route exact path={AuthFrontPath.login()} component={LoginPage} />
                 <Route exact path={AuthFrontPath.register()} component={SignUpPage} />
                 <Route exact path={AuthFrontPath.acceptEmail(':token')} component={AcceptAccountPage} />

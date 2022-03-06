@@ -1,32 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
-
-
 import ButtonVariants from '../button/ButtonVariants';
 import CardUserCells from './CardUserCells';
+import {UserService} from "../../../../services/userService";
 
-
-interface cellsI {
-    name: string,
-    value: number,
-    width: string,
-    marginLeft: string
-}
-
-
-const getCommentList = async(userId: number) => {
-    let commentList: object[] | null | undefined = []
-
-    await axios.get("http://127.0.0.1:8000/api/v1/user/comments/" + userId + "/")
-        .then((response) => {
-            commentList = response.data
-        })
-        .catch((err) => {
-            console.error(err)
-        })
-
-    return commentList
-}
 
 
 const InfoUserCell = (props: any) => {
@@ -35,10 +11,11 @@ const InfoUserCell = (props: any) => {
     const [commentList, setCommentList] = useState([])
 
     useEffect(() => {
-        getCommentList(props.user.id)
-            .then((result) => {
-                setCommentList(result)
-            })
+        const fetchData = async() => {
+            const response = await UserService.getCommentList(props.user.id)
+            setCommentList(response.status === 200 ? response.data : [])
+        }
+        fetchData()
     }, [])
 
 

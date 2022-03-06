@@ -3,11 +3,8 @@ import { useSelector } from 'react-redux';
 
 import Header from '../extend/Header';
 import CategoryList from './include/category/CategoryList';
-import { WelcomeAuthBox, WelcomeAnonBox } from './include/welcome_box/WelcomeBox';
 
-import { getCategories } from '../../services/service';
 import {ContentService} from "../../services/contentService";
-import Error404NotFound from "../extend/Error404NotFound";
 
 
 const CategoryPage = (props) => {

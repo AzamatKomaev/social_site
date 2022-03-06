@@ -11,6 +11,30 @@ export class UserService {
             return err.response
         }
     }
+
+    static getFriendRequests = async(userId: number): Promise<AxiosResponse> => {
+        try {
+            return await axios.get(UserPath.friendList(userId))
+        } catch (err: any) {
+            return err.response
+        }
+    }
+
+    static getUserPosts = async(userId: number): Promise<AxiosResponse> => {
+        try {
+            return await axios.get(UserPath.postList(userId))
+        } catch (err: any) {
+            return err.response
+        }
+    }
+
+    static getCommentList = async(userId: number): Promise<AxiosResponse> => {
+        try {
+            return await axios.get(UserPath.commentList(userId))
+        } catch (err: any) {
+            return err.response
+        }
+    }
 }
 
 
