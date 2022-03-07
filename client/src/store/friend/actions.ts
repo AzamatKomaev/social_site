@@ -8,36 +8,31 @@ import {
 } from './actionTypes';
 
 import {
-    getFriendRequest,
-    getAllFriendNotifications,
-    sendFriendRequest,
     deleteFriendRequest,
-    patchFriendRequest
+    FriendRequestService
 } from '../../services/friendRequestService';
-import axios from "axios";
 import {UserI} from "../../interfaces";
 import {UserService} from "../../services/userService";
 
 
 export const fetchGettingFriendRequest = (userId: number) => {
-    //action to get one friend request.
-    return function(dispatch) {
-        getFriendRequest(userId)
-            .then((result) => {
-                dispatch({
-                    type: GET_FRIEND_REQUEST,
-                    payload: {
-                        detail: result.friendRequest
-                    }
-                })
+    return async function(dispatch) {
+        const response = await FriendRequestService.getFriendRequestDetail(userId)
+
+        if (response.status === 200) {
+            dispatch({
+                type: GET_FRIEND_REQUEST,
+                payload: {
+                    detail: response.data
+                }
             })
+        }
     }
 }
 
-export const fetchGettingAllFriendRequests = (userId: number) => {
-    //action to get all friend requests by user id.
+export const fetchGettingAllFriendRequests = () => {
     return async function(dispatch) {
-        const response = await UserService.getFriendRequests(userId)
+        const response = await FriendRequestService.getFriendRequestList()
         if (response.status === 200) {
             dispatch({
                 type: GET_FRIEND_REQUESTS,
@@ -50,44 +45,46 @@ export const fetchGettingAllFriendRequests = (userId: number) => {
 }
 
 export const fetchSendingFriendRequest = (userId: number) => {
-    return function(dispatch) {
-        sendFriendRequest(userId)
-            .then((result) => {
-                dispatch({
-                    type: SEND_FRIEND_REQUEST,
-                    payload: {
-                        detail: result.friendRequest
-                    }
-                })
+    return async function(dispatch) {
+        const response = await FriendRequestService.sendFriendRequest(userId)
+        if (response.status >= 200 && response.status < 300) {
+            dispatch({
+                type: SEND_FRIEND_REQUEST,
+                payload: {
+                    detail: response.data
+                }
             })
+        }
     }
 }
 
 export const fetchDeletingFriendRequest = (userId: number) => {
-    return function(dispatch) {
-        deleteFriendRequest(userId)
-            .then((result) => {
-                dispatch({
-                    type: DELETE_FRIEND_REQUEST,
-                    payload: {
-                        statusCode: result
-                    }
-                })
+    return async function(dispatch) {
+        const response = await FriendRequestService.deleteFriend(userId)
+
+        if (response.status === 204) {
+            dispatch({
+                type: DELETE_FRIEND_REQUEST,
+                payload: {
+                    statusCode: response.status
+                }
             })
+        }
     }
 }
 
 export const fetchPatchingFriendRequest = (userId: number, isAccepted: number) => {
-    return function(dispatch) {
-        patchFriendRequest(userId, isAccepted)
-            .then((result) => {
-                dispatch({
-                    type: ACCEPT_FRIEND_REQUEST,
-                    payload: {
-                        detail: result.friendRequest
-                    }
-                })
+    return async function(dispatch) {
+        const response = await FriendRequestService.acceptFriendRequest(userId, isAccepted)
+
+        if (response.status === 200) {
+            dispatch({
+                type: ACCEPT_FRIEND_REQUEST,
+                payload: {
+                    detail: response.data
+                }
             })
+        }
     }
 }
 
@@ -104,9 +101,11 @@ export const deleteFriendRequestFromList = (friendRequestList: Array<any>, userI
 }
 
 export const fetchGettingAllUserFriends = (userId: number) => {
-    return function (dispatch) {
-        axios.get("http://127.0.0.1:8000/api/v1/user/find/" + userId + "/friends/")
-            .then((response) => {
+    return async function (dispatch) {
+        const response = await UserService.getFriendList(userId)
+
+        switch (response.status) {
+            case 200:
                 dispatch({
                     type: GET_ALL_FRIENDS,
                     payload: {
@@ -114,30 +113,30 @@ export const fetchGettingAllUserFriends = (userId: number) => {
                         statusCode: response.status
                     }
                 })
-            })
-            .catch((error) => {
+                break;
+
+            default:
                 dispatch({
                     type: GET_ALL_FRIENDS,
                     payload: {
                         list: [],
-                        statusCode: error.response.status
+                        statusCode: response.status
                     }
                 })
-            })
+                break;
+        }
     }
 }
 
 export const fetchDeletingUserFromFriendList = (userId: number) => {
-    return function(dispatch) {
-        deleteFriendRequest(userId)
-            .then((result) => {
-                dispatch({
-                    type: DELETE_USER_FROM_FRIEND_LIST,
-                    payload: {
-                        statusCode: result
-                    }
-                })
-            })
+    return async function(dispatch) {
+        const response = await FriendRequestService.deleteFriend(userId)
+        dispatch({
+            type: DELETE_USER_FROM_FRIEND_LIST,
+            payload: {
+                statusCode: response.status
+            }
+        })
     }
 }
 

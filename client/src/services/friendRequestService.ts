@@ -1,6 +1,50 @@
-import axios from 'axios';
+import axios, {AxiosResponse} from 'axios';
 import {FriendRequestI} from "../interfaces";
+import {FriendRequestPath} from "../backpaths/userPaths";
+import {defaultConfig} from "./authData";
 
+
+export class FriendRequestService {
+    static getFriendRequestList = async(): Promise<AxiosResponse> => {
+        try {
+            return await axios.get(FriendRequestPath.list(), defaultConfig)
+        } catch (err: any) {
+            return err.response
+        }
+    }
+
+    static getFriendRequestDetail = async(userId: number): Promise<AxiosResponse> => {
+        try {
+            return await axios.get(FriendRequestPath.detail(userId), defaultConfig)
+        } catch (err: any) {
+            return err.response
+        }
+    }
+
+    static deleteFriend = async(userId: number): Promise<AxiosResponse> => {
+        try {
+            return await axios.delete(FriendRequestPath.detail(userId), defaultConfig)
+        } catch (err: any) {
+            return err.response
+        }
+    }
+
+    static sendFriendRequest = async(userId: number): Promise<AxiosResponse> => {
+        try {
+            return await axios.post(FriendRequestPath.detail(userId), {}, defaultConfig)
+        } catch (err: any) {
+            return err.response
+        }
+    }
+
+    static acceptFriendRequest = async(userId: number, isAccepted: number): Promise<AxiosResponse> => {
+        try {
+            return await axios.patch(FriendRequestPath.patchDetail(userId, isAccepted), {}, defaultConfig)
+        } catch (err: any) {
+            return err.response
+        }
+    }
+}
 
 interface FriendRequestDataI {
     friendRequest?: FriendRequestI | null,

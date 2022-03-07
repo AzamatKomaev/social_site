@@ -19,20 +19,3 @@ export class AuthPath {
     }
 }
 
-export class UserPath {
-    static userDetail = (instance: number | string): string => {
-        return `${defaultUrl}/users/${instance}/`
-    }
-
-    static friendList = (userId: number): string => {
-        return `${defaultUrl}/users/${userId}/friends/`
-    }
-
-    static postList = (userId: number): string => {
-        return `${defaultUrl}/users/${userId}/posts/`
-    }
-
-    static commentList = (userId: number): string => {
-        return `${defaultUrl}/users/${userId}/comments/`
-    }
-}

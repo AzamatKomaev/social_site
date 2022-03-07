@@ -1,12 +1,20 @@
 import axios, {AxiosResponse} from "axios";
 import {GroupChatRequestI} from "../interfaces";
-import {UserPath} from "../backpaths/authPaths";
+import {UserPath} from "../backpaths/userPaths";
 
 
 export class UserService {
     static getUser = async(username: string): Promise<AxiosResponse> => {
         try {
             return await axios.get(UserPath.userDetail(username))
+        } catch (err: any) {
+            return err.response
+        }
+    }
+
+    static getFriendList = async(userId: number): Promise<AxiosResponse> => {
+        try {
+            return await axios.get(UserPath.friendList(userId))
         } catch (err: any) {
             return err.response
         }
@@ -36,6 +44,8 @@ export class UserService {
         }
     }
 }
+
+
 
 
 export const getAllUserChatRequests = async(userId: number) => {

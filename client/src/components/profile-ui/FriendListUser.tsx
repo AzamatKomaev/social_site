@@ -1,12 +1,12 @@
 import React, {useEffect, useState} from "react";
 import {findUserAndGetData} from "../../services/service";
-import axios from "axios";
 import Error404NotFound from "../extend/Error404NotFound";
 import Header from "../extend/Header";
 import {UserI} from "../../interfaces";
 import {useDispatch, useSelector} from "react-redux";
 import {fetchGettingAllUserFriends} from "../../store/friend/actions";
 import FriendList from "./include/friend/FriendList";
+import {UserService} from "../../services/userService";
 
 
 const FriendListUser = (props) => {
@@ -15,20 +15,19 @@ const FriendListUser = (props) => {
     const dispatch = useDispatch()
     const friendListData = useSelector((state: any) => state.friendList)
 
-    const [user, setUser] = useState<UserI>()
-
+    const [user, setUser] = useState<UserI | null>()
 
     useEffect(() => {
-        if (user) {
-            dispatch(fetchGettingAllUserFriends(user.id))
-        }
+        if (user) dispatch(fetchGettingAllUserFriends(user.id));
     }, [dispatch, user])
 
+
     useEffect(() => {
-        findUserAndGetData(username)
-            .then((result) => {
-                setUser(result)
-            })
+        const fetchData =  async() => {
+            const response = await UserService.getUser(username)
+            setUser(response.status === 200 ? response.data : null)
+        }
+        fetchData()
     }, [username])
 
 

@@ -14,7 +14,7 @@ const InfoTab = (props: any) => {
             setUserPosts(response.status === 200 ? response.data : [])
         }
         fetchData()
-    }, [])
+    }, [props.user.id])
 
     return (
         <div className="tab-pane fade show active" id="home">

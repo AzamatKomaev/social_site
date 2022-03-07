@@ -1,0 +1,2 @@
+GET http://192.168.1.9:8000/api/v1/friend_requests/4/
+Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNjQ2NjQzNDYwLCJqdGkiOiIxOGMzMzg4NDY4NDM0OWRlYTE3ZTQ5MDNiMGQyNjdhNyIsInVzZXJfaWQiOjF9.0HYz7XzMT3kaJW_YIxFWPz5iOuY7ne0Yan57ZS1-Bw4

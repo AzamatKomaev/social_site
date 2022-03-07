@@ -1,9 +1,6 @@
-from rest_framework.decorators import permission_classes
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status, permissions, viewsets
-
-from django.core.exceptions import ObjectDoesNotExist
 
 from .models import User
 from .services import UserService, CreationUser, FriendRequestService

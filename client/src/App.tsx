@@ -45,8 +45,6 @@ const App = (props: any) => {
        dispatch(fetchUserData())
     }, [dispatch])
 
-    console.log(CategoryFrontPath.postList(':categoryId'))
-
     return (
         <div className="App">
             <Switch>

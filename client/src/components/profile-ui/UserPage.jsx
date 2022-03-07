@@ -1,8 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
-import { findUserAndGetData } from '../../services/service';
-import { fetchGettingFriendRequest } from '../../store/friend/actions';
+import {fetchGettingFriendRequest} from '../../store/friend/actions';
 
 import Header from '../extend/Header';
 import Error404NotFound from '../extend/Error404NotFound';
@@ -17,14 +16,9 @@ const UserPage = (props) => {
     let username = props.match.params.username;
 
     const dispatch = useDispatch()
+
     const [user, setUser] = useState()
     const currentUserData = useSelector(state => state.user)
-
-    // useEffect(() => {
-    //     if (user) {
-    //         dispatch(fetchGettingFriendRequest(user.id))
-    //     }
-    // }, [dispatch, user])
 
     useEffect(() => {
         const fetchData = async() => {
@@ -33,6 +27,10 @@ const UserPage = (props) => {
         }
         fetchData()
     }, [username])
+
+    useEffect(() => {
+        if (user?.id) dispatch(fetchGettingFriendRequest(user.id))
+    }, [user])
 
     if (user && currentUserData !== undefined) {
         return (

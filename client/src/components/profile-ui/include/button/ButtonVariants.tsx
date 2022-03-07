@@ -1,14 +1,13 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
-import './style.css';
 import {
     fetchGettingFriendRequest,
     fetchSendingFriendRequest,
-    fetchDeletingFriendRequest,
-    fetchPatchingFriendRequest
+    fetchPatchingFriendRequest, fetchDeletingUserFromFriendList
 } from '../../../../store/friend/actions';
 import { fetchUserData } from '../../../../store/user/actions';
+import {AuthFrontPath} from "../../../../frontpaths/frontPath";
 
 
 
@@ -18,29 +17,44 @@ const ButtonVariants = (props: any) => {
     const dispatch = useDispatch()
 
 
-    const handleDeleteFriendRequest = (e: any) => {
-        dispatch(fetchDeletingFriendRequest(props.user.id))
+    const handleDeleteFriendRequest = () => {
+        dispatch(fetchDeletingUserFromFriendList(props.user.id))
         dispatch(fetchGettingFriendRequest(props.user.id))
         dispatch(fetchUserData())
     }
 
-    const handleAcceptFriendRequest = (e: any) => {
+    const handleAcceptFriendRequest = () => {
         dispatch(fetchPatchingFriendRequest(props.user.id, 1))
         dispatch(fetchGettingFriendRequest(props.user.id))
         dispatch(fetchUserData())
     }
 
+    useEffect(() => {
+        console.log(friendRequest)
+    }, [friendRequest])
+
 
     if (!currentUserData.isAuth) {
         return (
             <div>
-                <a href="/auth/login/"  className="btn btn-outline-primary btn-block default-button">Хотите войти?</a>
+                <a
+                    href={AuthFrontPath.login()}
+                    className="btn btn-outline-primary btn-block default-button"
+                    style={{width: "100%"}}
+                >
+                    Хотите войти?
+                </a>
             </div>
         )
     } else if (props.user.id === currentUserData.info.id) {
         return (
             <div>
-                <a href="/redac/" className="btn btn-outline-secondary btn-block default-button">Редактировать</a>
+                <a
+                    href="/redac/"
+                    style={{width: "100%"}}
+                    className="btn btn-outline-secondary btn-block default-button"
+                >Редактировать
+                </a>
             </div>
         )
     } else if ((friendRequest.detail) && (friendRequest.detail.is_accepted === false)) {
@@ -49,6 +63,7 @@ const ButtonVariants = (props: any) => {
                 <a
                     href={`/chats/personal/${props.user.username}/`}
                     className="btn btn-info default-button"
+                    style={{width: "100%"}}
                 >
                     Отправить сообщение
                 </a>
@@ -60,7 +75,7 @@ const ButtonVariants = (props: any) => {
                             className="btn btn-warning default-button"
                             onClick={handleDeleteFriendRequest}
                             style={{width: "100%"}}
-                         >
+                        >
                             Отозвать запрос.
                         </button>
                     :
@@ -68,7 +83,8 @@ const ButtonVariants = (props: any) => {
                             type="button"
                             className="btn btn-success default-button"
                             onClick={handleAcceptFriendRequest}
-                         >
+                            style={{width: "100%"}}
+                        >
                             Принять заявку в друзья.
                         </button>
                 }
@@ -80,6 +96,7 @@ const ButtonVariants = (props: any) => {
                 <a
                     href={`/chats/personal/${props.user.username}/`}
                     className="btn btn-info default-button"
+                    style={{width: "100%"}}
                 >
                     Отправить сообщение
                 </a>
@@ -89,7 +106,7 @@ const ButtonVariants = (props: any) => {
                     className="btn btn-outline-primary btn-block default-button"
                     onClick={() => dispatch(fetchSendingFriendRequest(props.user.id))}
                     style={{width: "100%"}}
-                 >
+                >
                     Добавить в друзья.
                 </button>
             </div>
@@ -100,6 +117,7 @@ const ButtonVariants = (props: any) => {
                 <a
                     href={`/chats/personal/${props.user.username}/`}
                     className="btn btn-info default-button"
+                    style={{width: "100%"}}
                 >
                     Отправить сообщение
                 </a>

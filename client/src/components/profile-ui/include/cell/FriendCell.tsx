@@ -1,7 +1,7 @@
 import React from "react";
 import {useDispatch, useSelector} from "react-redux";
 import {deleteUserFromFriendList, fetchDeletingUserFromFriendList} from "../../../../store/friend/actions";
-import friendListUser from "../../FriendListUser";
+import {UserFrontPath} from "../../../../frontpaths/frontPath";
 
 
 const FriendCell = (props) => {
@@ -18,17 +18,19 @@ const FriendCell = (props) => {
     return (
         <div className="card col-9 my-3 mx-auto border border-primary">
             <div className="list-group-item list-group-item-action border-0">
-                <div className="d-flex align-items-start" style={{marginLeft: "-10px"}}>
+                <div className="d-flex align-items-start">
                     <img
                         src={props.friend.avatar.image}
                         className="rounded-circle mr-1"
                         alt="lol"
                         width="60"
                         height="60"
-                        style={{marginLeft: "-10px"}}
                     />
                     <div className="flex-grow-1 ms-3">
-                        <a href={"/users/" + props.friend.username + "/"}>
+                        <a
+                            href={UserFrontPath.userDetail(props.friend.username)}
+                            style={{textDecoration: "none"}}
+                            className="text-dark">
                             <p style={{fontSize: "14pt"}}>{props.friend.username}</p>
                         </a>
                         <div className="small" style={{marginTop: "-15px"}}>
