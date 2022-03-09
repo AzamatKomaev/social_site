@@ -63,9 +63,35 @@ class UserAuthAPITestService:
         return response
 
     @staticmethod
-    def get_friend_list(user_id: int, user_jwt: str) -> Response:
+    def get_friend_list(user_id: int) -> Response:
         client = APIClient()
         url = reverse('friend.list', args=[user_id])
-        response = client.post(url, HTTP_AUTHORIZATION=f'Bearer {user_jwt}')
+        response = client.get(url)
         return response
-    
+
+    @staticmethod
+    def send_friend_request(user_id: int, admin_jwt: str) -> Response:
+        url = reverse('friend_request.view_set', args=[user_id])
+        client = APIClient()
+        response = client.post(url, HTTP_AUTHORIZATION=f'Bearer {admin_jwt}')
+        return response
+
+    @staticmethod
+    def send_several_friend_requests(users: QuerySet[User], user_jwt: str) -> list[Response]:
+        sent_friend_requests = [
+            UserAuthAPITestService.send_friend_request(user.id, user_jwt)
+            for user in users
+        ]
+        return sent_friend_requests
+
+    @staticmethod
+    def accept_several_friend_requests(users: QuerySet[User], user_id: int, password: str) -> tuple[Response]:
+        responses = tuple((
+            UserAuthAPITestService.accept_friend_request(
+                user_id=user_id,
+                user_jwt=UserAuthAPITestService.login_user(user.username, password).json().get('access'),
+                is_accepted=1
+            )
+            for user in users
+        ))
+        return responses

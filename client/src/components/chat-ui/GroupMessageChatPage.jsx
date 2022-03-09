@@ -75,10 +75,7 @@ const GroupMessageChatPage = (props) => {
     }, [])
 
     useEffect(() => {
-        getCurrentUserData()
-            .then((result) => {
-                setCurrentUserData(result)
-            })
+        getCurrentUserData().then((result) => setCurrentUserData(result))
         getChatMessages(chatId, 1)
             .then((result) => {
                 setMessages(result.messages.reverse())

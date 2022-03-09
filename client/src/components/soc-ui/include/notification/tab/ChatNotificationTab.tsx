@@ -8,13 +8,13 @@ const ChatNotificationTab = (props: any) => {
 
     if (userData.chatRequestNotifications && userData.chatRequestNotifications.length > 0) {
         return (
-            <div className="tab-pane fade" id="chats" role="tabpanel" aria-labelledby="nav-home-tab">
+            <div>
                 <ChatNotificationList/>
             </div>
         )
     } else {
         return (
-            <div className="tab-pane fade" id="chats" role="tabpanel" aria-labelledby="nav-home-tab">
+            <div>
                 There are not notifications for you :((
             </div>
         )

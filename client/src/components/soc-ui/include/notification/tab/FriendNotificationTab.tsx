@@ -7,20 +7,16 @@ import FriendNotificationList from "../list/FriendNotificationList";
 
 
 
-const FriendNotificationTab = (props: any) => {
+const FriendNotificationTab = () => {
     const friendRequest = useSelector((state: any) => state.friendRequest)
 
     if (friendRequest && friendRequest.list && friendRequest.list.length > 0) {
-        return (
-            <div className="tab-pane fade show active" id="friends" role="tabpanel" aria-labelledby="nav-home-tab">
-                <FriendNotificationList/>
-            </div>
-        )
+        return (<FriendNotificationList/>)
     } else {
         return (
-            <div className="tab-pane fade show active" id="friends" role="tabpanel" aria-labelledby="nav-home-tab">
+            <p>
                 There are not notifications for you. :( you are alone.
-            </div>
+            </p>
         )
     }
 }

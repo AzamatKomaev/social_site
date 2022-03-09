@@ -8,7 +8,6 @@ import {
 } from './actionTypes';
 
 import {
-    deleteFriendRequest,
     FriendRequestService
 } from '../../services/friendRequestService';
 import {UserI} from "../../interfaces";

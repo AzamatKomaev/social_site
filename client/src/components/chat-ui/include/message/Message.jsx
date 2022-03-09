@@ -11,7 +11,7 @@ const Message = (props) => {
                 ?
                     <div className="chat-message-right pb-4" style={{width: "70%"}}>
                         <div>
-                            <img src={props.message.user_data.avatar.image} className="rounded-circle mr-1" alt="you" width="40" height="40"/>
+                            <img src={props.message.user_data.avatar.image} className="rounded-circle ms-1" alt="you" width="40" height="40"/>
                         </div>
                         <div className="flex-shrink-1 bg-light rounded py-2 px-3 mr-3">
                             <div className="font-weight-bold mb-1"><a href="#" style={{textDecoration: "none", color: "black"}}>Вы</a></div>
@@ -22,7 +22,7 @@ const Message = (props) => {
                 :
                     <div className="chat-message-left pb-4" style={{width: "70%"}}>
                         <div>
-                            <img src={props.message.user_data.avatar.image} className="rounded-circle mr-1" alt="..." width="40" height="40"/>
+                            <img src={props.message.user_data.avatar.image} className="rounded-circle ms-1" alt="..." width="40" height="40"/>
                         </div>
                         <div className="flex-shrink-1 bg-light rounded py-2 px-3 ms-3">
                             <div className="font-weight-bold mb-1">

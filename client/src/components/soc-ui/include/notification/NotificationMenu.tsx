@@ -6,26 +6,28 @@ const NotificationMenu = (props: any) => {
         <div>
             <nav>
                 <div className="nav nav-tabs" id="nav-tab" role="tablist">
-                    <a
-                        className="nav-item nav-link active"
-                        id="nav-home-tab"
+                    <button
+                        id="nav-home-friends"
+                        type="button"
+                        className="nav-link active"
+                        data-bs-toggle="tab"
+                        data-bs-target="#friends"
                         data-toggle="tab"
-                        href="#friends"
                         role="tab"
                         aria-controls="nav-home"
                         aria-selected="true">
                         Друзья
-                    </a>
-                    <a
-                        className="nav-item nav-link"
+                    </button>
+                    <button
                         id="nav-profile-tab"
-                        data-toggle="tab"
-                        href="#chats"
+                        className="nav-link"
+                        data-bs-toggle="tab"
+                        data-bs-target="#chats"
                         role="tab"
                         aria-controls="nav-profile"
                         aria-selected="false">
                         Чаты
-                    </a>
+                    </button>
                 </div>
             </nav>
         </div>

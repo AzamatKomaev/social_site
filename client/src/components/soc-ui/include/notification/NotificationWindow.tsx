@@ -13,8 +13,12 @@ const NotificationsWindow = () => {
             </div>
             <div className="card" style={{marginTop: "5px"}}>
                 <div className="tab-content" id="nav-tabContent">
-                    <FriendNotificationTab/>
-                    <ChatNotificationTab/>
+                    <div className="tab-pane fade show active" id="friends" role="tabpanel" aria-labelledby="nav-home-tab">
+                        <FriendNotificationTab/>
+                    </div>
+                    <div className="tab-pane fade" id="chats" role="tabpanel" aria-labelledby="nav-home-tab">
+                        <ChatNotificationTab/>
+                    </div>
                 </div>
             </div>
         </div>

@@ -21,7 +21,7 @@ const FriendCell = (props) => {
                 <div className="d-flex align-items-start">
                     <img
                         src={props.friend.avatar.image}
-                        className="rounded-circle mr-1"
+                        className="rounded-circle ms-1"
                         alt="lol"
                         width="60"
                         height="60"

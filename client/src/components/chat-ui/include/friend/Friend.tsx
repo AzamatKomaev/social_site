@@ -15,7 +15,7 @@ const Friend = (props: any) => {
                 <div className="d-flex align-items-start" style={{marginLeft: "-10px"}}>
                     <img
                         src={props.friendData.avatar.image}
-                        className="rounded-circle mr-1"
+                        className="rounded-circle ms-1"
                         alt="lol"
                         width="60"
                         height="60"

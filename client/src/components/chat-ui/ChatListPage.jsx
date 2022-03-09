@@ -8,6 +8,7 @@ import Error404NotFound from '../extend/Error404NotFound';
 import ChatWindow from './include/chat/ChatWindow';
 import {getGroupChats} from "../../services/chatService";
 import {getPersonalChats} from "../../services/personalChatService";
+import {GroupChatService, PersonalChatService} from "../../services/chatServices";
 
 
 const getUserChats = async() => {
@@ -16,11 +17,11 @@ const getUserChats = async() => {
         group: []
     }
 
-    const groupResponse = await getGroupChats('last_message', 0)
-    const personalResponse = await getPersonalChats('last_message', 0);
+    const groupListChatResponse = await GroupChatService.getList('last_message', 0)
+    const personalListChatResponse = await PersonalChatService.getList('last_message', 0)
 
-    chats.group = groupResponse.data
-    chats.personal = personalResponse.data
+    chats.group = groupListChatResponse.status === 200 ? groupListChatResponse.data : []
+    chats.personal = personalListChatResponse === 200 ? personalListChatResponse.data : []
     return chats
 }
 
@@ -38,8 +39,6 @@ const ChatListPage = () => {
             setUpdate(prevState => prevState+=1)
         }, 5000)
     }, [])
-
-
 
 
     useEffect(() => {

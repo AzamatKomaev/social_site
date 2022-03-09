@@ -1,7 +1,7 @@
 import json
 import random
 import uuid
-from typing import Optional
+from typing import Optional, Union
 
 from django.contrib.auth.models import Group
 from django.db.models import QuerySet
@@ -24,6 +24,18 @@ class UserAPITestCase(APITestCase):
         f = open(self.json_users_path, 'r')
         self.users_dict = json.loads(f.read())
         Group.objects.create(name='Пользователь')
+
+    def _set_up_friend_requests(self) -> dict[str, Union[QuerySet[User], User]]:
+        self._create_users(self.users_dict)
+        UserAuthAPITestService.create_user({"username": "admin", "email": "mail@mail.ru", "password": "admin12345678"})
+
+        admin = User.objects.get(username="admin")
+        users = User.objects.all().exclude(id=admin.id)
+
+        UserAuthAPITestService.accept_all_users(users)
+        UserAuthAPITestService.accept_all_users([admin])
+
+        return {'users': users, 'admin': admin}
 
     def _create_users(self, json_users: list) -> list[Response]:
         responses = [UserAuthAPITestService.create_user(user_data) for user_data in json_users]
@@ -57,12 +69,6 @@ class UserAPITestCase(APITestCase):
         url = reverse('current-user-data')
         client = APIClient()
         response = client.get(url, data=None, follow=False, HTTP_AUTHORIZATION=f'Bearer {jwt}')
-        return response
-
-    def _send_friend_request(self, user_id: int, admin_jwt: str) -> Response:
-        url = reverse('friend_request.view_set', args=[user_id])
-        client = APIClient()
-        response = client.post(url, HTTP_AUTHORIZATION=f'Bearer {admin_jwt}')
         return response
 
     def _accept_several_users(self, users: QuerySet[User]) -> list[Response]:
@@ -141,22 +147,15 @@ class UserAPITestCase(APITestCase):
         self.assertEqual(404, self._find_user(user_id=random.randint(users.last().id+1, 100)).status_code)
         self.assertEqual(404, self._find_user(username="non-existing-username").status_code)
 
-    def test_friend_service(self):
-        self._create_users(self.users_dict)
-        UserAuthAPITestService.create_user({"username": "admin", "email": "mail@mail.ru", "password": "admin12345678"})
-
-        admin = User.objects.get(username="admin")
-        users = User.objects.all().exclude(id=admin.id)
-
-        UserAuthAPITestService.accept_all_users(users)
-        UserAuthAPITestService.accept_all_users([admin])
+    def test_friend_requests_accepting(self):
+        users, admin = self._set_up_friend_requests().values()
         admin_auth_response = UserAuthAPITestService.login_user(username="admin", password="admin12345678")
 
-        sent_friend_requests = [
-            self._send_friend_request(user.id, admin_auth_response.json().get('access'))
-            for user in users
-        ]
-        invalid_trying_sent_exists_friend_request = self._send_friend_request(
+        sent_friend_requests = UserAuthAPITestService.send_several_friend_requests(
+            users=users,
+            user_jwt=admin_auth_response.json().get('access')
+        )
+        invalid_trying_sent_exists_friend_request = UserAuthAPITestService.send_friend_request(
             users.order_by('?').first().id, admin_auth_response.json().get('access')
         )
 
@@ -169,34 +168,58 @@ class UserAPITestCase(APITestCase):
             invalid_trying_sent_exists_friend_request.json().get('message'), 'Friend request already exists'
         )
 
-        invalid_accepting_friend_request_response = UserAuthAPITestService.accept_friend_request(
+        invalid_accepted_friend_request_response = UserAuthAPITestService.accept_friend_request(
             user_id=users.exclude(username='User1').order_by('?').first().id,
             user_jwt=UserAuthAPITestService.login_user('User1', self.default_password).json().get('access', None),
             is_accepted=1
         )
-        invalid_deleting_friend_request_response = UserAuthAPITestService.delete_friend_request(
+        invalid_deleted_friend_request_response = UserAuthAPITestService.delete_friend_request(
             user_id=users.exclude(username='User1').order_by('?').first().id,
             user_jwt=UserAuthAPITestService.login_user('User1', self.default_password).json().get('access', None)
         )
 
-        valid_accepting_friend_requests_responses = UserAuthAPITestService.accept_friend_request(
-            user_id=users.last().id,
-            user_jwt=UserAuthAPITestService.login_user(
-                users.last().username, self.default_password
-            ).json().get('access'),
-            is_accepted=1
+        valid_accepted_friend_request_responses = UserAuthAPITestService.accept_several_friend_requests(
+            user_id=admin.id, users=users, password=self.default_password
         )
-        for req in FriendRequest.objects.all():
-            print(req.to_user.id, req.to_user.username)
 
         self.assertEqual(
-            (invalid_accepting_friend_request_response.json().get('message'),
-             invalid_accepting_friend_request_response.status_code),
+            (invalid_accepted_friend_request_response.json().get('message'),
+             invalid_accepted_friend_request_response.status_code),
             ('Friend Request with this data doesnt exists.', 404)
         )
         self.assertEqual(
-            (invalid_deleting_friend_request_response.json().get('message'),
-             invalid_deleting_friend_request_response.status_code),
+            (invalid_deleted_friend_request_response.json().get('message'),
+             invalid_deleted_friend_request_response.status_code),
             ('Friend Request with this data doesnt exists.', 404)
         )
 
+        self.assertEqual(
+            len(valid_accepted_friend_request_responses),
+            users.count()
+        )
+
+        self.assertEqual(
+            len(valid_accepted_friend_request_responses),
+            len(tuple(filter(lambda response: response.status_code == 200, valid_accepted_friend_request_responses)))
+        )
+
+        user_friend_list_response = UserAuthAPITestService.get_friend_list(users.last().id)
+        admin_friend_list_response = UserAuthAPITestService.get_friend_list(admin.id)
+
+        self.assertEqual(
+            [user_friend_list_response.status_code, len(user_friend_list_response.json())],
+            [200, 1]
+        )
+        self.assertEqual(
+            [admin_friend_list_response.status_code, len(admin_friend_list_response.json())],
+            [200, users.count()]
+        )
+
+    def test_friend_requests_deleting(self):
+        users, admin = self._set_up_friend_requests().values()
+        admin_auth_response = UserAuthAPITestService.login_user(username="admin", password="admin12345678")
+
+        UserAuthAPITestService.send_several_friend_requests(
+            users=users,
+            user_jwt=admin_auth_response.json().get('access')
+        )

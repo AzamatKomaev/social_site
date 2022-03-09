@@ -1,3 +1,5 @@
+from typing import Optional
+
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status, permissions, viewsets
@@ -97,7 +99,7 @@ class FriendRequestViewSet(viewsets.ViewSet):
 
     @staticmethod
     def check_possible_errors(
-                             to_user_object: User,
+                             to_user_object: Optional[User],
                              friend_request_service: FriendRequestService
                              ) -> dict:
         """
