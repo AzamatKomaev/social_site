@@ -10,7 +10,7 @@ interface ChatUserListI {
 
 const ChatUserList = (props: ChatUserListI) => {
     return (
-        <div className="col-12 col-lg-5 col-xl-3 d-none d-lg-block border-right">
+        <div className="col-12 col-lg-5 col-xl-3 d-none d-lg-block border">
             <div className="px-4 d-none d-md-block">
                 <div className="d-flex align-items-center">
                     <div className="flex-grow-1">

@@ -1,5 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
-import axios from 'axios';
+import React, { useEffect, useRef } from 'react';
 
 import '../style.css';
 
@@ -8,22 +7,15 @@ import MessageInput from './MessageInput';
 import ChatHeader from '../chat/ChatHeader';
 import ChatUserList from '../user/ChatUserList';
 
-import {getChatMembers} from "../../../../services/chatService";
 
-
-const MessageChatWindow = (props) => {
-    const [members, setMembers] = useState([])
+const MessageChatWindow = ({type_is_group, members, messages, newMessages, chat, ws, currentUserData, scrollHandler}) => {
 
     const messageRef = useRef();
 
     useEffect(() => {
-        if (props.type_is_group) {
-            getChatMembers(props.chat.id)
-                .then((result) => {
-                    setMembers(result)
-                })
-        }
-    }, [])
+        let chatWindow = document.getElementById('chat-window')
+        chatWindow.style.height = `${window.screen.height / 2}px`
+    }, [window.screen.height])
 
     useEffect(() => {
         if (messageRef.current) {
@@ -36,40 +28,44 @@ const MessageChatWindow = (props) => {
             )}
     })
 
-    if (props.chat !== undefined) {
+    if (chat !== undefined) {
         return (
             <main className="content">
                 <div className="container p-0">
                     <div className="card">
                         <div className="row g-0">
-                            {props.type_is_group
+                            {type_is_group
                                 ? <ChatUserList users={members}/>
                                 : ""
                             }
-                            <hr className="d-block d-lg-none mt-1 mb-0"/>
-                                <div className={props.type_is_group ? "col-12 col-lg-7 col-xl-9" : "col-12 col-lg-12 col-xl-12"}>
-
-                                {props.type_is_group
+                                <div className={type_is_group ? "col-12 col-lg-7 col-xl-9" : "col-12 col-lg-12 col-xl-12"}>
+                                {type_is_group
                                     ?
                                      <ChatHeader
-                                         avatar={props.chat.avatar}
-                                         name={props.chat.name}
-                                         id={props.chat.id}
+                                         avatar={chat.avatar}
+                                         name={chat.name}
+                                         id={chat.id}
                                          type_is_group={true}
                                       />
                                     :
                                      <ChatHeader
-                                         avatar={props.chat.interlocutor.avatar.image}
-                                         name={props.chat.interlocutor.username}
-                                         id={props.chat.interlocutor.id}
+                                         avatar={chat.interlocutor.avatar.image}
+                                         name={chat.interlocutor.username}
+                                         id={chat.interlocutor.id}
                                          type_is_group={false}
                                       />
                                     }
                                 <div className="position-relative">
-                                    <div className="chat-messages p-4" id="chat-window" onScroll={props.scrollHandler} ref={messageRef} style={{height: "550px"}}>
+                                    <div
+                                        className="chat-messages p-4"
+                                        id="chat-window"
+                                        onScroll={scrollHandler}
+                                        ref={messageRef}
+                                        style={{height: "550px"}}
+                                    >
                                         <MessageList
-                                            messages={props.messages}
-                                            currentUserData={props.currentUserData}
+                                            messages={messages}
+                                            currentUserData={currentUserData}
                                             new={false}
                                          />
                                         {"\n"}
@@ -78,17 +74,17 @@ const MessageChatWindow = (props) => {
                                             <hr style={{borderColor: "red"}}/>
                                         </center>
                                         <MessageList
-                                            messages={props.newMessages}
-                                            currentUserData={props.currentUserData}
+                                            messages={newMessages}
+                                            currentUserData={currentUserData}
                                             new={true}
                                          />
                                     </div>
                                 </div>
                                 <MessageInput
-                                    chat={props.chat}
-                                    ws={props.ws}
-                                    currentUserData={props.currentUserData}
-                                    type_is_group={props.type_is_group}
+                                    chat={chat}
+                                    ws={ws}
+                                    currentUserData={currentUserData}
+                                    type_is_group={type_is_group}
                                  />
                             </div>
                         </div>

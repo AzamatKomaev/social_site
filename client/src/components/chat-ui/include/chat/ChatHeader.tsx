@@ -12,7 +12,7 @@ const ChatHeader = (props: any) => {
                 <div className="position-relative">
                     <img src={props.avatar} className="rounded-circle ms-1" alt="..." width="50" height="50"/>
                 </div>
-                <div className="flex-grow-1 pl-3">
+                <div className="flex-grow-1 ms-3">
                     <strong>{props.name}</strong>
                 </div>
             </a>

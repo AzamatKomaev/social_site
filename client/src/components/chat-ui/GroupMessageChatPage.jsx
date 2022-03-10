@@ -7,6 +7,9 @@ import MessageChatWindow from './include/message/MessageChatWindow';
 
 import { getCurrentUserData } from '../../services/service';
 import { getChatData } from './services';
+import {GroupChatService} from "../../services/chatServices";
+import {AuthService} from "../../services/authService";
+import {WebSocketChatPath} from "../../backpaths/chatPaths";
 
 
 const getChatMessages = async(chatId, pageNumber) => {
@@ -14,22 +17,15 @@ const getChatMessages = async(chatId, pageNumber) => {
         messages: null,
         error: null
     }
+    
+    const service = new GroupChatService(chatId)
+    const response = service.getMessages(pageNumber)
 
-    await axios.get(`http://127.0.0.1:8000/api/v1/chats/${chatId}/messages/?page_number=${pageNumber}`, {
-        headers: {
-            Authorization: 'Bearer ' + localStorage.getItem("jwt")
-        }
-    })
-        .then((response) => {
-            if (response.status !== 204) {
-                data.messages = response.data
-            } else {
-                data.error = true
-            }
-        })
-        .catch((error) => {
-            data.error = true
-        })
+    if (response.status === 200) {
+        data.messages = response.data
+    } else {
+        data.error = true
+    }
 
     return data
 }
@@ -40,8 +36,8 @@ const GroupMessageChatPage = (props) => {
 
     const [currentUserData, setCurrentUserData] = useState()
 
+    const [members, setMembers] = useState([])
     const [messages, setMessages] = useState([])
-
     const [newMessages, setNewMessages] = useState([])
 
     const [chat, setChat] = useState(null)
@@ -52,6 +48,7 @@ const GroupMessageChatPage = (props) => {
     const [fetching, setFetching] = useState(false)
 
     const ws = useRef()
+    const service = useRef()
 
 
     const addNewMessageInArray = (data) => {
@@ -66,26 +63,55 @@ const GroupMessageChatPage = (props) => {
         }
     }
 
+
     useEffect(() => {
-        getChatData(chatId)
-            .then((result) => {
-                setChat(result.chat)
-                setError(result.error)
-            })
+        service.current = new GroupChatService(chatId)
+    }, [chatId])
+
+    useEffect(() => {
+        const fetchData = async() => {
+            const response = await service.current.getDetail()
+            if (response.status === 200) {
+                setChat(response.data)
+            } else {
+                setError(response.status)
+            }
+        }
+        fetchData()
     }, [])
 
     useEffect(() => {
-        getCurrentUserData().then((result) => setCurrentUserData(result))
-        getChatMessages(chatId, 1)
-            .then((result) => {
-                setMessages(result.messages.reverse())
+        const fetchData = async() => {
+            const response = await AuthService.getCurrentUser()
+            setCurrentUserData({
+                info: response.data,
+                isAuth: response.status === 200
+            })
+        }
+        fetchData()
+    }, [])
+
+    useEffect(() => {
+        const fetchData = async() => {
+            const response = await service.current.getMessages(1)
+
+            if (response.status === 200) {
+                setMessages(response.data.reverse())
                 let chatHistory = document.getElementById('chat-window')
-                chatHistory.scrollTop = chatHistory.scrollHeight;
-            })
+                chatHistory.scroolTop = chatHistory.schoolHeight;
+            }
+        }
+        fetchData()
+        // getChatMessages(chatId, 1)
+        //     .then((result) => {
+        //         setMessages(result.messages.reverse())
+        //         let chatHistory = document.getElementById('chat-window')
+        //         chatHistory.scrollTop = chatHistory.scrollHeight;
+        //     })
     }, [])
 
     useEffect(() => {
-        ws.current = new WebSocket("ws://127.0.0.1:8000/ws/group_chat/" + chatId + "/?token=" + localStorage.getItem("jwt") + "/")
+        ws.current = new WebSocket(WebSocketChatPath.group(chatId, localStorage.getItem('jwt')))
         ws.current.onopen = () => {
             console.log("opened")
         }
@@ -100,25 +126,50 @@ const GroupMessageChatPage = (props) => {
     }, [])
 
     useEffect(() => {
-        if (fetching && currentPage !== -1) {
-            console.log("fetching")
-            getChatMessages(chatId, currentPage)
-                .then((result) => {
-                    if (!result.error) {
-                        setMessages([...result.messages.reverse(), ...messages])
-                        setCurrentPage(prevState => prevState + 1)
-                    } else {
-                        setCurrentPage(-1)
-                    }
-                })
-                .catch(err => {
-                    console.log(err);
-                })
-                .finally(() => {
-                    setFetching(false)
-                })
+        const fetchData = async() => {
+            const response = await service.current.getMessages(currentPage)
+
+            if (response.status === 200) {
+                setMessages([...response.data.reverse(), ...messages])
+                setCurrentPage(prevState => prevState+1)
+            } else {
+                setCurrentPage(-1)
+            }
+
+            setFetching(false)
         }
+        fetchData()
+
+        // if (fetching && currentPage !== -1) {
+        //     console.log("fetching")
+        //     getChatMessages(chatId, currentPage)
+        //         .then((result) => {
+        //             if (!result.error) {
+        //                 setMessages([...result.messages.reverse(), ...messages])
+        //                 setCurrentPage(prevState => prevState + 1)
+        //             } else {
+        //                 setCurrentPage(-1)
+        //             }
+        //         })
+        //         .catch(err => {
+        //             console.log(err);
+        //         })
+        //         .finally(() => {
+        //             setFetching(false)
+        //         })
+        // }
     }, [fetching])
+
+    useEffect(() => {
+        const fetchData = async() => {
+            const response = await service.current.getMembers()
+
+            if (response.status === 200) {
+                setMembers(response.data)
+            }
+        }
+        fetchData()
+    }, [])
 
     useEffect(() => {
         if (messages && messages.length > 0) {
@@ -142,19 +193,13 @@ const GroupMessageChatPage = (props) => {
     }
 
 
-    if (error === 404 || error === 403) {
-        return (
-            <div>
-                <Header/>
-                <Error404NotFound/>
-            </div>
-        )
-    } else if ((messages || newMessages) && currentUserData) {
+    if ((messages || newMessages) && currentUserData?.isAuth) {
         return (
             <div>
                 <Header/>
                 <MessageChatWindow
                     type_is_group={true}
+                    members={members}
                     messages={messages}
                     newMessages={newMessages}
                     chat={chat}
@@ -165,12 +210,10 @@ const GroupMessageChatPage = (props) => {
             </div>
         )
     } else {
-        console.log(messages)
-        console.log(newMessages)
-        console.log(currentUserData)
         return (
             <div>
-                лох
+                <Header/>
+                <Error404NotFound/>
             </div>
         )
     }

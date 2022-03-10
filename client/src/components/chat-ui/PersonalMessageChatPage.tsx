@@ -138,6 +138,7 @@ const PersonalMessageChatPage = (props: any) => {
                 <Header/>
                 <MessageChatWindow
                     type_is_group={false}
+                    members={[]}
                     messages={messages}
                     newMessages={newMessages}
                     chat={chat}

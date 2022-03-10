@@ -40,7 +40,6 @@ class TokenAuthMiddleware:
         close_old_connections()
 
         unparsed_token = scope['query_string']
-
         list_with_token_or_none = parse_qs(unparsed_token).get(b'token', None)
         parsed_token = list_with_token_or_none[0] if list_with_token_or_none else None
         scope['user'] = await get_user(parsed_token)

@@ -1,11 +1,10 @@
 import React, { useState } from 'react';
-import axios from 'axios';
 import {createGroupMessage, createPersonalMessage} from "../../../../services/messageService";
 
 const MessageInput = (props) => {
     const [message, setMessage] = useState("")
 
-    const sendMessage = () => {
+    const sendMessage = async() => {
         if (message !== "") {
             if (props.type_is_group) {
                 createGroupMessage(message, props.chat.id)
