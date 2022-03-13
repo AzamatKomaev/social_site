@@ -32,7 +32,7 @@ def get_and_sort_chat_list(sort_by: Optional[str], request, chat_model, chat_ser
         }
 
     elif sort_by == "-name" and page:
-        page_size = 15
+        page_size = 10
         paginator = Paginator(chats.order_by('-name'), page_size)
 
         try:

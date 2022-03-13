@@ -63,7 +63,6 @@ const GroupMessageChatPage = (props) => {
         }
     }
 
-
     useEffect(() => {
         service.current = new GroupChatService(chatId)
     }, [chatId])
@@ -92,22 +91,16 @@ const GroupMessageChatPage = (props) => {
     }, [])
 
     useEffect(() => {
+
         const fetchData = async() => {
             const response = await service.current.getMessages(1)
-
             if (response.status === 200) {
                 setMessages(response.data.reverse())
                 let chatHistory = document.getElementById('chat-window')
-                chatHistory.scroolTop = chatHistory.schoolHeight;
+                chatHistory.scrollTop = chatHistory.scrollHeight;
             }
         }
         fetchData()
-        // getChatMessages(chatId, 1)
-        //     .then((result) => {
-        //         setMessages(result.messages.reverse())
-        //         let chatHistory = document.getElementById('chat-window')
-        //         chatHistory.scrollTop = chatHistory.scrollHeight;
-        //     })
     }, [])
 
     useEffect(() => {
@@ -127,37 +120,21 @@ const GroupMessageChatPage = (props) => {
 
     useEffect(() => {
         const fetchData = async() => {
-            const response = await service.current.getMessages(currentPage)
+            if (fetching && currentPage !== -1) {
+                const response = await service.current.getMessages(currentPage)
 
-            if (response.status === 200) {
-                setMessages([...response.data.reverse(), ...messages])
-                setCurrentPage(prevState => prevState+1)
-            } else {
-                setCurrentPage(-1)
+                if (response.status === 200) {
+                    setMessages([...response.data.reverse(), ...messages])
+                    setCurrentPage(prevState => prevState + 1)
+                    console.log('i was worked!!!!!!')
+                } else {
+                    setCurrentPage(-1)
+                }
+
+                setFetching(false)
             }
-
-            setFetching(false)
         }
         fetchData()
-
-        // if (fetching && currentPage !== -1) {
-        //     console.log("fetching")
-        //     getChatMessages(chatId, currentPage)
-        //         .then((result) => {
-        //             if (!result.error) {
-        //                 setMessages([...result.messages.reverse(), ...messages])
-        //                 setCurrentPage(prevState => prevState + 1)
-        //             } else {
-        //                 setCurrentPage(-1)
-        //             }
-        //         })
-        //         .catch(err => {
-        //             console.log(err);
-        //         })
-        //         .finally(() => {
-        //             setFetching(false)
-        //         })
-        // }
     }, [fetching])
 
     useEffect(() => {
@@ -181,13 +158,11 @@ const GroupMessageChatPage = (props) => {
 
     const scrollHandler = (e) => {
         if (
-            e.target.scrollTop < 10 &&
+            e.target.scrollTop < 100 &&
             currentPage !== -1
         ) {
             setFetching(true)
             let elem = document.getElementById('chat-window')
-            console.log(`Scroll top is ${elem.scrollTop}`)
-            console.log(scrollHeights)
             elem.scrollTop = e.target.scrollHeight - scrollHeights[scrollHeights.length - 2]
         }
     }
@@ -204,9 +179,13 @@ const GroupMessageChatPage = (props) => {
                     newMessages={newMessages}
                     chat={chat}
                     ws={ws.current}
+                    service={service.current}
                     currentUserData={currentUserData}
                     scrollHandler={scrollHandler}
                  />
+                <button onClick={() => console.log(scrollHeights, currentPage)}>
+                    click here!
+                </button>
             </div>
         )
     } else {

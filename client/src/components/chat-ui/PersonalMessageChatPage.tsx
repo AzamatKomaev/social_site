@@ -142,6 +142,7 @@ const PersonalMessageChatPage = (props: any) => {
                     messages={messages}
                     newMessages={newMessages}
                     chat={chat}
+                    service={null}
                     ws={ws.current}
                     currentUserData={currentUserData}
                     scrollHandler={scrollHandler}

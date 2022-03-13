@@ -13,9 +13,9 @@ export class ContentService {
         }
     }
 
-    static getPostList = async(categoryId: number): Promise<AxiosResponse> => {
+    static getPostList = async(categoryId: number, page: number): Promise<AxiosResponse> => {
         try {
-            return await axios.get(ContentPath.postList(categoryId))
+            return await axios.get(ContentPath.postList(categoryId, page))
         } catch (err: any) {
             return err.response
         }
@@ -83,7 +83,7 @@ export class CreatingPost {
         const dataForm: FormData = this.createDataForm()
 
         try {
-            return await axios.post(ContentPath.postList(this.category), dataForm, defaultConfig)
+            return await axios.post(ContentPath.postList(this.category, 0), dataForm, defaultConfig)
         } catch (err: any) {
             return err.response
         }

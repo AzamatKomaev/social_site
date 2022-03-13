@@ -7,7 +7,7 @@ import CategoryList from './include/category/CategoryList';
 import {ContentService} from "../../services/contentService";
 
 
-const CategoryPage = (props) => {
+const CategoryPage = () => {
     const [categoriesData, setCategoriesData] = useState({
         list: [],
         statusCode: null

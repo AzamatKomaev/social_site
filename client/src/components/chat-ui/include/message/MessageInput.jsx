@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import {createGroupMessage, createPersonalMessage} from "../../../../services/messageService";
+import {GroupChatService} from "../../../../services/chatServices";
 
 const MessageInput = (props) => {
     const [message, setMessage] = useState("")
@@ -7,16 +8,16 @@ const MessageInput = (props) => {
     const sendMessage = async() => {
         if (message !== "") {
             if (props.type_is_group) {
-                createGroupMessage(message, props.chat.id)
-                    .then((result) => {
-                        props.ws.send((JSON.stringify({
-                            type: "send_message",
-                            data: result.info
-                        })))
-                    })
-                    .catch((error) => {
-                        console.error(error)
-                    })
+                const response = await props.service.createMessage(message)
+
+                if (response.status === 201) {
+                    props.ws.send((JSON.stringify({
+                        type: "send_message",
+                        data: response.data
+                    })))
+                } else {
+                    console.log(response)
+                }
             } else {
                 createPersonalMessage(message, props.chat.interlocutor.username)
                     .then((result) => {

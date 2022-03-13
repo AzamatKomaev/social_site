@@ -5,9 +5,7 @@ import Header from '../extend/Header';
 import Error404NotFound from '../extend/Error404NotFound';
 import Error429TooManyRequests from '../extend/Error429TooManyRequests';
 
-import Post from './include/post/Post';
 import PostList from './include/post/PostList';
-import {ContentPath} from "../../backpaths/contentPaths";
 import {ContentService} from "../../services/contentService";
 
 
@@ -21,7 +19,7 @@ const PostPage = (props) => {
 
     useEffect(() => {
         const fetchData = async() => {
-            const response = await ContentService.getPostList(categoryId)
+            const response = await ContentService.getPostList(categoryId, currentPage)
             if (response.status === 204) {
                 setCurrentPage(-1)
             } else if (response.status === 200) {

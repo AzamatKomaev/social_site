@@ -8,25 +8,18 @@ import ChatHeader from '../chat/ChatHeader';
 import ChatUserList from '../user/ChatUserList';
 
 
-const MessageChatWindow = ({type_is_group, members, messages, newMessages, chat, ws, currentUserData, scrollHandler}) => {
+const MessageChatWindow = ({type_is_group, members, messages, newMessages, chat, ws, currentUserData, scrollHandler,
+                           service}) => {
 
     const messageRef = useRef();
 
-    useEffect(() => {
-        let chatWindow = document.getElementById('chat-window')
-        chatWindow.style.height = `${window.screen.height / 2}px`
-    }, [window.screen.height])
 
     useEffect(() => {
-        if (messageRef.current) {
-            messageRef.current.scrollIntoView(
-                {
-                    behavior: 'smooth',
-                    block: 'end',
-                    inline: 'nearest'
-                }
-            )}
-    })
+        try {
+            let chatWindow = document.getElementById('chat-window')
+            chatWindow.style.height = `${window.screen.height / 2}px`
+        } catch (err) {}
+    }, [window.screen.height])
 
     if (chat !== undefined) {
         return (
@@ -83,6 +76,7 @@ const MessageChatWindow = ({type_is_group, members, messages, newMessages, chat,
                                 <MessageInput
                                     chat={chat}
                                     ws={ws}
+                                    service={service}
                                     currentUserData={currentUserData}
                                     type_is_group={type_is_group}
                                  />
