@@ -53,15 +53,41 @@ export class GroupChatService {
 }
 
 export class PersonalChatService {
-    private interlocutorId: number
+    private interlocutorUsername: string
 
-    constructor(userId: number) {
-        this.interlocutorId = userId
+    constructor(username: string) {
+        this.interlocutorUsername = username
+    }
+
+    public async getDetail(): Promise<AxiosResponse> {
+        try {
+            return await axios.get(PersonalChatPath.chats_detail(this.interlocutorUsername), defaultConfig)
+        } catch (err: any) {
+            return err.response
+        }
     }
 
     static async getList(sortBy: string, page: number): Promise<AxiosResponse> {
         try {
             return await axios.get(PersonalChatPath.chats_list(sortBy, page), defaultConfig)
+        } catch (err: any) {
+            return err.response
+        }
+    }
+
+    public async getMessages(page: number): Promise<AxiosResponse> {
+        try {
+            return await axios.get(PersonalChatPath.messages_list(this.interlocutorUsername, page), defaultConfig)
+        } catch (err: any) {
+            return err.response
+        }
+    }
+
+    public async createMessage(text: string) {
+        try {
+            return await axios.post(PersonalChatPath.messages_list(this.interlocutorUsername, 1), {
+                text: text
+            }, defaultConfig)
         } catch (err: any) {
             return err.response
         }

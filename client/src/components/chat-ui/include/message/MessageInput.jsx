@@ -7,28 +7,15 @@ const MessageInput = (props) => {
 
     const sendMessage = async() => {
         if (message !== "") {
-            if (props.type_is_group) {
-                const response = await props.service.createMessage(message)
+            const response = await props.service.createMessage(message)
 
-                if (response.status === 201) {
-                    props.ws.send((JSON.stringify({
-                        type: "send_message",
-                        data: response.data
-                    })))
-                } else {
-                    console.log(response)
-                }
+            if (response.status === 201) {
+                props.ws.send((JSON.stringify({
+                    type: "send_message",
+                    data: response.data
+                })))
             } else {
-                createPersonalMessage(message, props.chat.interlocutor.username)
-                    .then((result) => {
-                        props.ws.send((JSON.stringify({
-                            type: "send_message",
-                            data: result.info
-                        })))
-                    })
-                    .catch((error) => {
-                        console.error(error)
-                    })
+                console.log(response)
             }
         }
         setMessage("")

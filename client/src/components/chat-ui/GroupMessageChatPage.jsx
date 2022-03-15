@@ -91,7 +91,6 @@ const GroupMessageChatPage = (props) => {
     }, [])
 
     useEffect(() => {
-
         const fetchData = async() => {
             const response = await service.current.getMessages(1)
             if (response.status === 200) {
@@ -130,7 +129,6 @@ const GroupMessageChatPage = (props) => {
                 } else {
                     setCurrentPage(-1)
                 }
-
                 setFetching(false)
             }
         }
@@ -140,7 +138,6 @@ const GroupMessageChatPage = (props) => {
     useEffect(() => {
         const fetchData = async() => {
             const response = await service.current.getMembers()
-
             if (response.status === 200) {
                 setMembers(response.data)
             }
@@ -183,9 +180,6 @@ const GroupMessageChatPage = (props) => {
                     currentUserData={currentUserData}
                     scrollHandler={scrollHandler}
                  />
-                <button onClick={() => console.log(scrollHeights, currentPage)}>
-                    click here!
-                </button>
             </div>
         )
     } else {

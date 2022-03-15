@@ -7,6 +7,9 @@ import Error404NotFound from '../extend/Error404NotFound';
 import MessageChatWindow from './include/message/MessageChatWindow';
 import {getPersonalChat, getPersonalChatMessages} from "../../services/personalChatService";
 import {CurrentUserDataI, getCurrentUserData} from "../../services/service";
+import {PersonalChatService} from "../../services/chatServices";
+import {AuthService} from "../../services/authService";
+import {WebSocketChatPath} from "../../backpaths/chatPaths";
 
 
 
@@ -28,6 +31,7 @@ const PersonalMessageChatPage = (props: any) => {
     const [fetching, setFetching] = useState(false)
     const [scrollHeights, setScrollHeights] = useState([1355])
 
+    const service: any = useRef()
     const ws: any = useRef()
 
 
@@ -44,32 +48,47 @@ const PersonalMessageChatPage = (props: any) => {
     }
 
     useEffect(() => {
-        getPersonalChat(interlocutorUsername)
-            .then((result) => {
-                setChat(result.info)
-                setError(result.error)
-            })
+        service.current = new PersonalChatService(interlocutorUsername)
+    }, [interlocutorUsername])
+
+    useEffect(() => {
+        const fetchData = async() => {
+            const response = await service.current.getDetail()
+            if (response.status === 200) {
+                setChat(response.data)
+            } else {
+                setError(response.status)
+            }
+        }
+        fetchData()
     }, [])
 
     useEffect(() => {
-        getCurrentUserData()
-            .then((result) => {
-                setCurrentUserData(result)
+        const fetchData = async() => {
+            const response = await AuthService.getCurrentUser()
+            setCurrentUserData({
+                info: response.data,
+                isAuth: response.status === 200
             })
+        }
+        fetchData()
+    }, [])
 
-        getPersonalChatMessages(interlocutorUsername, 1)
-            .then((result) => {
-                setMessages(result.messages.reverse())
+    useEffect(() => {
+        const fetchData = async() => {
+            const response = await service.current.getMessages(1)
+            if (response.status === 200) {
+                setMessages(response.data.reverse())
                 let chatHistory = document.getElementById('chat-window')
                 chatHistory.scrollTop = chatHistory.scrollHeight;
-            })
+            }
+        }
+        fetchData()
     }, [])
 
 
     useEffect(() => {
-        ws.current = new WebSocket(
-            `ws://127.0.0.1:8000/ws/personal_chat/${interlocutorUsername}/?token=${(localStorage.getItem("jwt") as string)}/`
-        )
+        ws.current = new WebSocket(WebSocketChatPath.personal(interlocutorUsername, localStorage.getItem("jwt")))
         ws.current.onopen = () => {
             console.log("opened")
         }
@@ -84,24 +103,20 @@ const PersonalMessageChatPage = (props: any) => {
     }, [])
 
     useEffect(() => {
-        if (fetching && currentPage !== -1) {
-            console.log("fetching")
-            getPersonalChatMessages(interlocutorUsername, currentPage)
-                .then((result) => {
-                    if (!result.error) {
-                        setMessages([...result.messages.reverse(), ...messages])
-                        setCurrentPage(prevState => prevState + 1)
-                    } else {
-                        setCurrentPage(-1)
-                    }
-                })
-                .catch(err => {
-                    console.log(err);
-                })
-                .finally(() => {
-                    setFetching(false)
-                })
+        const fetchData = async() => {
+            if (fetching && currentPage !== -1) {
+                const response = await service.current.getMessages(currentPage)
+                if (response.status === 200) {
+                    setMessages([...response.data.reverse(), ...messages])
+                    setCurrentPage(prevState => prevState + 1)
+                    console.log('i was worked!!!!!!')
+                } else {
+                    setCurrentPage(-1)
+                }
+                setFetching(false)
+            }
         }
+        fetchData()
     }, [fetching])
 
     useEffect(() => {
@@ -113,17 +128,14 @@ const PersonalMessageChatPage = (props: any) => {
 
     const scrollHandler = (e) => {
         if (
-            e.target.scrollTop < 10 &&
+            e.target.scrollTop < 100 &&
             currentPage !== -1
         ) {
             setFetching(true)
             let elem = document.getElementById('chat-window')
-            console.log(`Scroll top is ${elem.scrollTop}`)
-            console.log(scrollHeights)
             elem.scrollTop = e.target.scrollHeight - scrollHeights[scrollHeights.length - 2]
         }
     }
-
 
     if (!currentUserData.isAuth || error) {
         return (
@@ -142,7 +154,7 @@ const PersonalMessageChatPage = (props: any) => {
                     messages={messages}
                     newMessages={newMessages}
                     chat={chat}
-                    service={null}
+                    service={service.current}
                     ws={ws.current}
                     currentUserData={currentUserData}
                     scrollHandler={scrollHandler}

@@ -9,8 +9,8 @@ export class WebSocketChatPath {
         return `${defaultWsUrl}/group_chat/${chatId}/?token=${jwt}`
     }
 
-    static personal = (): string => {
-        return ""
+    static personal = (interlocutorUsername: string, jwt: string): string => {
+        return `${defaultWsUrl}/personal_chat/${interlocutorUsername}/?token=${jwt}`
     }
 }
 
@@ -46,11 +46,11 @@ export class PersonalChatPath {
         return `${defaultUrl}/personal_chats/?sort_by=${sortBy}&page=${page}`
     }
 
-    static chats_detail = (userId: number): string => {
-        return `${defaultUrl}/personal_chats/${userId}/`
+    static chats_detail = (username: string): string => {
+        return `${defaultUrl}/personal_chats/${username}/`
     }
 
-    static messages_list = (userId: number, page: number): string => {
-        return `${defaultUrl}/personal_chats/${userId}/messages/?page_number=${page}`
+    static messages_list = (username: string, page: number): string => {
+        return `${defaultUrl}/personal_chats/${username}/messages/?page_number=${page}`
     }
 }
