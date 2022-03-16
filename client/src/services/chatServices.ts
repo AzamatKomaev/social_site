@@ -41,11 +41,43 @@ export class GroupChatService {
         }
     }
 
+    public async getRequests(): Promise<AxiosResponse> {
+        try {
+            return await axios.get(GroupChatPath.chat_requests_list(this.chatId), defaultConfig)
+        } catch (err: any) {
+            return err.response
+        }
+    }
+
+    public static async getUserRequests(userId: number): Promise<AxiosResponse> {
+        try {
+            return await axios.get(GroupChatPath.user_chat_requests_list(userId), defaultConfig)
+        } catch (err: any) {
+            return err.response
+        }
+    }
+
     public async createMessage(text: string): Promise<AxiosResponse> {
         try {
             return await axios.post(GroupChatPath.messages_list(this.chatId, 0), {
                 text: text
             }, defaultConfig)
+        } catch (err: any) {
+            return err.response
+        }
+    }
+
+    public async createRequest(userId: number): Promise<AxiosResponse> {
+        try {
+            return await axios.post(GroupChatPath.user_chat_request_detail(this.chatId, userId), {}, defaultConfig)
+        } catch (err: any) {
+            return err.response
+        }
+    }
+
+    public async deleteRequest(userId: number): Promise<AxiosResponse> {
+        try {
+            return await axios.delete(GroupChatPath.user_chat_request_detail(this.chatId, userId), defaultConfig)
         } catch (err: any) {
             return err.response
         }
@@ -88,6 +120,33 @@ export class PersonalChatService {
             return await axios.post(PersonalChatPath.messages_list(this.interlocutorUsername, 1), {
                 text: text
             }, defaultConfig)
+        } catch (err: any) {
+            return err.response
+        }
+    }
+}
+
+export class CreatingChat {
+    private name: string | undefined;
+    private avatar: string | undefined;
+
+    public constructor(name: string, avatar: string) {
+        this.name = name;
+        this.avatar = avatar
+    }
+
+    private createDataForm(): FormData {
+        let dataForm: FormData = new FormData()
+        if (this.name) dataForm.append('name', this.name);
+        if (this.avatar) dataForm.append('avatar', this.avatar)
+        return dataForm
+    }
+
+    public async createChat(): Promise<AxiosResponse> {
+        const dataForm = this.createDataForm()
+
+        try {
+            return await axios.post(GroupChatPath.chats_list('last_message', 0), dataForm, defaultConfig)
         } catch (err: any) {
             return err.response
         }

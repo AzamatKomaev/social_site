@@ -57,10 +57,10 @@ export class ContentService {
 }
 
 export class CreatingPost {
-    title: string | undefined;
-    content: string | undefined;
-    category: number | undefined;
-    photo: File | null;
+    private title: string | undefined;
+    private content: string | undefined;
+    private category: number | undefined;
+    private photo: File | null;
 
     public constructor(title: string, content: string, category: number, photo: File | null) {
         this.title = title

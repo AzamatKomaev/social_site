@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, {useEffect} from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
 import { fetchGettingAllFriendRequests } from '../../store/friend/actions';
@@ -20,8 +20,8 @@ const NotificationsPage = (props) => {
 
 
     useEffect(() => {
-        if (userData?.info?.id) dispatch(fetchGettingAllChatRequestsToUser(userData.info.id));
-    }, [userData?.info, userData?.chatRequestNotifications.length])
+        if (userData.info) dispatch(fetchGettingAllChatRequestsToUser(userData.info.id));
+    }, [userData.info])
 
     if (userData.isAuth && userData.info) {
         return (

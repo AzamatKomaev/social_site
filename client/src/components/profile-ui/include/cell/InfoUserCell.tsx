@@ -22,10 +22,23 @@ const InfoUserCell = (props: any) => {
     return (
         <div className="row">
             <div className="col-12 col-sm-11 col-md-3 col-lg-3">
-                <img src={props.user.avatar.image} alt="avatar" className="rounded w-100"/>{"\n\n"}
+                <div className="mx-auto" style={{width: "100%"}}>
+                    <img
+                        src={props.user.avatar.image}
+                        alt="avatar"
+                        className="rounded"
+                        style={{
+                            display: "block",
+                            marginLeft: "auto",
+                            marginRight: "auto",
+                            width: "90%"
+                        }}
+                    />
+                    {"\n\n"}
+                </div>
                 <ButtonVariants
                     user={props.user}
-                 />
+                />
                 {"\n\n"}
             </div>
             <CardUserCells

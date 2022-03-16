@@ -40,8 +40,8 @@ const FriendCell = (props) => {
                     </div>
                     {currentUserData?.info?.id === props.user.id
                         ?
-                        <div style={{marginLeft: "auto"}} className="d-none d-lg-block" onClick={handleDeleteUserFromFriendList}>
-                            <button className="btn btn-danger">
+                        <div style={{marginLeft: "auto"}} className="d-none d-lg-block">
+                            <button className="btn btn-danger" onClick={handleDeleteUserFromFriendList}>
                                 Удалить
                             </button>
                         </div>
@@ -52,7 +52,11 @@ const FriendCell = (props) => {
                 {currentUserData?.info?.id === props.user.id
                     ?
                     <div className="d-lg-none">
-                        <button className="btn btn-danger" style={{marginTop: "10px", width: "100%"}} onClick={() => fetchDeletingUserFromFriendList(props.friend.id)}>
+                        <button
+                            className="btn btn-danger"
+                            style={{marginTop: "10px", width: "100%"}}
+                            onClick={handleDeleteUserFromFriendList}
+                        >
                             Удалить
                         </button>
                     </div>

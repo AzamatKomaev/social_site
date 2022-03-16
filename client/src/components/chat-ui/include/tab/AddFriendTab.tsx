@@ -7,7 +7,7 @@ import {fetchGettingAllUserFriends} from "../../../../store/friend/actions";
 
 
 
-const AddFriendTab = (props: any) => {
+const AddFriendTab = ({chatData, service}) => {
     const dispatch = useDispatch()
 
     const currentUserData = useSelector((state: any) => state.user)
@@ -23,7 +23,7 @@ const AddFriendTab = (props: any) => {
     if (friendListData.list.length > 0 && currentUserData.isAuth) {
         return (
             <div className="tab-pane fade" id="friend-tab" role="tabpanel" aria-labelledby="nav-home-tab">
-                <FriendList chatData={props.chatData}/>
+                <FriendList chatData={chatData} service={service}/>
             </div>
         )
     } else {

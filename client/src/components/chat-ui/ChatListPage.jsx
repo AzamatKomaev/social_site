@@ -1,13 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { useSelector } from 'react-redux'
-import axios from 'axios';
 
 import Header from '../extend/Header';
 import Error404NotFound from '../extend/Error404NotFound';
 
 import ChatWindow from './include/chat/ChatWindow';
-import {getGroupChats} from "../../services/chatService";
-import {getPersonalChats} from "../../services/personalChatService";
 import {GroupChatService, PersonalChatService} from "../../services/chatServices";
 
 
@@ -21,7 +18,7 @@ const getUserChats = async() => {
     const personalListChatResponse = await PersonalChatService.getList('last_message', 0)
 
     chats.group = groupListChatResponse.status === 200 ? groupListChatResponse.data : []
-    chats.personal = personalListChatResponse === 200 ? personalListChatResponse.data : []
+    chats.personal = personalListChatResponse.status === 200 ? personalListChatResponse.data : []
     return chats
 }
 

@@ -2,7 +2,6 @@ import {
     createRequest,
     deleteRequest,
     getAllChatRequest,
-    getChatMembers,
     getRequest
 } from "../../services/chatService";
 import {
@@ -11,36 +10,37 @@ import {
     CREATE_REQUEST, DELETE_REQUEST,
     GET_ALL_CHAT_MEMBERS,
     GET_ALL_CHAT_REQUESTS,
-    GET_REQUEST
 } from "./actionTypes";
 import {GroupChatI, GroupChatRequestI, PersonalChatI} from "../../interfaces";
+import {GroupChatService} from "../../services/chatServices";
+import {AxiosResponse} from "axios";
 
 
-export const fetchGettingAllChatMembers = (chatId: number) => {
-    return function (dispatch) {
-        getChatMembers(chatId)
-            .then((result) => {
-                dispatch({
-                    type: GET_ALL_CHAT_MEMBERS,
-                    payload: {
-                        members: result
-                    }
-                })
+export const fetchGettingAllChatMembers = (service: GroupChatService) => {
+    return async function (dispatch) {
+        const response = await service.getMembers()
+        if (response.status === 200) {
+            dispatch({
+                type: GET_ALL_CHAT_MEMBERS,
+                payload: {
+                    members: response.data
+                }
             })
+        }
     }
 }
 
-export const fetchGettingAllChatRequest = (chatId: number) => {
-    return function (dispatch) {
-        getAllChatRequest(chatId)
-            .then((result) => {
-                dispatch({
-                    type: GET_ALL_CHAT_REQUESTS,
-                    payload: {
-                        requestList: result
-                    }
-                })
+export const fetchGettingAllChatRequest = (service: GroupChatService) => {
+    return async function (dispatch) {
+        const response = await service.getRequests()
+        if (response.status === 200) {
+            dispatch({
+                type: GET_ALL_CHAT_REQUESTS,
+                payload: {
+                    requestList: response.data
+                }
             })
+        }
     }
 }
 
@@ -64,34 +64,40 @@ export const setIsRequestExists = (requestList: Array<GroupChatRequestI>, userId
     }
 }
 
-export const fetchCreatingRequest = (chatId: number, userId: number) => {
-    return function (dispatch) {
-        createRequest(chatId, userId)
-            .then((result) => {
-                dispatch({
-                    type: CREATE_REQUEST,
-                    payload: {
-                        newRequest: result
-                    }
-                })
+export const fetchCreatingRequest = (userId: number, service: GroupChatService) => {
+    return async function (dispatch) {
+        const response = await service.createRequest(userId)
+
+        if (response.status === 201) {
+            dispatch({
+                type: CREATE_REQUEST,
+                payload: {
+                    newRequest: response.data
+                }
             })
+        }
     }
 }
 
-export const fetchDeletingRequest = (chatId: number, userId: number) => {
-    return function (dispatch) {
-        getRequest(chatId, userId)
-            .then((result) => {
-                deleteRequest(chatId, userId)
-                    .then((status) => {
-                        dispatch({
-                            type: DELETE_REQUEST,
-                            payload: {
-                                deletingRequestId: result.id
-                            }
-                        })
-                    })
+export const fetchDeletingRequest = (userId: number, service: GroupChatService) => {
+    return async function (dispatch) {
+        const gettingRequestResponse = await service.getDetail()
+        let deletingRequestResponse: AxiosResponse
+
+        if (gettingRequestResponse.status === 200) {
+            deletingRequestResponse = await service.deleteRequest(userId)
+        } else {
+            return ;
+        }
+
+        if (deletingRequestResponse.status === 204) {
+            dispatch({
+                type: DELETE_REQUEST,
+                payload: {
+                    deletingRequestId: gettingRequestResponse.data.id
+                }
             })
+        }
     }
 }
 

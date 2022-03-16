@@ -7,6 +7,8 @@ import {
 import {getAllUserChatRequests} from "../../services/userService";
 import {acceptChatRequest, deleteRequest, getRequest} from "../../services/chatService";
 import {AuthService} from "../../services/authService";
+import {GroupChatService} from "../../services/chatServices";
+import {AxiosResponse} from "axios";
 
 
 export const fetchUserData = () => {
@@ -20,15 +22,16 @@ export const fetchUserData = () => {
 
 export const fetchGettingAllChatRequestsToUser = (userId: number) => {
     return async function (dispatch) {
-        const result = await getAllUserChatRequests(userId)
+        const response = await GroupChatService.getUserRequests(userId)
 
-
-        dispatch({
-            type: GET_USER_CHAT_NOTIFICATIONS,
-            payload: {
-                chatRequestNotifications: result.chatRequestsList
-            }
-        })
+        if (response.status === 200) {
+            dispatch({
+                type: GET_USER_CHAT_NOTIFICATIONS,
+                payload: {
+                    chatRequestNotifications: response.data
+                }
+            })
+        }
     }
 }
 
@@ -45,19 +48,25 @@ export const fetchAcceptingChatRequest = (fromChatId: number) => {
     }
 }
 
-export const fetchDeletingChatRequestNotification = (chatId: number, userId: number, requestId: number) => {
-    return function (dispatch) {
-        getRequest(chatId, userId)
-            .then((result) => {
-                deleteRequest(chatId, userId)
-                    .then((status) => {
-                        dispatch({
-                            type: DELETE_CHAT_NOTIFICATION,
-                            payload: {
-                                deletedRequestId: requestId
-                            }
-                        })
-                    })
+export const fetchDeletingChatRequestNotification = (userId: number, service: GroupChatService) => {
+    return async function (dispatch) {
+        const gettingRequestResponse = await service.getDetail()
+        let deletingRequestResponse: AxiosResponse
+
+        if (gettingRequestResponse.status === 200) {
+            deletingRequestResponse = await service.deleteRequest(userId)
+        }
+        else {
+            return ;
+        }
+
+        if (deletingRequestResponse.status === 204) {
+            dispatch({
+                type: DELETE_CHAT_NOTIFICATION,
+                payload: {
+                    deletedRequestId: gettingRequestResponse.data.id
+                }
             })
+        }
     }
 }

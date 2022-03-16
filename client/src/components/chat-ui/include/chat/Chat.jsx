@@ -10,7 +10,7 @@ const Chat = (props) => {
 
     console.log()
     return (
-        <div className="card col-9 my-3 mx-auto border border-primary">
+        <div className="card col-10 col-md-9 my-3 mx-auto border border-primary">
             <a
                 href={props.type_is_group
                         ? "/chats/group/" + props.chat.id + "/"

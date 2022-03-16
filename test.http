@@ -1,2 +1,4 @@
-GET http://192.168.1.9:8000/api/v1/friend_requests/4/
-Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNjQ2NjQzNDYwLCJqdGkiOiIxOGMzMzg4NDY4NDM0OWRlYTE3ZTQ5MDNiMGQyNjdhNyIsInVzZXJfaWQiOjF9.0HYz7XzMT3kaJW_YIxFWPz5iOuY7ne0Yan57ZS1-Bw4
+GET http://192.168.1.9:8000/api/v1/group_chats/1/requests/3/
+Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNjQ3NTQ3OTA5LCJqdGkiOiJlODI4OGY5YzBlNDM0MzlhYjU2YzQ5YzRkMzQxMDQyYyIsInVzZXJfaWQiOjN9.5f9Gl8XYOkQhGU9PCC1UITsB1gf3ns_EmVxF1PDZEqY
+
+

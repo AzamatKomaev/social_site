@@ -3,7 +3,7 @@ import React from 'react';
 
 
 
-const SettingMenu = (props: any) => {
+const SettingMenu = () => {
     const menuList = [
         {
             name: "Главная",
@@ -40,9 +40,10 @@ const SettingMenu = (props: any) => {
                         <a
                             className={menu.className}
                             id={menu.id}
-                            data-toggle="tab"
+                            data-bs-toggle="tab"
                             href={menu.href}
                             role="tab"
+                            data-bs-target={menu.href}
                             aria-controls={menu.aria_controls}
                             aria-selected={menu.aria_selected}
                         >

@@ -54,21 +54,22 @@ const PostDetailPage = (props) => {
                 <Header/>
                 {"\n"}
                 <div className="container">
-                    <Post
-                        id={post.id}
-                        title={post.title}
-                        text={post.text}
-                        created_at={post.created_at}
-                        user_data={post.user_data}
-                        photo={post.photo}
-                        url="#"
-                     />
-                     {"\n\n\n"}
-                    <CommentForm postId={postId} categoryId={categoryId}/>
-                </div>
-                {"\n\n\n"}
-                <div>
-                    <CommentList comments={post.comments}/>
+                    <div className="col-12 col-md-10 mx-auto">
+                        <Post
+                            id={post.id}
+                            title={post.title}
+                            text={post.text}
+                            created_at={post.created_at}
+                            user_data={post.user_data}
+                            photo={post.photo}
+                            url="#"
+                         />
+                        {"\n\n\n"}
+                        <CommentForm postId={postId} categoryId={categoryId}/>
+                        {"\n\n\n"}
+                        <CommentList comments={post.comments}/>
+
+                    </div>
                 </div>
             </div>
         )

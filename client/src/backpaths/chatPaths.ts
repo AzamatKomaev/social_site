@@ -32,12 +32,16 @@ export class GroupChatPath {
         return `${defaultUrl}/group_chats/${chatId}/members/`
     }
 
-    static chat_requests_list = (chatId: number, userId: number): string => {
-        return `${defaultUrl}/group_chats/${chatId}/requests/${userId}/`
+    static chat_requests_list = (chatId: number): string => {
+        return `${defaultUrl}/group_chats/${chatId}/requests/`
     }
 
     static user_chat_requests_list = (userId: number): string => {
         return `${defaultUrl}/group_chat_requests/${userId}/`
+    }
+
+    static user_chat_request_detail = (chatId: number, userId: number): string => {
+        return `${defaultUrl}/group_chats/${chatId}/requests/${userId}/`
     }
 }
 

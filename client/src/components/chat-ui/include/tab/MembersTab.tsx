@@ -3,20 +3,21 @@ import {useDispatch, useSelector} from "react-redux";
 import {fetchGettingAllUserFriends} from "../../../../store/friend/actions";
 import MemberList from "../member/MemberList";
 
-const MembersTab = (props: any) => {
+const MembersTab = ({chatData, service}) => {
     const dispatch = useDispatch();
 
     const currentUserData = useSelector((state: any) => state.user)
     const chatMembers = useSelector((state: any) => state.requestList.members)
+    const chatRequests = useSelector((state: any) => state.requestList.requestList)
 
     useEffect(() => {
-        console.log(chatMembers)
-    }, [])
+
+    }, [chatMembers, chatRequests])
 
     if (chatMembers.length > 0 && currentUserData.isAuth) {
         return (
             <div className="tab-pane fade" id="members-tab" role="tabpanel" aria-labelledby="nav-members-tab">
-                <MemberList/>
+                <MemberList service={service}/>
             </div>
         )
     } else {

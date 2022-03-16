@@ -3,7 +3,6 @@ import Chat from './Chat';
 
 
 const ChatList = (props) => {
-    console.log(props.chats)
 
     return (
         <div>

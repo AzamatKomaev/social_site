@@ -4,7 +4,7 @@ import {UserFrontPath} from "../../../../frontpaths/frontPath";
 
 const Post = (props) => {
     return (
-		<div className="card border-secondary">
+		<div className="card mx-auto border-secondary">
 			<div className="card-header bg-secondary text-white">
 			    <div className="d-flex align-items-center py-1">
 			        <div className="position-relative">

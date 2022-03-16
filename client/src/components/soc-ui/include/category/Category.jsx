@@ -13,7 +13,7 @@ const Category = (props) => {
                     <img src={props.avatar} className="rounded-circle ms-1" alt="user1" width="65" height="65" style={{marginLeft: "-10px"}}/>
                     <div className="flex-grow-1 ms-3">
                         <p className="category-name">{props.name}</p>
-                        <div className="small">
+                        <div className="small" style={{marginTop: "-15px"}}>
                             Всего постов: { props.count }
                         </div>
                     </div>

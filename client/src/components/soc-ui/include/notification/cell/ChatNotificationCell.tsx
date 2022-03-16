@@ -1,21 +1,16 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import {useDispatch} from "react-redux";
 import {fetchAcceptingChatRequest, fetchDeletingChatRequestNotification} from "../../../../../store/user/actions";
-import {fetchDeletingRequest} from "../../../../../store/chat/actions";
-import {DELETE_CHAT_NOTIFICATION} from "../../../../../store/user/actionType";
+import ChatCellButtons from "./ChatCellButtons";
+import {GroupChatService} from "../../../../../services/chatServices";
 
 
 const ChatNotificationCell = (props: any) => {
-    const dispatch = useDispatch()
+    const [service, setService] = useState<GroupChatService>()
 
-    const handleAcceptChatRequestButton = () => {
-        dispatch(fetchAcceptingChatRequest(props.notification.from_chat.id))
-    }
-
-    const handleDeleteChatRequestButton = () => {
-        dispatch(fetchDeletingChatRequestNotification(props.notification.from_chat.id, props.notification.to_user.id, props.notification.id))
-        //dispatch(fetchDeletingRequest(props.notification.from_chat.id, props.notification.to_user.id))
-    }
+    useEffect(() => {
+        if (props.notification?.from_chat) setService(new GroupChatService(props.notification.from_chat.id))
+    }, [props.notification])
 
     return (
         <div className="card col-9 my-3 mx-auto border border-primary">
@@ -40,31 +35,14 @@ const ChatNotificationCell = (props: any) => {
                        </div>
                     </div>
                     <div className="d-none d-lg-block" style={{marginLeft: "auto"}}>
-                        <button className="btn btn-primary" onClick={() => handleAcceptChatRequestButton()}>
-                            Вступить
-                        </button>
-                        <button className="btn btn-danger" style={{marginLeft: "10px"}} onClick={() => handleDeleteChatRequestButton()}>
-                            Отклонить
-                        </button>
+                        <ChatCellButtons notification={props.notification} size={"lg-block"} service={service}/>
                     </div>
                     <div className="d-none d-sm-block d-lg-none" style={{marginLeft: "auto"}}>
-                        <button className="btn btn-primary" style={{width: "100%"}} onClick={() => handleAcceptChatRequestButton()}>
-                            Вступить
-                        </button>
-                        <button className="btn btn-danger" style={{width: "100%"}} onClick={() => handleDeleteChatRequestButton()}>
-                            Отклонить
-                        </button>
+                        <ChatCellButtons notification={props.notification} size={"sm-block"} service={service}/>
                     </div>
                 </div>
-                <div className="d-none d-block d-sm-none" style={{marginTop: "10px"}}>
-                    <div style={{textAlign: "center"}}>
-                        <button className="btn btn-primary" style={{width: "75%"}} onClick={() => handleAcceptChatRequestButton()}>
-                            Вступить
-                        </button>
-                        <button className="btn btn-danger" style={{width: "75%"}} onClick={() => handleDeleteChatRequestButton()}>
-                            Отклонить
-                        </button>
-                    </div>
+                <div className="d-block d-sm-none" style={{marginTop: "10px"}}>
+                    <ChatCellButtons notification={props.notification} size={"sm-none"} service={service}/>
                 </div>
             </a>
         </div>

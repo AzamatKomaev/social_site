@@ -7,10 +7,10 @@ import AddFriendTab from '../tab/AddFriendTab';
 import MembersTab from "../tab/MembersTab";
 
 
-const SettingWindow = (props: any) => {
+const SettingWindow = ({chatData, service}) => {
     const currentUserData = useSelector((state: any) => state.user)
 
-    if (props.chatData && currentUserData.info) {
+    if (chatData && currentUserData.info) {
         return (
             <div className="container">
                 <div>
@@ -18,9 +18,9 @@ const SettingWindow = (props: any) => {
                 </div>
                 <div className="card" style={{marginTop: "5px"}}>
                     <div className="tab-content" id="nav-tabContent">
-                        <InformationTab chatData={props.chatData}/>
-                        <MembersTab chatData={props.chatData}/>
-                        <AddFriendTab chatData={props.chatData}/>
+                        <InformationTab chatData={chatData}/>
+                        <MembersTab chatData={chatData} service={service}/>
+                        <AddFriendTab chatData={chatData} service={service}/>
                     </div>
                 </div>
             </div>

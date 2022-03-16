@@ -7,13 +7,14 @@ const ChatWindow = (props) => {
     return (
         <div className="container">
             <div className="card">
-                <b style={{margin: "0 auto", fontSize: "15pt"}}>Групповые чаты</b>
+                <b style={{margin: "0 auto", fontSize: "15pt", padding: "12px"}}>Групповые чаты</b>
                 <div className="row">
                     <div className="col-12">
                         <button
                             type="button"
                             className="btn btn-primary my-3"
-                            data-toggle="modal"
+                            data-bs-target="#create-chat-modal"
+                            data-bs-toggle="modal"
                             data-target=".bd-example-modal-lg"
                             style={{marginLeft: "12.5%"}}
                         >

@@ -3,7 +3,7 @@ import { useSelector } from 'react-redux';
 import ChatNotificationList from "../list/ChatNotificationList";
 
 
-const ChatNotificationTab = (props: any) => {
+const ChatNotificationTab = () => {
     const userData = useSelector((state: any) => state.user)
 
     if (userData.chatRequestNotifications && userData.chatRequestNotifications.length > 0) {

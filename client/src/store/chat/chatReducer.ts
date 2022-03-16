@@ -26,6 +26,15 @@ interface RequestListState {
     members: any
 }
 
+interface ChatListStateI {
+    groupChats: Array<GroupChatI>,
+    groupChatsByName: Array<GroupChatI>,
+    groupChatsByEmptyMessages: Array<GroupChatI>,
+    groupChatsByLastMessages: Array<GroupChatI>,
+    groupChatsCurrentUser: Array<GroupChatI>,
+    groupChatsByFilterString: Array<GroupChatI>
+}
+
 const defaultRequestListState: RequestListState = {
     requestList: [],
     newRequest: null,
@@ -44,21 +53,20 @@ export const requestListReducer = (state: RequestListState = defaultRequestListS
         case CREATE_REQUEST:
             return {...state, ...action.payload, requestList: [...state.requestList, action.payload.newRequest]}
         case DELETE_REQUEST:
-            let requestListWithoutDeletedRequest = state.requestList.filter(request => request.id !== action.payload.deletingRequestId)
-            return {...state, ...action.payload, requestList: requestListWithoutDeletedRequest}
+            const requestListWithoutDeletedOne = state.requestList.filter(
+                request => request.id !== action.payload.deletingRequestId
+            )
+
+            const memberListWithoutDeletedOne = state.members.filter(
+                member => member.id !== action.payload.deletingRequestId
+            )
+            return {
+                ...state, ...action.payload, requestList: requestListWithoutDeletedOne,
+                members: memberListWithoutDeletedOne
+            }
         default:
             return state
     }
-}
-
-
-interface ChatListStateI {
-    groupChats: Array<GroupChatI>,
-    groupChatsByName: Array<GroupChatI>,
-    groupChatsByEmptyMessages: Array<GroupChatI>,
-    groupChatsByLastMessages: Array<GroupChatI>,
-    groupChatsCurrentUser: Array<GroupChatI>,
-    groupChatsByFilterString: Array<GroupChatI>
 }
 
 const defaultChatListState = {

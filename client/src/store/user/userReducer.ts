@@ -30,7 +30,9 @@ export const userReducer = (state = defaultState, action: any) => {
             const newRequestListWithAcceptedRequest = state.chatRequestNotifications.filter(request => request.id !== action.payload.acceptedRequest.id)
             return {...state, ...action.payload, chatRequestNotifications: newRequestListWithAcceptedRequest}
         case DELETE_CHAT_NOTIFICATION:
-            let newRequestListWithoutDeletedRequest = state.chatRequestNotifications.filter(request => request.id !== action.payload.deletedRequestId)
+            let newRequestListWithoutDeletedRequest = state.chatRequestNotifications.filter(
+                request => request.id !== action.payload.deletedRequestId
+            )
             return {...state, ...action.payload, chatRequestNotifications: newRequestListWithoutDeletedRequest}
         default:
             return state

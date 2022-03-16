@@ -1,6 +1,8 @@
 import React, {useEffect, useState} from 'react';
 import {createChat} from "../../../../services/chatService";
 import {GroupChatI} from "../../../../interfaces";
+import {CreatingChat} from "../../../../services/chatServices";
+import {ChatFrontPath} from "../../../../frontpaths/frontPath";
 
 
 const CreateChatWindow = () => {
@@ -31,22 +33,19 @@ const CreateChatWindow = () => {
     }
 
     const handleCreateChatButton = async() => {
-        let formData: FormData = new FormData();
-        if (name) {
-            formData.append('name', name)
+        const chatService = new CreatingChat(name, photo)
+        const response = await chatService.createChat()
+
+        if (response.status === 201) {
+            window.location.href = ChatFrontPath.chatList()
+        } else if (response.status >= 400) {
+            setFormErrors(response.data)
         }
-        formData.append('avatar', photo)
-        const chat: GroupChatI = await createChat(formData);
-        if (!chat?.id) {
-            setFormErrors(chat)
-            return
-        }
-        window.location.href = 'http://127.0.0.1:8000/chats/';
     }
 
     return (
         <div className="modal fade bd-example-modal-lg" role="dialog" aria-labelledby="myLargeModalLabel"
-             aria-hidden="true">
+             aria-hidden="true" id="create-chat-modal">
             <div className="modal-dialog modal-lg">
                 <div className="modal-content">
                     <div style={{width: "80%", margin: "10px auto"}}>

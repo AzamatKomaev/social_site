@@ -1,12 +1,11 @@
-import React, { useState, useEffect } from 'react';
+import React, {useState, useEffect, useRef} from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 
 import Header from '../extend/Header';
 import Error404NotFound from '../extend/Error404NotFound';
 import SettingWindow from './include/setting/SettingWindow';
-
-import { getChatData } from './services';
 import {fetchGettingAllChatMembers, fetchGettingAllChatRequest} from "../../store/chat/actions";
+import {GroupChatService} from "../../services/chatServices";
 
 
 const ChatSettingPage = (props: any) => {
@@ -14,23 +13,30 @@ const ChatSettingPage = (props: any) => {
     const dispatch = useDispatch()
 
     const currentUserData = useSelector((state: any) => state.user)
-    const chatRed = useSelector((state: any) => state.requestList)
+    const chatMembers = useSelector((state: any) => state.requestList.members)
+    const chatRequests = useSelector((state: any) => state.requestList.requestList)
 
     const [chatData, setChatData] = useState({
         data: null,
         error: null
     })
+    const service: any = useRef<GroupChatService>()
 
     useEffect(() => {
-        getChatData(chatId)
-            .then((result) => {
-                setChatData({data: result.chat, error: result.error})
-            })
+        service.current = new GroupChatService(chatId)
+    }, [chatId])
+
+    useEffect(() => {
+        const fetchData = async() => {
+            const response = service.current.getDetail()
+            setChatData({data: response.data, error: response.status})
+        }
+        fetchData()
     }, [])
 
     useEffect(() => {
-        dispatch(fetchGettingAllChatMembers(chatId))
-        dispatch(fetchGettingAllChatRequest(chatId))
+        dispatch(fetchGettingAllChatMembers(service.current))
+        dispatch(fetchGettingAllChatRequest(service.current))
     }, [dispatch])
 
 
@@ -38,7 +44,7 @@ const ChatSettingPage = (props: any) => {
         return (
             <div>
                 <Header/>
-                <SettingWindow chatData={chatData}/>
+                <SettingWindow chatData={chatData} service={service.current}/>
             </div>
         )
     } else {

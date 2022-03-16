@@ -6,7 +6,7 @@ import '../../../../App.css';
 
 const CommentList = (props) => {
     return(
-        <div className="container">
+        <div>
             {props.comments.map(comment => (
                 <div>
                     <Comment
