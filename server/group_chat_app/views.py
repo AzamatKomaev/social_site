@@ -160,7 +160,7 @@ class GroupChatRequestViewSet(viewsets.ViewSet):
 
         new_chat_request = group_chat_request_service.create_chat_request(user_id)
         serializer = GroupChatRequestSerializer(new_chat_request)
-        return Response(serializer.data)
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
 
     def update(self, request, chat_id: int):
         group_chat_request_service = GroupChatRequestService(chat_id)  # request service

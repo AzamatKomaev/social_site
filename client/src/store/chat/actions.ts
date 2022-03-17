@@ -67,7 +67,6 @@ export const setIsRequestExists = (requestList: Array<GroupChatRequestI>, userId
 export const fetchCreatingRequest = (userId: number, service: GroupChatService) => {
     return async function (dispatch) {
         const response = await service.createRequest(userId)
-
         if (response.status === 201) {
             dispatch({
                 type: CREATE_REQUEST,
@@ -81,7 +80,7 @@ export const fetchCreatingRequest = (userId: number, service: GroupChatService) 
 
 export const fetchDeletingRequest = (userId: number, service: GroupChatService) => {
     return async function (dispatch) {
-        const gettingRequestResponse = await service.getDetail()
+        const gettingRequestResponse = await service.getRequestDetail(userId)
         let deletingRequestResponse: AxiosResponse
 
         if (gettingRequestResponse.status === 200) {
@@ -94,7 +93,8 @@ export const fetchDeletingRequest = (userId: number, service: GroupChatService) 
             dispatch({
                 type: DELETE_REQUEST,
                 payload: {
-                    deletingRequestId: gettingRequestResponse.data.id
+                    deletingRequestId: gettingRequestResponse.data.id,
+                    deletingMemberId: userId
                 }
             })
         }

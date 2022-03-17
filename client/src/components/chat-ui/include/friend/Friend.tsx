@@ -24,10 +24,13 @@ const Friend = ({friendData, chatData, service}) => {
                            <u>Почта: </u>{" " + friendData.email}
                        </div>
                     </a>
-                    <div style={{marginLeft: "auto"}}>
+                    <div className="d-none d-sm-block" style={{marginLeft: "auto"}}>
                         <FriendButtonVariants friendData={friendData} chatData={chatData} service={service}/>
                    </div>
                 </div>
+                <div className="d-sm-none" style={{margin: "0 auto", width: "85%"}}>
+                    <FriendButtonVariants friendData={friendData} chatData={chatData} service={service}/>
+               </div>
             </div>
         </div>
     )

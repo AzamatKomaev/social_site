@@ -6,7 +6,7 @@ const ChatCellButtons = ({notification, size, service}) => {
     const dispatch = useDispatch()
 
     const handleAcceptChatRequestButton = () => {
-        dispatch(fetchAcceptingChatRequest(notification.from_chat.id))
+        dispatch(fetchAcceptingChatRequest(notification.from_chat.id, service))
     }
 
     const handleDeleteChatRequestButton = () => {

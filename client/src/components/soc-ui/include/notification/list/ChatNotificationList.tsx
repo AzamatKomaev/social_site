@@ -7,6 +7,8 @@ import ChatNotificationCell from '../cell/ChatNotificationCell';
 const ChatNotificationList = () => {
     const userData = useSelector((state: any) => state.user)
 
+    console.log(userData.chatRequestNotifications)
+
     return (
         <div>
             {userData.chatRequestNotifications.map((request) => (

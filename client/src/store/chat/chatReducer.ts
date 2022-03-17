@@ -58,8 +58,9 @@ export const requestListReducer = (state: RequestListState = defaultRequestListS
             )
 
             const memberListWithoutDeletedOne = state.members.filter(
-                member => member.id !== action.payload.deletingRequestId
+                member => member.user_data.id !== action.payload.deletingMemberId
             )
+
             return {
                 ...state, ...action.payload, requestList: requestListWithoutDeletedOne,
                 members: memberListWithoutDeletedOne

@@ -49,6 +49,22 @@ export class GroupChatService {
         }
     }
 
+    public async getRequestDetail(userId: number): Promise<AxiosResponse> {
+        try {
+            return await axios.get(GroupChatPath.user_chat_request_detail(this.chatId, userId), defaultConfig)
+        } catch (err: any) {
+            return err.response
+        }
+    }
+
+    public async acceptRequest(): Promise<AxiosResponse> {
+        try {
+            return await axios.patch(GroupChatPath.chat_requests_list(this.chatId), {}, defaultConfig)
+        } catch (err: any) {
+            return err.response
+        }
+    }
+
     public static async getUserRequests(userId: number): Promise<AxiosResponse> {
         try {
             return await axios.get(GroupChatPath.user_chat_requests_list(userId), defaultConfig)

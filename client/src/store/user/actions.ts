@@ -35,22 +35,23 @@ export const fetchGettingAllChatRequestsToUser = (userId: number) => {
     }
 }
 
-export const fetchAcceptingChatRequest = (fromChatId: number) => {
+export const fetchAcceptingChatRequest = (fromChatId: number, service: GroupChatService) => {
     return async function (dispatch) {
-        const result = await acceptChatRequest(fromChatId)
-
-        dispatch({
-            type: ACCEPT_CHAT_NOTIFICATION,
-            payload: {
-                acceptedRequest: result
-            }
-        })
+        const response = await service.acceptRequest()
+        if (response.status === 200) {
+            dispatch({
+                type: ACCEPT_CHAT_NOTIFICATION,
+                payload: {
+                    acceptedRequest: response.data
+                }
+            })
+        }
     }
 }
 
 export const fetchDeletingChatRequestNotification = (userId: number, service: GroupChatService) => {
     return async function (dispatch) {
-        const gettingRequestResponse = await service.getDetail()
+        const gettingRequestResponse = await service.getRequestDetail(userId)
         let deletingRequestResponse: AxiosResponse
 
         if (gettingRequestResponse.status === 200) {
@@ -61,6 +62,7 @@ export const fetchDeletingChatRequestNotification = (userId: number, service: Gr
         }
 
         if (deletingRequestResponse.status === 204) {
+            console.log(gettingRequestResponse.data)
             dispatch({
                 type: DELETE_CHAT_NOTIFICATION,
                 payload: {

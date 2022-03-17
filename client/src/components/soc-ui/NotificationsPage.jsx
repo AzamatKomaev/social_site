@@ -15,12 +15,8 @@ const NotificationsPage = (props) => {
     useEffect(() => {
         if (userData.info) {
             dispatch(fetchGettingAllFriendRequests(userData.info.id))
+            dispatch(fetchGettingAllChatRequestsToUser(userData.info.id));
         }
-    }, [userData.info])
-
-
-    useEffect(() => {
-        if (userData.info) dispatch(fetchGettingAllChatRequestsToUser(userData.info.id));
     }, [userData.info])
 
     if (userData.isAuth && userData.info) {
