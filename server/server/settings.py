@@ -65,7 +65,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    'group_chat_app.middleware.GroupChatMiddleware',
+    #'group_chat_app.middleware.GroupChatMiddleware',
 ]
 
 ROOT_URLCONF = 'server.urls'

@@ -15,6 +15,7 @@ from .serializers import (
     GroupChatSerializer, GroupMessageSerializer,
     GroupChatMembersSerializer, GroupChatRequestSerializer
 )
+from .permissions import GroupChatPermission
 
 
 def get_chat_by_id(chat_id: int) -> dict:
@@ -24,9 +25,15 @@ def get_chat_by_id(chat_id: int) -> dict:
         "exists": chat.exists()
     }
 
+class GroupChatModelViewSet(viewsets.ModelViewSet):
+    queryset = GroupChat.objects.all()
+    serializer_class = GroupChatSerializer
+    permission_classes = (GroupChatPermission, )
+
 
 class GroupChatViewSet(viewsets.ViewSet):
-    permission_classes = [permissions.IsAuthenticated]
+    permission_classes = (GroupChatPermission, )
+    queryset = GroupChat.objects.all()
 
     def list(self, request):
         sort_by = request.query_params.get('sort_by', None)

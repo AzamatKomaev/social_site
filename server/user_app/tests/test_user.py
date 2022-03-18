@@ -12,12 +12,12 @@ from rest_framework import status
 from rest_framework.test import APITestCase, APIClient
 
 from server.settings import BASE_DIR
-from user_app.models import User, FriendRequest
-from .tests_services import UserAuthAPITestService
+from user_app.models import User
+from .services.user_services import UserAuthAPITestService
 
 
 class UserAPITestCase(APITestCase):
-    json_users_path = BASE_DIR / 'user_app/test_data/user_data.json'
+    json_users_path = BASE_DIR / 'user_app/tests/data/users_data.json'
     default_password = 'the_same_password'
 
     def setUp(self) -> None:

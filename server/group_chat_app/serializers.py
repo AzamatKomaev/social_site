@@ -15,6 +15,7 @@ from .services import GroupChatService
 class GroupChatSerializer(ModelSerializer):
     user = HiddenField(default=CurrentUserDefault())
     last_message = SerializerMethodField('get_last_message')
+    members_count = SerializerMethodField('get_members_count')
     creator = SerializerMethodField('get_creator')
 
     class Meta:
@@ -23,6 +24,9 @@ class GroupChatSerializer(ModelSerializer):
 
     def get_last_message(self, obj: GroupChat) -> dict:
         return GroupMessageSerializer(obj.groupmessage_set.first()).data
+
+    def get_members_count(self, obj: GroupChat) -> int:
+        return obj.users.count()
 
     def get_creator(self, obj: GroupChat) -> dict:
         return UserSerializer(obj.creator).data

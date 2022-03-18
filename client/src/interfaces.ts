@@ -34,6 +34,7 @@ interface MessageI {
 export interface GroupChatI {
     id: number,
     last_message: MessageI,
+    members_count: number,
     name: string,
     created_at: string,
     avatar: string,

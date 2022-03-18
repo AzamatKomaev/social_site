@@ -30,7 +30,7 @@ const ChatNotificationCell = (props: any) => {
                     <div className="flex-grow-1 ms-3">
                        <p style={{fontSize: "14pt"}}>{props.notification.from_chat.name}</p>
                        <div className="small" style={{marginTop: "-15px"}}>
-                           <p className="text-info">Участников: {}</p>
+                           <p className="text-info">Участников: {props.notification.from_chat.members_count}</p>
                            pass
                        </div>
                     </div>

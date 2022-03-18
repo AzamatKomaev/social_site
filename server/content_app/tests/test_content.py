@@ -6,10 +6,10 @@ from requests import Response
 
 from rest_framework.test import APITestCase
 
-from content_app.models import Category, Comment
+from content_app.models import Category
 from user_app.models import User
-from user_app.tests_services import UserAuthAPITestService
-from .test_services import ContentAPITestService
+from user_app.tests.services.user_services import UserAuthAPITestService
+from .services.content_services import ContentAPITestService
 
 
 class ContentTestCase(APITestCase):
