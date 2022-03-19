@@ -42,52 +42,135 @@ class GroupChatTestCase(APITestCase):
 
     def test_creating_chat(self):
         creating_response = ChatAPITestService.create_chat(self.get_admin_jwt(), 'First Chat')
-        getting_response = ChatAPITestService.get_list_chat(self.get_admin_jwt())
-
         self.assertEqual(creating_response.status_code, 201)
+
+        creating_response_wrong = ChatAPITestService.create_chat(self.get_admin_jwt(), '')
+        self.assertEqual(creating_response_wrong.status_code, 400)
+
+        getting_response = ChatAPITestService.get_list_chat(self.get_admin_jwt())
         self.assertEqual(len(getting_response.json()), 1)
         self.assertEqual(getting_response.json()[0]['creator']['username'], 'Chat_admin')
 
-    def test_adding_user_in_chat(self):
+    def test_deleting_chat(self):
+        creating_response = ChatAPITestService.create_chat(self.get_admin_jwt(), 'First Chat')
+
+
+    def test_sending_request(self):
         chat_response = ChatAPITestService.create_chat(self.get_admin_jwt(), 'First Chat')
         user = User.objects.get(username='Chat_member')
-        request_response = ChatAPITestService.send_chat_request(self.get_admin_jwt(), chat_response.json().get('id'),
-                                                                user.id)
-        wrong_request_response = ChatAPITestService.send_chat_request(
-            user_jwt=self.get_user_jwt('Not_member', 'notmember12345'),
+        not_member_jwt = self.get_user_jwt('Not_member', 'notmember12345')
+        member_jwt = self.get_user_jwt('Chat_member', 'member12345')
+
+        request_response_as_not_member = ChatAPITestService.send_chat_request(
+            user_jwt=not_member_jwt,
             chat_id=chat_response.json().get('id'),
             user_id=user.id
         )
+        self.assertEqual(request_response_as_not_member.status_code, 403)
 
-        self.assertEqual(request_response.status_code, 201)
+        request_response_as_member = ChatAPITestService.send_chat_request(
+            user_jwt=member_jwt,
+            chat_id=chat_response.json().get('id'),
+            user_id=user.id
+        )
+        self.assertEqual(request_response_as_member.status_code, 403)
+
+        request_response_as_admin1 = ChatAPITestService.send_chat_request(
+            user_jwt=self.get_admin_jwt(),
+            chat_id=chat_response.json().get('id'),
+            user_id=user.id
+        )
+        self.assertEqual(request_response_as_admin1.status_code, 201)
+
+        request_response_as_admin2 = ChatAPITestService.send_chat_request(
+            user_jwt=self.get_admin_jwt(),
+            chat_id=chat_response.json().get('id'),
+            user_id=user.id
+        )
+        self.assertEqual(request_response_as_admin2.status_code, 400)
+
+        wrong_request_response = ChatAPITestService.send_chat_request(
+            user_jwt=not_member_jwt,
+            chat_id=chat_response.json().get('id'),
+            user_id=user.id
+        )
         self.assertEqual(wrong_request_response.status_code, 403)
 
     def test_accepting_user_in_chat(self):
         chat_response = ChatAPITestService.create_chat(self.get_admin_jwt(), 'First Chat')
+        admin = User.objects.get(username='Chat_admin')
         user = User.objects.get(username='Chat_member')
+
         member_jwt = self.get_user_jwt('Chat_member', 'member12345')
+        not_member_jwt = self.get_user_jwt('Not_member', 'notmember12345')
+
         ChatAPITestService.send_chat_request(self.get_admin_jwt(), chat_response.json().get('id'),
                                                                 user.id)
+
         requests_response = ChatAPITestService.get_requests_to_user(
             user_jwt=member_jwt,
             user_id=user.id
         )
+        self.assertEqual(requests_response.status_code, 200)
+
         requests_response_wrong = ChatAPITestService.get_requests_to_user(
             user_jwt=self.get_user_jwt('Chat_member', 'wrong_pwd12345'),
             user_id=user.id
         )
-
-        accepted_response = ChatAPITestService.accept_request(
-            user_jwt=member_jwt,
-            chat_id=chat_response.json().get('id')
-        )
+        self.assertEqual(requests_response_wrong.status_code, 401)
 
         accepted_response_wrong = ChatAPITestService.accept_request(
             user_jwt=self.get_user_jwt('Chat_member', 'wrong_pwd12345'),
             chat_id=chat_response.json().get('id')
         )
-
-        self.assertEqual(requests_response.status_code, 200)
-        self.assertEqual(requests_response_wrong.status_code, 401)
-        self.assertEqual(accepted_response.status_code, 200)
         self.assertEqual(accepted_response_wrong.status_code, 401)
+
+        accepted_response = ChatAPITestService.accept_request(
+            user_jwt=member_jwt,
+            chat_id=chat_response.json().get('id')
+        )
+        self.assertEqual(accepted_response.status_code, 200)
+
+
+        members_list_response_as_member1 = ChatAPITestService.get_members_list(member_jwt,
+                                                                               chat_response.json().get('id'))
+        self.assertEqual(len(members_list_response_as_member1.json()), 2)
+        self.assertEqual(members_list_response_as_member1.json()[0]['user_data']['id'], admin.id)
+        self.assertEqual(members_list_response_as_member1.json()[1]['user_data']['id'], user.id)
+
+        deleted_response_wrong = ChatAPITestService.delete_request(
+            user_jwt=not_member_jwt,
+            chat_id=chat_response.json().get('id'),
+            user_id=user.id
+        )
+        self.assertEqual(deleted_response_wrong.status_code, 403)
+
+        deleted_response_as_member = ChatAPITestService.delete_request(
+            user_jwt=member_jwt,
+            chat_id=chat_response.json().get('id'),
+            user_id=user.id
+        )
+        self.assertEqual(deleted_response_as_member.status_code, 204)
+
+        ChatAPITestService.send_chat_request(self.get_admin_jwt(), chat_response.json().get('id'),
+                                             user.id)
+        accepted_response_wrong_as_not_member = ChatAPITestService.accept_request(
+            user_jwt=not_member_jwt,
+            chat_id=chat_response.json().get('id')
+        )
+        self.assertEqual(accepted_response_wrong_as_not_member.status_code, 404)
+
+        deleted_response_as_admin = ChatAPITestService.delete_request(
+            user_jwt=self.get_admin_jwt(),
+            chat_id=chat_response.json().get('id'),
+            user_id=user.id
+        )
+        self.assertEqual(deleted_response_as_admin.status_code, 204)
+
+        members_list_response_as_member2 = ChatAPITestService.get_members_list(member_jwt,
+                                                                               chat_response.json().get('id'))
+        self.assertEqual(len(members_list_response_as_member2.json()), 1)
+
+        members_list_response_as_not_member = ChatAPITestService.get_members_list(not_member_jwt,
+                                                                                  chat_response.json().get('id'))
+        self.assertEqual(members_list_response_as_not_member.status_code, 403)

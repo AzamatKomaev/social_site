@@ -59,7 +59,7 @@ class GroupChatRoleSerializer(ModelSerializer):
         fields = "__all__"
 
     def get_user_data(self, obj: GroupChatRole):
-        return UserSerializer()
+        return UserSerializer(obj.user).data
 
 
 class GroupChatMembersSerializer(ModelSerializer):

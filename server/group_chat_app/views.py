@@ -3,19 +3,19 @@ from typing import Dict, Optional
 from django.core.paginator import Paginator, EmptyPage
 from django.shortcuts import get_object_or_404
 from rest_framework.response import Response
-from rest_framework import status, permissions, viewsets
+from rest_framework import status, permissions, viewsets, decorators
 
 from user_app.models import User
-from .models import GroupChat
+from .models import GroupChat, GroupChatRole
 from .services import (
     GroupChatService, GroupChatRequestService, GroupChatRoleService,
     get_and_sort_chat_list
 )
 from .serializers import (
     GroupChatSerializer, GroupMessageSerializer,
-    GroupChatMembersSerializer, GroupChatRequestSerializer
+    GroupChatMembersSerializer, GroupChatRequestSerializer, GroupChatRoleSerializer
 )
-from .permissions import GroupChatPermission
+from .permissions import GroupChatPermission, GroupChatRolePermission
 
 
 def get_chat_by_id(chat_id: int) -> dict:
@@ -29,6 +29,25 @@ class GroupChatModelViewSet(viewsets.ModelViewSet):
     queryset = GroupChat.objects.all()
     serializer_class = GroupChatSerializer
     permission_classes = (GroupChatPermission, )
+
+    def _get_serializer_data(self, request):
+        serializer_data = {
+            "name": request.data.get('name', None),
+            "users": [request.user.id]
+        }
+        if 'avatar' in request.data:
+            serializer_data = {**serializer_data, "avatar": request.data['avatar']}
+
+        return serializer_data
+
+
+
+    def create(self, request, *args, **kwargs):
+        serializer = self.get_serializer(data=self._get_serializer_data(request))
+        serializer.is_valid(raise_exception=True)
+        self.perform_create(serializer)
+        headers = self.get_success_headers(serializer.data)
+        return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
 
 
 class GroupChatViewSet(viewsets.ViewSet):
@@ -190,6 +209,15 @@ class GroupChatRequestViewSet(viewsets.ViewSet):
             return Response({"message": deleting_request_data['message']}, status=deleting_request_data['status'])
 
         return Response({"message": "The chat request was deleted successfully!"}, status.HTTP_204_NO_CONTENT)
+
+
+class GroupChatRoleModelViewSet(viewsets.ModelViewSet):
+    serializer_class = GroupChatRoleSerializer
+    queryset = GroupChatRole.objects.all()
+    permission_classes = (GroupChatRolePermission, )
+
+    def get_queryset(self, *args, **kwargs):
+        return super().get_queryset().filter(chat_id=self.kwargs.get('pk'))
 
 
 class GroupChatRoleViewSet(viewsets.ViewSet):
