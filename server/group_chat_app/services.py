@@ -1,9 +1,10 @@
 from datetime import datetime
-from typing import Optional, List, Union
+from typing import Optional, Union
 
-from django.core.paginator import Paginator, EmptyPage
 from django.db.models import QuerySet
+from django.core.paginator import Paginator, EmptyPage
 from django.shortcuts import get_object_or_404
+from django.http import Http404
 from rest_framework import status
 
 from personal_chat_app.models import PersonalChat
@@ -55,17 +56,6 @@ def get_and_sort_chat_list(sort_by: Optional[str], request, chat_model, chat_ser
         }
 
     return chat_data
-
-
-def sort_chat_list(serializer_data) -> list:
-    sorted_list = sorted(serializer_data,
-                         key=lambda x: (
-                             int(datetime.timestamp(datetime.strptime(x['last_message']['created_at'], '%Y-%m-%dT%H:%M:%S.%f')))
-                             if 'created_at' in x['last_message'] else 0
-                         ),
-                         reverse=True)
-
-    return sorted_list if len(sorted_list) < 5 else sorted_list[0:5]
 
 
 class GroupChatService:
@@ -165,17 +155,23 @@ class GroupChatRequestService:
         )
         return new_chat_request
 
+    def is_user_receiver(self, user: User):
+        try:
+            chat_request = self.get_request(user)
+        except Http404:
+            return False
+
+        return chat_request.to_user == user
+
     def is_user_admin(self, user: User) -> bool:
         return user == self.chat.creator
 
-    def get_request_or_none(self, user: User) -> Optional[GroupChatRequest]:
-        return GroupChatRequest.objects.filter(
-            to_user=user,
-            from_chat=self.chat
-        ).first()
+    def get_request(self, user: User) -> GroupChatRequest:
+        chat_request = get_object_or_404(GroupChatRequest, to_user=user, from_chat=self.chat)
+        return chat_request
 
     @staticmethod
-    def get_request_by_id(self, request_id: int) -> Optional[GroupChatRequest]:
+    def get_request_by_id(request_id: int) -> Optional[GroupChatRequest]:
         return GroupChatRequest.objects.filter(id=request_id).first()
 
     def accept_chat_request(self, chat_request: GroupChatRequest) -> GroupChatRequest:
@@ -185,30 +181,11 @@ class GroupChatRequestService:
         chat_request.save()
         return chat_request
 
-    def delete_chat_request(self, request_user: User, user_id: int) -> dict:
+    def delete_chat_request(self, request_user: User, user_id: int) -> bool:
         to_user = get_object_or_404(User, id=user_id)
-        chat_request = self.get_request_or_none(to_user)
-
-        if not chat_request:
-            return {
-                "is_deleted": False,
-                "message": "Not found. Chat request doesnt exists.",
-                "status": status.HTTP_404_NOT_FOUND
-            }
-
-        if not (request_user == chat_request.to_user or request_user == chat_request.from_chat.creator):
-            return {
-                "is_deleted": False,
-                "message": "You dont have a permission to do it.",
-                "status": status.HTTP_403_FORBIDDEN
-            }
-
+        chat_request = self.get_request(to_user)
         is_deleted = self._delete_chat_request(chat_request)
-        return {
-            "is_deleted": is_deleted,
-            "message": "Success" if is_deleted else "Bad request",
-            "status": status.HTTP_200_OK if is_deleted else status.HTTP_400_BAD_REQUEST
-        }
+        return is_deleted
 
 
 class GroupChatRoleService:

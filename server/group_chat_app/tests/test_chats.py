@@ -94,7 +94,7 @@ class GroupChatTestCase(APITestCase):
             chat_id=chat_response.json().get('id'),
             user_id=user.id
         )
-        self.assertEqual(wrong_request_response.status_code, 403)
+        self.assertEqual(wrong_request_response.status_code, 400)
 
     def test_accepting_user_in_chat(self):
         chat_response = ChatAPITestService.create_chat(self.get_admin_jwt(), 'First Chat')
@@ -112,6 +112,8 @@ class GroupChatTestCase(APITestCase):
             user_id=user.id
         )
         self.assertEqual(requests_response.status_code, 200)
+        self.assertEqual(len(requests_response.json()), 1)
+        self.assertEqual(requests_response.json()[0]['is_accepted'], False)
 
         requests_response_wrong = ChatAPITestService.get_requests_to_user(
             user_jwt=self.get_user_jwt('Chat_member', 'wrong_pwd12345'),
@@ -131,6 +133,27 @@ class GroupChatTestCase(APITestCase):
         )
         self.assertEqual(accepted_response.status_code, 200)
 
+        detail_request_response_as_member = ChatAPITestService.get_detail_request_to_user(
+            user_jwt=member_jwt,
+            chat_id=chat_response.json().get('id'),
+            user_id=user.id
+        )
+        self.assertEqual(detail_request_response_as_member.status_code, 200)
+        self.assertEqual(detail_request_response_as_member.json()['is_accepted'], True)
+
+        detail_request_response_as_not_member = ChatAPITestService.get_detail_request_to_user(
+            user_jwt=not_member_jwt,
+            chat_id=chat_response.json().get('id'),
+            user_id=user.id
+        )
+        self.assertEqual(detail_request_response_as_not_member.status_code, 403)
+
+        requests_response2 = ChatAPITestService.get_requests_to_user(
+            user_jwt=member_jwt,
+            user_id=user.id
+        )
+        self.assertEqual(requests_response2.status_code, 200)
+        self.assertEqual(len(requests_response2.json()), 0)
 
         members_list_response_as_member1 = ChatAPITestService.get_members_list(member_jwt,
                                                                                chat_response.json().get('id'))
