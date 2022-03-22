@@ -7,6 +7,12 @@ from rest_framework.test import APIClient
 
 class ContentAPITestService:
     @staticmethod
+    def get_categories():
+        client = APIClient()
+        url = reverse('categories.list')
+        return client.get(url)
+
+    @staticmethod
     def create_post(detail_data: dict, category_id: int, user_jwt: Optional[str]) -> Response:
         client = APIClient()
         url = reverse('post.list', args=[category_id])

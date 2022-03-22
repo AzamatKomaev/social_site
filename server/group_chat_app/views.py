@@ -7,12 +7,12 @@ from user_app.models import User
 from .models import GroupChat, GroupChatRole, GroupChatRequest, GroupMessage
 from .paginators import GroupMessagePagination
 from .services import (
-    GroupChatService, GroupChatRequestService, GroupChatRoleService,
+    GroupChatService, GroupChatRequestService,
     get_and_sort_chat_list
 )
 from .serializers import (
     GroupChatSerializer, GroupMessageSerializer,
-    GroupChatMembersSerializer, GroupChatRequestSerializer, GroupChatRoleSerializer
+    GroupChatRequestSerializer, GroupChatRoleSerializer
 )
 from .permissions import GroupChatPermission, GroupChatRolePermission, GroupChatRequestPermission, \
     GroupChatRequestListPermission

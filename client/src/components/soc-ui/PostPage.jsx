@@ -20,7 +20,10 @@ const PostPage = (props) => {
     useEffect(() => {
         const fetchData = async() => {
             const response = await ContentService.getPostList(categoryId, currentPage)
-            if (response.status === 204) {
+            if (
+                (response.status === 204) ||
+                (response.status === 404 && response.data?.detail === 'Неправильная страница')
+            ) {
                 setCurrentPage(-1)
             } else if (response.status === 200) {
                 setCurrentPage(prevState => prevState + 1)

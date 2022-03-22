@@ -1,8 +1,5 @@
-from typing import Optional
-
 from django.contrib.auth.models import Group
 from django.db.models import QuerySet
-from requests import Response
 
 from rest_framework.test import APITestCase
 
@@ -13,53 +10,34 @@ from .services.content_services import ContentAPITestService
 
 
 class ContentTestCase(APITestCase):
-    users: QuerySet[User]
-    categories: list[Category]
-
     def setUp(self):
-        Group.objects.create(name='Пользователь')
-        [
-            UserAuthAPITestService.create_user(
-                {'username': f'User{i}', 'email': f'mail{i}@mail.ru', 'password': 'the_same_password'}
-            ) for i in range(0, 5)
-        ]
+        group = Group.objects.create(name='User')
+        user1_response = UserAuthAPITestService.create_user({
+            'username': 'User2',
+            'email': 'user1@mail.ru',
+            'password': 'user1_12345'
+        })
+        user2_response = UserAuthAPITestService.create_user({
+            'username': 'User2',
+            'email': 'user2@mail.ru',
+            'password': 'user1_12345'
+        })
 
-        self.users = User.objects.all()
-        UserAuthAPITestService.accept_all_users(self.users)
-        self.categories = [
-            Category.objects.create(name=f'Category {i}') for i in range(0, 5)
-        ]
-
-    def _create_posts(self, send_jwt: bool) -> list[Response]:
-        responses = []
-        for category in self.categories:
-            for user in self.users:
-                user_jwt = UserAuthAPITestService.login_user(
-                    user.username, 'the_same_password'
-                ).json().get('access') if send_jwt else None
-
-                response = ContentAPITestService.create_post(
-                    {"title": f"Title user-{user.id} category-{category.id}", "text": "lol", "category": category.id},
-                    category_id=category.id, user_jwt=user_jwt
-                )
-                responses.append(response)
-
-        return responses
-
-    def test_set_up(self):
         users = User.objects.all()
-        self.assertEqual(len(users), 5)
-        self.assertEqual(len(self.categories), 5)
+        UserAuthAPITestService.accept_all_users(users)
+        group.user_set.add(users.first())
+        group.user_set.add(users.last())
 
-    def test_create_post(self):
-        correct_created_post_responses = self._create_posts(send_jwt=True)
-        non_correct_created_post_responses = self._create_posts(send_jwt=False)
+        Category.objects.create(name='First Category')
+        Category.objects.create(name='Second Category')
 
-        self.assertEqual(
-            [201 for _ in range(len(correct_created_post_responses))],
-            [response.status_code for response in correct_created_post_responses])
+    def test_creating_content(self):
+        pass
 
-        self.assertEqual(
-            [401 for _ in range(len(non_correct_created_post_responses))],
-            [response.status_code for response in non_correct_created_post_responses]
-        )
+    def test_getting_content(self):
+        # getting all categories.
+        gotten_categories_response = ContentAPITestService.get_categories()
+        self.assertEqual(gotten_categories_response.status_code, 200)
+        self.assertEqual(len(gotten_categories_response.json()), 2)
+
+

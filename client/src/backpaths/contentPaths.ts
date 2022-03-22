@@ -6,7 +6,7 @@ export class ContentPath {
     }
 
     static postList = (categoryId: number, page: number): string => {
-        return `${defaultUrl}/categories/${categoryId}/posts/?page_number=${page}`
+        return `${defaultUrl}/categories/${categoryId}/posts/?page=${page}`
     }
 
     static postDetail = (postId: number): string => {

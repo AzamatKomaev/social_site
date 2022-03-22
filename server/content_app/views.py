@@ -1,12 +1,10 @@
 from rest_framework.views import APIView
+from rest_framework import generics
 from rest_framework.response import Response
 from rest_framework import status, permissions, viewsets
-
-from django.db.utils import IntegrityError
-from django.core.paginator import Paginator, EmptyPage
-from django.core.exceptions import ObjectDoesNotExist
 from django.shortcuts import get_object_or_404
 
+from .paginators import PostPagination
 from .serializers import (
     PostSerializer,
     CommentSerializer,
@@ -16,11 +14,20 @@ from .models import Category, Comment, Post
 from .services import PostService, CommentService
 
 
-class CategoryListAPIView(APIView):
-    def get(self, request) -> Response:
-        categories = Category.objects.all()
-        serializer = CategorySerializer(categories, many=True)
-        return Response(serializer.data, status=status.HTTP_200_OK)
+class CategoryListAPIView(generics.ListAPIView):
+    queryset = Category.objects.all()
+    serializer_class = CategorySerializer
+
+
+class PostModelViewSet(viewsets.ModelViewSet):
+    queryset = Post.objects.all()
+    serializer_class = PostSerializer
+    permission_classes = (permissions.IsAuthenticatedOrReadOnly, )
+    pagination_class = PostPagination
+
+    def get_queryset(self):
+        queryset = Post.objects.filter(category_id=self.kwargs.get('category_id'))
+        return queryset
 
 
 class PostViewSet(viewsets.ViewSet):
