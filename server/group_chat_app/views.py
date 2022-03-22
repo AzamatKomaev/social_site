@@ -1,13 +1,11 @@
-from typing import Dict, Optional
-
 from django.core.paginator import Paginator, EmptyPage
 from django.shortcuts import get_object_or_404
-from rest_framework.decorators import action
 from rest_framework.response import Response
 from rest_framework import status, permissions, viewsets, generics
 
 from user_app.models import User
-from .models import GroupChat, GroupChatRole, GroupChatRequest
+from .models import GroupChat, GroupChatRole, GroupChatRequest, GroupMessage
+from .paginators import GroupMessagePagination
 from .services import (
     GroupChatService, GroupChatRequestService, GroupChatRoleService,
     get_and_sort_chat_list
@@ -20,17 +18,20 @@ from .permissions import GroupChatPermission, GroupChatRolePermission, GroupChat
     GroupChatRequestListPermission
 
 
-def get_chat_by_id(chat_id: int) -> dict:
-    chat = GroupChat.objects.filter(id=chat_id)
-    return {
-        "chat": chat.first(),
-        "exists": chat.exists()
-    }
-
 class GroupChatModelViewSet(viewsets.ModelViewSet):
     queryset = GroupChat.objects.all()
     serializer_class = GroupChatSerializer
     permission_classes = (GroupChatPermission, )
+
+    def get_object(self):
+        obj = get_object_or_404(self.queryset.model, pk=self.kwargs.get('pk'))
+        self.check_object_permissions(self.request, obj)
+        return obj
+
+    def get_queryset(self):
+        sort_by = self.request.query_params.get('sort_by', None)
+        page = self.request.query_params.get('page', None)
+        return get_and_sort_chat_list(sort_by, self.request, self.queryset.model, self.serializer_class, page)
 
     def _get_serializer_data(self, request):
         serializer_data = {
@@ -51,46 +52,11 @@ class GroupChatModelViewSet(viewsets.ModelViewSet):
         return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
 
 
-class GroupChatViewSet(viewsets.ViewSet):
-    permission_classes = (GroupChatPermission, )
-    queryset = GroupChat.objects.all()
-
-    def list(self, request):
-        sort_by = request.query_params.get('sort_by', None)
-        page = request.query_params.get('page', None)
-        chat_data = get_and_sort_chat_list(sort_by, request, GroupChat, GroupChatSerializer, page)
-        return Response(chat_data['list'], status=chat_data['status_code'])
-
-    def retrieve(self, request, chat_id: int):
-        chat = get_object_or_404(GroupChat, id=chat_id)
-        chat_serializer = GroupChatSerializer(chat)
-        return Response(chat_serializer.data)
-
-    def create(self, request):
-        data_for_serializer = {
-            "name": request.data.get('name', None),
-            "users": [request.user.id]
-        }
-
-        if 'avatar' in request.data:
-            data_for_serializer = {**data_for_serializer, "avatar": request.data['avatar']}
-
-        serializer = GroupChatSerializer(data=data_for_serializer, context={"request": request})
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
-
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
-    def destroy(self, request, chat_id: int):
-        chat = get_object_or_404(GroupChat, id=chat_id)
-        chat_service = GroupChatService(chat)
-
-        if not chat_service.is_user_admin(request.user):
-            return Response({"text": "You dont have permission to do it."}, status=status.HTTP_403_FORBIDDEN)
-
-        chat_service.delete_chat()
-        return Response({"text": "The chat was deleted successfully!"}, status=status.HTTP_200_OK)
+class GroupMessageModelViewSet(viewsets.ModelViewSet):
+    queryset = GroupMessage.objects.all()
+    serializer_class = GroupMessageSerializer
+    permission_classes = (GroupChatPermission, GroupChatRolePermission)
+    pagination_class = GroupMessagePagination
 
 
 class GroupMessageViewSet(viewsets.ViewSet):
@@ -158,7 +124,7 @@ class GroupChatRequestModelViewSet(viewsets.ModelViewSet):
     def create(self, request, *args, **kwargs):
         request_service = GroupChatRequestService(kwargs.get('chat_id'))
         new_chat_request = request_service.create_chat_request(kwargs.get('user_id'))
-        serializer = GroupChatRequestSerializer(new_chat_request)
+        serializer = self.get_serializer(new_chat_request)
         return Response(serializer.data, status=status.HTTP_201_CREATED)
 
     def update(self, request, *args, **kwargs):

@@ -76,7 +76,7 @@ export class GroupChatService {
     public async createMessage(text: string): Promise<AxiosResponse> {
         try {
             return await axios.post(GroupChatPath.messages_list(this.chatId, 0), {
-                text: text
+                text: text, chat: this.chatId
             }, defaultConfig)
         } catch (err: any) {
             return err.response

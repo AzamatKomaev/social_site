@@ -21,41 +21,24 @@ def get_and_sort_chat_list(sort_by: Optional[str], request, chat_model, chat_ser
     chats = chat_model.objects.filter(users=request.user)
 
     if sort_by == "last_message":
-        if chat_model == GroupChat:
-            chat_qs = GroupChat.objects.raw(get_ordered_group_chats, (request.user.id,))
-        else:
-            chat_qs = PersonalChat.objects.raw(get_ordered_personal_chats, (request.user.id,))
-
-        serializer = chat_serializer(chat_qs, many=True, context={'request': request})
-        chat_data = {
-            "list": serializer.data if len(chat_qs) < 5 else serializer.data[:5],
-            "status_code": status.HTTP_200_OK
-        }
+        chat_qs = chat_model.objects.raw(
+            get_ordered_group_chats if chat_model == GroupChat else get_ordered_personal_chats,
+            (request.user.id, )
+        )
+        return chat_qs if len(chat_qs) < 5 else chat_qs[:5]
+        # serializer = chat_serializer(chat_qs, many=True, context={'request': request})
+        # return serializer.data if len(chat_qs) < 5 else serializer.data[:5]
 
     elif sort_by == "-name" and page:
         page_size = 10
         paginator = Paginator(chats.order_by('-name'), page_size)
+        return paginator.page(page)
+        # serializer = chat_serializer(paginator.page(page), many=True, context={'request': request})
+        # return serializer.data
 
-        try:
-            serializer = chat_serializer(paginator.page(page), many=True, context={'request': request})
-            chat_data = {
-                "list": serializer.data,
-                "status_code": status.HTTP_200_OK
-            }
-        except EmptyPage:
-            chat_data = {
-                "list": [],
-                "status_code": status.HTTP_204_NO_CONTENT
-            }
-
-    else:
-        serializer = chat_serializer(chats, many=True, context={'request': request})
-        chat_data = {
-            "list": serializer.data,
-            "status_code": status.HTTP_200_OK
-        }
-
-    return chat_data
+    return chats
+    # serializer = chat_serializer(chats, many=True, context={'request': request})
+    # return serializer.data
 
 
 class GroupChatService:

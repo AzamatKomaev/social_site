@@ -1,3 +1,5 @@
+from typing import Optional
+
 from rest_framework.serializers import (
     ModelSerializer, HiddenField,
     CurrentUserDefault, SerializerMethodField,
@@ -22,7 +24,11 @@ class GroupChatSerializer(ModelSerializer):
         model = GroupChat
         fields = '__all__'
 
-    def get_last_message(self, obj: GroupChat) -> dict:
+    def get_last_message(self, obj: GroupChat) -> Optional[dict]:
+        service = GroupChatService(obj)
+        if not service.is_user_member(self.context['request'].user):
+            return None
+
         return GroupMessageSerializer(obj.groupmessage_set.first()).data
 
     def get_members_count(self, obj: GroupChat) -> int:
@@ -89,6 +95,6 @@ class GroupChatRequestSerializer(ModelSerializer):
         return UserSerializer(obj.to_user).data
 
     def get_from_chat_data(self, obj) -> dict:
-        return GroupChatSerializer(obj.from_chat).data
+        return GroupChatSerializer(obj.from_chat, context=self.context).data
 
 

@@ -25,7 +25,7 @@ export class GroupChatPath {
     }
 
     static messages_list = (chatId: number, page: number): string => {
-        return `${defaultUrl}/group_chats/${chatId}/messages/?page_number=${page}`
+        return `${defaultUrl}/group_chats/${chatId}/messages/?page=${page}`
     }
 
     static members_list = (chatId: number): string => {

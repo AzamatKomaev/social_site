@@ -8,6 +8,12 @@ class ChatAPITestService:
     client = APIClient()
 
     @staticmethod
+    def send_and_accept_chat_request(admin_jwt: str, receiver_jwt: str, chat_id: int, receiver_id: int) -> bool:
+        send_response = ChatAPITestService.send_chat_request(admin_jwt, chat_id, receiver_id)
+        accept_response = ChatAPITestService.accept_request(receiver_jwt, chat_id)
+        return send_response.status_code == 201 and accept_response.status_code == 200
+
+    @staticmethod
     def create_chat(user_jwt: str, name: str):
         client = APIClient()
         url = reverse('group_chats.list')
@@ -27,6 +33,12 @@ class ChatAPITestService:
         return client.get(url, HTTP_AUTHORIZATION=f'Bearer {user_jwt}')
 
     @staticmethod
+    def get_detail_chat(user_jwt: str, chat_id: int):
+        client = APIClient()
+        url = reverse('group_chats.detail', args=[chat_id])
+        return client.get(url, HTTP_AUTHORIZATION=f'Bearer {user_jwt}')
+
+    @staticmethod
     def get_requests_to_user(user_jwt: str, user_id: int):
         client = APIClient()
         url = reverse('group_chats_requests.to_user.list', args=[user_id])
@@ -39,7 +51,7 @@ class ChatAPITestService:
         return client.get(url, HTTP_AUTHORIZATION=f'Bearer {user_jwt}')
 
     @staticmethod
-    def accept_request(user_jwt: str, chat_id: str):
+    def accept_request(user_jwt: str, chat_id: int):
         client = APIClient()
         url = reverse('group_chats_requests.list', args=[chat_id])
         return client.patch(url, HTTP_AUTHORIZATION=f'Bearer {user_jwt}')
@@ -58,4 +70,21 @@ class ChatAPITestService:
 
     @staticmethod
     def delete_chat(user_jwt: str, chat_id: int):
-        pass
+        client = APIClient()
+        url = reverse('group_chats.detail', args=[chat_id])
+        return client.delete(url, HTTP_AUTHORIZATION=f'Bearer {user_jwt}')
+
+    @staticmethod
+    def get_messages_list(user_jwt: str, chat_id: int):
+        client = APIClient()
+        url = reverse('group_chats_messages.list', args=[chat_id])
+        return client.get(url, HTTP_AUTHORIZATION=f'Bearer {user_jwt}')
+
+    @staticmethod
+    def send_message(user_jwt: str, text: str, chat_id: int):
+        client = APIClient()
+        url = reverse('group_chats_messages.list', args=[chat_id])
+        data = {
+            'text': text, 'chat': chat_id
+        }
+        return client.post(url, data=data, HTTP_AUTHORIZATION=f'Bearer {user_jwt}')

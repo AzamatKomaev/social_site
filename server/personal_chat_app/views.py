@@ -18,8 +18,9 @@ class PersonalChatViewSet(viewsets.ViewSet):
     def list(self, request):
         sort_by = request.query_params.get('sort_by', None)
         page = request.query_params.get('page', 0)
-        chat_data = get_and_sort_chat_list(sort_by, request, PersonalChat, PersonalChatSerializer, page)
-        return Response(chat_data['list'], status=chat_data['status_code'])
+        chat_list = get_and_sort_chat_list(sort_by, request, PersonalChat, PersonalChatSerializer, page)
+        serializer = PersonalChatSerializer(chat_list, many=True, context={'request': request})
+        return Response(serializer.data)
 
     def retrieve(self, request, to_user_username: str):
         try:

@@ -41,7 +41,7 @@ const GroupMessageChatPage = (props) => {
     const [newMessages, setNewMessages] = useState([])
 
     const [chat, setChat] = useState(null)
-    const [scrollHeights, setScrollHeights] = useState([1355])
+    const [scrollHeights, setScrollHeights] = useState([800])
     const [error, setError] = useState(false)
 
     const [currentPage, setCurrentPage] = useState(2);
