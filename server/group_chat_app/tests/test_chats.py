@@ -6,15 +6,11 @@ from rest_framework.test import APITestCase
 from user_app.models import User
 from user_app.tests.services.user_services import UserAuthAPITestService
 from .services.chat_services import ChatAPITestService
-from ..models import GroupChat, GroupChatRequest
 
 
 class GroupChatTestCase(APITestCase):
     def get_admin_jwt(self) -> Optional[str]:
-        return self.get_user_jwt('Chat_admin', 'admin12345')
-
-    def get_user_jwt(self, username: str, password: str) -> Optional[str]:
-        return UserAuthAPITestService.login_user(username, password).json().get('access')
+        return UserAuthAPITestService.get_user_jwt('Chat_admin', 'admin12345')
 
     def setUp(self) -> None:
         admin_group = Group.objects.create(name='Admin')
@@ -51,8 +47,8 @@ class GroupChatTestCase(APITestCase):
 
     def test_getting_chat(self):
         # create a chat.
-        not_member_jwt = self.get_user_jwt('Not_member', 'notmember12345')
-        member_jwt = self.get_user_jwt('Chat_member', 'member12345')
+        not_member_jwt = UserAuthAPITestService.get_user_jwt('Not_member', 'notmember12345')
+        member_jwt = UserAuthAPITestService.get_user_jwt('Chat_member', 'member12345')
 
         created_chat_response = ChatAPITestService.create_chat(self.get_admin_jwt(), 'First Chat')
 
@@ -87,8 +83,8 @@ class GroupChatTestCase(APITestCase):
         self.assertEqual(getting_chat_members_response_as_member.status_code, 200)
 
     def test_deleting_chat(self):
-        not_member_jwt = self.get_user_jwt('Not_member', 'notmember12345')
-        member_jwt = self.get_user_jwt('Chat_member', 'member12345')
+        not_member_jwt = UserAuthAPITestService.get_user_jwt('Not_member', 'notmember12345')
+        member_jwt = UserAuthAPITestService.get_user_jwt('Chat_member', 'member12345')
 
         # creating a chat.
         created_chat_response = ChatAPITestService.create_chat(self.get_admin_jwt(), 'First Chat')
@@ -106,8 +102,8 @@ class GroupChatTestCase(APITestCase):
     def test_sending_request(self):
         chat_response = ChatAPITestService.create_chat(self.get_admin_jwt(), 'First Chat')
         user = User.objects.get(username='Chat_member')
-        not_member_jwt = self.get_user_jwt('Not_member', 'notmember12345')
-        member_jwt = self.get_user_jwt('Chat_member', 'member12345')
+        not_member_jwt = UserAuthAPITestService.get_user_jwt('Not_member', 'notmember12345')
+        member_jwt = UserAuthAPITestService.get_user_jwt('Chat_member', 'member12345')
 
         # trying to send a chat request to the user as not admin of the chat.
         request_response_as_not_member = ChatAPITestService.send_chat_request(
@@ -156,8 +152,8 @@ class GroupChatTestCase(APITestCase):
         admin = User.objects.get(username='Chat_admin')
         user = User.objects.get(username='Chat_member')
 
-        member_jwt = self.get_user_jwt('Chat_member', 'member12345')
-        not_member_jwt = self.get_user_jwt('Not_member', 'notmember12345')
+        member_jwt = UserAuthAPITestService.get_user_jwt('Chat_member', 'member12345')
+        not_member_jwt = UserAuthAPITestService.get_user_jwt('Not_member', 'notmember12345')
 
         # sending a chat request to the user named Chat_member from the chat.
         ChatAPITestService.send_chat_request(self.get_admin_jwt(), chat_response.json().get('id'),
@@ -174,14 +170,14 @@ class GroupChatTestCase(APITestCase):
 
         # trying to get all chat requests to the user named Chat_member with invalid user_jwt.
         requests_response_wrong = ChatAPITestService.get_requests_to_user(
-            user_jwt=self.get_user_jwt('Chat_member', 'wrong_pwd12345'),
+            user_jwt=UserAuthAPITestService.get_user_jwt('Chat_member', 'wrong_pwd12345'),
             user_id=user.id
         )
         self.assertEqual(requests_response_wrong.status_code, 401)
 
         # trying to accept the chat request sent above with invalid user_jwt
         accepted_response_wrong = ChatAPITestService.accept_request(
-            user_jwt=self.get_user_jwt('Chat_member', 'wrong_pwd12345'),
+            user_jwt=UserAuthAPITestService.get_user_jwt('Chat_member', 'wrong_pwd12345'),
             chat_id=chat_response.json().get('id')
         )
         self.assertEqual(accepted_response_wrong.status_code, 401)
@@ -276,8 +272,8 @@ class GroupChatTestCase(APITestCase):
     def test_group_chat_messages(self):
         chat_response = ChatAPITestService.create_chat(self.get_admin_jwt(), 'First Chat')
         member = User.objects.get(username='Chat_member')
-        member_jwt = self.get_user_jwt('Chat_member', 'member12345')
-        not_member_jwt = self.get_user_jwt('Not_member', 'notmember12345')
+        member_jwt = UserAuthAPITestService.get_user_jwt('Chat_member', 'member12345')
+        not_member_jwt = UserAuthAPITestService.get_user_jwt('Not_member', 'notmember12345')
 
         # sending and accepting a chat request to the Chat_member user.
         is_chat_request_sent_and_accepted = ChatAPITestService.send_and_accept_chat_request(

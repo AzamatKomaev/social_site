@@ -1,4 +1,4 @@
-from typing import Union
+from typing import Union, Optional
 from requests import Response
 
 from django.db.models import QuerySet
@@ -9,6 +9,11 @@ from user_app.models import User
 
 
 class UserAuthAPITestService:
+
+    @staticmethod
+    def get_user_jwt(username: str, password: str) -> Optional[str]:
+        return UserAuthAPITestService.login_user(username, password).json().get('access')
+
     @staticmethod
     def create_user(user_data: dict) -> Response:
         client = APIClient()
