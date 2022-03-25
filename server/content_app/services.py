@@ -54,27 +54,13 @@ class PostService:
 
 
 class CommentService:
-    post_id: int
+    comment: Comment
 
-    def __init__(self, post_id: int):
-        self.post_id = post_id
+    def __init__(self, comment: Comment):
+        self.comment = comment
 
-    def get_list(self) -> CommentSerializer:
-        comments = Comment.objects.filter(post_id=self.post_id)
-        serializer = CommentSerializer(comments, many=True)
-        return serializer
+    def is_user_creator(self, user: User):
+        return self.comment.user == user
 
-    def create(self, request: Request) -> Optional[dict[str, Union[PostSerializer, bool]]]:
-        data = {**request.data, **{"post": self.post_id}}
-        serializer = CommentSerializer(data=data, context={'request': request})
-
-        if serializer.is_valid():
-            try:
-                serializer.save()
-            except ObjectDoesNotExist:
-                return None
-
-            return {'serializer': serializer, 'is_valid': True}
-
-        return {'serializer': serializer, 'is_valid': False}
-
+    def can_user_delete_comment(self, user: User):
+        return self.is_user_creator(user) or self.comment.post.user == user

@@ -4,6 +4,7 @@ from rest_framework.serializers import (
     SerializerMethodField,
     CurrentUserDefault,
     CharField,
+    IntegerField
 )
 
 from .models import Post, Comment, Category
@@ -24,7 +25,8 @@ class CategorySerializer(ModelSerializer):
 class PostSerializer(ModelSerializer):
     user = HiddenField(default=CurrentUserDefault())
     user_data = SerializerMethodField('get_data_about_user')
-    comments = SerializerMethodField('get_comments')
+    #comments = SerializerMethodField('get_comments')
+    comments_count = SerializerMethodField('get_comments_count')
 
     def get_data_about_user(self, obj: Post) -> dict:
         return UserSerializer(obj.user).data
@@ -33,6 +35,9 @@ class PostSerializer(ModelSerializer):
         comments = Comment.objects.filter(post_id=obj.id)
         comments_list = [CommentSerializer(comment).data for comment in comments]
         return comments_list
+
+    def get_comments_count(self, obj: Post) -> int:
+        return obj.comment_set.count()
 
     class Meta:
         model = Post

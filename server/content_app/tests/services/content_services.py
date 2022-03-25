@@ -1,4 +1,4 @@
-from typing import Optional
+from typing import Optional, Union
 from requests import Response
 
 from django.urls import reverse
@@ -10,6 +10,12 @@ class ContentAPITestService:
     def get_categories():
         client = APIClient()
         url = reverse('categories.list')
+        return client.get(url)
+
+    @staticmethod
+    def get_detail_category(category_id: int):
+        client = APIClient()
+        url = reverse('categories.detail', args=[category_id])
         return client.get(url)
 
     @staticmethod
@@ -35,4 +41,28 @@ class ContentAPITestService:
     def delete_post(user_jwt: str, post_id: int):
         client = APIClient()
         url = reverse('posts.detail', args=[post_id])
+        return client.delete(url, HTTP_AUTHORIZATION=f'Bearer {user_jwt}')
+
+    @staticmethod
+    def create_comment(user_jwt: str, data: dict[str, Union[str, int]]):
+        client = APIClient()
+        url = reverse('comments.list', args=[data.get('post')])
+        return client.post(url, data=data, format='json', HTTP_AUTHORIZATION=f'Bearer {user_jwt}')
+
+    @staticmethod
+    def get_comment_list(post_id: int):
+        client = APIClient()
+        url = reverse('comments.list', args=[post_id])
+        return client.get(url)
+
+    @staticmethod
+    def get_comment_detail(comment_id: int):
+        client = APIClient()
+        url = reverse('comments.detail', args=[comment_id])
+        return client.get(url)
+
+    @staticmethod
+    def delete_comment(user_jwt: str, comment_id: int):
+        client = APIClient()
+        url = reverse('comments.detail', args=[comment_id])
         return client.delete(url, HTTP_AUTHORIZATION=f'Bearer {user_jwt}')

@@ -17,6 +17,7 @@ const PostDetailPage = (props) => {
     const postId = props.match.params.postId;
 
     const [post, setPost] = useState(null);
+    const [comments, setComments] = useState([])
     const [error, setError] = useState(false);
 
     useEffect(() => {
@@ -27,10 +28,19 @@ const PostDetailPage = (props) => {
             } else {
                 setError(response.status)
             }
-
         }
         fetchData()
-    }, []);
+    }, [postId]);
+
+    useEffect(() => {
+        const fetchData = async() => {
+            const response = await ContentService.getCommentList(postId)
+            if (response.status === 200) {
+                setComments(response.data)
+            }
+        }
+        fetchData()
+    }, [postId])
 
     if (error === 404) {
         return (
@@ -67,8 +77,7 @@ const PostDetailPage = (props) => {
                         {"\n\n\n"}
                         <CommentForm postId={postId} categoryId={categoryId}/>
                         {"\n\n\n"}
-                        <CommentList comments={post.comments}/>
-
+                        <CommentList comments={comments}/>
                     </div>
                 </div>
             </div>

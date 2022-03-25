@@ -48,7 +48,7 @@ export class ContentService {
     static createComment = async(postId: number, content: string): Promise<AxiosResponse> => {
         try {
             return await axios.post(ContentPath.commentList(postId), {
-                text: content
+                text: content, post: postId
             }, defaultConfig)
         } catch (err: any) {
             return err.response
