@@ -1,6 +1,4 @@
 import React, { useState, useEffect} from 'react';
-import axios from 'axios';
-
 import Header from '../extend/Header';
 import Error404NotFound from '../extend/Error404NotFound';
 import Error429TooManyRequests from '../extend/Error429TooManyRequests';
@@ -35,7 +33,6 @@ const PostPage = (props) => {
         }
 
         if (fetching && currentPage !== -1) {
-            console.log("fetching")
             fetchData()
         }
     }, [fetching])

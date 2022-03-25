@@ -67,3 +67,22 @@ export interface GroupChatRequestI {
     created_at: string,
     updated_at: string
 }
+
+export interface PostI {
+    id: number,
+    user_data: UserI,
+    comments_count: number,
+    title: string,
+    text: string,
+    photo: string | null,
+    created_at: string,
+    category: number
+}
+
+export interface CommentI {
+    id: number,
+    user_data: UserI,
+    text: string,
+    created_at: string,
+    post: number
+}

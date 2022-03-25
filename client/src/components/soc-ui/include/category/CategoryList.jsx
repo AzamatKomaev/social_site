@@ -1,11 +1,14 @@
 import React from 'react';
 import Category from './Category';
+import {useSelector} from "react-redux";
 
 
-const CategoryList = (props) => {
+const CategoryList = () => {
+    const categoryReducer = useSelector(state => state.category)
+
     return (
         <div className="container-fluid">
-            {props.categories.map((category) => (
+            {categoryReducer.list.map((category) => (
                 <div className="row" style={{marginTop: "25px"}}>
                     <Category
                         id={category.id}

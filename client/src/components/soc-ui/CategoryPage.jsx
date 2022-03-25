@@ -1,59 +1,30 @@
-import React, { useState, useEffect } from 'react';
-import { useSelector } from 'react-redux';
+import React, { useEffect } from 'react';
+import {useDispatch, useSelector} from 'react-redux';
 
 import Header from '../extend/Header';
 import CategoryList from './include/category/CategoryList';
 
-import {ContentService} from "../../services/contentService";
+import {fetchGettingAllCategories} from "../../store/content/actions";
 
 
 const CategoryPage = () => {
-    const [categoriesData, setCategoriesData] = useState({
-        list: [],
-        statusCode: null
-    })
-    const [showCategoryList, setShowCategoryList] = useState()
-
-    const userData = useSelector(state => state.user)
+    const dispatch = useDispatch();
+    const categoryReducer = useSelector(state => state.category)
 
     useEffect(() => {
-        const fetchData = async() => {
-            const response = await ContentService.getCategoryList()
-            setCategoriesData({
-                list: response.data,
-                statusCode: response.status
-            })
-        }
-        fetchData()
+        dispatch(fetchGettingAllCategories())
     }, [])
 
-    useEffect(() => {
-        setShowCategoryList(categoriesData.statusCode < 400 && categoriesData.list?.length > 0)
-    }, [categoriesData])
-
-    if (userData.isAuth) {
-        return (
-            <div>
-                <Header/>{"\n"}
-                {showCategoryList ?
-                    <CategoryList categories={categoriesData.list}/>
-                :
-                    <b>There is no categories!</b>
-                }
-            </div>
-        )
-    } else {
-        return (
-            <div>
-                <Header/>{"\n"}
-                {showCategoryList ?
-                    <CategoryList categories={categoriesData.list}/>
-                    :
-                    <b>There is no categories!</b>
-                }
-            </div>
-        )
-    }
+    return (
+        <div>
+            <Header/>{"\n"}
+            {categoryReducer.list.length > 0 ?
+                <CategoryList/>
+            :
+                <b>There is no categories!</b>
+            }
+        </div>
+    )
 }
 
 export default CategoryPage;

@@ -5,6 +5,8 @@ import { userReducer } from './user/userReducer';
 import { friendRequestReducer, friendListReducer } from './friend/friendReducer';
 import {chatListReducer, requestListReducer} from "./chat/chatReducer";
 import {personalChatReducer} from "./chat/personalChatReducer";
+import {categoryReducer} from "./content/reducers/categoryReducer";
+import {postReducer} from "./content/reducers/postReducer";
 
 
 const rootReducer = combineReducers({
@@ -13,7 +15,9 @@ const rootReducer = combineReducers({
     friendList: friendListReducer,
     requestList: requestListReducer,
     chatList: chatListReducer,
-    personalChatList: personalChatReducer
+    personalChatList: personalChatReducer,
+    category: categoryReducer,
+    post: postReducer
 })
 
 

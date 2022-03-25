@@ -29,6 +29,14 @@ export class ContentService {
         }
     }
 
+    static deletePost = async(postId: number): Promise<AxiosResponse> => {
+        try {
+            return await axios.delete(ContentPath.postDetail(postId), defaultConfig)
+        } catch (err: any) {
+            return err.response
+        }
+    }
+
     static getCommentList = async(postId: number): Promise<AxiosResponse> => {
         try {
             return await axios.get(ContentPath.commentList(postId))

@@ -1,5 +1,5 @@
 import React, { useState, useEffect} from 'react';
-import { useSelector } from 'react-redux';
+import {useDispatch, useSelector} from 'react-redux';
 import axios from 'axios';
 
 import Header from '../extend/Header';
@@ -10,26 +10,30 @@ import Post from './include/post/Post';
 import CommentList from './include/comment/CommentList';
 import CommentForm from './include/comment/CommentForm';
 import {ContentService} from "../../services/contentService";
+import {fetchGettingDetailPost} from "../../store/content/actions";
 
 
 const PostDetailPage = (props) => {
+    const dispatch = useDispatch()
     const categoryId = props.match.params.categoryId;
     const postId = props.match.params.postId;
 
-    const [post, setPost] = useState(null);
+    const post = useSelector(state => state.post.detail)
     const [comments, setComments] = useState([])
     const [error, setError] = useState(false);
 
     useEffect(() => {
-        const fetchData = async() => {
-            const response = await ContentService.getPostDetail(postId)
-            if (response.status === 200) {
-                setPost(response.data)
-            } else {
-                setError(response.status)
-            }
-        }
-        fetchData()
+        // const fetchData = async() => {
+        //     const response = await ContentService.getPostDetail(postId)
+        //     if (response.status === 200) {
+        //         setPost(response.data)
+        //     } else {
+        //         setError(response.status)
+        //     }
+        // }
+        // fetchData()
+        dispatch(fetchGettingDetailPost(postId))
+
     }, [postId]);
 
     useEffect(() => {
@@ -65,15 +69,7 @@ const PostDetailPage = (props) => {
                 {"\n"}
                 <div className="container">
                     <div className="col-12 col-md-10 mx-auto">
-                        <Post
-                            id={post.id}
-                            title={post.title}
-                            text={post.text}
-                            created_at={post.created_at}
-                            user_data={post.user_data}
-                            photo={post.photo}
-                            url="#"
-                         />
+                        <Post post={post}/>
                         {"\n\n\n"}
                         <CommentForm postId={postId} categoryId={categoryId}/>
                         {"\n\n\n"}

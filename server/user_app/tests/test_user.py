@@ -118,6 +118,7 @@ class UserAPITestCase(APITestCase):
         worst_response2 = UserAuthAPITestService.login_user()
         correct_responses = self._login_many_users(users)
 
+        print(worst_response1.json())
         self.assertEqual(worst_response1.status_code, 401)
         self.assertIn('detail', worst_response1.json())
 
