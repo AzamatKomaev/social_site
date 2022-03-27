@@ -5,6 +5,7 @@ from rest_framework import status, permissions, viewsets, generics
 
 from content_app.models import Post, Comment
 from .models import User, FriendRequest
+from .permissions import FriendRequestPermission
 from .services import UserService, CreationUser, FriendRequestService
 from .serializers import (
     UserSerializer,
@@ -88,103 +89,47 @@ class UserCommentListView(generics.ListAPIView):
         return queryset
 
 
-class FriendRequestViewSet(viewsets.ViewSet):
-    permission_classes = (permissions.IsAuthenticatedOrReadOnly,)
+class FriendRequestModelViewSet(viewsets.ModelViewSet):
+    queryset = FriendRequest.objects.all()
+    serializer_class = FriendRequestSerializer
+    permission_classes = (FriendRequestPermission, )
 
-    @staticmethod
-    def check_possible_errors(
-                             to_user_object: Optional[User],
-                             friend_request_service: FriendRequestService
-                             ) -> dict:
-        """
-        Static method for get, delete and patch methods for checking possible errors for all these methods.
-        """
-        if not to_user_object:
-            return {
-                "message": "User with this id doesnt exists.",
-                "status_code": status.HTTP_404_NOT_FOUND
-            }
+    def get_service(self) -> FriendRequestService:
+        service = FriendRequestService(self.request.user)
+        return service
 
-        if not friend_request_service.is_friend_request_exists(to_user_object.id):
-            return {
-                "message": "Friend Request with this data doesnt exists.",
-                "status_code": status.HTTP_404_NOT_FOUND
-            }
+    def get_queryset(self):
+        service = self.get_service()
+        queryset = service.get_current_friend_requests()
+        return queryset
 
-    def list(self, request):
-        friend_request_service = FriendRequestService(request.user)
-        chat_requests = friend_request_service.get_current_friend_requests()
-        serializer = FriendRequestSerializer(chat_requests, many=True)
+    def get_object(self):
+        obj = UserService.get_user(user_id=self.kwargs.get('to_user'))
+        self.check_object_permissions(self.request, obj)
+        return obj
+
+    def retrieve(self, request, *args, **kwargs):
+        service = self.get_service()
+        user = self.get_object()
+        friend_request = service.get_friend_request(request.user, user)
+        serializer = self.get_serializer(friend_request)
         return Response(serializer.data)
 
-    def retrieve(self, request, to_user: int):
-        friend_request_service = FriendRequestService(request.user)
-        to_user_object = UserService.get_user(user_id=to_user)
-
-        possible_errors = self.check_possible_errors(
-            to_user_object=to_user_object,
-            friend_request_service=friend_request_service
-        )
-
-        if possible_errors:
-            return Response({"message": possible_errors['message']}, status=possible_errors['status_code'])
-
-        friend_request = friend_request_service.get_friend_request(request.user, to_user_object)
-        friend_request = FriendRequest.objects.first()
-        if not friend_request:
-            return Response({"message": "Bad request."}, status=status.HTTP_400_BAD_REQUEST)
-
-        serializer = FriendRequestSerializer(friend_request)
-        return Response(serializer.data)
-
-    def create(self, request, to_user: int):
-        friend_request_service = FriendRequestService(request.user)
-        data = friend_request_service.create_friend_request(to_user)
-
-        if data["error"]:
-            return Response({"message": data["error"]}, status=status.HTTP_400_BAD_REQUEST)
-
-        serializer = FriendRequestSerializer(data["instance"])
+    def create(self, request, *args, **kwargs):
+        user = self.get_object()
+        friend_request = FriendRequest.objects.create(from_user=request.user, to_user=user)
+        serializer = self.get_serializer(friend_request)
         return Response(serializer.data, status=status.HTTP_201_CREATED)
 
-    def destroy(self, request, to_user: int):
-        friend_request_service = FriendRequestService(request.user)
-        to_user_object = UserService.get_user(user_id=to_user)
+    def update(self, request, *args, **kwargs):
+        service = self.get_service()
+        user = self.get_object()
+        friend_request = service.accept_friend_request(user, True)
+        serializer = self.get_serializer(friend_request)
+        return Response(serializer.data)
 
-        possible_errors = self.check_possible_errors(
-            to_user_object=to_user_object,
-            friend_request_service=friend_request_service
-        )
-
-        if possible_errors:
-            return Response({"message": possible_errors['message']}, status=possible_errors['status_code'])
-
-        if not friend_request_service.delete_friend_request(to_user_object):
-            return Response({"message": "Bad request."}, status=status.HTTP_400_BAD_REQUEST)
-
-        return Response({"message": "Request was deleted successfully."}, status=status.HTTP_204_NO_CONTENT)
-
-    def update(self, request, to_user: int):
-        if "is_accepted" not in request.query_params:
-            return Response({
-                "message": "Bad request: there is not is_accepted value in query params"
-            }, status=status.HTTP_400_BAD_REQUEST)
-
-        is_accepted = bool(int(request.query_params['is_accepted']))
-        friend_request_service = FriendRequestService(request.user)
-        to_user_object = UserService.get_user(user_id=to_user)
-        possible_errors = self.check_possible_errors(
-            to_user_object=to_user_object,
-            friend_request_service=friend_request_service
-        )
-
-        if possible_errors:
-            return Response({"message": possible_errors['message']}, status=possible_errors['status_code'])
-
-        friend_request = friend_request_service.accept_friend_request(to_user_object, is_accepted)
-
-        if not friend_request:
-            return Response({"message": "Bad request."}, status=status.HTTP_400_BAD_REQUEST)
-
-        serializer = FriendRequestSerializer(friend_request)
-        return Response(serializer.data, status=status.HTTP_200_OK)
+    def destroy(self, request, *args, **kwargs):
+        service = self.get_service()
+        user = self.get_object()
+        service.delete_friend_request(user)
+        return Response({}, status=status.HTTP_204_NO_CONTENT)

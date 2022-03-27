@@ -15,6 +15,7 @@ try:
     from server.settings import EMAIL_HOST_USER
 except ImportError:
     EMAIL_HOST_USER = ""
+from .permissions import UserIsNotReceiver
 
 
 class CreationUser:
@@ -207,33 +208,29 @@ class FriendRequestService:
         )
         return data
 
-    def delete_friend_request(self, second_user: User) -> bool:
+    def delete_friend_request(self, second_user: User) -> None:
         """Method for deleting friend request."""
-        if not self.is_friend_request_exists(second_user.id):
-            return False
+        # if not self.is_friend_request_exists(second_user.id):
+        #     return False
 
         friend_request = self.get_friend_request(self.user, second_user)
 
-        if self.user not in (friend_request.from_user, friend_request.to_user):
-            return False
+        # if self.user not in (friend_request.from_user, friend_request.to_user):
+        #     return False
 
         self._remove_both_users_from_each_other_friend_list(friend_request)
-        return bool(friend_request.delete())
+        friend_request.delete()
+        # return bool(friend_request.delete())
 
     def accept_friend_request(self, second_user: User, is_accepted: bool) -> Optional[FriendRequest]:
         """Method for accepting friend request making is_accepted True or False."""
-        if not self.is_friend_request_exists(second_user.id):
-            return
-
         friend_request = self.get_friend_request(self.user, second_user)
 
-        if self.user == friend_request.from_user:
-            return
+        if self.user != friend_request.to_user:
+            raise UserIsNotReceiver()
 
         friend_request.is_accepted = is_accepted
         friend_request.save()
-
-        if not self._add_both_users_in_each_other_friends_list(friend_request):
-            return
+        self._add_both_users_in_each_other_friends_list(friend_request)
 
         return friend_request

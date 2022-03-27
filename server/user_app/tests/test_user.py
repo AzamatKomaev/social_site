@@ -12,7 +12,7 @@ from rest_framework import status
 from rest_framework.test import APITestCase, APIClient
 
 from server.settings import BASE_DIR
-from user_app.models import User
+from user_app.models import User, FriendRequest
 from .services.user_services import UserAuthAPITestService
 from .data import users_data
 
@@ -164,9 +164,7 @@ class UserAPITestCase(APITestCase):
             [201 for _ in range(0, users.count())],
             [friend_request.status_code for friend_request in sent_friend_requests]
         )
-        self.assertEqual(
-            invalid_trying_sent_exists_friend_request.json().get('message'), 'Friend request already exists'
-        )
+        self.assertEqual(invalid_trying_sent_exists_friend_request.status_code, 400)
 
         invalid_accepted_friend_request_response = UserAuthAPITestService.accept_friend_request(
             user_id=users.exclude(username='User1').order_by('?').first().id,
@@ -181,17 +179,8 @@ class UserAPITestCase(APITestCase):
         valid_accepted_friend_request_responses = UserAuthAPITestService.accept_several_friend_requests(
             user_id=admin.id, users=users, password=self.default_password
         )
-
-        self.assertEqual(
-            (invalid_accepted_friend_request_response.json().get('message'),
-             invalid_accepted_friend_request_response.status_code),
-            ('Friend Request with this data doesnt exists.', 404)
-        )
-        self.assertEqual(
-            (invalid_deleted_friend_request_response.json().get('message'),
-             invalid_deleted_friend_request_response.status_code),
-            ('Friend Request with this data doesnt exists.', 404)
-        )
+        self.assertEqual(invalid_accepted_friend_request_response.status_code, 404)
+        self.assertEqual(invalid_deleted_friend_request_response.status_code, 404)
 
         self.assertEqual(
             len(valid_accepted_friend_request_responses),
@@ -215,11 +204,9 @@ class UserAPITestCase(APITestCase):
             [200, users.count()]
         )
 
-    def test_friend_requests_deleting(self):
-        users, admin = self._set_up_friend_requests().values()
-        admin_auth_response = UserAuthAPITestService.login_user(username="admin", password="admin12345678")
-
-        UserAuthAPITestService.send_several_friend_requests(
-            users=users,
-            user_jwt=admin_auth_response.json().get('access')
+        deleted_non_exist_friend_request_response = UserAuthAPITestService.delete_friend_request(
+            user_id=users[0].id,
+            user_jwt=UserAuthAPITestService.get_user_jwt(users[1].username, 'the_same_password')
         )
+        self.assertEqual(deleted_non_exist_friend_request_response.status_code, 404)
+

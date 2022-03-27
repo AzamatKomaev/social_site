@@ -7,8 +7,8 @@ from . import views
 
 
 urlpatterns = [
-    path('friend_requests/', views.FriendRequestViewSet.as_view({"get": "list"}), name='friend_request.list'),
-    path('friend_requests/<to_user>/', views.FriendRequestViewSet.as_view(
+    path('friend_requests/', views.FriendRequestModelViewSet.as_view({"get": "list"}), name='friend_request.list'),
+    path('friend_requests/<to_user>/', views.FriendRequestModelViewSet.as_view(
         {"get": "retrieve", "post": "create",
          "delete": "destroy", "patch": "update"}
     ), name="friend_request.view_set"),
