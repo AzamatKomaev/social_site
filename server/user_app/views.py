@@ -1,10 +1,10 @@
 from typing import Optional
 
-from rest_framework.views import APIView
 from rest_framework.response import Response
-from rest_framework import status, permissions, viewsets
+from rest_framework import status, permissions, viewsets, generics
 
-from .models import User
+from content_app.models import Post, Comment
+from .models import User, FriendRequest
 from .services import UserService, CreationUser, FriendRequestService
 from .serializers import (
     UserSerializer,
@@ -26,11 +26,8 @@ class AuthViewSet(viewsets.ViewSet):
 
     def create(self, request):
         """The action to create user with is_active=False."""
-        serializer_data = UserService.create(request)
-        if not serializer_data['is_valid']:
-            return Response(serializer_data['serializer'].errors, status=status.HTTP_400_BAD_REQUEST)
-
-        return Response(serializer_data['serializer'].data, status=status.HTTP_201_CREATED)
+        serializer = UserService.create(request)
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
 
     def partial_update(self, request, token: str):
         """The action to accept registration user by his token."""
@@ -48,40 +45,47 @@ class AuthViewSet(viewsets.ViewSet):
         return [permission() for permission in permission_classes]
 
 
-class UserViewSet(viewsets.ViewSet):
-    permissions_classes = (permissions.IsAuthenticatedOrReadOnly,)
+class UserModelView(viewsets.ModelViewSet):
+    queryset = User.objects.all()
+    serializer_class = UserSerializer
+    permission_classes = (permissions.IsAuthenticatedOrReadOnly, )
 
-    def retrieve(self, request, username: str = None, user_id: int = None):
-        """The action to get data about user by his username or id."""
-        user = UserService.get_user(user_id=user_id, username=username)
-        if not user:
-            return Response({"error": "User not found with given data."}, status=status.HTTP_404_NOT_FOUND)
-
-        serializer = UserSerializer(user)
-        return Response(serializer.data, status=status.HTTP_200_OK)
-
-    def list_user_posts(self, request, user_id: int):
-        """The action to get all user posts by his id."""
-        user_service = UserService(user_id)
-        posts = user_service.get_user_posts()
-        serializer = PostSerializer(posts, many=True)
-        return Response(serializer.data, status=status.HTTP_200_OK)
-
-    def list_user_comments(self, request, user_id: int):
-        """The action to get all user comments by his id."""
-        user_service = UserService(user_id)
-        comments = user_service.get_user_comments()
-        serializer = CommentSerializer(comments, many=True)
-        return Response(serializer.data, status=status.HTTP_200_OK)
+    def get_object(self):
+        obj = UserService.get_user(self.kwargs.get('user_id'), self.kwargs.get('username'))
+        return obj
 
 
-class UserFriendsAPIView(APIView):
-    """API View to get all user friends."""
-    def get(self, request, user_id: int) -> Response:
-        user_service = UserService(user_id)
-        friends = user_service.get_user_friends()
-        serializer = UserSerializer(friends, many=True)
-        return Response(serializer.data)
+class UserFriendListView(generics.ListAPIView):
+    queryset = User.objects.all()
+    serializer_class = UserSerializer
+
+    def get_queryset(self):
+        user_id = self.kwargs.get('user_id')
+        serivce = UserService(user_id)
+        queryset = serivce.get_user_friends()
+        return queryset
+
+
+class UserPostListView(generics.ListAPIView):
+    queryset = Post.objects.all()
+    serializer_class = PostSerializer
+
+    def get_queryset(self):
+        user_id = self.kwargs.get('user_id')
+        service = UserService(user_id)
+        queryset = service.get_user_posts()
+        return queryset
+
+
+class UserCommentListView(generics.ListAPIView):
+    queryset = Comment.objects.all()
+    serializer_class = CommentSerializer
+
+    def get_queryset(self):
+        user_id = self.kwargs.get('user_id')
+        service = UserService(user_id)
+        queryset = service.get_user_comments()
+        return queryset
 
 
 class FriendRequestViewSet(viewsets.ViewSet):
@@ -125,7 +129,8 @@ class FriendRequestViewSet(viewsets.ViewSet):
         if possible_errors:
             return Response({"message": possible_errors['message']}, status=possible_errors['status_code'])
 
-        friend_request = FriendRequestService.get_friend_request(request.user, to_user_object)
+        friend_request = friend_request_service.get_friend_request(request.user, to_user_object)
+        friend_request = FriendRequest.objects.first()
         if not friend_request:
             return Response({"message": "Bad request."}, status=status.HTTP_400_BAD_REQUEST)
 

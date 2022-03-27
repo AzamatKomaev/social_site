@@ -14,6 +14,7 @@ from rest_framework.test import APITestCase, APIClient
 from server.settings import BASE_DIR
 from user_app.models import User
 from .services.user_services import UserAuthAPITestService
+from .data import users_data
 
 
 class UserAPITestCase(APITestCase):
@@ -85,10 +86,9 @@ class UserAPITestCase(APITestCase):
         return responses
 
     def test_creating_users(self):
-        responses = self._create_users(self.users_dict)
+        responses = self._create_users(users_data)
         statuses = [response.status_code for response in responses]
         users = User.objects.all()
-
         self.assertEqual(len(responses)-4, users.count())
         self.assertEqual(statuses[5:], [status.HTTP_400_BAD_REQUEST for _ in range(4)])
 
@@ -118,7 +118,6 @@ class UserAPITestCase(APITestCase):
         worst_response2 = UserAuthAPITestService.login_user()
         correct_responses = self._login_many_users(users)
 
-        print(worst_response1.json())
         self.assertEqual(worst_response1.status_code, 401)
         self.assertIn('detail', worst_response1.json())
 
@@ -145,7 +144,7 @@ class UserAPITestCase(APITestCase):
         self.assertEqual(users.count(), len(found_users_by_id))
         self.assertEqual(users.count(), len(found_users_by_username))
 
-        self.assertEqual(404, self._find_user(user_id=random.randint(users.last().id+1, 100)).status_code)
+        self.assertEqual(404, self._find_user(user_id=1000).status_code)
         self.assertEqual(404, self._find_user(username="non-existing-username").status_code)
 
     def test_friend_requests_accepting(self):

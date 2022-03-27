@@ -1,13 +1,10 @@
-from datetime import datetime
 from typing import Optional, Union
 
 from django.db.models import QuerySet
-from django.core.paginator import Paginator, EmptyPage
+from django.core.paginator import Paginator
 from django.shortcuts import get_object_or_404
 from django.http import Http404
-from rest_framework import status
 
-from personal_chat_app.models import PersonalChat
 from .models import (
     GroupChat, GroupChatRequest, GroupChatRole
 )
@@ -16,7 +13,7 @@ from group_chat_app.sql.commands import get_ordered_group_chats
 from personal_chat_app.sql.commands import get_ordered_personal_chats
 
 
-def get_and_sort_chat_list(sort_by: Optional[str], request, chat_model, chat_serializer, page) -> dict:
+def get_and_sort_chat_list(sort_by: Optional[str], request, chat_model, page) -> dict:
     chat_data: dict[str, Union[dict, int]]
     chats = chat_model.objects.filter(users=request.user)
 
@@ -26,19 +23,24 @@ def get_and_sort_chat_list(sort_by: Optional[str], request, chat_model, chat_ser
             (request.user.id, )
         )
         return chat_qs if len(chat_qs) < 5 else chat_qs[:5]
-        # serializer = chat_serializer(chat_qs, many=True, context={'request': request})
-        # return serializer.data if len(chat_qs) < 5 else serializer.data[:5]
 
     elif sort_by == "-name" and page:
         page_size = 10
         paginator = Paginator(chats.order_by('-name'), page_size)
         return paginator.page(page)
-        # serializer = chat_serializer(paginator.page(page), many=True, context={'request': request})
-        # return serializer.data
 
     return chats
-    # serializer = chat_serializer(chats, many=True, context={'request': request})
-    # return serializer.data
+
+
+def get_group_chat_serializer_data(request) -> dict[str, str]:
+    serializer_data = {
+        "name": request.data.get('name', None),
+        "users": [request.user.id]
+    }
+    if 'avatar' in request.data:
+        serializer_data = {**serializer_data, "avatar": request.data['avatar']}
+
+    return serializer_data
 
 
 class GroupChatService:
