@@ -1,4 +1,6 @@
 from django.core.paginator import Paginator, EmptyPage
+from django.http import Http404
+from django.shortcuts import get_object_or_404
 from rest_framework.response import Response
 from rest_framework import status, permissions, viewsets
 
@@ -12,51 +14,40 @@ from group_chat_app.services import get_and_sort_chat_list
 from .services import PersonalChatService
 
 
-class PersonalChatViewSet(viewsets.ViewSet):
-    permission_classes = [permissions.IsAuthenticated]
+class PersonalChatModelViewSet(viewsets.ModelViewSet):
+    queryset = PersonalChat.objects.all()
+    serializer_class = PersonalChatSerializer
+    permission_classes = (permissions.IsAuthenticated, )
 
-    def list(self, request):
-        sort_by = request.query_params.get('sort_by', None)
-        page = request.query_params.get('page', 0)
-        chat_list = get_and_sort_chat_list(sort_by, request, PersonalChat, PersonalChatSerializer, page)
-        serializer = PersonalChatSerializer(chat_list, many=True, context={'request': request})
-        return Response(serializer.data)
+    def get_service(self) -> PersonalChatService:
+        service = PersonalChatService(self.request.user.username, self.kwargs.get('to_user_username'))
+        return service
 
-    def retrieve(self, request, to_user_username: str):
+    def get_queryset(self):
+        sort_by, page = self.request.query_params.get('sort_by'), self.request.query_params.get('page')
+        queryset = get_and_sort_chat_list(sort_by, self.request, PersonalChat, page)
+        return queryset
+
+    def get_object(self):
+        service = self.get_service()
+        obj = service.get_chat_with_both_users()
+        return obj
+
+    def retrieve(self, request, *args, **kwargs):
+        """
+        Action for getting a user chat.
+        If a user chat with to_user does not exist this creates a chat."""
+        service = self.get_service()
+        status_code: int
+
         try:
-            chat_service = PersonalChatService(from_user_username=request.user.username,
-                                               to_user_username=to_user_username)
-            if not chat_service.is_chat_exists():
-                new_chat = chat_service.create()
-                serializer = PersonalChatSerializer(
-                    new_chat,
-                    context={"request": request}
-                )
-                return Response(serializer.data, status=status.HTTP_201_CREATED)
+            chat = self.get_object()
+            serializer, status_code = self.get_serializer(chat), status.HTTP_200_OK
+        except Http404:
+            new_chat = service.create()
+            serializer, status_code = self.get_serializer(new_chat), status.HTTP_201_CREATED
 
-        except ObjectDoesNotExist:
-            return Response({"error": f"User with username {to_user_username} is not exists."},
-                            status=status.HTTP_404_NOT_FOUND)
-
-        serializer = PersonalChatSerializer(
-            chat_service.get_chat_with_both_users(),
-            context={"request": request}
-        )
-        return Response(serializer.data)
-
-    def create(self, request, to_user_username: str):
-        chat_service = PersonalChatService(from_user_username=request.user.username, to_user_username=to_user_username)
-        if chat_service.is_chat_exists():
-            return Response({"message": "Bad request: chat with this user already exists."},
-                            status=status.HTTP_400_BAD_REQUEST)
-
-        new_chat = chat_service.create()
-        if not new_chat:
-            return Response({"message": "Bad request: cannot create personal chat with this user."},
-                            status=status.HTTP_400_BAD_REQUEST)
-
-        serializer = PersonalChatSerializer(new_chat, context={'request': request})
-        return Response(serializer.data)
+        return Response(serializer.data, status=status_code)
 
 
 class PersonalMessageViewSet(viewsets.ViewSet):

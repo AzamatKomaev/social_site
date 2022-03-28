@@ -54,7 +54,7 @@ const PersonalMessageChatPage = (props: any) => {
     useEffect(() => {
         const fetchData = async() => {
             const response = await service.current.getDetail()
-            if (response.status === 200) {
+            if (response.status === 200 || response.status === 201) {
                 setChat(response.data)
             } else {
                 setError(response.status)
@@ -109,7 +109,6 @@ const PersonalMessageChatPage = (props: any) => {
                 if (response.status === 200) {
                     setMessages([...response.data.reverse(), ...messages])
                     setCurrentPage(prevState => prevState + 1)
-                    console.log('i was worked!!!!!!')
                 } else {
                     setCurrentPage(-1)
                 }

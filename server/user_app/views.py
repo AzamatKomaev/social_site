@@ -1,5 +1,3 @@
-from typing import Optional
-
 from rest_framework.response import Response
 from rest_framework import status, permissions, viewsets, generics
 
@@ -57,17 +55,19 @@ class UserModelView(viewsets.ModelViewSet):
 
 
 class UserFriendListView(generics.ListAPIView):
+    """View for getting all user friends."""
     queryset = User.objects.all()
     serializer_class = UserSerializer
 
     def get_queryset(self):
         user_id = self.kwargs.get('user_id')
-        serivce = UserService(user_id)
-        queryset = serivce.get_user_friends()
+        service = UserService(user_id)
+        queryset = service.get_user_friends()
         return queryset
 
 
 class UserPostListView(generics.ListAPIView):
+    """View for getting all user posts."""
     queryset = Post.objects.all()
     serializer_class = PostSerializer
 
@@ -79,6 +79,7 @@ class UserPostListView(generics.ListAPIView):
 
 
 class UserCommentListView(generics.ListAPIView):
+    """View for getting all user comments."""
     queryset = Comment.objects.all()
     serializer_class = CommentSerializer
 

@@ -1,4 +1,6 @@
+from django.http import Http404
 from django.shortcuts import get_object_or_404
+from django.db.models import Q
 
 from .models import PersonalChat
 from user_app.models import User
@@ -26,7 +28,11 @@ class PersonalChatService:
 
     def get_chat_with_both_users(self):
         """Method to get chat with both users."""
-        return PersonalChat.objects.filter(users=self.from_user).filter(users=self.to_user).first()
+        personal_chat = PersonalChat.objects.filter(users=self.from_user).filter(users=self.to_user).first()
+        if not personal_chat:
+            raise Http404()
+
+        return personal_chat
 
     def get_messages(self):
         """Method to get messages in chat with both users."""

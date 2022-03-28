@@ -18,8 +18,6 @@ class PersonalChatConsumer(AsyncWebsocketConsumer):
                 to_user_username: str
             ) -> Optional[PersonalChat]:
         chat_service = PersonalChatService(from_user_username=from_user_username, to_user_username=to_user_username)
-        if not chat_service.is_chat_exists():
-            return None
         return chat_service.get_chat_with_both_users()
 
     async def connect(self):
