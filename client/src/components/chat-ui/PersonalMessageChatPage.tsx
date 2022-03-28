@@ -1,12 +1,10 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { useSelector } from 'react-redux';
 
 import Header from '../extend/Header';
 import Error404NotFound from '../extend/Error404NotFound';
 
 import MessageChatWindow from './include/message/MessageChatWindow';
-import {getPersonalChat, getPersonalChatMessages} from "../../services/personalChatService";
-import {CurrentUserDataI, getCurrentUserData} from "../../services/service";
+import {CurrentUserDataI} from "../../services/service";
 import {PersonalChatService} from "../../services/chatServices";
 import {AuthService} from "../../services/authService";
 import {WebSocketChatPath} from "../../backpaths/chatPaths";
@@ -29,7 +27,7 @@ const PersonalMessageChatPage = (props: any) => {
 
     const [currentPage, setCurrentPage] = useState(2);
     const [fetching, setFetching] = useState(false)
-    const [scrollHeights, setScrollHeights] = useState([1355])
+    const [scrollHeights, setScrollHeights] = useState([800])
 
     const service: any = useRef()
     const ws: any = useRef()

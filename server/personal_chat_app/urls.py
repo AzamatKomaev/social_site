@@ -8,7 +8,7 @@ urlpatterns = [
     path('personal_chats/<str:to_user_username>/', views.PersonalChatModelViewSet.as_view({
         "get": "retrieve", "post": "create"
     })),
-    path('personal_chats/<str:to_user_username>/messages/', views.PersonalMessageViewSet.as_view({
+    path('personal_chats/<str:to_user_username>/messages/', views.PersonalMessageModelViewSet.as_view({
         "get": "list", "post": "create"
     })),
 ]

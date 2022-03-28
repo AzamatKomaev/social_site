@@ -1,11 +1,10 @@
 from django.shortcuts import get_object_or_404
-from rest_framework.decorators import action
 from rest_framework.response import Response
 from rest_framework import status, viewsets, generics
 
 from user_app.models import User
 from .models import GroupChat, GroupChatRole, GroupChatRequest, GroupMessage
-from .paginators import GroupMessagePagination
+from .paginators import MessagePagination
 from .services import GroupChatRequestService, get_and_sort_chat_list, get_group_chat_serializer_data
 from .serializers import (
     GroupChatSerializer, GroupMessageSerializer,
@@ -42,7 +41,7 @@ class GroupMessageModelViewSet(viewsets.ModelViewSet):
     queryset = GroupMessage.objects.all()
     serializer_class = GroupMessageSerializer
     permission_classes = (GroupChatPermission, GroupChatRolePermission)
-    pagination_class = GroupMessagePagination
+    pagination_class = MessagePagination
 
 
 class GroupChatRequestListAPIView(generics.ListAPIView):

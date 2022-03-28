@@ -1,34 +1,11 @@
 import React, { useState, useEffect, useRef } from 'react';
-import axios from 'axios';
-
 import Header from '../extend/Header';
 import Error404NotFound from '../extend/Error404NotFound';
 import MessageChatWindow from './include/message/MessageChatWindow';
 
-import { getCurrentUserData } from '../../services/service';
-import { getChatData } from './services';
 import {GroupChatService} from "../../services/chatServices";
 import {AuthService} from "../../services/authService";
 import {WebSocketChatPath} from "../../backpaths/chatPaths";
-
-
-const getChatMessages = async(chatId, pageNumber) => {
-    let data =  {
-        messages: null,
-        error: null
-    }
-    
-    const service = new GroupChatService(chatId)
-    const response = service.getMessages(pageNumber)
-
-    if (response.status === 200) {
-        data.messages = response.data
-    } else {
-        data.error = true
-    }
-
-    return data
-}
 
 
 const GroupMessageChatPage = (props) => {

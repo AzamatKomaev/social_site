@@ -55,6 +55,6 @@ export class PersonalChatPath {
     }
 
     static messages_list = (username: string, page: number): string => {
-        return `${defaultUrl}/personal_chats/${username}/messages/?page_number=${page}`
+        return `${defaultUrl}/personal_chats/${username}/messages/?page=${page}`
     }
 }
