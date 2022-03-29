@@ -31,7 +31,9 @@ class GroupChatTestCase(APITestCase):
             'email': 'notmember@mail.ru',
             'password': 'notmember12345'
         })
-        UserAuthAPITestService.accept_all_users(User.objects.all())
+
+        users = User.objects.all()
+        UserAuthAPITestService.accept_all_users(users)
         admin_group.user_set.add(User.objects.get(username='Chat_admin'))
         user_group.user_set.add(User.objects.get(username='Chat_member'))
         user_group.user_set.add(User.objects.get(username='Not_member'))
@@ -84,7 +86,6 @@ class GroupChatTestCase(APITestCase):
 
     def test_deleting_chat(self):
         not_member_jwt = UserAuthAPITestService.get_user_jwt('Not_member', 'notmember12345')
-        member_jwt = UserAuthAPITestService.get_user_jwt('Chat_member', 'member12345')
 
         # creating a chat.
         created_chat_response = ChatAPITestService.create_chat(self.get_admin_jwt(), 'First Chat')
