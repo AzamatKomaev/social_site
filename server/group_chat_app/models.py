@@ -34,6 +34,13 @@ class GroupChatRole(models.Model):
     user = models.ForeignKey(AUTH_USER_MODEL, on_delete=models.CASCADE)
     chat = models.ForeignKey(GroupChat, on_delete=models.CASCADE)
 
+    def is_role_name_valid(self, role_name: str) -> bool:
+        for chat_role in self.CHAT_ROLES:
+            if chat_role[0] == role_name:
+                return True
+
+        return False
+
 
 class GroupMessage(models.Model):
     text = models.TextField()

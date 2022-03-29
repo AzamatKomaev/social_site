@@ -176,8 +176,8 @@ class GroupChatRequestService:
 class GroupChatRoleService:
     chat_role: GroupChatRole
 
-    def __init__(self, chat_id: int, user_id: int):
-        self.chat_role = get_object_or_404(GroupChatRole, chat=chat_id, user=user_id)
+    def __init__(self, role_id):
+        self.chat_role = get_object_or_404(GroupChatRole, id=role_id)
 
-    def print_role(self):
-        return self.chat_role
+    def is_user_admin(self, user: User) -> bool:
+        return self.chat_role.chat.creator == user

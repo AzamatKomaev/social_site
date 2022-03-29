@@ -2,7 +2,7 @@ from django.shortcuts import get_object_or_404
 from rest_framework import permissions
 
 from group_chat_app.models import GroupChat
-from group_chat_app.services import GroupChatService, GroupChatRequestService
+from group_chat_app.services import GroupChatService, GroupChatRequestService, GroupChatRoleService
 from user_app.models import User
 from .exceptions import ChatRequestAlreadyExists, ChatRequestDoesNotExist
 
@@ -23,6 +23,13 @@ class GroupChatPermission(permissions.BasePermission):
 
 
 class GroupChatRolePermission(permissions.BasePermission):
+    def has_object_permission(self, request, view, obj):
+        service = GroupChatRoleService(obj)
+        if request.method not in permissions.SAFE_METHODS and not service.is_user_admin():
+            return False
+
+        return True
+
     def has_permission(self, request, view):
         if not request.user.is_authenticated:
             return False

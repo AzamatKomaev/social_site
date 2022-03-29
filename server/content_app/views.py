@@ -11,7 +11,6 @@ from .serializers import (
     CategorySerializer
 )
 from .models import Category, Comment, Post
-from .services import CommentService
 
 
 class CategoryListRetrieveView(mixins.ListModelMixin,

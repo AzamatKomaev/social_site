@@ -1,5 +1,3 @@
-import json
-import random
 import uuid
 from typing import Optional, Union
 
@@ -12,7 +10,7 @@ from rest_framework import status
 from rest_framework.test import APITestCase, APIClient
 
 from server.settings import BASE_DIR
-from user_app.models import User, FriendRequest
+from user_app.models import User
 from .services.user_services import UserAuthAPITestService
 from .data import users_data
 
@@ -22,12 +20,10 @@ class UserAPITestCase(APITestCase):
     default_password = 'the_same_password'
 
     def setUp(self) -> None:
-        f = open(self.json_users_path, 'r')
-        self.users_dict = json.loads(f.read())
         Group.objects.create(name='Пользователь')
 
     def _set_up_friend_requests(self) -> dict[str, Union[QuerySet[User], User]]:
-        self._create_users(self.users_dict)
+        self._create_users(users_data)
         UserAuthAPITestService.create_user({"username": "admin", "email": "mail@mail.ru", "password": "admin12345678"})
 
         admin = User.objects.get(username="admin")
@@ -97,7 +93,7 @@ class UserAPITestCase(APITestCase):
         self.assertEqual([unique_statuses[0], len(unique_statuses) == 1], [status.HTTP_201_CREATED, True])
 
     def test_accepting_users(self):
-        self._create_users(self.users_dict)
+        self._create_users(users_data)
 
         users = User.objects.all()
 
@@ -110,7 +106,7 @@ class UserAPITestCase(APITestCase):
         self.assertEqual(correct_requests_statuses, [200 for _ in range(5)])
 
     def test_login_users(self):
-        self._create_users(self.users_dict)
+        self._create_users(users_data)
         users = User.objects.all()
         UserAuthAPITestService.accept_all_users(users)
 
@@ -135,7 +131,7 @@ class UserAPITestCase(APITestCase):
                 self.assertEqual(response.status_code, 200)
 
     def test_searching_user(self):
-        self._create_users(self.users_dict)
+        self._create_users(users_data)
         users = User.objects.all()
 
         found_users_by_id = [self._find_user(user_id=user.id) for user in users]

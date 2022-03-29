@@ -12,3 +12,7 @@ class ChatRequestDoesNotExist(APIException):
     status_code = status.HTTP_404_NOT_FOUND
     default_detail = {'message': 'A chat request to this user does not exist.'}
 
+
+class InvalidRoleName(APIException):
+    status_code = status.HTTP_400_BAD_REQUEST
+    default_detail = {'error': 'You chose invalid name of role.'}

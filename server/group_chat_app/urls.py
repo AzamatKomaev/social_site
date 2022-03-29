@@ -14,8 +14,9 @@ urlpatterns = [
     path('group_chats/<int:chat_id>/messages/', views.GroupMessageModelViewSet.as_view({
         "get": "list", "post": "create"
     }), name='group_chats_messages.list'),
-    path('group_chats/<int:pk>/members/', views.GroupChatRoleModelViewSet.as_view({"get": "list"}),
+    path('group_chats/<int:chat_id>/members/', views.GroupChatRoleModelViewSet.as_view({"get": "list"}),
          name='group_chat_members.list'),
+    path('group_chats/<int:chat_id>/members/<int:role_id>/', views.GroupChatRoleModelViewSet.as_view({"get": "retrieve"})),
     path('group_chats/<int:chat_id>/requests/', views.GroupChatRequestModelViewSet.as_view({
         "get": "list",
         "patch": "update"

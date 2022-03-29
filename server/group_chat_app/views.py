@@ -12,6 +12,7 @@ from .serializers import (
 )
 from .permissions import GroupChatPermission, GroupChatRolePermission, GroupChatRequestPermission, \
     GroupChatRequestListPermission
+from . import exceptions
 
 
 class GroupChatModelViewSet(viewsets.ModelViewSet):
@@ -98,5 +99,22 @@ class GroupChatRoleModelViewSet(viewsets.ModelViewSet):
     queryset = GroupChatRole.objects.all()
     permission_classes = (GroupChatRolePermission, )
 
+    def get_object(self):
+        obj = get_object_or_404(GroupChatRole, user_id=self.kwargs.get('user_id'), chat_id=self.kwargs.get('chat_id'))
+        self.check_object_permissions(self.request, obj)
+        return obj
+
     def get_queryset(self, *args, **kwargs):
-        return super().get_queryset().filter(chat_id=self.kwargs.get('pk'))
+        return super().get_queryset().filter(chat_id=self.kwargs.get('chat_id'))
+
+    def update(self, request, *args, **kwargs):
+        role_name = request.data.get('role_name', 'Участник')
+        obj = self.get_object()
+
+        if not obj.is_role_name_valid(role_name):
+            raise exceptions.InvalidRoleName()
+
+        obj.name = role_name
+        obj.save()
+        serializer = self.get_serializer(obj)
+        return Response(serializer.data, status=status.HTTP_200_OK)

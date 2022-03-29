@@ -268,7 +268,6 @@ class GroupChatTestCase(APITestCase):
                                                                                   chat_response.json().get('id'))
         self.assertEqual(members_list_response_as_not_member.status_code, 403)
 
-
     def test_group_chat_messages(self):
         chat_response = ChatAPITestService.create_chat(self.get_admin_jwt(), 'First Chat')
         member = User.objects.get(username='Chat_member')
