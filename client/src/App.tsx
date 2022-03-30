@@ -13,11 +13,11 @@ import {
 import './App.css';
 import { fetchUserData } from './store/user/actions';
 
-import CategoryPage from './components/soc-ui/CategoryPage';
-import PostPage from './components/soc-ui/PostPage';
-import PostDetailPage from './components/soc-ui/PostDetailPage';
-import CreatePostPage from './components/soc-ui/CreatePostPage';
-import NotificationsPage from './components/soc-ui/NotificationsPage';
+import CategoryPage from './components/content-ui/CategoryPage';
+import PostPage from './components/content-ui/PostPage';
+import PostDetailPage from './components/content-ui/PostDetailPage';
+import CreatePostPage from './components/content-ui/CreatePostPage';
+import NotificationsPage from './components/content-ui/NotificationsPage';
 
 import LoginPage from './components/auth-ui/LoginPage';
 import SignUpPage from './components/auth-ui/SignUpPage';

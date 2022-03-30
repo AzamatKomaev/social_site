@@ -4,38 +4,27 @@ import Error404NotFound from '../extend/Error404NotFound';
 import Error429TooManyRequests from '../extend/Error429TooManyRequests';
 
 import PostList from './include/post/PostList';
-import {ContentService} from "../../services/contentService";
+import {useDispatch, useSelector} from "react-redux";
+import {fetchGettingListPost} from "../../store/content/actions";
+import {SET_FETCHING} from "../../store/content/actionTypes";
 
 
 const PostPage = (props) => {
-    const [posts, setPosts] = useState([]);
-    const [currentPage, setCurrentPage] = useState(1);
-    const [fetching, setFetching] = useState(true)
-    const [error, setError] = useState(null);
+    const dispatch = useDispatch()
+    const postListData = useSelector((state) => state.post.list)
 
     let categoryId = props.match.params.categoryId;
 
     useEffect(() => {
-        const fetchData = async() => {
-            const response = await ContentService.getPostList(categoryId, currentPage)
-            if (
-                (response.status === 204) ||
-                (response.status === 404 && response.data?.detail === 'Неправильная страница')
-            ) {
-                setCurrentPage(-1)
-            } else if (response.status === 200) {
-                setCurrentPage(prevState => prevState + 1)
-                setPosts([...posts, ...response.data])
-            } else {
-                setError(response.status) && alert('error!!')
-            }
-            setFetching(false)
+        console.log(postListData)
+    }, [postListData])
+
+    useEffect(() => {
+        if (postListData.fetching && postListData.page !== -1) {
+            dispatch(fetchGettingListPost(categoryId, postListData.page))
         }
 
-        if (fetching && currentPage !== -1) {
-            fetchData()
-        }
-    }, [fetching])
+    }, [postListData.fetching])
 
     useEffect(() => {
         document.addEventListener('scroll', scrollHandler)
@@ -46,31 +35,36 @@ const PostPage = (props) => {
 
     const scrollHandler = (e) => {
         if (e.target.documentElement.scrollHeight - (e.target.documentElement.scrollTop + window.innerHeight) < 100 &&
-            currentPage !== -1
+            postListData.page !== -1
         ) {
-            setFetching(true)
+            dispatch({
+                type: SET_FETCHING,
+                payload: {
+                    fetching: true
+                }
+            })
         }
     }
 
-    if (!error) {
+    if ((postListData.lastStatusCode === 200 || postListData.lastStatusCode === 201) && postListData.values?.length > 0) {
         return (
             <div>
                 <Header/>
                 {"\n\n"}
                 <PostList
-                    posts={posts}
+                    posts={postListData.values}
                     categoryId={categoryId}
                  />
             </div>
         )
-    } else if (error.response === 404) {
+    } else if (postListData.lastStatusCode === 404) {
         return (
             <div>
                 <Header/>
                 <Error404NotFound style={{marginTop: "25px"}}/>
             </div>
         )
-    } else if (error.response === 429) {
+    } else if (postListData.lastStatusCode === 429) {
         return (
             <div>
                 <Header/>
@@ -79,7 +73,6 @@ const PostPage = (props) => {
             </div>
         )
     } else {
-        alert(error.response)
         return (
             <div>
             </div>

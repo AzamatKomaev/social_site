@@ -75,3 +75,37 @@ class GroupChatRoleTestCase(APITestCase):
                                                                                          users_dict['User2'].id)
         self.assertEqual(sent_chat_request_to_user2_as_not_creator.status_code, 403)
 
+        # sending a request to User2 user.
+        sent_chat_request_to_user2 = ChatAPITestService.send_chat_request(self.get_admin_jwt(), chat_id,
+                                                                          users_dict['User2'].id)
+        self.assertEqual(sent_chat_request_to_user2.status_code, 201)
+
+        # accepting a request sent to User2 user.
+        accepted_chat_request_to_user2 = ChatAPITestService.accept_request(user2_jwt, chat_id)
+        self.assertEqual(accepted_chat_request_to_user2.status_code, 200)
+
+        # trying to get detail User2 member as User1.
+        gotten_chat_member_user2_detail_as_member = ChatAPITestService.get_member_detail(user1_jwt, chat_id,
+                                                                                         users_dict['User2'].id)
+        self.assertEqual(gotten_chat_member_user2_detail_as_member.status_code, 200)
+
+        # trying to delete User1 member as User2.
+        deleted_chat_member_as_member = ChatAPITestService.delete_request(user2_jwt, chat_id, users_dict['User1'].id)
+        self.assertEqual(deleted_chat_member_as_member.status_code, 403)
+
+        # trying to change User1 role to non-existent.
+        changed_user1_role_non_existent = ChatAPITestService.change_member_role(self.get_admin_jwt(), chat_id,
+                                                                                users_dict['User1'].id, 'SomeRole')
+        self.assertEqual(changed_user1_role_non_existent.status_code, 400)
+        self.assertEqual(changed_user1_role_non_existent.json().get('error'), 'You chose invalid name of role.')
+
+        # trying to change User1 member current role to Moderator as not admin.
+        changed_user1_role_as_not_admin = ChatAPITestService.change_member_role(user2_jwt, chat_id,
+                                                                                users_dict['User1'].id, 'Модератор')
+        self.assertEqual(changed_user1_role_as_not_admin.status_code, 403)
+
+        # changing User1 member current role to Moderator as admin.
+        changed_user1_role_as_admin = ChatAPITestService.change_member_role(self.get_admin_jwt(), chat_id,
+                                                                            users_dict['User1'].id, 'Модератор')
+        self.assertEqual(changed_user1_role_as_admin.status_code, 200)
+        self.assertEqual(changed_user1_role_as_admin.json().get('name'), 'Модератор')

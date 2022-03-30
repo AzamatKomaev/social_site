@@ -69,10 +69,17 @@ class ChatAPITestService:
         return client.get(url, HTTP_AUTHORIZATION=f'Bearer {user_jwt}')
 
     @staticmethod
-    def get_member_detail(user_jwt: str, chat_id: str, user_id: str):
+    def get_member_detail(user_jwt: str, chat_id: int, user_id: int):
         client = APIClient()
         url = reverse('group_chat_members.detail', args=[chat_id, user_id])
         return client.get(url, HTTP_AUTHORIZATION=f'Bearer {user_jwt}')
+
+    @staticmethod
+    def change_member_role(user_jwt: str, chat_id: int, user_id: int, role: str):
+        client = APIClient()
+        url = reverse('group_chat_members.detail', args=[chat_id, user_id])
+        data = {'role_name': role}
+        return client.patch(url, data=data, HTTP_AUTHORIZATION=f'Bearer {user_jwt}')
 
     @staticmethod
     def delete_chat(user_jwt: str, chat_id: int):

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 
-import PostList from '../../../soc-ui/include/post/PostList';
+import PostList from '../../../content-ui/include/post/PostList';
 import InfoUserCell from '../cell/InfoUserCell';
 import {UserService} from "../../../../services/userService";
 
