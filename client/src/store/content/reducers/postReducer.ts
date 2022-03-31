@@ -1,5 +1,5 @@
 import {PostI} from "../../../interfaces";
-import {CREATE_POST, GET_DETAIL_POST, GET_POSTS, SET_FETCHING} from "../actionTypes";
+import {CREATE_POST, GET_DETAIL_POST, GET_POSTS, SET_FETCHING, DELETE_POST, HIDE_POST} from "../actionTypes";
 
 interface PostReducerStateI {
     list: any,
@@ -56,6 +56,28 @@ export const postReducer = (state = defaultPostReducerState, action: any) => {
             return {...state, ...action.payload}
         case CREATE_POST:
             return {...state, ...action.payload}
+        case DELETE_POST:
+            const newPostList = state.list.values.filter(post => post.id !== action.payload.deletedPostId)
+            return {
+                ...state,
+                list: {
+                    values: newPostList,
+                    lastStatusCode: state.list.lastStatusCode,
+                    page: state.list.page,
+                    fetching: state.list.fetching
+                }
+            }
+        case HIDE_POST:
+            const postList = state.list.values.filter(post => post.id !== action.payload.hiddenPostId)
+            return {
+                ...state,
+                list: {
+                    values: postList,
+                    lastStatusCode: state.list.lastStatusCode,
+                    page: state.list.page,
+                    fetching: state.list.fetching
+                }
+            }
         default:
             return state;
     }

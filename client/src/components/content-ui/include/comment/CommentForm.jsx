@@ -5,43 +5,25 @@ import axios from 'axios';
 import '../../../../App.css';
 import {ContentService} from "../../../../services/contentService";
 import {AuthFrontPath} from "../../../../frontpaths/frontPath";
+import {useDispatch, useSelector} from "react-redux";
+import {fetchCreatingComment} from "../../../../store/content/actions";
 
 
 const CommentForm = (props) => {
+    const dispatch = useDispatch()
+
+    const commentData = useSelector(state => state.comment)
     const [content, setContent] = useState()
     const [error, setError] = useState(null)
 
-    const createComment = () => {
-        axios.post("http://127.0.0.1:8000/api/v1/post/" + props.postId + "/comment/", {
-                text: content
-            },
-            {
-                headers: {
-                    Authorization: 'Bearer ' + localStorage.getItem("jwt")
-                }
-            })
-            .then((response) => {
-                window.location.reload()
-            })
-            .catch((error) => {
-                if (error.response.status == 401) {
-                    window.location.href = 'http://127.0.0.1:8000/auth/login/'
-                } else if (error.response.status == 400) {
-                    setError("Комментарий не может быть пустым!")
-                } else {
-                    alert(error.response.status + " error")
-                }
-            })
-    }
-
     const handleCommentCreateButton = async() => {
-        const response = await ContentService.createComment(props.postId, content)
+        dispatch(fetchCreatingComment(props.postId, content))
+        setError("")
+        setContent("")
 
-        switch (response.status) {
-            case 201:
-                window.location.reload()
-                break;
+        //const response = await ContentService.createComment(props.postId, content)
 
+        switch (commentData.createdPostStatusCode) {
             case 400:
                 setError("Комментарий не может быть пустым!")
                 break;
@@ -49,10 +31,8 @@ const CommentForm = (props) => {
             case 401:
                 window.location.href = AuthFrontPath.login()
                 break;
-
             default:
-                alert(`${response.status} error`)
-                break;
+                console.log(commentData)
         }
 
     }
@@ -65,11 +45,12 @@ const CommentForm = (props) => {
                     name="text"
                     rows="5"
                     className="form-control"
-                    spellcheck="false"
+                    spellCheck="false"
+                    value={content}
                     placeholder="Добавить комментарий..."
                     onChange={e => setContent(e.target.value)}
                  >
-                    {content}
+
                 </textarea>
                 <p className="form-text text-muted" style={{fontSize: "10pt"}}>Пожалуйста, уважайте своих собеседников!</p>
             </div>

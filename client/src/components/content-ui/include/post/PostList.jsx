@@ -5,12 +5,12 @@ import '../../../../App.css';
 import Post from './Post';
 
 
-const PostList = (props) => {
+const PostList = ({posts, categoryId}) => {
     return (
         <div className="posts">
-            {props.posts.map((post) => (
+            {posts.map((post) => (
                 <div className="container">
-                    <Post post={post}/>
+                    <Post post={post} type={"list"}/>
                     {"\n\n\n"}
                 </div>
             ))}

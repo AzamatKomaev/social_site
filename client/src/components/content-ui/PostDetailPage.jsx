@@ -10,7 +10,7 @@ import Post from './include/post/Post';
 import CommentList from './include/comment/CommentList';
 import CommentForm from './include/comment/CommentForm';
 import {ContentService} from "../../services/contentService";
-import {fetchGettingDetailPost} from "../../store/content/actions";
+import {fetchGettingCommentList, fetchGettingDetailPost} from "../../store/content/actions";
 
 
 const PostDetailPage = (props) => {
@@ -19,21 +19,13 @@ const PostDetailPage = (props) => {
     const postId = props.match.params.postId;
 
     const post = useSelector(state => state.post.detail)
+    const commentList = useSelector(state => state.comment.list)
     const [comments, setComments] = useState([])
     const [error, setError] = useState(false);
 
     useEffect(() => {
-        // const fetchData = async() => {
-        //     const response = await ContentService.getPostDetail(postId)
-        //     if (response.status === 200) {
-        //         setPost(response.data)
-        //     } else {
-        //         setError(response.status)
-        //     }
-        // }
-        // fetchData()
         dispatch(fetchGettingDetailPost(postId))
-
+        dispatch(fetchGettingCommentList(postId))
     }, [postId]);
 
     useEffect(() => {
@@ -46,41 +38,29 @@ const PostDetailPage = (props) => {
         fetchData()
     }, [postId])
 
-    if (error === 404) {
-        return (
-            <div>
-                <Header/>
-                {"\n"}
-                <Error404NotFound/>
-            </div>
-        )
-    } else if (error === 429) {
-        return (
-            <div>
-                <Header/>
-                {"\n"}
-                <Error429TooManyRequests/>
-            </div>
-        )
-    } else if (!error && post) {
+    if (post) {
         return (
             <div>
                 <Header/>
                 {"\n"}
                 <div className="container">
                     <div className="col-12 col-md-10 mx-auto">
-                        <Post post={post}/>
+                        <Post post={post} type={"detail"}/>
                         {"\n\n\n"}
                         <CommentForm postId={postId} categoryId={categoryId}/>
                         {"\n\n\n"}
-                        <CommentList comments={comments}/>
+                        <CommentList comments={commentList}/>
                     </div>
                 </div>
             </div>
         )
     } else {
         return (
-            <div></div>
+            <div>
+                <Header/>
+                {"\n"}
+                <Error404NotFound/>
+            </div>
         )
     }
 }

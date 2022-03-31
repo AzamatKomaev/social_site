@@ -15,7 +15,7 @@ const CommentList = (props) => {
                         created_at={comment.created_at}
                         user_data={comment.user_data}
                      />
-                     {"\n"}
+                     {"\n\n"}
                 </div>
             ))}
         </div>

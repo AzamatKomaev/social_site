@@ -7,6 +7,7 @@ import {chatListReducer, requestListReducer} from "./chat/chatReducer";
 import {personalChatReducer} from "./chat/personalChatReducer";
 import {categoryReducer} from "./content/reducers/categoryReducer";
 import {postReducer} from "./content/reducers/postReducer";
+import {commentReducer} from "./content/reducers/commentReducer";
 
 
 const rootReducer = combineReducers({
@@ -17,7 +18,8 @@ const rootReducer = combineReducers({
     chatList: chatListReducer,
     personalChatList: personalChatReducer,
     category: categoryReducer,
-    post: postReducer
+    post: postReducer,
+    comment: commentReducer
 })
 
 

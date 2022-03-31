@@ -1,5 +1,5 @@
 import {ContentService} from "../../services/contentService";
-import {GET_ALL_CATEGORIES, GET_DETAIL_POST, GET_POSTS} from "./actionTypes";
+import {CREATE_COMMENT, DELETE_POST, GET_ALL_CATEGORIES, GET_COMMENTS, GET_DETAIL_POST, GET_POSTS} from "./actionTypes";
 
 // Actions for categoryReducer.
 export const fetchGettingAllCategories = () => {
@@ -31,7 +31,6 @@ export const fetchGettingListPost = (categoryId: number, page: number) => {
     }
 }
 
-
 export const fetchGettingDetailPost = (postId: number) => {
     return async function(dispatch) {
         const response = await ContentService.getPostDetail(postId)
@@ -44,5 +43,51 @@ export const fetchGettingDetailPost = (postId: number) => {
                 }
             })
         }
+    }
+}
+
+export const fetchDeletingPost = (postId: number) => {
+    return async function(dispatch) {
+        // eslint-disable-next-line no-restricted-globals
+        if(confirm("Вы точно хотите удалить этот пост?")) {
+            const response = await ContentService.deletePost(postId)
+            if (response.status === 204) {
+                dispatch({
+                    type: DELETE_POST,
+                    payload: {
+                        deletedPostId: postId
+                    }
+                })
+            }
+        }
+    }
+}
+
+// Actions for commentReducer.
+export const fetchGettingCommentList = (postId: number) => {
+    return async function(dispatch) {
+        const response = await ContentService.getCommentList(postId)
+
+        if (response.status === 200) {
+            dispatch({
+                type: GET_COMMENTS,
+                payload: {
+                    list: response.data
+                }
+            })
+        }
+    }
+}
+
+export const fetchCreatingComment = (postId: number, content: string) => {
+    return async function(dispatch) {
+        const response = await ContentService.createComment(postId, content)
+        dispatch({
+            type: CREATE_COMMENT,
+            payload: {
+                createdComment: response.status === 201 ? response.data : null,
+                statusCode: response.status
+            }
+        })
     }
 }
