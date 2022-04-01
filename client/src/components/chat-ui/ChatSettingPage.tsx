@@ -13,8 +13,6 @@ const ChatSettingPage = (props: any) => {
     const dispatch = useDispatch()
 
     const currentUserData = useSelector((state: any) => state.user)
-    const chatMembers = useSelector((state: any) => state.requestList.members)
-    const chatRequests = useSelector((state: any) => state.requestList.requestList)
 
     const [chatData, setChatData] = useState({
         data: null,

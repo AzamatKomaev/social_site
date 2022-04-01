@@ -47,11 +47,11 @@ const Post = ({post, type}) => {
 						<a
 							href={UserFrontPath.userDetail(post.user_data.username)}
 							className="text-white"
-							style={{fontSize: "13pt", textDecoration: "none"}}
+							style={{fontSize: "11pt", textDecoration: "none"}}
 						>
 							{post.user_data.username}
 						</a>
-						<p className="text-info" style={{fontSize: "11pt"}}>{post.user_data.group_data.name}</p>
+						<p className="text-info" style={{fontSize: "10pt"}}>{post.user_data.group_data.name}</p>
 
 						<button
 							id="post_group_btn"
@@ -64,14 +64,6 @@ const Post = ({post, type}) => {
 						</button>
 						<ul className="dropdown-menu" aria-labelledby="post_group_btn">
 							<li>
-								{post.user_data.id === currentUserData?.id ?
-									<button className="dropdown-item" onClick={handleDeletePostButton}>
-										Удалить
-									</button>
-									:
-									null
-								}
-
 								{type === "list" ?
 									<button className="dropdown-item" onClick={handleHidePostButton}>
 										Скрыть
@@ -79,7 +71,13 @@ const Post = ({post, type}) => {
 									:
 									null
 								}
-
+								{post.user_data.id === currentUserData?.id ?
+									<button className="dropdown-item text-danger" onClick={handleDeletePostButton}>
+										Удалить
+									</button>
+									:
+									null
+								}
 							</li>
 						</ul>
 					</div>
@@ -89,7 +87,7 @@ const Post = ({post, type}) => {
 			<a
 				className="card-body text-dark"
 				href={CategoryFrontPath.postDetail(post.category, post.id)}
-				style={{textDecoration: "none"}}
+				style={{textDecoration: "none", fontSize: "10pt"}}
 			>
 				<b>{post.title}</b>{"\n"}
 				{post.text}
@@ -102,7 +100,7 @@ const Post = ({post, type}) => {
 					:
 					null}
 			</a>
-			<div className="card-footer" style={{display: "flex"}}>{getReadableDateFormat(post.created_at)}</div>
+			<div className="card-footer" style={{display: "flex", fontSize: "10pt"}}>{getReadableDateFormat(post.created_at)}</div>
 		</div>
 	)
 }

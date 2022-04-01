@@ -2,17 +2,12 @@ import React from "react";
 import {useDispatch, useSelector} from "react-redux";
 import {
     fetchCreatingRequest,
-    fetchDeletingRequest,
-    fetchGettingAllChatMembers,
-    fetchGettingAllChatRequest
+    fetchDeletingRequest
 } from "../../../../store/chat/actions";
-import friend from "./Friend";
-import {fetchGettingAllUserFriends} from "../../../../store/friend/actions";
 
 
 const FriendButtonVariants = ({friendData, chatData, service}) => {
     const chatRed = useSelector((state: any) => state.requestList)
-    const currentUserData = useSelector((state: any) => state.user)
 
     const dispatch = useDispatch()
 
@@ -27,7 +22,7 @@ const FriendButtonVariants = ({friendData, chatData, service}) => {
     if (chatRed.requestList.find(req => req.to_user.id === friendData.id && !req.is_accepted)) {
         return (
             <div>
-                <button className="btn btn-warning" onClick={handleDeleteRequestButton}>
+                <button style={{fontSize: "10pt"}} className="btn btn-warning" onClick={handleDeleteRequestButton}>
                     Отозвать
                 </button>
             </div>
@@ -35,7 +30,7 @@ const FriendButtonVariants = ({friendData, chatData, service}) => {
     } else if (chatRed.requestList.find(req => req.to_user.id === friendData.id && req.is_accepted)) {
         return (
             <div>
-                <button className="btn btn-danger" onClick={handleDeleteRequestButton}>
+                <button style={{fontSize: "10pt"}} className="btn btn-danger" onClick={handleDeleteRequestButton}>
                     Удалить
                 </button>
             </div>
@@ -43,7 +38,7 @@ const FriendButtonVariants = ({friendData, chatData, service}) => {
     } else {
         return (
             <div>
-                <button className="btn btn-info" onClick={handleCreateRequestButton}>
+                <button style={{fontSize: "10pt"}} className="btn btn-info" onClick={handleCreateRequestButton}>
                     Пригласить
                 </button>
             </div>

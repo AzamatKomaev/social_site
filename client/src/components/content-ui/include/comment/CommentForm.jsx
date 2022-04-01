@@ -21,8 +21,6 @@ const CommentForm = (props) => {
         setError("")
         setContent("")
 
-        //const response = await ContentService.createComment(props.postId, content)
-
         switch (commentData.createdPostStatusCode) {
             case 400:
                 setError("Комментарий не может быть пустым!")

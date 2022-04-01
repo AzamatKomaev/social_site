@@ -23,17 +23,17 @@ const Chat = (props) => {
                         src={props.type_is_group ? props.chat.avatar : props.chat.interlocutor.avatar.image}
                         className="rounded-circle ms-1"
                         alt="lol"
-                        width="60"
-                        height="60"
+                        width="55"
+                        height="55"
                         style={{marginLeft: "-10px"}}
                      />
                     <div className="flex-grow-1 ms-3" id={props.chat.id}>
-                        <p style={{fontSize: "14pt"}}>{props.type_is_group ? props.chat.name : props.chat.interlocutor.username}</p>
+                        <p style={{fontSize: "11pt"}}>{props.type_is_group ? props.chat.name : props.chat.interlocutor.username}</p>
                         <div className="small" style={{marginTop: "-10px"}}>
                             <p>
                                 {props.chat.last_message.text
                                 ?
-                                    <div>
+                                    <div style={{fontSize: "9pt"}}>
                                         <b>
                                             {userData.info.id === props.chat.last_message.user_data.id ? "Вы" : props.chat.last_message.user_data.username}
                                         </b>{"\n"}

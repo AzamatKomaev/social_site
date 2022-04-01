@@ -16,10 +16,17 @@ export const commentReducer = (state = defaultCommentReducerState, action: any) 
         case GET_COMMENTS:
             return {...state, ...action.payload}
         case CREATE_COMMENT:
+            let newList;
+            if (action.payload.statusCode !== 201) {
+                newList = state.list
+            } else {
+                newList = [action.payload.createdComment, ...state.list]
+            }
+
             return {
                 ...state,
                 ...action.payload,
-                list: [action.payload.createdComment, ...state.list],
+                list: newList,
                 createdPostStatusCode: action.payload.statusCode
             }
         default:

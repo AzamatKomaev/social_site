@@ -1,6 +1,6 @@
-import React, {useEffect, useState} from 'react';
+import React from 'react';
 import FriendButtonVariants from "./FriendButtonVariants";
-import {useDispatch, useSelector} from "react-redux";
+import {UserFrontPath} from "../../../../frontpaths/frontPath";
 
 const Friend = ({friendData, chatData, service}) => {
     return (
@@ -13,15 +13,18 @@ const Friend = ({friendData, chatData, service}) => {
                         src={friendData.avatar.image}
                         className="rounded-circle ms-1"
                         alt="lol"
-                        width="60"
-                        height="60"
+                        width="53"
+                        height="53"
                         style={{marginLeft: "-10px"}}
                      />
-                    <a href={"/users/" + friendData.username + "/"} className="flex-grow-1 ms-3 text-dark" style={{textDecoration: "none"}}>
-                       <p style={{fontSize: "14pt"}}>{friendData.username}</p>
-                       <div className="small" style={{marginTop: "-15px"}}>
+                    <a
+                        href={UserFrontPath.userDetail(friendData.username)}
+                        className="flex-grow-1 ms-3 text-dark"
+                        style={{textDecoration: "none", fontSize: "10pt"}}
+                    >
+                       <p>{friendData.username}</p>
+                       <div style={{marginTop: "-15px"}}>
                            <p className="text-info">{friendData.group_data.name}</p>
-                           <u>Почта: </u>{" " + friendData.email}
                        </div>
                     </a>
                     <div className="d-none d-sm-block" style={{marginLeft: "auto"}}>

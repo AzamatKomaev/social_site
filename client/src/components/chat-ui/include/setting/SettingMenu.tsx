@@ -35,7 +35,7 @@ const SettingMenu = () => {
     return (
         <div>
             <nav>
-                <div className="nav nav-tabs" id="nav-tab" role="tablist">
+                <div className="nav nav-tabs" id="nav-tab" role="tablist" style={{fontSize: "10pt"}}>
                     {menuList.map((menu) => (
                         <a
                             className={menu.className}
@@ -50,28 +50,6 @@ const SettingMenu = () => {
                             {menu.name}
                         </a>
                     ))}
-
-                    {/**<a
-                        className="nav-item nav-link active"
-                        id="nav-home-tab"
-                        data-toggle="tab"
-                        href="#main-tab"
-                        role="tab"
-                        aria-controls="nav-home"
-                        aria-selected="true">
-                        Главная
-                    </a>
-                    <a
-                        className="nav-item nav-link"
-                        id="nav-profile-tab"
-                        data-toggle="tab"
-                        href="#friend-tab"
-                        role="tab"
-                        aria-controls="nav-profile"
-                        aria-selected="false">
-                        Добавить друга
-                    </a>
-                    */}
                 </div>
             </nav>
         </div>

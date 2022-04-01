@@ -6,6 +6,8 @@ import {
     fetchPatchingFriendRequest,
     deleteFriendRequestFromList
 } from '../../../../../store/friend/actions';
+import {UserFrontPath} from "../../../../../frontpaths/frontPath";
+import AcceptDeleteButtons from "./buttons/AcceptDeleteButtons";
 
 
 const FriendNotificationCell = (props: any) => {
@@ -31,44 +33,43 @@ const FriendNotificationCell = (props: any) => {
                         src={fromUserData.avatar.image}
                         className="rounded-circle ms-1"
                         alt="lol"
-                        width="60"
-                        height="60"
+                        width="53"
+                        height="53"
                         style={{marginLeft: "-10px"}}
                     />
-                    <div className="flex-grow-1 ms-3">
-                        <a href={"/users/" + fromUserData.username + "/"}>
-                            <p style={{fontSize: "14pt"}}>{fromUserData.username}</p>
+                    <div className="flex-grow-1 ms-3" style={{fontSize: "10pt"}}>
+                        <a
+                            href={UserFrontPath.userDetail(fromUserData.username)}
+                            className="text-dark"
+                            style={{textDecoration: "none"}}>
+                            <p>{fromUserData.username}</p>
                         </a>
-                        <div className="small" style={{marginTop: "-15px"}}>
+                        <div style={{marginTop: "-15px"}}>
                             <p className="text-info">{fromUserData.group_data.name}</p>
-                            <u>Почта: </u>{" " + fromUserData.email}
                         </div>
                     </div>
                     <div className="d-none d-lg-block" style={{marginLeft: "auto"}}>
-                        <button className="btn btn-primary" onClick={handleAcceptFriendRequest}>
-                            Принять
-                        </button>
-                        <button className="btn btn-warning" style={{marginLeft: "10px"}} onClick={handleDeleteFriendRequest}>
-                            Отклонить
-                        </button>
+                        <AcceptDeleteButtons
+                            notification={props.notification}
+                            acceptButtonStyles={{fontSize: "10pt"}}
+                            deleteButtonStyles={{marginLeft: "10px", fontSize: "10pt"}}
+                        />
                     </div>
                     <div className="d-none d-sm-block d-lg-none" style={{marginLeft: "auto"}}>
-                        <button className="btn btn-primary" style={{width: "100%"}} onClick={handleAcceptFriendRequest}>
-                            Принять
-                        </button>
-                        <button className="btn btn-warning" style={{width: "100%"}} onClick={handleDeleteFriendRequest}>
-                            Отклонить
-                        </button>
+                        <AcceptDeleteButtons
+                            notification={props.notification}
+                            acceptButtonStyles={{width: "100%", fontSize: "10pt"}}
+                            deleteButtonStyles={{width: "100%", fontSize: "10pt"}}
+                        />
                     </div>
                 </div>
-                <div className="d-none d-block d-sm-none" style={{marginTop: "10px"}}>
+                <div className="d-sm-none" style={{marginTop: "15px"}}>
                     <div style={{textAlign: "center"}}>
-                        <button className="btn btn-primary" style={{width: "75%"}} onClick={handleAcceptFriendRequest}>
-                            Принять
-                        </button>
-                        <button className="btn btn-warning" style={{width: "75%"}} onClick={handleDeleteFriendRequest}>
-                            Отклонить
-                        </button>
+                        <AcceptDeleteButtons
+                            notification={props.notification}
+                            acceptButtonStyles={{width: "90%", fontSize: "10pt"}}
+                            deleteButtonStyles={{width: "90%", fontSize: "10pt"}}
+                        />
                     </div>
                 </div>
             </div>

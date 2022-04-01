@@ -19,29 +19,35 @@ const Member = ({member, service}) => {
                         src={member.user_data.avatar.image}
                         className="rounded-circle ms-1"
                         alt="lol"
-                        width="60"
-                        height="60"
+                        width="53"
+                        height="53"
                         style={{marginLeft: "-10px"}}
                     />
                     <a
                         href={UserFrontPath.userDetail(member.user_data.username)}
                         className="flex-grow-1 ms-3 text-dark"
-                        style={{textDecoration: "none"}}
+                        style={{textDecoration: "none", fontSize: "10pt"}}
                     >
-                        <p style={{fontSize: "14pt"}}>{member.user_data.username}</p>
-                        <div className="small" style={{marginTop: "-15px"}}>
+                        <p>{member.user_data.username}</p>
+                        <div style={{marginTop: "-15px"}}>
                             <p className="text-info">{member.name}</p>
                         </div>
                     </a>
                     <div style={{marginLeft: "auto"}} className="d-none d-sm-block">
-                        <button className="btn btn-warning" onClick={handleDeleteRequestButton}>Удалить</button>
+                        <button
+                            className="btn btn-warning"
+                            onClick={handleDeleteRequestButton}
+                            style={{fontSize: "10pt"}}
+                        >
+                            Удалить
+                        </button>
                     </div>
                 </div>
                 <div className="d-sm-none">
                     {"\n"}
                     <button
                         className="btn btn-warning"
-                        style={{width: "85%", display: "block", margin: "0 auto"}}
+                        style={{width: "95%", display: "block", margin: "0 auto", fontSize: "10pt"}}
                         onClick={handleDeleteRequestButton}
                     >
                         Удалить

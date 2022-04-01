@@ -5,11 +5,8 @@ import {AuthService} from "../../services/authService";
 import {generalTabs} from "./tabs";
 
 
-const Header = (props) => {
+const Header = () => {
     const userData = useSelector(state => state.user)
-
-
-
 
     return (
         <div>

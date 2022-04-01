@@ -1,3 +1,5 @@
+import django_filters
+
 from rest_framework.response import Response
 from rest_framework import status, permissions, viewsets, generics
 
@@ -42,6 +44,18 @@ class AuthViewSet(viewsets.ViewSet):
         else:
             permission_classes = (permissions.AllowAny,)
         return [permission() for permission in permission_classes]
+
+
+class UserFilter(django_filters.FilterSet):
+    class Meta:
+        model = User
+        fields = ['id', 'username']
+
+
+class UserListView(generics.ListAPIView):
+    queryset = User.objects.all()
+    serializer_class = UserSerializer
+    filterset_class = UserFilter
 
 
 class UserModelView(viewsets.ModelViewSet):

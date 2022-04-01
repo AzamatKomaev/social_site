@@ -10,13 +10,20 @@ const Comment = (props) => {
                 <div className="card-header bg-secondary text-white">
                     <div className="d-flex align-items-center py-1">
                         <div className="position-relative">
-                            <img src={props.user_data.avatar.image} alt="avatar" style={{marginTop: "-10px"}} className="rounded-circle float-left" width="48" height="48"/>
+                            <img
+                                src={props.user_data.avatar.image}
+                                alt="avatar"
+                                style={{marginTop: "-10px"}}
+                                className="rounded-circle float-left"
+                                width="48"
+                                height="48"
+                            />
                         </div>
                             <div className="flex-grow-1 ms-3">
                                 <a
                                     href={UserFrontPath.userDetail(props.user_data.username)}
                                     className="text-white"
-                                    style={{fontSize: "13pt", textDecoration: "none"}}>
+                                    style={{fontSize: "10pt", textDecoration: "none"}}>
                                     {props.user_data.username}
                                 </a>{"\n"}
                                 <p className="text-info" style={{fontSize: "10pt"}}>{props.user_data.group_data.name}</p>
@@ -25,9 +32,9 @@ const Comment = (props) => {
                 </div>
 
                 <div className="card-body">
-                    {props.text}
+                    <p style={{fontSize: "10pt"}}>{props.text}</p>
                 </div>
-                <div className="card-footer">{getReadableDateFormat(props.created_at)}</div>
+                <div className="card-footer" style={{fontSize: "10pt"}}>{getReadableDateFormat(props.created_at)}</div>
             </div>
         </div>
     )

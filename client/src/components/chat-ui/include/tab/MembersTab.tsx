@@ -22,7 +22,7 @@ const MembersTab = ({chatData, service}) => {
         )
     } else {
         return (
-            <div className="tab-pane fade" id="members-tab" role="tabpanel" aria-labelledby="nav-members-tab">
+            <div id="members-tab" role="tabpanel" aria-labelledby="nav-members-tab">
                 В вашем чате нет участников. Мб пригласим хоть каво нипуть?((
             </div>
         )

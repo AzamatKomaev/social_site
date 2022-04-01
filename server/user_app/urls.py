@@ -1,10 +1,11 @@
+from django_filters.views import FilterView
 from django.urls import path
 from rest_framework_simplejwt.views import (
     TokenObtainPairView
 )
 
 from . import views
-
+from .models import User
 
 urlpatterns = [
     path('friend_requests/', views.FriendRequestModelViewSet.as_view({"get": "list"}), name='friend_request.list'),
@@ -13,6 +14,7 @@ urlpatterns = [
          "delete": "destroy", "patch": "update"}
     ), name="friend_request.view_set"),
 
+    path('users/', views.UserListView.as_view()),
     path('users/<int:user_id>/', views.UserModelView.as_view({"get": "retrieve"}), name='user.find_by_id'),
     path('users/<str:username>/', views.UserModelView.as_view({"get": "retrieve"}), name='user.find_by_username'),
     path('users/<int:user_id>/friends/', views.UserFriendListView.as_view(), name='friend.list'),

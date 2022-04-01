@@ -64,12 +64,11 @@ const PostPage = (props) => {
                 <Error404NotFound style={{marginTop: "25px"}}/>
             </div>
         )
-    } else if (postListData.lastStatusCode === 429) {
+    } else if (postListData.values?.length === 0) {
         return (
             <div>
                 <Header/>
-                {"\n"}
-                <Error429TooManyRequests/>
+                <p>Увы, тут пока нет постов, мб создашь?</p>
             </div>
         )
     } else {

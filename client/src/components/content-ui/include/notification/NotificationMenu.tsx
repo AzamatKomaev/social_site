@@ -1,10 +1,10 @@
 import React from 'react';
 
 
-const NotificationMenu = (props: any) => {
+const NotificationMenu = () => {
     return (
         <div>
-            <nav>
+            <nav style={{fontSize: "10pt"}}>
                 <div className="nav nav-tabs" id="nav-tab" role="tablist">
                     <button
                         id="nav-home-friends"

@@ -1,5 +1,4 @@
-import React, { useState, useEffect } from 'react';
-import axios from 'axios';
+import React, { useState } from 'react';
 import {CreatingPost} from "../../../../services/contentService";
 import {CategoryFrontPath} from "../../../../frontpaths/frontPath";
 
@@ -39,15 +38,21 @@ const CreatePostForm = (props) => {
             case 400:
                 setError(response.data)
                 break;
+            default:
+                break;
         }
     }
 
     return (
         <div className="container">
-            <h2 style={{margin: "0 35%", fontSize:"35px"}}>Добавить пост</h2>{"\n\n"}
+            <h2 style={{fontSize:"15pt"}} align="center">Добавить пост</h2>{"\n\n"}
 
-            <label htmlFor="select-category">Категория</label>{"\n"}
-            <select className="form-select" id="select-category" onChange={e => setCategory(e.target.value)}>
+            <select
+                className="form-select"
+                style={{fontSize: "10pt"}}
+                id="select-category"
+                onChange={e => setCategory(e.target.value)}
+            >
                 <option value={null} selected>Выбери категорию</option>
                 {props.categories.map((category) => (
                     <option value={category.id}>{category.name}</option>
@@ -56,14 +61,14 @@ const CreatePostForm = (props) => {
             <p className="text-danger" style={{marginTop: "-15px"}}>{error.category}</p>
     
             <div className="form-group" style={{marginTop: "100px"}}>
-                <label htmlFor="id_title">Заголовок</label>{"\n"}
                 <input
                     type="text"
                     name="title"
-                    maxlength="199"
+                    maxLength="199"
                     id="id_title"
                     className="form-control"
                     value={title}
+                    style={{fontSize: "10pt"}}
                     onChange={e => setTitle(e.target.value)}
                     placeholder="У меня есть мечта..."
                  />
@@ -77,17 +82,17 @@ const CreatePostForm = (props) => {
             </div>
             {"\n"}
             <div className="form-group">
-                <label htmlFor="id_text">Контент</label>{"\n"}
                 <textarea
                     name="text"
                     rows="10"
                     required=""
                     id="id_text"
                     className="form-control"
-                    spellcheck="false"
+                    spellCheck="false"
+                    style={{fontSize: "10pt"}}
+                    value={content}
                     onChange={e => setContent(e.target.value)}
                     placeholder="Мечта - особый вид воображения, представляющий собой самостоятельное создание новых образов, направленный на будущее и выражающий желания человека.">
-                {content}
                 </textarea>
                 <p className="form-text text-muted" style={{fontSize: "10pt"}}>А теперь полностью излейте свою душу.</p>
                 {error.text
@@ -99,12 +104,12 @@ const CreatePostForm = (props) => {
             </div>
             {"\n"}
             <div className="mb-3">
-                <label htmlFor="formFile" className="form-label">Default file input example</label>
                 <input
                     type="file"
                     id="id_image"
                     accept=".png, .jpg, .jpeg"
                     name="image"
+                    style={{fontSize: "10pt"}}
                     onChange={changePhoto}
                     className="form-control"/>
             </div>
@@ -112,7 +117,9 @@ const CreatePostForm = (props) => {
             {"\n"}
             <div className="form-group row">
                 <div className="col-sm-10">
-                    <button onClick={handleCreatePostButton} className="btn btn-primary">Добавить</button>
+                    <button onClick={handleCreatePostButton} className="btn btn-primary" style={{fontSize: "10pt"}}>
+                        Добавить
+                    </button>
                 </div>
             </div>
         </div>
