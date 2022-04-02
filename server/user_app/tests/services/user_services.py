@@ -100,3 +100,16 @@ class UserAuthAPITestService:
             for user in users
         ))
         return responses
+
+    @staticmethod
+    def find_user(user_id: Optional[int] = None, username: Optional[str] = None):
+        client = APIClient()
+        url = reverse('user.find')
+
+        if user_id is not None:
+            url = f"{url}?id={user_id}"
+
+        elif username is not None:
+            url = f"{url}?username={username}"
+
+        return client.get(url)

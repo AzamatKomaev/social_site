@@ -23,7 +23,7 @@ const UserPage = (props) => {
     useEffect(() => {
         const fetchData = async() => {
             const response = await UserService.getUser(username)
-            if (response.status === 200) setUser(response.data)
+            if (response.status === 200 && response.data.length === 1) setUser(response.data[0])
         }
         fetchData()
     }, [username])
@@ -32,7 +32,7 @@ const UserPage = (props) => {
         if (user?.id) dispatch(fetchGettingFriendRequest(user.id))
     }, [user])
 
-    if (user && currentUserData !== undefined) {
+    if (user && currentUserData) {
         return (
             <div>
                 <Header/>

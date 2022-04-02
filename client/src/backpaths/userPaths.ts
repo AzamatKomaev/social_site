@@ -2,7 +2,22 @@ import {defaultUrl} from "./defaultUrl";
 
 
 export class UserPath {
-    static userDetail = (instance: number | string): string => {
+    static userList = (username: string | null, userId: number | null): string => {
+        let url = `${defaultUrl}/users/`
+
+        if (username) {
+            return `${url}?username=${username}`
+        }
+
+        if (userId) {
+            return `${url}?id=${userId}`
+        }
+
+        return url;
+
+    }
+
+    static userDetail1 = (instance: number | string): string => {
         return `${defaultUrl}/users/${instance}/`
     }
 

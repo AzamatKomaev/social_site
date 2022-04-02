@@ -62,6 +62,7 @@ class UserModelView(viewsets.ModelViewSet):
     queryset = User.objects.all()
     serializer_class = UserSerializer
     permission_classes = (permissions.IsAuthenticatedOrReadOnly, )
+    filterset_class = UserFilter
 
     def get_object(self):
         obj = UserService.get_user(self.kwargs.get('user_id'), self.kwargs.get('username'))

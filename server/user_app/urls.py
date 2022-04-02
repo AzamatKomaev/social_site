@@ -14,9 +14,7 @@ urlpatterns = [
          "delete": "destroy", "patch": "update"}
     ), name="friend_request.view_set"),
 
-    path('users/', views.UserListView.as_view()),
-    path('users/<int:user_id>/', views.UserModelView.as_view({"get": "retrieve"}), name='user.find_by_id'),
-    path('users/<str:username>/', views.UserModelView.as_view({"get": "retrieve"}), name='user.find_by_username'),
+    path('users/', views.UserModelView.as_view({"get": "list"}), name='user.find'),
     path('users/<int:user_id>/friends/', views.UserFriendListView.as_view(), name='friend.list'),
     path('users/<int:user_id>/posts/', views.UserPostListView.as_view()),
     path('users/<int:user_id>/comments/', views.UserCommentListView.as_view()),

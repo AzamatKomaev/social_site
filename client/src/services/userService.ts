@@ -6,7 +6,8 @@ import {UserPath} from "../backpaths/userPaths";
 export class UserService {
     static getUser = async(username: string): Promise<AxiosResponse> => {
         try {
-            return await axios.get(UserPath.userDetail(username))
+            return await axios.get(UserPath.userList(username, null))
+            // return await axios.get(UserPath.userDetail(username))
         } catch (err: any) {
             return err.response
         }

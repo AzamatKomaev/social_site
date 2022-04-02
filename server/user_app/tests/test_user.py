@@ -134,14 +134,20 @@ class UserAPITestCase(APITestCase):
         self._create_users(users_data)
         users = User.objects.all()
 
-        found_users_by_id = [self._find_user(user_id=user.id) for user in users]
-        found_users_by_username = [self._find_user(username=user.username) for user in users]
+        found_user_by_id = UserAuthAPITestService.find_user(user_id=users.first().id)
+        found_user_by_username = UserAuthAPITestService.find_user(username=users.first().username)
+        self.assertEqual(found_user_by_id.status_code, 200)
+        self.assertEqual(found_user_by_username.status_code, 200)
+        self.assertEqual(found_user_by_username.json(), found_user_by_id.json())
 
-        self.assertEqual(users.count(), len(found_users_by_id))
-        self.assertEqual(users.count(), len(found_users_by_username))
 
-        self.assertEqual(404, self._find_user(user_id=1000).status_code)
-        self.assertEqual(404, self._find_user(username="non-existing-username").status_code)
+        found_user_by_invalid_id = UserAuthAPITestService.find_user(user_id=1000)
+        fount_user_by_invalid_username = UserAuthAPITestService.find_user(username="aaaaaaaaa")
+
+        self.assertEqual(found_user_by_invalid_id.status_code, 200)
+        self.assertEqual(found_user_by_invalid_id.json(), [])
+        self.assertEqual(fount_user_by_invalid_username.status_code, 200)
+        self.assertEqual(fount_user_by_invalid_username.json(), [])
 
     def test_friend_requests_accepting(self):
         users, admin = self._set_up_friend_requests().values()
