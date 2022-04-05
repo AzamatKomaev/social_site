@@ -70,30 +70,6 @@ class UserFriendListView(generics.ListAPIView):
         return queryset
 
 
-class UserPostListView(generics.ListAPIView):
-    """View for getting all user posts."""
-    queryset = Post.objects.all()
-    serializer_class = PostSerializer
-
-    def get_queryset(self):
-        user_id = self.kwargs.get('user_id')
-        service = UserService(user_id)
-        queryset = service.get_user_posts()
-        return queryset
-
-
-class UserCommentListView(generics.ListAPIView):
-    """View for getting all user comments."""
-    queryset = Comment.objects.all()
-    serializer_class = CommentSerializer
-
-    def get_queryset(self):
-        user_id = self.kwargs.get('user_id')
-        service = UserService(user_id)
-        queryset = service.get_user_comments()
-        return queryset
-
-
 class FriendRequestModelViewSet(viewsets.ModelViewSet):
     queryset = FriendRequest.objects.all()
     serializer_class = FriendRequestSerializer

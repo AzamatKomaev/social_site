@@ -16,8 +16,6 @@ urlpatterns = [
 
     path('users/', views.UserModelView.as_view({"get": "list"}), name='user.find'),
     path('users/<int:user_id>/friends/', views.UserFriendListView.as_view(), name='friend.list'),
-    path('users/<int:user_id>/posts/', views.UserPostListView.as_view()),
-    path('users/<int:user_id>/comments/', views.UserCommentListView.as_view()),
 
     path('auth/login/', TokenObtainPairView.as_view(), name='auth.login'),
     path('auth/register/', views.AuthViewSet.as_view({"post": "create"}), name="auth.register"),

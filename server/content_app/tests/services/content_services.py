@@ -46,14 +46,14 @@ class ContentAPITestService:
     @staticmethod
     def create_comment(user_jwt: str, data: dict[str, Union[str, int]]):
         client = APIClient()
-        url = reverse('comments.list', args=[data.get('post')])
+        url = reverse('comments.list')
         return client.post(url, data=data, format='json', HTTP_AUTHORIZATION=f'Bearer {user_jwt}')
 
     @staticmethod
     def get_comment_list(post_id: int):
         client = APIClient()
-        url = reverse('comments.list', args=[post_id])
-        return client.get(url)
+        url = reverse('comments.list')
+        return client.get(url, QUERY_STRING=f'post__id={post_id}')
 
     @staticmethod
     def get_comment_detail(comment_id: int):

@@ -11,8 +11,10 @@ urlpatterns = [
     path('posts/<int:pk>/', views.PostModelViewSet.as_view({"get": "retrieve", "delete": "destroy"}),
          name='posts.detail'),
 
-    path('posts/<int:post_id>/comments/', views.CommentModelViewSet.as_view({"get": "list", "post": "create"}),
-         name='comments.list'),
+    # path('posts/<int:post_id>/comments/', views.CommentModelViewSet.as_view({"get": "list", "post": "create"}),
+    #      name='comments.list'),
+
+    path('comments/', views.CommentModelViewSet.as_view({"get": "list", "post": "create"}), name='comments.list'),
     path('comments/<int:pk>/', views.CommentModelViewSet.as_view({"get": "retrieve", "delete": "destroy"}),
          name='comments.detail'),
 ]

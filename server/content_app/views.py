@@ -9,7 +9,7 @@ from .serializers import (
     CategorySerializer
 )
 from .models import Category, Comment, Post
-from .filters import PostFilter
+from .filters import PostFilter, CommentFilter
 
 
 class CategoryListRetrieveView(mixins.ListModelMixin,
@@ -36,10 +36,7 @@ class CommentModelViewSet(viewsets.ModelViewSet):
     queryset = Comment.objects.all()
     serializer_class = CommentSerializer
     permission_classes = (CommentPermission, )
-
-    def get_queryset(self):
-        queryset = Comment.objects.filter(post_id=self.kwargs.get('post_id'))
-        return queryset
+    filterset_class = CommentFilter
 
     def get_object(self):
         obj = get_object_or_404(Comment, pk=self.kwargs.get('pk'))

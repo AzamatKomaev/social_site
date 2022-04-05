@@ -14,7 +14,7 @@ export class ContentPath {
     }
 
     static commentList = (postId: number): string => {
-        return `${defaultUrl}/posts/${postId}/comments/`
+        return `${defaultUrl}/comments/?post__id=${postId}`
     }
 
     static commentDetail = (commentId: number): string  => {
