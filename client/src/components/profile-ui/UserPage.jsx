@@ -10,13 +10,15 @@ import SwitchMenu from './include/menu/SwitchMenu';
 import InfoTab from './include/tab/InfoTab';
 import SettingTab from './include/tab/SettingTab'
 import {UserService} from "../../services/userService";
+import {fetchGettingListPost} from "../../store/content/actions";
+import {SET_FETCHING} from "../../store/content/actionTypes";
 
 
 const UserPage = (props) => {
     let username = props.match.params.username;
 
     const dispatch = useDispatch()
-
+    const postListData = useSelector((state) => state.post.list)
     const [user, setUser] = useState()
     const currentUserData = useSelector(state => state.user)
 
@@ -29,8 +31,35 @@ const UserPage = (props) => {
     }, [username])
 
     useEffect(() => {
+        console.log(user)
         if (user?.id) dispatch(fetchGettingFriendRequest(user.id))
     }, [user])
+
+    useEffect(() => {
+        if (postListData.fetching && postListData !== -1 && user?.id) {
+            dispatch(fetchGettingListPost('', user.id, postListData.page))
+        }
+    }, [postListData.fetching, user])
+
+    useEffect(() => {
+        document.addEventListener('scroll', scrollHandler)
+        return function () {
+            document.removeEventListener('scroll', scrollHandler)
+        }
+    })
+
+    const scrollHandler = (e) => {
+        if (e.target.documentElement.scrollHeight - (e.target.documentElement.scrollTop + window.innerHeight) < 1000 &&
+            postListData.page !== -1
+        ) {
+            dispatch({
+                type: SET_FETCHING,
+                payload: {
+                    fetching: true
+                }
+            })
+        }
+    }
 
     if (user && currentUserData) {
         return (

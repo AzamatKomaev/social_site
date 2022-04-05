@@ -1,6 +1,4 @@
-from rest_framework import generics
-from rest_framework.response import Response
-from rest_framework import status, permissions, viewsets, mixins
+from rest_framework import viewsets, mixins, generics
 from django.shortcuts import get_object_or_404
 
 from .paginators import PostPagination
@@ -11,6 +9,7 @@ from .serializers import (
     CategorySerializer
 )
 from .models import Category, Comment, Post
+from .filters import PostFilter
 
 
 class CategoryListRetrieveView(mixins.ListModelMixin,
@@ -25,15 +24,12 @@ class PostModelViewSet(viewsets.ModelViewSet):
     serializer_class = PostSerializer
     permission_classes = (PostPermission, )
     pagination_class = PostPagination
+    filterset_class = PostFilter
 
     def get_object(self):
         obj = get_object_or_404(Post, pk=self.kwargs.get('pk'))
         self.check_object_permissions(self.request, obj)
         return obj
-
-    def get_queryset(self):
-        queryset = Post.objects.filter(category_id=self.kwargs.get('category_id'))
-        return queryset
 
 
 class CommentModelViewSet(viewsets.ModelViewSet):

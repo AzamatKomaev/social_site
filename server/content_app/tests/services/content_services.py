@@ -21,15 +21,15 @@ class ContentAPITestService:
     @staticmethod
     def create_post(detail_data: dict, category_id: int, user_jwt: Optional[str]) -> Response:
         client = APIClient()
-        url = reverse('posts.list', args=[category_id])
+        url = reverse('posts.list')
         return client.post(url, {**detail_data, **{'category': category_id}}, format='json',
                             HTTP_AUTHORIZATION=f'Bearer {user_jwt}')
 
     @staticmethod
     def get_post_list(category_id: int):
         client = APIClient()
-        url = reverse('posts.list', args=[category_id])
-        return client.get(url)
+        url = reverse('posts.list')
+        return client.get(url, QUERY_STRING=f'category__id={category_id}')
 
     @staticmethod
     def get_post_detail(post_id: int):

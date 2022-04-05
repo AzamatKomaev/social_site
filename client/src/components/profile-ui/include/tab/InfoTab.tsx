@@ -3,29 +3,22 @@ import React, { useState, useEffect } from 'react';
 import PostList from '../../../content-ui/include/post/PostList';
 import InfoUserCell from '../cell/InfoUserCell';
 import {UserService} from "../../../../services/userService";
+import {ContentService} from "../../../../services/contentService";
+import {useSelector} from "react-redux";
 
 
 const InfoTab = (props: any) => {
-    const [userPosts, setUserPosts] = useState([])
-
-    useEffect(() => {
-        const fetchData = async() => {
-            const response = await UserService.getUserPosts(props.user.id)
-            setUserPosts(response.status === 200 ? response.data : [])
-        }
-        fetchData()
-    }, [props.user.id])
+    const postListData = useSelector((state: any) => state.post.list)
 
     return (
         <div className="tab-pane fade show active" id="home">
             <InfoUserCell
                 user={props.user}
-                posts={userPosts}
              />
 			{"\n\n"}
-			{userPosts ?
+			{postListData?.values.length > 0 ?
             <PostList
-                posts={userPosts}
+                posts={postListData.values}
                 categoryId={"#"}
              />
 			:

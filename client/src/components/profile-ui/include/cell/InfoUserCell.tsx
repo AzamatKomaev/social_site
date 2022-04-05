@@ -44,7 +44,6 @@ const InfoUserCell = (props: any) => {
             <CardUserCells
                 user={props.user}
                 friends={friends}
-                posts={props.posts}
                 commentList={commentList}
              />
         </div>

@@ -1,4 +1,6 @@
 import React from 'react';
+import UserPage from "../../UserPage";
+import {UserFrontPath} from "../../../../frontpaths/frontPath";
 
 
 
@@ -6,21 +8,21 @@ const CardUserCells = (props: any) => {
     const cells = [
         {
             name: "Друзья",
-            value: props.friends.length,
+            value: props.user.friends_count,
             width: "120px",
             marginLeft: "0px",
-            href: "/users/" + props.user.username + "/friends/"
+            href: UserFrontPath.friendList(props.user.username)
         },
         {
             name: "Публикаций",
-            value: props.posts.length,
+            value: props.user.posts_count,
             width: "120px",
             marginLeft: "20px",
             href: "#"
         },
         {
             name: "Комментарий",
-            value: props.commentList.length,
+            value: props.user.comments_count,
             width: "130px",
             marginLeft: "20px",
             href: "#"
