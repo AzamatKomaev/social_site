@@ -16,32 +16,31 @@ const FriendCell = (props) => {
     }
 
     return (
-        <div className="card col-9 my-3 mx-auto border border-primary">
+        <div className="card col-10 col-md-9 my-3 mx-auto border border-primary">
             <div className="list-group-item list-group-item-action border-0">
                 <div className="d-flex align-items-start">
                     <img
                         src={props.friend.avatar.image}
                         className="rounded-circle ms-1"
                         alt="lol"
-                        width="60"
-                        height="60"
+                        width="53"
+                        height="53"
                     />
-                    <div className="flex-grow-1 ms-3">
+                    <div className="flex-grow-1 ms-3" style={{fontSize: "10pt"}}>
                         <a
                             href={UserFrontPath.userDetail(props.friend.username)}
                             style={{textDecoration: "none"}}
                             className="text-dark">
-                            <p style={{fontSize: "14pt"}}>{props.friend.username}</p>
+                            <p>{props.friend.username}</p>
                         </a>
-                        <div className="small" style={{marginTop: "-15px"}}>
+                        <div style={{marginTop: "-15px"}}>
                             <p className="text-info">{props.friend.group_data.name}</p>
-                            <u>Почта: </u>{" " + props.friend.email}
                         </div>
                     </div>
                     {currentUserData?.info?.id === props.user.id
                         ?
                         <div style={{marginLeft: "auto"}} className="d-none d-lg-block">
-                            <button className="btn btn-danger" onClick={handleDeleteUserFromFriendList}>
+                            <button style={{fontSize: "10pt"}} className="btn btn-danger" onClick={handleDeleteUserFromFriendList}>
                                 Удалить
                             </button>
                         </div>
@@ -54,7 +53,7 @@ const FriendCell = (props) => {
                     <div className="d-lg-none">
                         <button
                             className="btn btn-danger"
-                            style={{marginTop: "10px", width: "100%"}}
+                            style={{marginTop: "10px", width: "100%", fontSize: "10pt"}}
                             onClick={handleDeleteUserFromFriendList}
                         >
                             Удалить
