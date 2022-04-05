@@ -10,12 +10,24 @@ from .services import CreationUser
 class UserSerializer(ModelSerializer):
     group_data = SerializerMethodField('get_group_data')
     avatar = SerializerMethodField('get_avatar')
+    friends_count = SerializerMethodField('get_friends_count')
+    posts_count = SerializerMethodField('get_posts_count')
+    comments_count = SerializerMethodField('get_comments_count')
 
     def get_group_data(self, obj: User) -> dict:
         return GroupSerializer(obj.groups.get()).data
 
-    def get_avatar(self, obj: User):
+    def get_avatar(self, obj: User) -> dict:
         return AvatarSerializer(obj.avatar_set.get()).data
+
+    def get_friends_count(self, obj: User) -> int:
+        return obj.user_set.count()
+
+    def get_posts_count(self, obj: User) -> int:
+        return obj.post_set.count()
+
+    def get_comments_count(self, obj: User) -> int:
+        return obj.comment_set.count()
 
     class Meta:
         model = User
@@ -24,7 +36,10 @@ class UserSerializer(ModelSerializer):
                   "email",
                   "group_data",
                   "avatar",
-                  "friends"]
+                  "friends",
+                  "posts_count",
+                  "comments_count",
+                  "friends_count"]
 
 
 class GroupSerializer(ModelSerializer):

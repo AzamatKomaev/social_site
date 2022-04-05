@@ -1,7 +1,6 @@
 import React, { useState, useEffect} from 'react';
 import Header from '../extend/Header';
 import Error404NotFound from '../extend/Error404NotFound';
-import Error429TooManyRequests from '../extend/Error429TooManyRequests';
 
 import PostList from './include/post/PostList';
 import {useDispatch, useSelector} from "react-redux";
@@ -16,12 +15,8 @@ const PostPage = (props) => {
     let categoryId = props.match.params.categoryId;
 
     useEffect(() => {
-        console.log(postListData)
-    }, [postListData])
-
-    useEffect(() => {
         if (postListData.fetching && postListData.page !== -1) {
-            dispatch(fetchGettingListPost(categoryId, postListData.page))
+            dispatch(fetchGettingListPost(categoryId, '', postListData.page))
         }
 
     }, [postListData.fetching])

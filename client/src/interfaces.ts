@@ -12,7 +12,9 @@ export interface UserI {
     email: string,
     group_data: GroupI,
     avatar: AvatarI,
-    friends?: Array<number>
+    friends_count: number,
+    posts_count: number,
+    comments_count: number
 }
 
 export interface CategoryI {

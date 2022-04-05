@@ -18,18 +18,16 @@ const FriendListUser = (props) => {
     const [user, setUser] = useState<UserI | null>()
 
     useEffect(() => {
-        if (user) dispatch(fetchGettingAllUserFriends(user.id));
-    }, [dispatch, user])
-
-
-    useEffect(() => {
         const fetchData =  async() => {
             const response = await UserService.getUser(username)
-            setUser(response.status === 200 ? response.data : null)
+            setUser(response.status === 200 && response.data.length > 0 ? response.data[0] : null)
         }
         fetchData()
     }, [username])
 
+    useEffect(() => {
+        if (user) dispatch(fetchGettingAllUserFriends(user.id));
+    }, [dispatch, user])
 
     if (friendListData.status >= 400 && friendListData.status < 600) {
         return (

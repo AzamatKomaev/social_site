@@ -1,7 +1,6 @@
 import axios, {AxiosResponse} from "axios";
 import {ContentPath} from "../backpaths/contentPaths";
 import {defaultConfig} from "./authData";
-import {CategoryFrontPath} from "../frontpaths/frontPath";
 
 
 export class ContentService {
@@ -13,9 +12,9 @@ export class ContentService {
         }
     }
 
-    static getPostList = async(categoryId: number, page: number): Promise<AxiosResponse> => {
+    static getPostList = async(categoryId: number | string, userId: number | string,  page: number): Promise<AxiosResponse> => {
         try {
-            return await axios.get(ContentPath.postList(categoryId, page))
+            return await axios.get(ContentPath.postList(categoryId, userId, page))
         } catch (err: any) {
             return err.response
         }
@@ -91,7 +90,7 @@ export class CreatingPost {
         const dataForm: FormData = this.createDataForm()
 
         try {
-            return await axios.post(ContentPath.postList(this.category, 0), dataForm, defaultConfig)
+            return await axios.post(ContentPath.postList('', '', 0), dataForm, defaultConfig)
         } catch (err: any) {
             return err.response
         }
