@@ -1,49 +1,47 @@
 import React, {useState} from 'react';
 import {useDispatch, useSelector} from "react-redux";
-import {
-    CLEAR_FILTERED_CHAT_LIST,
-    FILTER_GROUP_CHAT_LIST_BY_EMPTY_MESSAGES, GET_CURRENT_USER_CHAT_LIST,
-    GET_GROUP_CHAT_LIST,
-    GET_GROUP_CHAT_LIST_WITH_MESSAGES,
-    GET_GROUP_CHAT_LIST_WITHOUT_MESSAGES,
-    SORT_GROUP_CHAT_LIST_BY_LAST_MESSAGES
-} from "../../../../store/chat/actionTypes";
+import {SORT_CHATS_BY_LAST_MESSAGE, SORT_CHATS_BY_NAME} from "../../../../store/chat/actionTypes";
 
 
 const ButtonRow = () => {
     const dispatch = useDispatch()
     const currentUserId = useSelector((state: any) => state.user.info.id)
 
-    const filterByEmptyMessages = () => {
-        dispatch({type: GET_GROUP_CHAT_LIST_WITHOUT_MESSAGES})
+    const sortByName = () => {
+        dispatch({type: SORT_CHATS_BY_NAME})
     }
 
     const sortByLastMessages = () => {
-        dispatch({type: GET_GROUP_CHAT_LIST_WITH_MESSAGES})
+        dispatch({type: SORT_CHATS_BY_LAST_MESSAGE})
     }
 
-    const filterByCreatorUser = () => {
-        dispatch({
-            type: GET_CURRENT_USER_CHAT_LIST,
-            payload: {
-                userId: currentUserId
-            }
-        })
-    }
-
-    const reset = () => {
-        dispatch({type: CLEAR_FILTERED_CHAT_LIST})
-        dispatch({type: GET_GROUP_CHAT_LIST})
-    }
+    const buttons = [
+        {
+            onClick: sortByName,
+            content: "По названию"
+        },
+        {
+            onClick: sortByLastMessages,
+            content: "По дате создания последнего сообщения"
+        }
+    ]
 
     return (
         <div className="btn-group" role="group" aria-label="Basic example">
-            <button type="button" className="btn btn-outline-primary" onClick={sortByLastMessages}>С сообщениями</button>
-            <button type="button" className="btn btn-outline-primary" onClick={filterByEmptyMessages}>Без сообщений</button>
-            <button type="button" className="btn btn-outline-primary" onClick={filterByCreatorUser}>Ваши</button>
-            <button type="button" className="btn btn-outline-warning" onClick={reset}>Сбросить</button>
-        </div>
+            {buttons.map(button => (
+                <button
+                    type="button"
+                    className="btn btn-outline-primary"
+                    style={{fontSize: "10pt"}}
+                    onClick={button.onClick}
+                >
+                    {button.content}
+                </button>
+            ))}
 
+            {/*<button type="button" className="btn btn-outline-primary" style={{fontSize: "10pt"}} onClick={sortByLastMessages}>С сообщениями</button>*/}
+            {/*<button type="button" className="btn btn-outline-primary" style={{fontSize: "10pt"}} onClick={filterByEmptyMessages}>Без сообщений</button>*/}
+        </div>
     );
 };
 

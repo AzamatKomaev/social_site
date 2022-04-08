@@ -13,12 +13,14 @@ from .serializers import (
 from .permissions import GroupChatPermission, GroupChatRolePermission, GroupChatRequestPermission, \
     GroupChatRequestListPermission
 from . import exceptions
+from .sql.commands import get_ordered_group_chats
 
 
 class GroupChatModelViewSet(viewsets.ModelViewSet):
     queryset = GroupChat.objects.all()
     serializer_class = GroupChatSerializer
     permission_classes = (GroupChatPermission, )
+    pagination_class = MessagePagination
 
     def get_object(self):
         obj = get_object_or_404(self.queryset.model, pk=self.kwargs.get('pk'))
@@ -26,9 +28,7 @@ class GroupChatModelViewSet(viewsets.ModelViewSet):
         return obj
 
     def get_queryset(self):
-        sort_by = self.request.query_params.get('sort_by', None)
-        page = self.request.query_params.get('page', None)
-        return get_and_sort_chat_list(sort_by, self.request, self.queryset.model, page)
+        return get_and_sort_chat_list(self.request, self.queryset.model)
 
     def create(self, request, *args, **kwargs):
         serializer = self.get_serializer(data=get_group_chat_serializer_data(request))
@@ -43,6 +43,10 @@ class GroupMessageModelViewSet(viewsets.ModelViewSet):
     serializer_class = GroupMessageSerializer
     permission_classes = (GroupChatPermission, GroupChatRolePermission)
     pagination_class = MessagePagination
+
+    def get_queryset(self):
+        chat_id = self.kwargs.get('chat_id')
+        return super().get_queryset().filter(chat_id=chat_id)
 
 
 class GroupChatRequestListAPIView(generics.ListAPIView):

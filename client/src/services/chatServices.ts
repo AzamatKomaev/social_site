@@ -3,7 +3,7 @@ import {GroupChatPath, PersonalChatPath} from "../backpaths/chatPaths";
 import {defaultConfig} from "./authData";
 
 export class GroupChatService {
-    private chatId: number
+    private readonly chatId: number
 
     constructor(chatId: number) {
         this.chatId = chatId
@@ -17,9 +17,12 @@ export class GroupChatService {
         }
     }
 
-    public static async getList(sortBy: string, page: number): Promise<AxiosResponse> {
+    public static async getList(params): Promise<AxiosResponse> {
         try {
-            return await axios.get(GroupChatPath.chats_list(sortBy, page), defaultConfig)
+            return await axios.get(GroupChatPath.chats_list(), {
+                headers: defaultConfig.headers,
+                params: params
+            })
         } catch (err: any) {
             return err.response
         }
@@ -162,7 +165,7 @@ export class CreatingChat {
         const dataForm = this.createDataForm()
 
         try {
-            return await axios.post(GroupChatPath.chats_list('last_message', 0), dataForm, defaultConfig)
+            return await axios.post(GroupChatPath.chats_list(), dataForm, defaultConfig)
         } catch (err: any) {
             return err.response
         }

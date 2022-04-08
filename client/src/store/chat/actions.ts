@@ -1,18 +1,11 @@
 import {
-    createRequest,
-    deleteRequest,
-    getAllChatRequest,
-    getRequest
-} from "../../services/chatService";
-import {
-    ADD_NEW_GROUP_CHATS_IN_GROUP_CHAT_LIST, ADD_NEW_PERSONAL_CHATS_IN_PERSONAL_CHAT_LIST,
     CHECK_IS_REQUEST_EXISTS,
     CREATE_REQUEST, DELETE_REQUEST,
     GET_ALL_CHAT_MEMBERS,
-    GET_ALL_CHAT_REQUESTS,
+    GET_ALL_CHAT_REQUESTS, GET_CHAT_LIST,
 } from "./actionTypes";
 import {GroupChatI, GroupChatRequestI, PersonalChatI} from "../../interfaces";
-import {GroupChatService} from "../../services/chatServices";
+import {GroupChatService, PersonalChatService} from "../../services/chatServices";
 import {AxiosResponse} from "axios";
 
 
@@ -101,11 +94,29 @@ export const fetchDeletingRequest = (userId: number, service: GroupChatService) 
     }
 }
 
+export const fetchGettingChats = (page: number, type: string) => {
+    return async function (dispatch) {
+        let response;
 
+        if (type === "group") response = await GroupChatService.getList({sort__by: '-name', page: page})
+        else response = await PersonalChatService.getList('-name', page)
+
+
+        dispatch({
+            type: GET_CHAT_LIST,
+            payload: {
+                list: response.status === 200 ? response.data : [],
+                statusCode: response.status
+            }
+        })
+    }
+}
+
+// func for deleting!!!
 export const addNewChatsInChatList = (newChats: Array<GroupChatI | PersonalChatI>, type: string) => {
     return function (dispatch) {
         dispatch({
-            type: type==="group" ? ADD_NEW_GROUP_CHATS_IN_GROUP_CHAT_LIST : ADD_NEW_PERSONAL_CHATS_IN_PERSONAL_CHAT_LIST,
+            type: type==="group" ? "" : "ADD_NEW_PERSONAL_CHATS_IN_PERSONAL_CHAT_LIST",
             payload: {
                 newLoadedChatList: newChats
             }

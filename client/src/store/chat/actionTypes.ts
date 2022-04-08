@@ -8,17 +8,11 @@ export const DELETE_REQUEST = "DELETE_REQUEST";
 
 //-----------------------------------------------------------------------------------------------------------------
 
-export const GET_GROUP_CHAT_LIST = "GET_GROUP_CHAT_LIST";
-export const GET_GROUP_CHAT_LIST_WITHOUT_MESSAGES = "GET_GROUP_CHAT_LIST_WITHOUT_MESSAGES";
-export const GET_GROUP_CHAT_LIST_WITH_MESSAGES = "GET_GROUP_CHAT_LIST_WITH_MESSAGES";
-export const GET_CURRENT_USER_CHAT_LIST = "GET_CURRENT_USER_CHAT_LIST";
-export const FILTER_CHAT_LIST_BY_STRING = "FILTER_CHAT_LIST_BY_STRING";
-export const CLEAR_FILTERED_CHAT_LIST = "CLEAR_FILTERED_CHAT_LIST"
-
-export const ADD_NEW_GROUP_CHATS_IN_GROUP_CHAT_LIST = "ADD_NEW_GROUP_CHATS_IN_GROUP_CHAT_LIST";
-export const FILTER_GROUP_CHAT_LIST_BY_EMPTY_MESSAGES = "FILTER_GROUP_CHAT_LIST_BY_EMPTY_MESSAGES";
-export const SORT_GROUP_CHAT_LIST_BY_LAST_MESSAGES = "SORT_GROUP_CHAT_LIST_BY_LAST_MESSAGES";
-
+export const GET_CHAT_LIST = "GET_CHAT_LIST";
+export const FILTERED_CHAT = ""
+export const SET_FETCHING = "SET_FETCHING";
+export const SORT_CHATS_BY_NAME = "SORT_CHATS_BY_NAME";
+export const SORT_CHATS_BY_LAST_MESSAGE = "SORT_CHATS_BY_LAST_MESSAGE";
 //-----------------------------------------------------------------------------------------------------------------
 
 export const GET_PERSONAL_CHAT_LIST = "GET_PERSONAL_CHAT_LIST";

@@ -21,7 +21,7 @@ const MessageChatWindow = ({type_is_group, members, messages, newMessages, chat,
         } catch (err) {}
     }, [window.screen.height])
 
-    if (chat !== undefined) {
+    if (chat) {
         return (
             <main className="content">
                 <div className="container p-0">
@@ -35,16 +35,16 @@ const MessageChatWindow = ({type_is_group, members, messages, newMessages, chat,
                                 {type_is_group
                                     ?
                                      <ChatHeader
-                                         avatar={chat.avatar}
-                                         name={chat.name}
-                                         id={chat.id}
+                                         avatar={chat?.avatar}
+                                         name={chat?.name}
+                                         id={chat?.id}
                                          type_is_group={true}
                                       />
                                     :
                                      <ChatHeader
-                                         avatar={chat.interlocutor.avatar.image}
-                                         name={chat.interlocutor.username}
-                                         id={chat.interlocutor.id}
+                                         avatar={chat?.interlocutor.avatar.image}
+                                         name={chat?.interlocutor.username}
+                                         id={chat?.interlocutor.id}
                                          type_is_group={false}
                                       />
                                     }

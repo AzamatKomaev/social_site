@@ -37,9 +37,8 @@ export const postReducer = (state = defaultPostReducerState, action: any) => {
                         fetching: false
                     }
                 }
-            } else {
-                return {...state}
             }
+            else return {...state}
 
         case SET_FETCHING:
             return {

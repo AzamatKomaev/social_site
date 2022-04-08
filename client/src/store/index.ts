@@ -3,7 +3,8 @@ import thunk from 'redux-thunk'
 
 import { userReducer } from './user/userReducer';
 import { friendRequestReducer, friendListReducer } from './friend/friendReducer';
-import {chatListReducer, requestListReducer} from "./chat/chatReducer";
+import {requestListReducer} from "./chat/chatReducer";
+import {chatListReducer} from "./chat/reducers/chatReducer";
 import {personalChatReducer} from "./chat/personalChatReducer";
 import {categoryReducer} from "./content/reducers/categoryReducer";
 import {postReducer} from "./content/reducers/postReducer";

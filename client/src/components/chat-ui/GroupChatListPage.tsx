@@ -3,52 +3,30 @@ import {useSelector, useDispatch} from "react-redux";
 import Error404NotFound from "../extend/Error404NotFound";
 import Header from "../extend/Header";
 import ChatList from "./include/chat/ChatList";
-import {getGroupChats} from "../../services/chatService";
-import {addNewChatsInChatList} from "../../store/chat/actions";
+import {fetchGettingChats} from "../../store/chat/actions";
 import {GroupChatNotification} from "./include/notifications/Notifications";
 import ButtonRow from "./include/button_row/ButtonRow";
 import ChatFilteringInput from "./include/chat/ChatFilteringInput";
+import {SET_FETCHING} from "../../store/chat/actionTypes";
+import {ContentPath} from "../../backpaths/contentPaths";
+import axios from "axios";
 
 
 const GroupChatListPage = () => {
     const dispatch = useDispatch()
 
-    const groupChats = useSelector((state: any) => state.chatList.groupChats)
-    const filteringResult = useSelector((state: any) => state.chatList.groupChatsByFilterString)
+    const chatsData = useSelector((state: any) => state.chatList.list)
+    const filteredChatsData = useSelector((state: any) => state.chatList.filteredList)
+    //const filteringResult = useSelector((state: any) => state.chatList.groupChatsByFilterString)
     const userData = useSelector((state: any) => state.user)
 
-    //const [groupChats, setGroupChats] = useState([])
-    const [page, setPage] = useState(1)
-    const [fetching, setFetching] = useState(true)
     const [error, setError] = useState(null)
 
-
     useEffect(() => {
-        if (fetching && page !== -1) {
-            console.log("fetching")
-            getGroupChats('-name', page)
-                .then(response => {
-                    dispatch(addNewChatsInChatList(response.data, "group"))
-                    if (response.status === 204) {
-                        setPage(-1)
-                    } else {
-                        setPage(prevState => prevState + 1)
-                    }
-                })
-                .catch(err => {
-                    console.log(err.response);
-                    if (err.response.status) {
-                        setError(
-                            {
-                                response: err.response.status
-                            });
-                    }
-                })
-                .finally(() => {
-                    setFetching(false)
-                })
+        if (chatsData.fetching && chatsData.page !== -1) {
+            dispatch(fetchGettingChats(chatsData.page, 'group'))
         }
-    }, [fetching])
+    }, [chatsData.fetching])
 
     useEffect(() => {
         document.addEventListener('scroll', scrollHandler)
@@ -57,14 +35,19 @@ const GroupChatListPage = () => {
         }
     }, [])
 
+
     const scrollHandler = (e) => {
-        if (e.target.documentElement.scrollHeight - (e.target.documentElement.scrollTop + window.innerHeight) < 100 &&
-            page !== -1
+        if (e.target.documentElement.scrollHeight - (e.target.documentElement.scrollTop + window.innerHeight) < 1000 &&
+            chatsData.page !== -1
         ) {
-            setFetching(true)
+            dispatch({
+                type: SET_FETCHING,
+                payload: {
+                    fetching: true
+                }
+            })
         }
     }
-
 
     if (userData.isAuth && !error) {
         return (
@@ -80,11 +63,11 @@ const GroupChatListPage = () => {
                         <div className="row">
                             {'\n'}
                             <div className="col-12">
-                                {filteringResult.length > 0
+                                {filteredChatsData.length > 0
                                     ?
                                     <div>
-                                        <p>Найдено: {filteringResult.length}.</p>
-                                        <ChatList chats={filteringResult} type_is_group={true}/>
+                                        <p>Найдено: {filteredChatsData.length}.</p>
+                                        <ChatList chats={filteredChatsData} type_is_group={true}/>
                                     </div>
                                     :
                                     null
@@ -96,8 +79,8 @@ const GroupChatListPage = () => {
                         <div className="row">
                             {"\n"}
                             <div className="col-12">
-                                {groupChats && groupChats.length > 0
-                                    ? <ChatList chats={groupChats} type_is_group={true}/>
+                                {chatsData.values
+                                    ? <ChatList chats={chatsData.values} type_is_group={true}/>
                                     : <p>У вас нет чатов... Мб создадим?</p>
                                 }
                             </div>

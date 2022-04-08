@@ -5,8 +5,8 @@ export class ContentPath {
         return `${defaultUrl}/categories/`
     }
 
-    static postList = (categoryId: number | string, userId: number | string, page: number): string => {
-        return `${defaultUrl}/posts/?category__id=${categoryId}&page=${page}&user__id=${userId}`
+    static postList = (): string => {
+        return `${defaultUrl}/posts/`
     }
 
     static postDetail = (postId: number): string => {

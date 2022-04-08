@@ -6,6 +6,7 @@ class PostFilter(django_filters.FilterSet):
     class Meta:
         model = Post
         fields = ['user__id', 'category__id']
+        ordering = ['title']
 
 
 class CommentFilter(django_filters.FilterSet):

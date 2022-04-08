@@ -1,7 +1,7 @@
 from typing import Optional, Union
 
 from django.db.models import QuerySet
-from django.core.paginator import Paginator
+from django.db.models.expressions import RawSQL
 from django.shortcuts import get_object_or_404
 from django.http import Http404
 
@@ -13,21 +13,22 @@ from group_chat_app.sql.commands import get_ordered_group_chats
 from personal_chat_app.sql.commands import get_ordered_personal_chats
 
 
-def get_and_sort_chat_list(sort_by: Optional[str], request, chat_model, page) -> dict:
+def get_and_sort_chat_list(request, chat_model) -> dict:
     chat_data: dict[str, Union[dict, int]]
     chats = chat_model.objects.filter(users=request.user)
+    sort_by = request.query_params.get('sort_by')
 
     if sort_by == "last_message":
+        """Order chats by last message created_at. """
         chat_qs = chat_model.objects.raw(
             get_ordered_group_chats if chat_model == GroupChat else get_ordered_personal_chats,
             (request.user.id, )
         )
-        return chat_qs if len(chat_qs) < 5 else chat_qs[:5]
+        chats = chat_qs if len(chat_qs) < 5 else chat_qs[:5]
 
-    elif sort_by == "-name" and page:
-        page_size = 10
-        paginator = Paginator(chats.order_by('-name'), page_size)
-        return paginator.page(page)
+    if sort_by == "-name":
+        """Order chats by -name. """
+        chats = chats.order_by('name')
 
     return chats
 

@@ -62,7 +62,6 @@ export const fetchDeletingChatRequestNotification = (userId: number, service: Gr
         }
 
         if (deletingRequestResponse.status === 204) {
-            console.log(gettingRequestResponse.data)
             dispatch({
                 type: DELETE_CHAT_NOTIFICATION,
                 payload: {

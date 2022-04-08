@@ -12,9 +12,11 @@ export class ContentService {
         }
     }
 
-    static getPostList = async(categoryId: number | string, userId: number | string,  page: number): Promise<AxiosResponse> => {
+    static getPostList = async(params): Promise<AxiosResponse> => {
         try {
-            return await axios.get(ContentPath.postList(categoryId, userId, page))
+            return await axios.get(ContentPath.postList(), {
+                params: params
+            })
         } catch (err: any) {
             return err.response
         }
@@ -90,7 +92,7 @@ export class CreatingPost {
         const dataForm: FormData = this.createDataForm()
 
         try {
-            return await axios.post(ContentPath.postList('', '', 0), dataForm, defaultConfig)
+            return await axios.post(ContentPath.postList(), dataForm, defaultConfig)
         } catch (err: any) {
             return err.response
         }

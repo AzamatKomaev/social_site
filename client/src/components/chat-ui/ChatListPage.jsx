@@ -14,8 +14,8 @@ const getUserChats = async() => {
         group: []
     }
 
-    const groupListChatResponse = await GroupChatService.getList('last_message', 0)
-    const personalListChatResponse = await PersonalChatService.getList('last_message', 0)
+    const groupListChatResponse = await GroupChatService.getList({sort_by: 'last_message'})
+    const personalListChatResponse = await PersonalChatService.getList('last_message', 1)
 
     chats.group = groupListChatResponse.status === 200 ? groupListChatResponse.data : []
     chats.personal = personalListChatResponse.status === 200 ? personalListChatResponse.data : []

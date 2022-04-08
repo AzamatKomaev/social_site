@@ -29,11 +29,6 @@ const ButtonVariants = (props: any) => {
         dispatch(fetchUserData())
     }
 
-    useEffect(() => {
-        console.log(friendRequest)
-    }, [friendRequest])
-
-
     if (!currentUserData.isAuth) {
         return (
             <div>

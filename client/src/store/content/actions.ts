@@ -18,9 +18,9 @@ export const fetchGettingAllCategories = () => {
 
 
 // Actions for postReducer.
-export const fetchGettingListPost = (categoryId: number | string, userId: number | string, page: number) => {
+export const fetchGettingListPost = (params) => {
     return async function (dispatch) {
-        const response = await ContentService.getPostList(categoryId, userId, page)
+        const response = await ContentService.getPostList(params)
         dispatch({
             type: GET_POSTS,
             payload: {

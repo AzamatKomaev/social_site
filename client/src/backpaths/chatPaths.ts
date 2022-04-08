@@ -16,8 +16,8 @@ export class WebSocketChatPath {
 
 
 export class GroupChatPath {
-    static chats_list = (sortBy: string, page: number): string => {
-        return `${defaultUrl}/group_chats/?sort_by=${sortBy}&page=${page}`
+    static chats_list = (): string => {
+        return `${defaultUrl}/group_chats/`
     }
 
     static chat_detail = (chatId: number): string => {

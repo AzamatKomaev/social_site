@@ -16,9 +16,12 @@ const PostPage = (props) => {
 
     useEffect(() => {
         if (postListData.fetching && postListData.page !== -1) {
-            dispatch(fetchGettingListPost(categoryId, '', postListData.page))
+            let params = {
+                category__id: categoryId,
+                page: postListData.page
+            }
+            dispatch(fetchGettingListPost(params))
         }
-
     }, [postListData.fetching])
 
     useEffect(() => {

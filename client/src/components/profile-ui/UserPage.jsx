@@ -31,13 +31,16 @@ const UserPage = (props) => {
     }, [username])
 
     useEffect(() => {
-        console.log(user)
         if (user?.id) dispatch(fetchGettingFriendRequest(user.id))
     }, [user])
 
     useEffect(() => {
         if (postListData.fetching && postListData !== -1 && user?.id) {
-            dispatch(fetchGettingListPost('', user.id, postListData.page))
+            let params = {
+                user__id: user.id,
+                page: postListData.page
+            }
+            dispatch(fetchGettingListPost(params))
         }
     }, [postListData.fetching, user])
 
