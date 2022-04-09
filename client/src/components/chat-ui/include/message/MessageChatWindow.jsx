@@ -17,7 +17,7 @@ const MessageChatWindow = ({type_is_group, members, messages, newMessages, chat,
     useEffect(() => {
         try {
             let chatWindow = document.getElementById('chat-window')
-            chatWindow.style.height = `${window.screen.height / 2}px`
+            chatWindow.style.height = `${window.screen.height / 1.9}px`
         } catch (err) {}
     }, [window.screen.height])
 

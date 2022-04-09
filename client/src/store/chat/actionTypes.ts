@@ -13,6 +13,7 @@ export const FILTERED_CHAT = ""
 export const SET_FETCHING = "SET_FETCHING";
 export const SORT_CHATS_BY_NAME = "SORT_CHATS_BY_NAME";
 export const SORT_CHATS_BY_LAST_MESSAGE = "SORT_CHATS_BY_LAST_MESSAGE";
+export const FILTER_CHATS_BY_STRING = "FILTER_CHATS_BY_STRING";
 //-----------------------------------------------------------------------------------------------------------------
 
 export const GET_PERSONAL_CHAT_LIST = "GET_PERSONAL_CHAT_LIST";

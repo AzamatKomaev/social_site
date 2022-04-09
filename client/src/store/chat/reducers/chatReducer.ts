@@ -1,12 +1,13 @@
 import {
     SET_FETCHING,
-    GET_CHAT_LIST, SORT_CHATS_BY_NAME, SORT_CHATS_BY_LAST_MESSAGE
+    GET_CHAT_LIST, SORT_CHATS_BY_NAME, SORT_CHATS_BY_LAST_MESSAGE, FILTER_CHATS_BY_STRING
 } from "../actionTypes";
 import {GroupChatI, PersonalChatI} from "../../../interfaces";
 
+
 interface ChatListStateI {
     list: any,
-    filteredList: Array<GroupChatI | PersonalChatI>
+    filteredChatList: Array<GroupChatI | PersonalChatI>
 }
 
 const defaultChatListState = {
@@ -17,11 +18,11 @@ const defaultChatListState = {
         fetching: true,
         wasChange: null
     },
-    filteredList: []
+    filteredChatList: []
 }
 
 export const chatListReducer = (state: ChatListStateI = defaultChatListState, action: any) => {
-    let sortedChat;
+    let newChatList;
 
     switch (action.type) {
         case GET_CHAT_LIST:
@@ -29,7 +30,7 @@ export const chatListReducer = (state: ChatListStateI = defaultChatListState, ac
                 let page = state.list.page;
 
                 if (action.payload.statusCode === 204 || action.payload.statusCode === 404) page = -1;
-                else page++
+                else page++;
 
                 return {
                     ...state,
@@ -43,37 +44,29 @@ export const chatListReducer = (state: ChatListStateI = defaultChatListState, ac
                     }
                 }
             }
-            return {...state}
+            return state
 
         case SET_FETCHING:
             return {
                 ...state,
                 list: {
-                    values: state.list.values,
-                    lastStatusCode: state.list.lastStatusCode,
-                    page: state.list.page,
+                    ...state.list,
                     fetching: action.payload.fetching
                 }
             }
 
         case SORT_CHATS_BY_NAME:
-            sortedChat = state.list.values.sort((a: GroupChatI, b: GroupChatI) => {
-                    if (a.name > b.name) return -1
-                    // eslint-disable-next-line eqeqeq
-                    else if (a.name == b.name) return 0
-                    else return 1
-                }
-            )
+            newChatList = state.list.values.sort((a: GroupChatI, b: GroupChatI) => a.name.localeCompare(b.name))
             return {
                 ...state,
                 list: {
                     ...state.list,
-                    values: sortedChat
+                    values: newChatList
                 }
             }
 
         case SORT_CHATS_BY_LAST_MESSAGE:
-            sortedChat = state.list.values.sort((a: GroupChatI | PersonalChatI, b: GroupChatI | PersonalChatI): number => {
+            newChatList = state.list.values.sort((a: GroupChatI | PersonalChatI, b: GroupChatI | PersonalChatI): number => {
                     if (!a.last_message.created_at) {
                         return 1
                     }
@@ -88,13 +81,19 @@ export const chatListReducer = (state: ChatListStateI = defaultChatListState, ac
                     }
                 }
             )
-
             return {
                 ...state,
                 list: {
                     ...state.list,
-                    values: sortedChat
+                    values: newChatList
                 }
+            }
+            
+        case FILTER_CHATS_BY_STRING:
+            const filteredChatList = state.list.values.filter(chat => chat.name.indexOf(action.payload.string) !== -1)
+            return {
+                ...state,
+                filteredChatList: filteredChatList
             }
 
         default:

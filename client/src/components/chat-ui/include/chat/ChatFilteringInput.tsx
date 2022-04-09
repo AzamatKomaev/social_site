@@ -1,5 +1,6 @@
-import React, {useEffect, useState} from 'react';
-import {useDispatch, useSelector} from "react-redux";
+import React, {useState} from 'react';
+import {useDispatch} from "react-redux";
+import {FILTER_CHATS_BY_STRING} from "../../../../store/chat/actionTypes";
 
 const ChatFilteringInput = () => {
     const dispatch = useDispatch()
@@ -7,9 +8,8 @@ const ChatFilteringInput = () => {
     const [name, setName] = useState<string | undefined>()
 
     const filterByString = () => {
-
         dispatch({
-            type: "",
+            type: FILTER_CHATS_BY_STRING,
             payload: {
                 string: name === "" ? undefined : name
             }

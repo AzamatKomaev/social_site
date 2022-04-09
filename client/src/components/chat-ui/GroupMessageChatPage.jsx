@@ -102,7 +102,6 @@ const GroupMessageChatPage = (props) => {
                 if (response.status === 200) {
                     setMessages([...response.data.reverse(), ...messages])
                     setCurrentPage(prevState => prevState + 1)
-                    console.log('i was worked!!!!!!')
                 } else {
                     setCurrentPage(-1)
                 }

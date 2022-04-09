@@ -123,4 +123,3 @@ export const addNewChatsInChatList = (newChats: Array<GroupChatI | PersonalChatI
         })
     }
 }
-

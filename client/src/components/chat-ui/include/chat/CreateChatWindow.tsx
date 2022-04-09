@@ -1,6 +1,4 @@
 import React, {useEffect, useState} from 'react';
-import {createChat} from "../../../../services/chatService";
-import {GroupChatI} from "../../../../interfaces";
 import {CreatingChat} from "../../../../services/chatServices";
 import {ChatFrontPath} from "../../../../frontpaths/frontPath";
 

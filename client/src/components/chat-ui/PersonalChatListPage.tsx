@@ -1,13 +1,11 @@
 import React, {useEffect, useState} from 'react';
 import {useDispatch, useSelector} from "react-redux";
-import {addNewChatsInChatList} from "../../store/chat/actions";
 import Header from "../extend/Header";
 import {GroupChatNotification} from "./include/notifications/Notifications";
 import ButtonRow from "./include/button_row/ButtonRow";
 import ChatFilteringInput from "./include/chat/ChatFilteringInput";
 import ChatList from "./include/chat/ChatList";
 import Error404NotFound from "../extend/Error404NotFound";
-import {getPersonalChats} from "../../services/personalChatService";
 
 const PersonalChatListPage = () => {
     const dispatch = useDispatch()
@@ -24,27 +22,27 @@ const PersonalChatListPage = () => {
     useEffect(() => {
         if (fetching && page !== -1) {
             console.log("fetching")
-            getPersonalChats('-name', page)
-                .then(response => {
-                    dispatch(addNewChatsInChatList(response.data, "personal"))
-                    if (response.status === 204) {
-                        setPage(-1)
-                    } else {
-                        setPage(prevState => prevState + 1)
-                    }
-                })
-                .catch(err => {
-                    console.log(err.response);
-                    if (err.response.status) {
-                        setError(
-                            {
-                                response: err.response.status
-                            });
-                    }
-                })
-                .finally(() => {
-                    setFetching(false)
-                })
+        //     getPersonalChats('-name', page)
+        //         .then(response => {
+        //             dispatch(addNewChatsInChatList(response.data, "personal"))
+        //             if (response.status === 204) {
+        //                 setPage(-1)
+        //             } else {
+        //                 setPage(prevState => prevState + 1)
+        //             }
+        //         })
+        //         .catch(err => {
+        //             console.log(err.response);
+        //             if (err.response.status) {
+        //                 setError(
+        //                     {
+        //                         response: err.response.status
+        //                     });
+        //             }
+        //         })
+        //         .finally(() => {
+        //             setFetching(false)
+        //         })
         }
     }, [fetching])
 

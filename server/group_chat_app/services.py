@@ -1,7 +1,6 @@
 from typing import Optional, Union
 
 from django.db.models import QuerySet
-from django.db.models.expressions import RawSQL
 from django.shortcuts import get_object_or_404
 from django.http import Http404
 
@@ -25,10 +24,6 @@ def get_and_sort_chat_list(request, chat_model) -> dict:
             (request.user.id, )
         )
         chats = chat_qs if len(chat_qs) < 5 else chat_qs[:5]
-
-    if sort_by == "-name":
-        """Order chats by -name. """
-        chats = chats.order_by('name')
 
     return chats
 

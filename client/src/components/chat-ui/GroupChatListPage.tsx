@@ -8,16 +8,13 @@ import {GroupChatNotification} from "./include/notifications/Notifications";
 import ButtonRow from "./include/button_row/ButtonRow";
 import ChatFilteringInput from "./include/chat/ChatFilteringInput";
 import {SET_FETCHING} from "../../store/chat/actionTypes";
-import {ContentPath} from "../../backpaths/contentPaths";
-import axios from "axios";
 
 
 const GroupChatListPage = () => {
     const dispatch = useDispatch()
 
     const chatsData = useSelector((state: any) => state.chatList.list)
-    const filteredChatsData = useSelector((state: any) => state.chatList.filteredList)
-    //const filteringResult = useSelector((state: any) => state.chatList.groupChatsByFilterString)
+    const filteredChatList = useSelector((state: any) => state.chatList.filteredChatList)
     const userData = useSelector((state: any) => state.user)
 
     const [error, setError] = useState(null)
@@ -63,11 +60,12 @@ const GroupChatListPage = () => {
                         <div className="row">
                             {'\n'}
                             <div className="col-12">
-                                {filteredChatsData.length > 0
+                                {filteredChatList.length > 0
                                     ?
                                     <div>
-                                        <p>Найдено: {filteredChatsData.length}.</p>
-                                        <ChatList chats={filteredChatsData} type_is_group={true}/>
+                                        {"\n"}
+                                        <h4 style={{textAlign: "center"}}>Найдено: {filteredChatList.length}.</h4>
+                                        <ChatList chats={filteredChatList} type_is_group={true}/>
                                     </div>
                                     :
                                     null

@@ -1,6 +1,4 @@
 import React, {useEffect, useState} from 'react';
-import {useDispatch} from "react-redux";
-import {fetchAcceptingChatRequest, fetchDeletingChatRequestNotification} from "../../../../../store/user/actions";
 import ChatCellButtons from "./ChatCellButtons";
 import {GroupChatService} from "../../../../../services/chatServices";
 

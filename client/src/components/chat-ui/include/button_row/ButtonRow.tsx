@@ -1,6 +1,10 @@
 import React, {useState} from 'react';
 import {useDispatch, useSelector} from "react-redux";
-import {SORT_CHATS_BY_LAST_MESSAGE, SORT_CHATS_BY_NAME} from "../../../../store/chat/actionTypes";
+import {
+    FILTER_CHATS_BY_STRING,
+    SORT_CHATS_BY_LAST_MESSAGE,
+    SORT_CHATS_BY_NAME
+} from "../../../../store/chat/actionTypes";
 
 
 const ButtonRow = () => {
@@ -15,14 +19,30 @@ const ButtonRow = () => {
         dispatch({type: SORT_CHATS_BY_LAST_MESSAGE})
     }
 
+    const clearFilteredChatList = () => {
+        dispatch({
+            type: FILTER_CHATS_BY_STRING,
+            payload: {
+                string: null
+            }
+        })
+    }
+
     const buttons = [
         {
             onClick: sortByName,
-            content: "По названию"
+            content: "По названию",
+            className: "btn btn-outline-primary"
         },
         {
             onClick: sortByLastMessages,
-            content: "По дате создания последнего сообщения"
+            content: "По дате создания последнего сообщения",
+            className: "btn btn-outline-primary"
+        },
+        {
+            onClick: clearFilteredChatList,
+            content: "Очистить резултат поиска",
+            className: "btn btn-outline-warning"
         }
     ]
 
@@ -31,7 +51,7 @@ const ButtonRow = () => {
             {buttons.map(button => (
                 <button
                     type="button"
-                    className="btn btn-outline-primary"
+                    className={button.className}
                     style={{fontSize: "10pt"}}
                     onClick={button.onClick}
                 >

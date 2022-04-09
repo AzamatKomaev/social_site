@@ -1,6 +1,4 @@
 import React, { useState } from 'react';
-import {createGroupMessage, createPersonalMessage} from "../../../../services/messageService";
-import {GroupChatService} from "../../../../services/chatServices";
 
 const MessageInput = (props) => {
     const [message, setMessage] = useState("")

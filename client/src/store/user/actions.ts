@@ -4,8 +4,6 @@ import {
     GET_USER_CHAT_NOTIFICATIONS,
     GET_USER_DATA
 } from './actionType';
-import {getAllUserChatRequests} from "../../services/userService";
-import {acceptChatRequest, deleteRequest, getRequest} from "../../services/chatService";
 import {AuthService} from "../../services/authService";
 import {GroupChatService} from "../../services/chatServices";
 import {AxiosResponse} from "axios";

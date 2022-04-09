@@ -146,8 +146,8 @@ export class PersonalChatService {
 }
 
 export class CreatingChat {
-    private name: string | undefined;
-    private avatar: string | undefined;
+    private readonly name: string | undefined;
+    private readonly avatar: string | undefined;
 
     public constructor(name: string, avatar: string) {
         this.name = name;
