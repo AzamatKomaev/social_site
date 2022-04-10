@@ -12,7 +12,7 @@ from group_chat_app.sql.commands import get_ordered_group_chats
 from personal_chat_app.sql.commands import get_ordered_personal_chats
 
 
-def get_and_sort_chat_list(request, chat_model) -> dict:
+def get_sorted_chat_list(request, chat_model) -> QuerySet:
     chat_data: dict[str, Union[dict, int]]
     chats = chat_model.objects.filter(users=request.user)
     sort_by = request.query_params.get('sort_by')

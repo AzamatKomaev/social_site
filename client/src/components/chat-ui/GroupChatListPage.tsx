@@ -17,8 +17,6 @@ const GroupChatListPage = () => {
     const filteredChatList = useSelector((state: any) => state.chatList.filteredChatList)
     const userData = useSelector((state: any) => state.user)
 
-    const [error, setError] = useState(null)
-
     useEffect(() => {
         if (chatsData.fetching && chatsData.page !== -1) {
             dispatch(fetchGettingChats(chatsData.page, 'group'))
@@ -31,7 +29,6 @@ const GroupChatListPage = () => {
             document.removeEventListener('scroll', scrollHandler)
         }
     }, [])
-
 
     const scrollHandler = (e) => {
         if (e.target.documentElement.scrollHeight - (e.target.documentElement.scrollTop + window.innerHeight) < 1000 &&
@@ -46,7 +43,7 @@ const GroupChatListPage = () => {
         }
     }
 
-    if (userData.isAuth && !error) {
+    if (userData.isAuth) {
         return (
             <div>
                 <Header/>

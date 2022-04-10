@@ -17,6 +17,14 @@ export class GroupChatService {
         }
     }
 
+    public async delete(): Promise<AxiosResponse> {
+        try {
+            return await axios.delete(GroupChatPath.chat_detail(this.chatId), defaultConfig)
+        } catch (err: any) {
+            return err.response
+        }
+    }
+
     public static async getList(params): Promise<AxiosResponse> {
         try {
             return await axios.get(GroupChatPath.chats_list(), {
@@ -104,7 +112,7 @@ export class GroupChatService {
 }
 
 export class PersonalChatService {
-    private interlocutorUsername: string
+    private readonly interlocutorUsername: string
 
     constructor(username: string) {
         this.interlocutorUsername = username

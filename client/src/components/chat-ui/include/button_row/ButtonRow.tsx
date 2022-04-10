@@ -58,9 +58,6 @@ const ButtonRow = () => {
                     {button.content}
                 </button>
             ))}
-
-            {/*<button type="button" className="btn btn-outline-primary" style={{fontSize: "10pt"}} onClick={sortByLastMessages}>С сообщениями</button>*/}
-            {/*<button type="button" className="btn btn-outline-primary" style={{fontSize: "10pt"}} onClick={filterByEmptyMessages}>Без сообщений</button>*/}
         </div>
     );
 };

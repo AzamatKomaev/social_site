@@ -1,10 +1,8 @@
 import React, {useEffect} from 'react';
-import {useDispatch, useSelector} from "react-redux";
-import {fetchGettingAllUserFriends} from "../../../../store/friend/actions";
+import {useSelector} from "react-redux";
 import MemberList from "../member/MemberList";
 
 const MembersTab = ({chatData, service}) => {
-    const dispatch = useDispatch();
 
     const currentUserData = useSelector((state: any) => state.user)
     const chatMembers = useSelector((state: any) => state.requestList.members)

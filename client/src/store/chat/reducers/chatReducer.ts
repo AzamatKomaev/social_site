@@ -6,11 +6,13 @@ import {GroupChatI, PersonalChatI} from "../../../interfaces";
 
 
 interface ChatListStateI {
+    type: string,
     list: any,
     filteredChatList: Array<GroupChatI | PersonalChatI>
 }
 
-const defaultChatListState = {
+const defaultChatListState: ChatListStateI = {
+    type: null,
     list: {
         values: [],
         lastStatusCode: null,
@@ -40,7 +42,7 @@ export const chatListReducer = (state: ChatListStateI = defaultChatListState, ac
                         lastStatusCode: action.payload.statusCode === 404 ? 201 : action.payload.statusCode,
                         page: page,
                         fetching: false,
-                        wasChange: 100
+                        type: action.payload.type
                     }
                 }
             }
@@ -56,7 +58,15 @@ export const chatListReducer = (state: ChatListStateI = defaultChatListState, ac
             }
 
         case SORT_CHATS_BY_NAME:
-            newChatList = state.list.values.sort((a: GroupChatI, b: GroupChatI) => a.name.localeCompare(b.name))
+            if (state.type === "group") {
+                newChatList = state.list.values.sort(
+                    (a: GroupChatI, b: GroupChatI) => a.name.localeCompare(b.name)
+                )
+            } else if (state.type === "personal") {
+                newChatList = state.list.values.sort(
+                    (a: PersonalChatI, b: PersonalChatI) => a.interlocutor.username.localeCompare(b.interlocutor.username)
+                )
+            }
             return {
                 ...state,
                 list: {
@@ -90,7 +100,14 @@ export const chatListReducer = (state: ChatListStateI = defaultChatListState, ac
             }
             
         case FILTER_CHATS_BY_STRING:
-            const filteredChatList = state.list.values.filter(chat => chat.name.indexOf(action.payload.string) !== -1)
+            let filteredChatList;
+            if (state.type === "group") {
+                filteredChatList = state.list.values.filter(chat => chat.name.indexOf(action.payload.string) !== -1)
+            } else if (state.type === "personal") {
+                filteredChatList = state.list.values.filter(
+                    chat => chat.interlocutor.username.indexOf(action.payload.string) !== -1
+                )
+            }
             return {
                 ...state,
                 filteredChatList: filteredChatList

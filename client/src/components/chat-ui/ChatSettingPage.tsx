@@ -16,7 +16,7 @@ const ChatSettingPage = (props: any) => {
 
     const [chatData, setChatData] = useState({
         data: null,
-        error: null
+        status: null
     })
     const service: any = useRef<GroupChatService>()
 
@@ -26,8 +26,8 @@ const ChatSettingPage = (props: any) => {
 
     useEffect(() => {
         const fetchData = async() => {
-            const response = service.current.getDetail()
-            setChatData({data: response.data, error: response.status})
+            const response = await service.current.getDetail()
+            setChatData({data: response.data, status: response.status})
         }
         fetchData()
     }, [])
@@ -38,11 +38,11 @@ const ChatSettingPage = (props: any) => {
     }, [dispatch])
 
 
-    if (currentUserData.isAuth && chatData.error !== 403) {
+    if (currentUserData.isAuth && chatData.status === 200) {
         return (
             <div>
                 <Header/>
-                <SettingWindow chatData={chatData} service={service.current}/>
+                <SettingWindow chatData={chatData.data} service={service.current}/>
             </div>
         )
     } else {

@@ -17,9 +17,11 @@ const GroupMessageChatPage = (props) => {
     const [messages, setMessages] = useState([])
     const [newMessages, setNewMessages] = useState([])
 
-    const [chat, setChat] = useState(null)
+    const [chat, setChat] = useState({
+        data: null,
+        status: null
+    })
     const [scrollHeights, setScrollHeights] = useState([800])
-    const [error, setError] = useState(false)
 
     const [currentPage, setCurrentPage] = useState(2);
     const [fetching, setFetching] = useState(false)
@@ -47,11 +49,10 @@ const GroupMessageChatPage = (props) => {
     useEffect(() => {
         const fetchData = async() => {
             const response = await service.current.getDetail()
-            if (response.status === 200) {
-                setChat(response.data)
-            } else {
-                setError(response.status)
-            }
+            setChat({
+                data: response.status === 200 ? response.data : null,
+                status: response.status
+            })
         }
         fetchData()
     }, [])
@@ -92,7 +93,7 @@ const GroupMessageChatPage = (props) => {
         ws.current.onmessage = (e) => {
             addNewMessageInArray(JSON.parse(e.data))
         }
-    }, [])
+    }, [chatId])
 
     useEffect(() => {
         const fetchData = async() => {
@@ -141,7 +142,7 @@ const GroupMessageChatPage = (props) => {
     }
 
 
-    if ((messages || newMessages) && currentUserData?.isAuth) {
+    if ((messages || newMessages) && currentUserData?.isAuth && chat.status === 200) {
         return (
             <div>
                 <Header/>
@@ -150,7 +151,7 @@ const GroupMessageChatPage = (props) => {
                     members={members}
                     messages={messages}
                     newMessages={newMessages}
-                    chat={chat}
+                    chat={chat.data}
                     ws={ws.current}
                     service={service.current}
                     currentUserData={currentUserData}

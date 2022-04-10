@@ -1,11 +1,12 @@
 from django.shortcuts import get_object_or_404
+from rest_framework.decorators import action
 from rest_framework.response import Response
 from rest_framework import status, viewsets, generics
 
 from user_app.models import User
 from .models import GroupChat, GroupChatRole, GroupChatRequest, GroupMessage
 from .paginators import MessagePagination
-from .services import GroupChatRequestService, get_and_sort_chat_list, get_group_chat_serializer_data
+from .services import GroupChatRequestService, get_sorted_chat_list, get_group_chat_serializer_data
 from .serializers import (
     GroupChatSerializer, GroupMessageSerializer,
     GroupChatRequestSerializer, GroupChatRoleSerializer
@@ -13,7 +14,6 @@ from .serializers import (
 from .permissions import GroupChatPermission, GroupChatRolePermission, GroupChatRequestPermission, \
     GroupChatRequestListPermission
 from . import exceptions
-from .sql.commands import get_ordered_group_chats
 
 
 class GroupChatModelViewSet(viewsets.ModelViewSet):
@@ -28,7 +28,7 @@ class GroupChatModelViewSet(viewsets.ModelViewSet):
         return obj
 
     def get_queryset(self):
-        return get_and_sort_chat_list(self.request, self.queryset.model)
+        return get_sorted_chat_list(self.request, self.queryset.model)
 
     def create(self, request, *args, **kwargs):
         serializer = self.get_serializer(data=get_group_chat_serializer_data(request))
@@ -122,3 +122,5 @@ class GroupChatRoleModelViewSet(viewsets.ModelViewSet):
         obj.save()
         serializer = self.get_serializer(obj)
         return Response(serializer.data, status=status.HTTP_200_OK)
+
+

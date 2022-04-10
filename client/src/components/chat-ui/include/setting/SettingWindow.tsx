@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React from 'react';
 import { useSelector } from 'react-redux';
 
 import SettingMenu from './SettingMenu';
@@ -9,6 +9,7 @@ import MembersTab from "../tab/MembersTab";
 
 const SettingWindow = ({chatData, service}) => {
     const currentUserData = useSelector((state: any) => state.user)
+    console.log(chatData)
 
     if (chatData && currentUserData.info) {
         return (

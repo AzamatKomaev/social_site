@@ -1,9 +1,8 @@
-from django.core.paginator import Paginator, EmptyPage
 from django.http import Http404
 from rest_framework.response import Response
 from rest_framework import status, permissions, viewsets
 
-from group_chat_app.services import get_and_sort_chat_list
+from group_chat_app.services import get_sorted_chat_list
 from group_chat_app.paginators import MessagePagination
 from .services import PersonalChatService
 from .models import PersonalChat, PersonalMessage
@@ -27,11 +26,10 @@ class PersonalChatModelViewSet(PersonalBase, viewsets.ModelViewSet):
     queryset = PersonalChat.objects.all()
     serializer_class = PersonalChatSerializer
     permission_classes = (permissions.IsAuthenticated, )
+    pagination_class = MessagePagination
 
     def get_queryset(self):
-        sort_by, page = self.request.query_params.get('sort_by'), self.request.query_params.get('page')
-        queryset = get_and_sort_chat_list(sort_by, self.request, PersonalChat, page)
-        return queryset
+        return get_sorted_chat_list(self.request, PersonalChat)
 
     def retrieve(self, request, *args, **kwargs):
         """

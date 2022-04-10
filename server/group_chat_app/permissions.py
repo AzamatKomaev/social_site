@@ -25,7 +25,13 @@ class GroupChatPermission(permissions.BasePermission):
 class GroupChatRolePermission(permissions.BasePermission):
     def has_object_permission(self, request, view, obj):
         service = GroupChatRoleService(obj)
-        if request.method not in permissions.SAFE_METHODS and not service.is_user_admin(request.user):
+        is_admin = service.is_user_admin(request.user)
+
+        # if request.method == "DELETE" and (request.user == obj.user or is_admin):
+        #     """If request user own the role or request user is admin."""
+        #     return True
+
+        if request.method not in permissions.SAFE_METHODS and not is_admin:
             return False
 
         return True

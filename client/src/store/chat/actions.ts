@@ -106,7 +106,8 @@ export const fetchGettingChats = (page: number, type: string) => {
             type: GET_CHAT_LIST,
             payload: {
                 list: response.status === 200 ? response.data : [],
-                statusCode: response.status
+                statusCode: response.status,
+                type: type
             }
         })
     }
