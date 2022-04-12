@@ -27,10 +27,6 @@ class GroupChatRolePermission(permissions.BasePermission):
         service = GroupChatRoleService(obj)
         is_admin = service.is_user_admin(request.user)
 
-        # if request.method == "DELETE" and (request.user == obj.user or is_admin):
-        #     """If request user own the role or request user is admin."""
-        #     return True
-
         if request.method not in permissions.SAFE_METHODS and not is_admin:
             return False
 

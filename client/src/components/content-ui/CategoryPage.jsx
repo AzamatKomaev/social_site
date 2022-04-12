@@ -5,6 +5,7 @@ import Header from '../extend/Header';
 import CategoryList from './include/category/CategoryList';
 
 import {fetchGettingAllCategories} from "../../store/content/actions";
+import Spinner from "../extend/Spinner";
 
 
 const CategoryPage = () => {
@@ -15,16 +16,21 @@ const CategoryPage = () => {
         dispatch(fetchGettingAllCategories())
     }, [])
 
-    return (
-        <div>
-            <Header/>{"\n"}
-            {categoryReducer.list.length > 0 ?
+    if (categoryReducer.list.length > 0) {
+        return (
+            <div>
+                <Header/>
                 <CategoryList/>
-            :
-                <b>There is no categories!</b>
-            }
-        </div>
-    )
+            </div>
+        )
+    } else {
+        return (
+            <div>
+                <Header/>
+                <Spinner/>
+            </div>
+        )
+    }
 }
 
 export default CategoryPage;

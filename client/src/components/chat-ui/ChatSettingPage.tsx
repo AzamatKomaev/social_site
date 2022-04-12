@@ -4,7 +4,11 @@ import { useSelector, useDispatch } from 'react-redux';
 import Header from '../extend/Header';
 import Error404NotFound from '../extend/Error404NotFound';
 import SettingWindow from './include/setting/SettingWindow';
-import {fetchGettingAllChatMembers, fetchGettingAllChatRequest} from "../../store/chat/actions";
+import {
+    fetchGettingAllChatMembers,
+    fetchGettingAllChatRequest,
+    fetchGettingDetailGroupChat
+} from "../../store/chat/actions";
 import {GroupChatService} from "../../services/chatServices";
 
 
@@ -14,10 +18,7 @@ const ChatSettingPage = (props: any) => {
 
     const currentUserData = useSelector((state: any) => state.user)
 
-    const [chatData, setChatData] = useState({
-        data: null,
-        status: null
-    })
+    const chatData = useSelector((state: any) => state.chatList.detail)
     const service: any = useRef<GroupChatService>()
 
     useEffect(() => {
@@ -25,12 +26,8 @@ const ChatSettingPage = (props: any) => {
     }, [chatId])
 
     useEffect(() => {
-        const fetchData = async() => {
-            const response = await service.current.getDetail()
-            setChatData({data: response.data, status: response.status})
-        }
-        fetchData()
-    }, [])
+        dispatch(fetchGettingDetailGroupChat(service.current))
+    }, [service])
 
     useEffect(() => {
         dispatch(fetchGettingAllChatMembers(service.current))
@@ -38,11 +35,11 @@ const ChatSettingPage = (props: any) => {
     }, [dispatch])
 
 
-    if (currentUserData.isAuth && chatData.status === 200) {
+    if (currentUserData.isAuth && chatData.statusCode === 200) {
         return (
             <div>
                 <Header/>
-                <SettingWindow chatData={chatData.data} service={service.current}/>
+                <SettingWindow service={service.current}/>
             </div>
         )
     } else {

@@ -1,13 +1,12 @@
 import React, {useEffect, useRef} from 'react';
 import Modal from "../../../extend/modal/Modal";
 import {useSelector} from "react-redux";
-import {GroupChatService} from "../../../../services/chatServices";
 import {ChatFrontPath} from "../../../../frontpaths/frontPath";
 
 
-const InformationTab = ({chatData}) => {
+const InformationTab = ({service}) => {
     const currentUserData = useSelector((state: any) => state.user)
-    const service = useRef<GroupChatService>()
+    const chatData = useSelector((state: any) => state.chatList.detail.value)
 
     const handleDeleteChatButton = async() => {
         const response = await service.current.delete()
@@ -22,10 +21,6 @@ const InformationTab = ({chatData}) => {
             window.location.href = ChatFrontPath.chatList()
         }
     }
-
-    useEffect(() => {
-        service.current = new GroupChatService(chatData.id)
-    }, [chatData])
 
     return (
         <div className="tab-pane fade show active" id="main-tab" role="tabpanel" aria-labelledby="nav-home-tab">

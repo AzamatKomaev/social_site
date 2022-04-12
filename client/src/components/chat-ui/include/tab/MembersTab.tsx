@@ -2,7 +2,7 @@ import React, {useEffect} from 'react';
 import {useSelector} from "react-redux";
 import MemberList from "../member/MemberList";
 
-const MembersTab = ({chatData, service}) => {
+const MembersTab = ({service}) => {
 
     const currentUserData = useSelector((state: any) => state.user)
     const chatMembers = useSelector((state: any) => state.requestList.members)

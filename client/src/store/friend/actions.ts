@@ -102,28 +102,13 @@ export const deleteFriendRequestFromList = (friendRequestList: Array<any>, userI
 export const fetchGettingAllUserFriends = (userId: number) => {
     return async function (dispatch) {
         const response = await UserService.getFriendList(userId)
-
-        switch (response.status) {
-            case 200:
-                dispatch({
-                    type: GET_ALL_FRIENDS,
-                    payload: {
-                        list: response.data,
-                        statusCode: response.status
-                    }
-                })
-                break;
-
-            default:
-                dispatch({
-                    type: GET_ALL_FRIENDS,
-                    payload: {
-                        list: [],
-                        statusCode: response.status
-                    }
-                })
-                break;
-        }
+        dispatch({
+            type: GET_ALL_FRIENDS,
+            payload: {
+                list: response.status === 200 ? response.data : [],
+                statusCode: response.status
+            }
+        })
     }
 }
 

@@ -1,13 +1,12 @@
-import React, { useState, useEffect} from 'react';
+import React, {useMemo} from 'react';
 import { useSelector } from 'react-redux';
-import {AuthFrontPath, CategoryFrontPath, ChatFrontPath, UserFrontPath} from "../../frontpaths/frontPath";
+import {AuthFrontPath, CategoryFrontPath, UserFrontPath} from "../../frontpaths/frontPath";
 import {AuthService} from "../../services/authService";
 import {generalTabs} from "./tabs";
 
 
 const Header = () => {
     const userData = useSelector(state => state.user)
-
     return (
         <div>
             <nav className="navbar navbar-light bg-light fixed-top">

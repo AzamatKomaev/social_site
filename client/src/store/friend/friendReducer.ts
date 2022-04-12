@@ -24,7 +24,7 @@ interface FriendListStateI {
 
 
 const defaultRequestState: FriendRequestStateI = {
-    list: [],
+    list: null,
     detail: null,
     statusCode: null
 }

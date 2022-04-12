@@ -79,7 +79,7 @@ class GroupChatMembersSerializer(ModelSerializer):
         fields = ["id",
                   "user_data",
                   "name",
-                  "data_joined"
+                  "date_joined"
                   ]
 
 

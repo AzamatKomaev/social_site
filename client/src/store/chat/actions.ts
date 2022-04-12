@@ -1,13 +1,13 @@
 import {
+    CHANGE_USER_CHAT_ROLE,
     CHECK_IS_REQUEST_EXISTS,
     CREATE_REQUEST, DELETE_REQUEST,
     GET_ALL_CHAT_MEMBERS,
-    GET_ALL_CHAT_REQUESTS, GET_CHAT_LIST,
+    GET_ALL_CHAT_REQUESTS, GET_CHAT_DETAIL, GET_CHAT_LIST,
 } from "./actionTypes";
 import {GroupChatI, GroupChatRequestI, PersonalChatI} from "../../interfaces";
 import {GroupChatService, PersonalChatService} from "../../services/chatServices";
 import {AxiosResponse} from "axios";
-
 
 export const fetchGettingAllChatMembers = (service: GroupChatService) => {
     return async function (dispatch) {
@@ -110,6 +110,43 @@ export const fetchGettingChats = (page: number, type: string) => {
                 type: type
             }
         })
+    }
+}
+
+export const fetchGettingDetailGroupChat = (service: GroupChatService) => {
+    return async function (dispatch) {
+        const response = await service.getDetail()
+        dispatch({
+            type: GET_CHAT_DETAIL,
+            payload: {
+                detail: response.status === 200 ? response.data : null,
+                statusCode: response.status
+            }
+        })
+    }
+}
+
+export const fetchChangingChatRole = (memberData, service: GroupChatService) => {
+    return async function (dispatch) {
+        let response;
+
+        if (memberData.name === 'Участник') {
+            response = await service.changeRole(memberData.user_data.id, 'Модератор')
+        } else if (memberData.name === 'Модератор') {
+            response = await service.changeRole(memberData.user_data.id, 'Участник')
+        } else {
+            alert("Да ты че, БЛЯЯЯЯЯЯЯЯЯЯЯЯЯЯЯЯЯЯЯЯЯЯЯЯЯЯЯЯ")
+            return;
+        }
+
+        if (response.status === 200) {
+            dispatch({
+                type: CHANGE_USER_CHAT_ROLE,
+                payload: {
+                    updatedChatRole: response.data
+                }
+            })
+        }
     }
 }
 

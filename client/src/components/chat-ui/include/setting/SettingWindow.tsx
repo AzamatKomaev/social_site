@@ -7,9 +7,9 @@ import AddFriendTab from '../tab/AddFriendTab';
 import MembersTab from "../tab/MembersTab";
 
 
-const SettingWindow = ({chatData, service}) => {
+const SettingWindow = ({service}) => {
     const currentUserData = useSelector((state: any) => state.user)
-    console.log(chatData)
+    const chatData = useSelector((state: any) => state.chatList.detail.value)
 
     if (chatData && currentUserData.info) {
         return (
@@ -19,9 +19,9 @@ const SettingWindow = ({chatData, service}) => {
                 </div>
                 <div className="card" style={{marginTop: "5px"}}>
                     <div className="tab-content" id="nav-tabContent">
-                        <InformationTab chatData={chatData}/>
-                        <MembersTab chatData={chatData} service={service}/>
-                        <AddFriendTab chatData={chatData} service={service}/>
+                        <InformationTab service={service}/>
+                        <MembersTab service={service}/>
+                        <AddFriendTab service={service}/>
                     </div>
                 </div>
             </div>

@@ -1,4 +1,5 @@
 import {
+    CHANGE_USER_CHAT_ROLE,
     CREATE_REQUEST,
     DELETE_REQUEST,
     GET_ALL_CHAT_MEMBERS,
@@ -50,6 +51,20 @@ export const requestListReducer = (state: RequestListState = defaultRequestListS
             return {
                 ...state, ...action.payload, requestList: requestListWithoutDeletedOne,
                 members: memberListWithoutDeletedOne
+            }
+        case CHANGE_USER_CHAT_ROLE:
+            let newMemberList = [...state.members]
+
+            for (let i=0; i < state.members.length; i++) {
+                if (state.members[i].id === action.payload.updatedChatRole.id) {
+                    newMemberList[i] = action.payload.updatedChatRole
+                }
+            }
+            console.log(state.members)
+            console.log(newMemberList)
+            return {
+                ...state,
+                members: newMemberList
             }
         default:
             return state

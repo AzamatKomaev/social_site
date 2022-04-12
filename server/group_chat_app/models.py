@@ -30,7 +30,8 @@ class GroupChatRole(models.Model):
         choices=CHAT_ROLES,
         default="Участник"
     )
-    data_joined = models.DateTimeField(auto_now_add=True)
+    date_joined = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
     user = models.ForeignKey(AUTH_USER_MODEL, on_delete=models.CASCADE)
     chat = models.ForeignKey(GroupChat, on_delete=models.CASCADE)
 

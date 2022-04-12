@@ -34,15 +34,15 @@ export const fetchGettingListPost = (params) => {
 export const fetchGettingDetailPost = (postId: number) => {
     return async function(dispatch) {
         const response = await ContentService.getPostDetail(postId)
-
-        if (response.status === 200) {
-            dispatch({
-                type: GET_DETAIL_POST,
-                payload: {
-                    detail: response.data
+        dispatch({
+            type: GET_DETAIL_POST,
+            payload: {
+                detail: {
+                    value: response.status === 200 ? response.data : null,
+                    statusCode: response.status
                 }
-            })
-        }
+            }
+        })
     }
 }
 

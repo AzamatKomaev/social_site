@@ -12,6 +12,7 @@ import SettingTab from './include/tab/SettingTab'
 import {UserService} from "../../services/userService";
 import {fetchGettingListPost} from "../../store/content/actions";
 import {SET_FETCHING} from "../../store/content/actionTypes";
+import Spinner from "../extend/Spinner";
 
 
 const UserPage = (props) => {
@@ -19,25 +20,30 @@ const UserPage = (props) => {
 
     const dispatch = useDispatch()
     const postListData = useSelector((state) => state.post.list)
-    const [user, setUser] = useState()
-    const currentUserData = useSelector(state => state.user)
+    const [user, setUser] = useState({
+        value: null,
+        statusCode: null
+    })
 
     useEffect(() => {
         const fetchData = async() => {
             const response = await UserService.getUser(username)
-            if (response.status === 200 && response.data.length === 1) setUser(response.data[0])
+            setUser({
+                value: response.status === 200 ? response.data[0] : null,
+                statusCode: response.status
+            })
         }
         fetchData()
     }, [username])
 
     useEffect(() => {
-        if (user?.id) dispatch(fetchGettingFriendRequest(user.id))
+        if (user.value?.id) dispatch(fetchGettingFriendRequest(user.value.id))
     }, [user])
 
     useEffect(() => {
-        if (postListData.fetching && postListData !== -1 && user?.id) {
+        if (postListData.fetching && postListData !== -1 && user.value?.id) {
             let params = {
-                user__id: user.id,
+                user__id: user.value.id,
                 page: postListData.page
             }
             dispatch(fetchGettingListPost(params))
@@ -64,7 +70,7 @@ const UserPage = (props) => {
         }
     }
 
-    if (user && currentUserData) {
+    if (user.value) {
         return (
             <div>
                 <Header/>
@@ -72,10 +78,17 @@ const UserPage = (props) => {
                     <SwitchMenu/>
                     <div className="tab-content">
                         {"\n"}
-                        <InfoTab user={user}/>
+                        <InfoTab user={user.value}/>
                         <SettingTab/>
                     </div>
                 </div>
+            </div>
+        )
+    } else if (!user.value && !user.statusCode) {
+        return (
+            <div>
+                <Header/>
+                <Spinner/>
             </div>
         )
     } else {

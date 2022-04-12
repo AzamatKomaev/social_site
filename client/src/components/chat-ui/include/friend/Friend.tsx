@@ -2,7 +2,7 @@ import React from 'react';
 import FriendButtonVariants from "./FriendButtonVariants";
 import {UserFrontPath} from "../../../../frontpaths/frontPath";
 
-const Friend = ({friendData, chatData, service}) => {
+const Friend = ({friendData, service}) => {
     return (
         <div className="card col-10 col-md-9 my-3 mx-auto border border-primary">
             <div
@@ -28,11 +28,11 @@ const Friend = ({friendData, chatData, service}) => {
                        </div>
                     </a>
                     <div className="d-none d-sm-block" style={{marginLeft: "auto"}}>
-                        <FriendButtonVariants friendData={friendData} chatData={chatData} service={service}/>
+                        <FriendButtonVariants friendData={friendData} service={service}/>
                    </div>
                 </div>
                 <div className="d-sm-none" style={{margin: "0 auto", width: "85%"}}>
-                    <FriendButtonVariants friendData={friendData} chatData={chatData} service={service}/>
+                    <FriendButtonVariants friendData={friendData} service={service}/>
                </div>
             </div>
         </div>

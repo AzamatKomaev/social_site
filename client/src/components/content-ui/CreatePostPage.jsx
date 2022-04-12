@@ -8,14 +8,12 @@ import CreatePostForm from './include/post/CreatePostForm';
 import Header from '../extend/Header';
 import Error404NotFound from '../extend/Error404NotFound';
 import {ContentService} from "../../services/contentService";
+import Spinner from "../extend/Spinner";
 
 
 const CreatePostPage = (props) => {
     const [categories, setCategories] = useState([])
-
-
     const userData = useSelector(state => state.user)
-
 
     useEffect(() => {
         const fetchData = async() => {
@@ -32,17 +30,19 @@ const CreatePostPage = (props) => {
                 <CreatePostForm categories={categories} />
             </div>
         )
-    } else if (!userData.isAuth) {
+    } else if (userData.isAuth === false) {
         return (
             <div>
                 <Header/>
-                {"\n"}
                 <Error404NotFound/>
             </div>
         )
     } else {
         return (
-            <div></div>
+            <div>
+                <Header/>
+                <Spinner/>
+            </div>
         )
     }
 }

@@ -12,9 +12,14 @@ import {AxiosResponse} from "axios";
 export const fetchUserData = () => {
     return async function(dispatch) {
         const response = await AuthService.getCurrentUser()
-        if (response.status === 200) {
-            dispatch({type: GET_USER_DATA, payload: {info: response.data, isAuth: response.status === 200}})
-        }
+        dispatch({
+            type: GET_USER_DATA,
+            payload: {
+                info: response.status === 200 ? response.data : null,
+                isAuth: response.status === 200
+            }
+        })
+
     }
 }
 

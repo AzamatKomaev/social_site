@@ -1,12 +1,11 @@
 import React, {useEffect, useState} from "react";
-import {findUserAndGetData} from "../../services/service";
 import Error404NotFound from "../extend/Error404NotFound";
 import Header from "../extend/Header";
-import {UserI} from "../../interfaces";
 import {useDispatch, useSelector} from "react-redux";
 import {fetchGettingAllUserFriends} from "../../store/friend/actions";
 import FriendList from "./include/friend/FriendList";
 import {UserService} from "../../services/userService";
+import Spinner from "../extend/Spinner";
 
 
 const FriendListUser = (props) => {
@@ -15,34 +14,47 @@ const FriendListUser = (props) => {
     const dispatch = useDispatch()
     const friendListData = useSelector((state: any) => state.friendList)
 
-    const [user, setUser] = useState<UserI | null>()
+    const [user, setUser] = useState({
+        value: null,
+        statusCode: null
+    })
 
     useEffect(() => {
         const fetchData =  async() => {
             const response = await UserService.getUser(username)
-            setUser(response.status === 200 && response.data.length > 0 ? response.data[0] : null)
+            setUser({
+                value: response.status === 200 ? response.data[0] : null,
+                statusCode: response.status
+            })
         }
         fetchData()
     }, [username])
 
     useEffect(() => {
-        if (user) dispatch(fetchGettingAllUserFriends(user.id));
+        if (user.value) dispatch(fetchGettingAllUserFriends(user.value.id));
     }, [dispatch, user])
 
-    if (friendListData.status >= 400 && friendListData.status < 600) {
+    if (user.value) {
         return (
             <div>
                 <Header/>
-                <Error404NotFound/>
+                    <div className="container">
+                        <FriendList user={user.value}/>
+                    </div>
+                </div>
+        )
+    } else if (!user.statusCode) {
+        return (
+            <div>
+                <Header/>
+                <Spinner/>
             </div>
         )
     } else {
         return (
             <div>
                 <Header/>
-                <div className="container">
-                    <FriendList user={user}/>
-                </div>
+                <Error404NotFound/>
             </div>
         )
     }

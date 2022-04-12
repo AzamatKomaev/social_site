@@ -6,9 +6,10 @@ import Header from '../extend/Header';
 import Error404NotFound from '../extend/Error404NotFound';
 import NotificationWindow from './include/notification/NotificationWindow';
 import {fetchGettingAllChatRequestsToUser} from "../../store/user/actions";
+import Spinner from "../extend/Spinner";
 
 
-const NotificationsPage = (props) => {
+const NotificationsPage = () => {
     const dispatch = useDispatch()
     const userData = useSelector(state => state.user)
 
@@ -26,11 +27,18 @@ const NotificationsPage = (props) => {
                 <NotificationWindow/>
             </div>
         )
-    } else {
+    } else if (userData.isAuth === false) {
         return (
             <div>
                 <Header/>
                 <Error404NotFound/>
+            </div>
+        )
+    } else {
+        return (
+            <div>
+                <Header/>
+                <Spinner/>
             </div>
         )
     }

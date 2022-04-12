@@ -9,7 +9,9 @@ export const DELETE_REQUEST = "DELETE_REQUEST";
 //-----------------------------------------------------------------------------------------------------------------
 
 export const GET_CHAT_LIST = "GET_CHAT_LIST";
-export const FILTERED_CHAT = ""
+export const GET_CHAT_DETAIL = "GET_CHAT_DETAIL";
+export const CHANGE_USER_CHAT_ROLE = "CHANGE_USER_CHAT_ROLE";
+// export const FILTERED_CHAT = ""
 export const SET_FETCHING = "SET_FETCHING";
 export const SORT_CHATS_BY_NAME = "SORT_CHATS_BY_NAME";
 export const SORT_CHATS_BY_LAST_MESSAGE = "SORT_CHATS_BY_LAST_MESSAGE";

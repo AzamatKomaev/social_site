@@ -2,14 +2,10 @@ import React from 'react';
 import {UserFrontPath} from "../../../../frontpaths/frontPath";
 import {useDispatch} from "react-redux";
 import {fetchDeletingRequest} from "../../../../store/chat/actions";
+import MemberButtons from "./MemberButtons";
 
 const Member = ({member, service}) => {
     const dispatch = useDispatch()
-
-    const handleDeleteRequestButton = async() => {
-        dispatch(fetchDeletingRequest(member.user_data.id, service))
-    }
-
 
     return (
         <div className="card col-10 col-md-9 my-3 mx-auto border border-primary">
@@ -34,24 +30,22 @@ const Member = ({member, service}) => {
                         </div>
                     </a>
                     <div style={{marginLeft: "auto"}} className="d-none d-sm-block">
-                        <button
-                            className="btn btn-warning"
-                            onClick={handleDeleteRequestButton}
-                            style={{fontSize: "10pt"}}
-                        >
-                            Удалить
-                        </button>
+                        <MemberButtons
+                            screenLargeStyles={{fontSize: "10pt"}}
+                            screenSmallStyles={{}}
+                            service={service}
+                            member={member}
+                        />
                     </div>
                 </div>
                 <div className="d-sm-none">
                     {"\n"}
-                    <button
-                        className="btn btn-warning"
-                        style={{width: "95%", display: "block", margin: "0 auto", fontSize: "10pt"}}
-                        onClick={handleDeleteRequestButton}
-                    >
-                        Удалить
-                    </button>
+                    <MemberButtons
+                        screenLargeStyles={{}}
+                        screenSmallStyles={{width: "95%", display: "block", margin: "0 auto", fontSize: "10pt"}}
+                        service={service}
+                        member={member}
+                    />
                 </div>
             </div>
         </div>

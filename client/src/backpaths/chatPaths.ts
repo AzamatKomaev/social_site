@@ -32,6 +32,10 @@ export class GroupChatPath {
         return `${defaultUrl}/group_chats/${chatId}/members/`
     }
 
+    static detail_list = (chatId: number, userId: number): string => {
+        return `${defaultUrl}/group_chats/${chatId}/members/${userId}/`
+    }
+
     static chat_requests_list = (chatId: number): string => {
         return `${defaultUrl}/group_chats/${chatId}/requests/`
     }

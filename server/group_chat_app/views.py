@@ -109,10 +109,10 @@ class GroupChatRoleModelViewSet(viewsets.ModelViewSet):
         return obj
 
     def get_queryset(self, *args, **kwargs):
-        return super().get_queryset().filter(chat_id=self.kwargs.get('chat_id'))
+        return super().get_queryset().filter(chat_id=self.kwargs.get('chat_id')).order_by('name')
 
     def update(self, request, *args, **kwargs):
-        role_name = request.data.get('role_name', 'Участник')
+        role_name = request.data.get('role_name')
         obj = self.get_object()
 
         if not obj.is_role_name_valid(role_name):
@@ -122,5 +122,3 @@ class GroupChatRoleModelViewSet(viewsets.ModelViewSet):
         obj.save()
         serializer = self.get_serializer(obj)
         return Response(serializer.data, status=status.HTTP_200_OK)
-
-

@@ -6,6 +6,7 @@ import PostList from './include/post/PostList';
 import {useDispatch, useSelector} from "react-redux";
 import {fetchGettingListPost} from "../../store/content/actions";
 import {SET_FETCHING} from "../../store/content/actionTypes";
+import Spinner from "../extend/Spinner";
 
 
 const PostPage = (props) => {
@@ -62,16 +63,11 @@ const PostPage = (props) => {
                 <Error404NotFound style={{marginTop: "25px"}}/>
             </div>
         )
-    } else if (postListData.values?.length === 0) {
-        return (
-            <div>
-                <Header/>
-                <p>Увы, тут пока нет постов, мб создашь?</p>
-            </div>
-        )
     } else {
         return (
             <div>
+                <Header/>
+                <Spinner/>
             </div>
         )
     }

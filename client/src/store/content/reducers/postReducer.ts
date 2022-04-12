@@ -3,7 +3,8 @@ import {CREATE_POST, GET_DETAIL_POST, GET_POSTS, SET_FETCHING, DELETE_POST, HIDE
 
 interface PostReducerStateI {
     list: any,
-    detail: PostI | null,
+    detail: any
+    //detail: PostI | null,
     created: PostI | null
 }
 
@@ -14,7 +15,11 @@ const defaultPostReducerState: PostReducerStateI = {
         page: 1,
         fetching: true
     },
-    detail: null,
+    detail: {
+        value: null,
+        statusCode: null
+    },
+    //detail: null,
     created: null
 }
 

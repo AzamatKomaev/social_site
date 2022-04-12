@@ -1,6 +1,7 @@
 import axios, {AxiosResponse} from "axios";
 import {GroupChatPath, PersonalChatPath} from "../backpaths/chatPaths";
 import {defaultConfig} from "./authData";
+import {defaultUrl} from "../backpaths/defaultUrl";
 
 export class GroupChatService {
     private readonly chatId: number
@@ -105,6 +106,16 @@ export class GroupChatService {
     public async deleteRequest(userId: number): Promise<AxiosResponse> {
         try {
             return await axios.delete(GroupChatPath.user_chat_request_detail(this.chatId, userId), defaultConfig)
+        } catch (err: any) {
+            return err.response
+        }
+    }
+
+    public async changeRole(userId: number, roleName: string): Promise<AxiosResponse> {
+        try {
+            return await axios.patch(GroupChatPath.detail_list(this.chatId, userId), {
+                role_name: roleName
+            }, defaultConfig)
         } catch (err: any) {
             return err.response
         }

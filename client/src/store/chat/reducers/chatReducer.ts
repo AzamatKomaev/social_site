@@ -1,11 +1,12 @@
 import {
     SET_FETCHING,
-    GET_CHAT_LIST, SORT_CHATS_BY_NAME, SORT_CHATS_BY_LAST_MESSAGE, FILTER_CHATS_BY_STRING
+    GET_CHAT_LIST, SORT_CHATS_BY_NAME, SORT_CHATS_BY_LAST_MESSAGE, FILTER_CHATS_BY_STRING, GET_CHAT_DETAIL
 } from "../actionTypes";
 import {GroupChatI, PersonalChatI} from "../../../interfaces";
 
 
 interface ChatListStateI {
+    detail: any,
     type: string,
     list: any,
     filteredChatList: Array<GroupChatI | PersonalChatI>
@@ -13,6 +14,10 @@ interface ChatListStateI {
 
 const defaultChatListState: ChatListStateI = {
     type: null,
+    detail: {
+        value: null,
+        statusCode: null
+    },
     list: {
         values: [],
         lastStatusCode: null,
@@ -47,6 +52,15 @@ export const chatListReducer = (state: ChatListStateI = defaultChatListState, ac
                 }
             }
             return state
+
+        case GET_CHAT_DETAIL:
+            return {
+                ...state,
+                detail: {
+                    value: action.payload.detail,
+                    statusCode: action.payload.statusCode
+                }
+            }
 
         case SET_FETCHING:
             return {

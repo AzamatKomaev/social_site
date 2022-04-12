@@ -31,6 +31,9 @@ class PostModelViewSet(viewsets.ModelViewSet):
         self.check_object_permissions(self.request, obj)
         return obj
 
+    def get_queryset(self):
+        return super().get_queryset()
+
 
 class CommentModelViewSet(viewsets.ModelViewSet):
     queryset = Comment.objects.all()

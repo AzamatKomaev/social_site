@@ -16,7 +16,7 @@ interface UserReducerStateI {
 
 const defaultState: UserReducerStateI = {
     info: null,
-    isAuth: false,
+    isAuth: null,
     chatRequestNotifications: []
 }
 

@@ -7,8 +7,8 @@ import Error404NotFound from '../extend/Error404NotFound';
 import Post from './include/post/Post';
 import CommentList from './include/comment/CommentList';
 import CommentForm from './include/comment/CommentForm';
-import {ContentService} from "../../services/contentService";
 import {fetchGettingCommentList, fetchGettingDetailPost} from "../../store/content/actions";
+import Spinner from "../extend/Spinner";
 
 
 const PostDetailPage = (props) => {
@@ -24,14 +24,14 @@ const PostDetailPage = (props) => {
         dispatch(fetchGettingCommentList(postId))
     }, [postId]);
 
-    if (post) {
+    if (post.value) {
         return (
             <div>
                 <Header/>
                 {"\n"}
                 <div className="container">
                     <div className="col-12 col-md-10 mx-auto">
-                        <Post post={post} type={"detail"}/>
+                        <Post post={post.value} type={"detail"}/>
                         {"\n\n\n"}
                         <CommentForm postId={postId} categoryId={categoryId}/>
                         {"\n\n\n"}
@@ -40,11 +40,17 @@ const PostDetailPage = (props) => {
                 </div>
             </div>
         )
+    } else if (!post.value && !post.statusCode) {
+        return (
+            <div>
+                <Header/>
+                <Spinner/>
+            </div>
+        )
     } else {
         return (
             <div>
                 <Header/>
-                {"\n"}
                 <Error404NotFound/>
             </div>
         )

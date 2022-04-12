@@ -6,7 +6,7 @@ import {
 } from "../../../../store/chat/actions";
 
 
-const FriendButtonVariants = ({friendData, chatData, service}) => {
+const FriendButtonVariants = ({friendData, service}) => {
     const chatRed = useSelector((state: any) => state.requestList)
 
     const dispatch = useDispatch()
