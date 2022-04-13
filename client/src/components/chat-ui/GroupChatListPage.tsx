@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {useEffect} from 'react';
 import {useSelector, useDispatch} from "react-redux";
 import Error404NotFound from "../extend/Error404NotFound";
 import Header from "../extend/Header";
@@ -8,6 +8,7 @@ import {GroupChatNotification} from "./include/notifications/Notifications";
 import ButtonRow from "./include/button_row/ButtonRow";
 import ChatFilteringInput from "./include/chat/ChatFilteringInput";
 import {SET_FETCHING} from "../../store/chat/actionTypes";
+import Spinner from "../extend/Spinner";
 
 
 const GroupChatListPage = () => {
@@ -43,7 +44,7 @@ const GroupChatListPage = () => {
         }
     }
 
-    if (userData.isAuth) {
+    if (userData.isAuth === true) {
         return (
             <div>
                 <Header/>
@@ -84,11 +85,18 @@ const GroupChatListPage = () => {
                 </div>
             </div>
         )
-    } else {
+    } else if (userData.isAuth === false) {
         return (
             <div>
                 <Header/>
                 <Error404NotFound/>
+            </div>
+        )
+    } else {
+        return (
+            <div>
+                <Header/>
+                <Spinner/>
             </div>
         )
     }

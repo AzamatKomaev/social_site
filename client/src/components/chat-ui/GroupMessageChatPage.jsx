@@ -6,12 +6,16 @@ import MessageChatWindow from './include/message/MessageChatWindow';
 import {GroupChatService} from "../../services/chatServices";
 import {AuthService} from "../../services/authService";
 import {WebSocketChatPath} from "../../backpaths/chatPaths";
+import Spinner from "../extend/Spinner";
 
 
 const GroupMessageChatPage = (props) => {
     const chatId = props.match.params.chatId;
 
-    const [currentUserData, setCurrentUserData] = useState()
+    const [currentUserData, setCurrentUserData] = useState({
+        info: null,
+        isAuth: null
+    })
 
     const [members, setMembers] = useState([])
     const [messages, setMessages] = useState([])
@@ -61,7 +65,7 @@ const GroupMessageChatPage = (props) => {
         const fetchData = async() => {
             const response = await AuthService.getCurrentUser()
             setCurrentUserData({
-                info: response.data,
+                info: response.status === 200 ? response.data : null,
                 isAuth: response.status === 200
             })
         }
@@ -142,7 +146,7 @@ const GroupMessageChatPage = (props) => {
     }
 
 
-    if ((messages || newMessages) && currentUserData?.isAuth && chat.status === 200) {
+    if ((messages || newMessages) && currentUserData.isAuth === true && chat.status === 200) {
         return (
             <div>
                 <Header/>
@@ -159,11 +163,18 @@ const GroupMessageChatPage = (props) => {
                  />
             </div>
         )
-    } else {
+    } else if (currentUserData.isAuth === false || (chat.status >= 400 && chat.status < 500)) {
         return (
             <div>
                 <Header/>
                 <Error404NotFound/>
+            </div>
+        )
+    } else {
+        return (
+            <div>
+                <Header/>
+                <Spinner/>
             </div>
         )
     }

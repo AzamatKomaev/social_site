@@ -8,6 +8,7 @@ import {CurrentUserDataI} from "../../services/service";
 import {PersonalChatService} from "../../services/chatServices";
 import {AuthService} from "../../services/authService";
 import {WebSocketChatPath} from "../../backpaths/chatPaths";
+import Spinner from "../extend/Spinner";
 
 
 
@@ -16,12 +17,14 @@ const PersonalMessageChatPage = (props: any) => {
 
     const [currentUserData, setCurrentUserData] = useState<CurrentUserDataI>({
         info: null,
-        isAuth: false
+        isAuth: null
     })
 
     const [messages, setMessages] = useState([])
-    const [chat, setChat] = useState<any>()
-    const [error, setError] = useState<any>(false)
+    const [chat, setChat] = useState({
+        data: null,
+        status: null
+    })
 
     const [newMessages, setNewMessages] = useState([])
 
@@ -52,11 +55,10 @@ const PersonalMessageChatPage = (props: any) => {
     useEffect(() => {
         const fetchData = async() => {
             const response = await service.current.getDetail()
-            if (response.status === 200 || response.status === 201) {
-                setChat(response.data)
-            } else {
-                setError(response.status)
-            }
+            setChat({
+                data: response.status === 200 ? response.data : null,
+                status: response.status
+            })
         }
         fetchData()
     }, [])
@@ -65,7 +67,7 @@ const PersonalMessageChatPage = (props: any) => {
         const fetchData = async() => {
             const response = await AuthService.getCurrentUser()
             setCurrentUserData({
-                info: response.data,
+                info: response.status === 200 ? response.data : null,
                 isAuth: response.status === 200
             })
         }
@@ -134,7 +136,24 @@ const PersonalMessageChatPage = (props: any) => {
         }
     }
 
-    if (!currentUserData.isAuth || error) {
+    if ((messages || newMessages) && currentUserData.isAuth === true && chat.status === 200) {
+        return (
+            <div>
+                <Header/>
+                <MessageChatWindow
+                    type_is_group={false}
+                    members={[]}
+                    messages={messages}
+                    newMessages={newMessages}
+                    chat={chat.data}
+                    service={service.current}
+                    ws={ws.current}
+                    currentUserData={currentUserData}
+                    scrollHandler={scrollHandler}
+                 />
+            </div>
+        )
+    } else if (currentUserData.isAuth === false || (chat.status >= 400 && chat.status < 500)) {
         return (
             <div>
                 <Header/>
@@ -145,17 +164,7 @@ const PersonalMessageChatPage = (props: any) => {
         return (
             <div>
                 <Header/>
-                <MessageChatWindow
-                    type_is_group={false}
-                    members={[]}
-                    messages={messages}
-                    newMessages={newMessages}
-                    chat={chat}
-                    service={service.current}
-                    ws={ws.current}
-                    currentUserData={currentUserData}
-                    scrollHandler={scrollHandler}
-                 />
+                <Spinner/>
             </div>
         )
     }

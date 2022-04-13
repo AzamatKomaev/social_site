@@ -1,6 +1,5 @@
-import React, { useState, useEffect, SetStateAction } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useSelector } from 'react-redux';
-import axios from 'axios';
 
 import Header from '../extend/Header';
 import Error404NotFound from '../extend/Error404NotFound';
@@ -27,9 +26,9 @@ const AcceptAccountPage = (props: any) => {
         <div>
             <Header/>
             {accepted ?
-            <AcceptedPasswordAlert/>
+                <AcceptedPasswordAlert/>
             :
-            <Error404NotFound/>
+                <Error404NotFound/>
             }
         </div>
     )

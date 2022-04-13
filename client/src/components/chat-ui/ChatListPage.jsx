@@ -6,6 +6,7 @@ import Error404NotFound from '../extend/Error404NotFound';
 
 import ChatWindow from './include/chat/ChatWindow';
 import {GroupChatService, PersonalChatService} from "../../services/chatServices";
+import Spinner from "../extend/Spinner";
 
 
 const getUserChats = async() => {
@@ -26,8 +27,8 @@ const getUserChats = async() => {
 const ChatListPage = () => {
     const userData = useSelector(state => state.user)
 
-    const [groupChats, setGroupChats] = useState([])
-    const [personalChats, setPersonalChats] = useState([])
+    const [groupChats, setGroupChats] = useState(null)
+    const [personalChats, setPersonalChats] = useState(null)
 
     const [update, setUpdate] = useState(0);
 
@@ -46,7 +47,7 @@ const ChatListPage = () => {
         })
     }, [update])
 
-    if (userData.isAuth) {
+    if (userData.isAuth === true && groupChats && personalChats) {
         return (
             <div>
                 <Header/>
@@ -57,11 +58,18 @@ const ChatListPage = () => {
                 {"\n"}
             </div>
         )
-    } else {
+    } else if (userData.isAuth === false) {
         return (
             <div>
                 <Header/>
                 <Error404NotFound/>
+            </div>
+        )
+    } else {
+        return (
+            <div>
+                <Header/>
+                <Spinner/>
             </div>
         )
     }

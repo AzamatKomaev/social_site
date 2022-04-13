@@ -19,11 +19,10 @@ const defaultChatListState: ChatListStateI = {
         statusCode: null
     },
     list: {
-        values: [],
+        values: null,
         lastStatusCode: null,
         page: 1,
         fetching: true,
-        wasChange: null
     },
     filteredChatList: []
 }
@@ -43,7 +42,7 @@ export const chatListReducer = (state: ChatListStateI = defaultChatListState, ac
                     ...state,
                     ...action.payload,
                     list: {
-                        values: [...state.list.values, ...action.payload.list],
+                        values: [...state.list.values || [], ...action.payload.list],
                         lastStatusCode: action.payload.statusCode === 404 ? 201 : action.payload.statusCode,
                         page: page,
                         fetching: false,

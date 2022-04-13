@@ -51,15 +51,16 @@ const SignUpForm = () => {
             <div className="col-11 mx-auto">
                 <div className="registration-form">
                     <div className="form" id="registrationForm">
-                        <div className="form-icon">
+                        <div className="form-icon" style={{marginTop: "-25px"}}>
                             <span><i className="icon icon-user"></i></span>
                         </div>
-                        <div>
+                        <div style={{marginTop: "-25px"}}>
                             <div className="form-group">
                                 <input
                                     type="text"
                                     className="form-control item"
                                     id="username"
+                                    style={{fontSize: "11pt"}}
                                     value={username}
                                     onChange={e => setUsername(e.target.value)}
                                     placeholder="Username"
@@ -71,6 +72,7 @@ const SignUpForm = () => {
                                     type="password"
                                     className="form-control item"
                                     id="password1"
+                                    style={{fontSize: "11pt"}}
                                     value={password1}
                                     onChange={e => setPassword1(e.target.value)}
                                     placeholder="Password"
@@ -82,6 +84,7 @@ const SignUpForm = () => {
                                     type="password"
                                     className="form-control item"
                                     id="password2"
+                                    style={{fontSize: "11pt"}}
                                     value={password2}
                                     onChange={e => setPassword2(e.target.value)}
                                     placeholder="Repeat Password"
@@ -93,17 +96,34 @@ const SignUpForm = () => {
                                     type="text"
                                     className="form-control item"
                                     id="email"
+                                    style={{fontSize: "11pt"}}
                                     value={email}
                                     onChange={e => setEmail(e.target.value)}
                                     placeholder="Email"
                                  />
-                                <p className="text-danger" style={{float: "left", marginTop: "-10px", backgroundColor: "PowderBlue"}}>{errorReg.email}</p>
+                                <p
+                                    className="text-danger"
+                                    style={{float: "left", marginTop: "-10px", backgroundColor: "PowderBlue", fontSize: "11pt"}}
+                                >
+                                    {errorReg.email}
+                                </p>
                             </div>
                             {"\n"}
-                            <a href={AuthFrontPath.login()} style={{float: "right", marginTop: "-5px", backgroundColor: "PowderBlue"}}>Already have an account?</a>
+                            <a
+                                href={AuthFrontPath.login()}
+                                style={{float: "right", marginTop: "-5px", backgroundColor: "PowderBlue", fontSize: "11pt"}}
+                            >
+                                Уже есть аккаунт?
+                            </a>
                             {"\n\n"}
-                            <div className="form-group">
-                                <button onClick={handleCreateUserButton} className="btn btn-block create-account">Создать Аккаунт</button>
+                            <div className="form-group" style={{marginTop: "-45px"}}>
+                                <button
+                                    onClick={handleCreateUserButton}
+                                    className="btn btn-block create-account"
+                                    style={{fontSize: "11pt"}}
+                                >
+                                    Создать Аккаунт
+                                </button>
                             </div>
                         </div>
                     </div>

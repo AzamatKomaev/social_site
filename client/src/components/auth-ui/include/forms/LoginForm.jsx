@@ -1,7 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
-
-
 import 'simple-line-icons';
 import '../../style.css';
 import '../../../../App.css';
@@ -45,43 +42,63 @@ const LoginForm = () => {
     return (
         <div className="row">
             <div className="col-10 mx-auto">
-                <div className="registration-form">
+                <form className="registration-form">
                     <div id="formLogin" className="form-login">
-                        <div className="form-icon">
+                        <div className="form-icon" style={{marginTop: "-25px"}}>
                             <span><i className="icon icon-user"></i></span>
                         </div>
-                        <div>
+                        <div style={{marginTop: "-25px"}}>
                             <div className="form-group">
                                 <input
                                     type="text"
                                     className="form-control item"
                                     id="username"
+                                    style={{fontSize: "11pt"}}
                                     value={username}
                                     onChange={e => setUsername(e.target.value)}
-                                    placeholder="Username"/>
+                                    placeholder="Юзернейм плез"/>
                             </div>
                             <div className="form-group">
                                 <input
                                     type="password"
                                     className="form-control item"
                                     id="password1"
+                                    style={{fontSize: "11pt"}}
                                     value={password}
                                     onChange={e => setPassword(e.target.value)}
-                                    placeholder="Password"/>
+                                    placeholder="И пароль"/>
                             </div>
-                            <a href={AuthFrontPath.register()} style={{float:"right", marginTop: "-10px", backgroundColor: "PowderBlue"}}>Don't have an account?</a>{"\n"}
-                            <p className="text-danger" style={{float:"right",  backgroundColor: "PowderBlue"}}>{error}</p>
+                            <a
+                                href={AuthFrontPath.register()}
+                                style={{float:"right", marginTop: "-10px", backgroundColor: "PowderBlue", fontSize: "11pt"}}
+                            >
+                                Нет аккаунта?
+                            </a>
+                            {"\n"}
+                            <p
+                                className="text-danger"
+                                style={{float:"right",  backgroundColor: "PowderBlue", fontSize: "11pt"}}
+                            >
+                                {error}
+                            </p>
                             {"\n\n"}
-                            <div className="form-group">
-                                <button type="button" className="btn btn-block create-account" onClick={handleLoginButton}>Войти</button>
+                            <div className="form-group" style={{marginTop: "-45px"}}>
+                                <button
+                                    type="button"
+                                    className="btn btn-block create-account"
+                                    style={{fontSize: "11pt"}}
+                                    onClick={handleLoginButton}
+                                >
+                                    Войти
+                                </button>
                             </div>
                         </div>
                     </div>
-                </div>
+                </form>
             </div>
         </div>
     )
 }
 
 
-export default LoginForm
+export default LoginForm;
