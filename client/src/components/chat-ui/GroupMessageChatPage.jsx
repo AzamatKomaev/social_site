@@ -5,61 +5,28 @@ import MessageChatWindow from './include/message/MessageChatWindow';
 
 import {GroupChatService} from "../../services/chatServices";
 import {AuthService} from "../../services/authService";
-import {WebSocketChatPath} from "../../backpaths/chatPaths";
 import Spinner from "../extend/Spinner";
+import {WebSocketChatPath} from "../../backpaths/chatPaths";
 
 
 const GroupMessageChatPage = (props) => {
     const chatId = props.match.params.chatId;
 
+    const service = useRef()
     const [currentUserData, setCurrentUserData] = useState({
         info: null,
         isAuth: null
     })
-
-    const [members, setMembers] = useState([])
-    const [messages, setMessages] = useState([])
-    const [newMessages, setNewMessages] = useState([])
-
     const [chat, setChat] = useState({
         data: null,
         status: null
     })
-    const [scrollHeights, setScrollHeights] = useState([800])
-
-    const [currentPage, setCurrentPage] = useState(2);
-    const [fetching, setFetching] = useState(false)
-
-    const ws = useRef()
-    const service = useRef()
-
-
-    const addNewMessageInArray = (data) => {
-        let chatHistory = document.getElementById('chat-window')
-
-        setNewMessages(
-            newMessages => [...newMessages, data]
-        )
-
-        if (chatHistory.scrollHeight - chatHistory.scrollTop < 1000) {
-            chatHistory.scrollTop = chatHistory.scrollHeight;
-        }
-    }
+    const [members, setMembers] = useState([])
+    const [wsPath, setWsPath] = useState()
 
     useEffect(() => {
         service.current = new GroupChatService(chatId)
     }, [chatId])
-
-    useEffect(() => {
-        const fetchData = async() => {
-            const response = await service.current.getDetail()
-            setChat({
-                data: response.status === 200 ? response.data : null,
-                status: response.status
-            })
-        }
-        fetchData()
-    }, [])
 
     useEffect(() => {
         const fetchData = async() => {
@@ -74,47 +41,14 @@ const GroupMessageChatPage = (props) => {
 
     useEffect(() => {
         const fetchData = async() => {
-            const response = await service.current.getMessages(1)
-            if (response.status === 200) {
-                setMessages(response.data.reverse())
-                let chatHistory = document.getElementById('chat-window')
-                chatHistory.scrollTop = chatHistory.scrollHeight;
-            }
+            const response = await service.current.getDetail()
+            setChat({
+                data: response.status === 200 ? response.data : null,
+                status: response.status
+            })
         }
         fetchData()
-    }, [])
-
-    useEffect(() => {
-        ws.current = new WebSocket(WebSocketChatPath.group(chatId, localStorage.getItem('jwt')))
-        ws.current.onopen = () => {
-            console.log("opened")
-        }
-
-        ws.current.onclose = () => {
-            console.log("closed")
-        }
-
-        ws.current.onmessage = (e) => {
-            addNewMessageInArray(JSON.parse(e.data))
-        }
-    }, [chatId])
-
-    useEffect(() => {
-        const fetchData = async() => {
-            if (fetching && currentPage !== -1) {
-                const response = await service.current.getMessages(currentPage)
-
-                if (response.status === 200) {
-                    setMessages([...response.data.reverse(), ...messages])
-                    setCurrentPage(prevState => prevState + 1)
-                } else {
-                    setCurrentPage(-1)
-                }
-                setFetching(false)
-            }
-        }
-        fetchData()
-    }, [fetching])
+    }, [service])
 
     useEffect(() => {
         const fetchData = async() => {
@@ -127,39 +61,21 @@ const GroupMessageChatPage = (props) => {
     }, [])
 
     useEffect(() => {
-        if (messages && messages.length > 0) {
-            let chatHistory = document.getElementById('chat-window')
-            setScrollHeights([...scrollHeights, chatHistory.scrollHeight])
-        }
-    }, [messages])
+        setWsPath(WebSocketChatPath.group(chatId, localStorage.getItem('jwt')))
+    }, [chatId])
 
 
-    const scrollHandler = (e) => {
-        if (
-            e.target.scrollTop < 100 &&
-            currentPage !== -1
-        ) {
-            setFetching(true)
-            let elem = document.getElementById('chat-window')
-            elem.scrollTop = e.target.scrollHeight - scrollHeights[scrollHeights.length - 2]
-        }
-    }
-
-
-    if ((messages || newMessages) && currentUserData.isAuth === true && chat.status === 200) {
+    if (currentUserData.isAuth === true && chat.data) {
         return (
             <div>
                 <Header/>
                 <MessageChatWindow
                     type_is_group={true}
                     members={members}
-                    messages={messages}
-                    newMessages={newMessages}
-                    chat={chat.data}
-                    ws={ws.current}
                     service={service.current}
                     currentUserData={currentUserData}
-                    scrollHandler={scrollHandler}
+                    wsPath={wsPath}
+                    chat={chat.data}
                  />
             </div>
         )

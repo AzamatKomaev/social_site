@@ -10,6 +10,7 @@ import {
     fetchGettingDetailGroupChat
 } from "../../store/chat/actions";
 import {GroupChatService} from "../../services/chatServices";
+import Spinner from "../extend/Spinner";
 
 
 const ChatSettingPage = (props: any) => {
@@ -35,18 +36,25 @@ const ChatSettingPage = (props: any) => {
     }, [dispatch])
 
 
-    if (currentUserData.isAuth && chatData.statusCode === 200) {
+    if (currentUserData.isAuth === true && chatData.statusCode === 200) {
         return (
             <div>
                 <Header/>
                 <SettingWindow service={service.current}/>
             </div>
         )
-    } else {
+    } else if (currentUserData === false || (chatData.statusCode >= 400 && chatData.statusCode < 500)) {
         return (
             <div>
                 <Header/>
                 <Error404NotFound/>
+            </div>
+        )
+    } else {
+        return (
+            <div>
+                <Header/>
+                <Spinner/>
             </div>
         )
     }

@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 
 import '../style.css';
 
@@ -6,22 +6,96 @@ import MessageList from './MessageList';
 import MessageInput from './MessageInput';
 import ChatHeader from '../chat/ChatHeader';
 import ChatUserList from '../user/ChatUserList';
+import Spinner from "../../../extend/Spinner";
 
 
-const MessageChatWindow = ({type_is_group, members, messages, newMessages, chat, ws, currentUserData, scrollHandler,
-                           service}) => {
+const MessageChatWindow = ({type_is_group, members, currentUserData, service, wsPath, chat}) => {
+    const messageListRef = useRef();
+    const ws = useRef();
 
-    const messageRef = useRef();
+    const [messages, setMessages] = useState(null)
+    const [newMessages, setNewMessages] = useState([])
+    const [scrollHeights, setScrollHeights] = useState([800])
 
+    const [currentPage, setCurrentPage] = useState(2);
+    const [fetching, setFetching] = useState(false)
+
+    const addNewMessageInArray = (data) => {
+        setNewMessages(
+            newMessages => [...newMessages, data]
+        )
+
+        if (messageListRef.current.scrollHeight - messageListRef.current.scrollTop < 1000) {
+            messageListRef.current.scrollTop = messageListRef.current.scrollHeight;
+        }
+    }
+
+     const scrollHandler = (e) => {
+        if (
+            e.target.scrollTop < 100 &&
+            currentPage !== -1
+        ) {
+            setFetching(true)
+            messageListRef.current.scrollTop = e.target.scrollHeight - scrollHeights[scrollHeights.length - 2]
+        }
+    }
+
+     useEffect(() => {
+        const fetchData = async() => {
+            const response = await service.getMessages(1)
+            if (response.status === 200) {
+                setMessages(response.data.reverse())
+                messageListRef.current.scrollTop = messageListRef.current.scrollHeight;
+            }
+        }
+        fetchData()
+    }, [service])
+
+    useEffect(() => {
+        ws.current = new WebSocket(wsPath)
+        ws.current.onopen = () => {
+            console.log("opened")
+        }
+
+        ws.current.onclose = () => {
+            console.log("closed")
+        }
+
+        ws.current.onmessage = (e) => {
+            addNewMessageInArray(JSON.parse(e.data))
+        }
+    }, [wsPath])
+
+    useEffect(() => {
+        const fetchData = async() => {
+            if (fetching && currentPage !== -1) {
+                const response = await service.getMessages(currentPage)
+
+                if (response.status === 200) {
+                    setMessages([...response.data.reverse(), ...messages])
+                    setCurrentPage(prevState => prevState + 1)
+                } else {
+                    setCurrentPage(-1)
+                }
+                setFetching(false)
+            }
+        }
+        fetchData()
+    }, [fetching])
+
+    useEffect(() => {
+        if (messages && messages.length > 0) {
+            setScrollHeights([...scrollHeights, messageListRef.current.scrollHeight])
+        }
+    }, [messages])
 
     useEffect(() => {
         try {
-            let chatWindow = document.getElementById('chat-window')
-            chatWindow.style.height = `${window.screen.height / 1.9}px`
+            messageListRef.current.style.height = `${window.screen.height / 1.9}px`
         } catch (err) {}
-    }, [window.screen.height])
+    }, [])
 
-    if (chat) {
+    if (messages !== null) {
         return (
             <main className="content">
                 <div className="container p-0">
@@ -53,7 +127,7 @@ const MessageChatWindow = ({type_is_group, members, messages, newMessages, chat,
                                         className="chat-messages p-4"
                                         id="chat-window"
                                         onScroll={scrollHandler}
-                                        ref={messageRef}
+                                        ref={messageListRef}
                                         style={{height: "550px"}}
                                     >
                                         <MessageList
@@ -75,7 +149,7 @@ const MessageChatWindow = ({type_is_group, members, messages, newMessages, chat,
                                 </div>
                                 <MessageInput
                                     chat={chat}
-                                    ws={ws}
+                                    ws={ws.current}
                                     service={service}
                                     currentUserData={currentUserData}
                                     type_is_group={type_is_group}
@@ -87,10 +161,7 @@ const MessageChatWindow = ({type_is_group, members, messages, newMessages, chat,
             </main>
         )
     } else {
-        return (
-            <div>
-            </div>
-        )
+        return (<Spinner/>)
     }
 }
 
