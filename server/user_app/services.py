@@ -11,6 +11,7 @@ from rest_framework.request import Request
 
 from content_app.models import Post, Comment
 from .models import User, AcceptAuthToken, FriendRequest
+from .tasks import send_mail_with_accepting_token
 try:
     from server.settings import EMAIL_HOST_USER
 except ImportError:
@@ -63,19 +64,8 @@ class CreationUser:
                   "Чтобы успешно пройти регистрацию перейди по данной ссылке:\n" \
                   f"Ссылка: http://127.0.0.1:8000/auth/accept/{self._token}\n" \
                   "Смотри не ошибись, братело :).\n" \
-                  "Всего хорошего ©Azamat Komaev\n\n" \
-                  f"Hello, {self.username}.\n" \
-                  "If you wanna pass registration, click on the url down:\n" \
-                  f"url: http://127.0.0.1:8000/auth/accept/{self._token}\n" \
-                  "Dont make mistake, bro :)\n" \
-                  "Good luck ©Azamat Komaev"
-
-        send_mail(
-            "Регистрация в InTheGame",
-            content,
-            EMAIL_HOST_USER,
-            [self.email]
-        )
+                  "Всего хорошего ©Azamat Komaev\n\n"
+        send_mail_with_accepting_token.delay(content, [self.email])
 
     def create_user(self) -> None:
         """Method to create new user."""

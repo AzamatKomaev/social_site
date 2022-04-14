@@ -125,8 +125,6 @@ class UserAPITestCase(APITestCase):
         for response in correct_responses:
             for user_id, value in response.items():
                 response = self._get_current_user_response(value['data']['access'])
-
-                self.assertEqual(len(response.json()), 6)
                 self.assertEqual(response.json()['id'], user_id)
                 self.assertEqual(response.status_code, 200)
 

@@ -54,6 +54,7 @@ INSTALLED_APPS = [
     'django_extensions',
     'django_filters',
     'drf_yasg',
+    'django_celery_results',
     #'debug_toolbar',
 
     'django.contrib.admin',
@@ -168,14 +169,22 @@ if os.getenv('TEST_MOD') == '1':
 else:
     EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 
-EMAIL_HOST = 'smtp.mail.ru'
-EMAIL_PORT = 2525
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_PORT = 587
 EMAIL_HOST_USER = os.getenv('EMAIL')
 EMAIL_HOST_PASSWORD = os.getenv('PASSWORD_FROM_EMAIL')
 EMAIL_USE_TLS = True
 EMAIL_USE_SSL = False
 
 ASGI_APPLICATION = 'server.asgi.application'
+
+CELERY_BROKER_URL = 'redis://localhost:6379'
+CELERY_RESULT_BACKEND = 'redis://localhost:6379'
+CELERY_ACCEPT_CONTENT = ['application/json']
+CELERY_TASK_SERIALIZER = 'json'
+CELERY_RESULT_SERIALIZER = 'json'
+CELERY_TIMEZONE = 'Europe/Moscow'
+
 
 CHANNEL_LAYERS = {
     'default': {
