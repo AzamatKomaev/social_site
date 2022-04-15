@@ -1,7 +1,14 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser
-
+from django.utils import timezone
 from server.settings import AUTH_USER_MODEL
+
+
+class TokenManager(models.Manager):
+    def create(self, **kwargs):
+        timezone.timedelta()
+        kwargs['expired_at'] = timezone.now() + timezone.timedelta(days=1)
+        return super().create(**kwargs)
 
 
 class User(AbstractUser):
@@ -31,6 +38,8 @@ class AcceptAuthToken(models.Model):
     user = models.OneToOneField(AUTH_USER_MODEL, on_delete=models.CASCADE, unique=True)
     token = models.TextField(max_length=50)
     created_at = models.DateTimeField(auto_now_add=True)
+    expired_at = models.DateTimeField()
+    objects = TokenManager()
 
     class Meta:
         verbose_name = "Токен авторизаций."

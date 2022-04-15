@@ -1,5 +1,5 @@
-from celery import shared_task
 from django.core.mail import send_mail
+from django.utils import timezone
 
 from server.celery import app
 from .models import AcceptAuthToken
@@ -9,7 +9,7 @@ except ImportError:
     EMAIL_HOST_USER = ""
 
 
-@shared_task
+@app.task
 def send_mail_with_accepting_token(content: str, receivers: list[str]):
     send_mail(
         "Регистрация в InTheGame",
@@ -19,9 +19,9 @@ def send_mail_with_accepting_token(content: str, receivers: list[str]):
     )
 
 
-@shared_task
-def delete_token():
+@app.task
+def delete_expired_tokens():
     for token in AcceptAuthToken.objects.all():
-        token.delete()
+        if token.expired_at > timezone.now():
+            token.delete()
 
-    return "done"
