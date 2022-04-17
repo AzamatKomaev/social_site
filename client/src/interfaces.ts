@@ -2,16 +2,12 @@ interface GroupI {
     name: string
 }
 
-interface AvatarI {
-    image: string
-}
-
 export interface UserI {
     id: number,
     username: string,
     email: string,
     group_data: GroupI,
-    avatar: AvatarI,
+    avatar: string,
     friends_count: number,
     posts_count: number,
     comments_count: number

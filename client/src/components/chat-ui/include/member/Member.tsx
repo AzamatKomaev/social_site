@@ -12,7 +12,7 @@ const Member = ({member, service}) => {
             <div className="list-group-item list-group-item-action border-0">
                 <div className="d-flex align-items-start" style={{marginLeft: "-10px"}}>
                     <img
-                        src={member.user_data.avatar.image}
+                        src={member.user_data.avatar === null ? 'another' : member.user_data.avatar}
                         className="rounded-circle ms-1"
                         alt="lol"
                         width="53"

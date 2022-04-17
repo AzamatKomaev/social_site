@@ -3,22 +3,18 @@ from django.contrib.auth.models import Group
 from rest_framework.fields import SerializerMethodField, CharField
 from rest_framework.serializers import ModelSerializer
 
-from .models import User, Avatar, FriendRequest
+from .models import User, FriendRequest
 from .services import CreationUser
 
 
 class UserSerializer(ModelSerializer):
     group_data = SerializerMethodField('get_group_data')
-    avatar = SerializerMethodField('get_avatar')
     friends_count = SerializerMethodField('get_friends_count')
     posts_count = SerializerMethodField('get_posts_count')
     comments_count = SerializerMethodField('get_comments_count')
 
     def get_group_data(self, obj: User) -> dict:
         return GroupSerializer(obj.groups.get()).data
-
-    def get_avatar(self, obj: User) -> dict:
-        return AvatarSerializer(obj.avatar_set.get()).data
 
     def get_friends_count(self, obj: User) -> int:
         return obj.user_set.count()
@@ -46,12 +42,6 @@ class GroupSerializer(ModelSerializer):
     class Meta:
         model = Group
         fields = ['name']
-
-
-class AvatarSerializer(ModelSerializer):
-    class Meta:
-        model = Avatar
-        fields = ["image"]
 
 
 class RegistrationUserSerializer(ModelSerializer):

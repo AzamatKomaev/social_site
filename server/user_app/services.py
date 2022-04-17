@@ -36,8 +36,6 @@ class CreationUser:
             password=self.password,
             is_active=False
         )
-
-        self.user.avatar_set.create()
         group = get_object_or_404(Group, name='Пользователь')
         group.user_set.add(self.user)
 

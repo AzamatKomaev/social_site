@@ -3,10 +3,14 @@ from django.db import models
 from server.settings import AUTH_USER_MODEL
 
 
+def group_chat_profile_file_path(instance, filename):
+    return f'user_{instance.creator.id}/chat_avatars/{filename}'
+
+
 class GroupChat(models.Model):
     name = models.CharField(max_length=50, help_text="Название чата")
     created_at = models.DateTimeField(auto_now_add=True)
-    avatar = models.ImageField(default="/static/img/me.png", upload_to="media/group_avatars")
+    avatar = models.ImageField(upload_to=group_chat_profile_file_path, null=True, blank=True)
     creator = models.ForeignKey(AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="creator_id")
     users = models.ManyToManyField(AUTH_USER_MODEL, related_name="users_id")
 

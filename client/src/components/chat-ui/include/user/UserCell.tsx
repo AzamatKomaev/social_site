@@ -10,7 +10,7 @@ const UserCell = (props: any) => {
                 <a href={UserFrontPath.userDetail(user.username)} className="list-group-item list-group-item-action border-0">
                     <div className="d-flex align-items-start">
                         <img
-                            src={user.user_data.avatar.image}
+                            src={user.user_data.avatar === null ? 'another' : user.user_data.avatar}
                             className="rounded-circle ms-1"
                             alt="..."
                             width="40"

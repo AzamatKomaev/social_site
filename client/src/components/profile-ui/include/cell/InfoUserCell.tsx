@@ -24,7 +24,7 @@ const InfoUserCell = (props: any) => {
             <div className="col-12 col-sm-11 col-md-3 col-lg-3">
                 <div className="mx-auto" style={{width: "100%"}}>
                     <img
-                        src={props.user.avatar.image}
+                        src={props.user.avatar === null ? 'another file' : props.user.avatar}
                         alt="avatar"
                         className="rounded"
                         style={{

@@ -26,6 +26,7 @@ const UserPage = (props) => {
     })
 
     useEffect(() => {
+        // Get user data.
         const fetchData = async() => {
             const response = await UserService.getUser(username)
             setUser({

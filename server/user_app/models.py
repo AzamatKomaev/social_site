@@ -4,6 +4,10 @@ from django.utils import timezone
 from server.settings import AUTH_USER_MODEL
 
 
+def user_profile_file_path(instance, filename):
+    return f'user_{instance.id}/avatars/{filename}'
+
+
 class TokenManager(models.Manager):
     def create(self, **kwargs):
         kwargs['expired_at'] = timezone.now() + timezone.timedelta(days=1)
@@ -18,19 +22,17 @@ class User(AbstractUser):
         }
     )
     friends = models.ManyToManyField(AUTH_USER_MODEL, blank=True)
+    avatar = models.ImageField(upload_to=user_profile_file_path, null=True, blank=True)
+    photos = models.ManyToManyField('Photo')
 
 
-class Avatar(models.Model):
-    user = models.ForeignKey(AUTH_USER_MODEL, on_delete=models.CASCADE)
-    image = models.ImageField(default="/static/img/me.png", upload_to="media/user_images")
-    created_at = models.DateTimeField(auto_now_add=True)
+class Photo(models.Model):
+    image = models.ImageField(upload_to='user_photos')
+    added_at = models.DateTimeField(auto_now_add=True)
 
     class Meta:
-        verbose_name = "Аватар"
-        verbose_name_plural = "Аватарки"
-
-    def __str__(self):
-        return f"Аватарка пользователя {self.user}"
+        verbose_name = "Фотография пользователя"
+        verbose_name_plural = "Фотографий пользователей"
 
 
 class AcceptAuthToken(models.Model):

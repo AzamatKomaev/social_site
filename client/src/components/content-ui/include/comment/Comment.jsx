@@ -11,7 +11,7 @@ const Comment = (props) => {
                     <div className="d-flex align-items-center py-1">
                         <div className="position-relative">
                             <img
-                                src={props.user_data.avatar.image}
+                                src={props.user_data.avatar === null ? 'another' : props.user_data.avatar}
                                 alt="avatar"
                                 style={{marginTop: "-10px"}}
                                 className="rounded-circle float-left"

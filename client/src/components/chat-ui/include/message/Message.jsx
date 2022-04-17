@@ -15,7 +15,7 @@ const Message = (props) => {
                         style={{width: "85%"}}
                     >
                         <div>
-                            <img src={props.message.user_data.avatar.image} className="rounded-circle ms-1" alt="you" width="40" height="40"/>
+                            <img src={props.message.user_data.avatar === null ? 'another' : props.message.user_data.avatar} className="rounded-circle ms-1" alt="you" width="40" height="40"/>
                         </div>
                         <div className="flex-shrink-1 bg-light rounded py-2 px-3 me-2" style={{fontSize: "10pt"}}>
                             <div className="font-weight-bold mb-1"><a href="#" style={{textDecoration: "none", color: "black"}}>Вы</a></div>
@@ -28,7 +28,7 @@ const Message = (props) => {
                         className="chat-message-left pb-4"
                         style={{width: "85%"}}>
                         <div>
-                            <img src={props.message.user_data.avatar.image} className="rounded-circle ms-1" alt="..." width="40" height="40"/>
+                            <img src={props.message.user_data.avatar === null ? 'another' : props.message.user_data.avatar} className="rounded-circle ms-1" alt="..." width="40" height="40"/>
                         </div>
                         <div className="flex-shrink-1 bg-light rounded py-2 px-3 ms-2" style={{fontSize: "10pt"}}>
                             <div className="font-weight-bold mb-1">

@@ -37,7 +37,7 @@ const Post = ({post, type}) => {
 				<div className="d-flex align-items-center py-1">
 					<div className="position-relative">
 						<img
-							src={post.user_data.avatar.image}
+							src={post.user_data.avatar === null ? 'another' : post.user_data.avatar}
 							className="rounded-circle float-left"
 							alt="avatar"
 							width="53" height="53"
