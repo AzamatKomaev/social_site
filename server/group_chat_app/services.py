@@ -129,9 +129,8 @@ class GroupChatRequestService:
         return user_chat_requests
 
     def create_chat_request(self, user_id: int) -> GroupChat:
-        user = get_object_or_404(User, id=user_id)
         new_chat_request = GroupChatRequest.objects.create(
-            to_user=user,
+            to_user_id=user_id,
             from_chat=self.chat
         )
         return new_chat_request
@@ -148,7 +147,8 @@ class GroupChatRequestService:
         return user == self.chat.creator
 
     def get_request(self, user: User) -> GroupChatRequest:
-        chat_request = get_object_or_404(GroupChatRequest, to_user=user, from_chat=self.chat)
+        chat_request = get_object_or_404(GroupChatRequest.objects.select_related('to_user', 'from_chat'), to_user=user,
+                                         from_chat=self.chat)
         return chat_request
 
     @staticmethod

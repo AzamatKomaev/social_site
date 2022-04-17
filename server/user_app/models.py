@@ -6,7 +6,6 @@ from server.settings import AUTH_USER_MODEL
 
 class TokenManager(models.Manager):
     def create(self, **kwargs):
-        timezone.timedelta()
         kwargs['expired_at'] = timezone.now() + timezone.timedelta(days=1)
         return super().create(**kwargs)
 
@@ -50,7 +49,12 @@ class AcceptAuthToken(models.Model):
 
 
 class FriendRequest(models.Model):
-    to_user = models.ForeignKey(AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="friend_request_to_user", default=None)
+    to_user = models.ForeignKey(
+        AUTH_USER_MODEL,
+        on_delete=models.CASCADE,
+        related_name="friend_request_to_user",
+        default=None
+    )
     is_accepted = models.BooleanField(default=False)
     created_at = models.DateTimeField(auto_now_add=True)
     changed_at = models.DateTimeField(auto_now=True)

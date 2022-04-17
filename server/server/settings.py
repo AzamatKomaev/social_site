@@ -46,6 +46,7 @@ INSTALLED_APPS = [
     'user_app',
     'group_chat_app',
     'personal_chat_app',
+    'dating_app',
 
     'channels',
     'polymorphic',
@@ -54,8 +55,6 @@ INSTALLED_APPS = [
     'django_extensions',
     'django_filters',
     'drf_yasg',
-    'django_celery_results',
-    #'debug_toolbar',
 
     'django.contrib.admin',
     'django.contrib.auth',
@@ -72,7 +71,6 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    #"debug_toolbar.middleware.DebugToolbarMiddleware",
 ]
 
 INTERNAL_IPS = [
