@@ -25,7 +25,6 @@ class CategorySerializer(ModelSerializer):
 class PostSerializer(ModelSerializer):
     user = HiddenField(default=CurrentUserDefault())
     user_data = SerializerMethodField('get_data_about_user')
-    #comments = SerializerMethodField('get_comments')
     comments_count = SerializerMethodField('get_comments_count')
 
     def get_data_about_user(self, obj: Post) -> dict:

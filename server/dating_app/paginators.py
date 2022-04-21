@@ -2,8 +2,8 @@ from rest_framework.pagination import PageNumberPagination
 from rest_framework.response import Response
 
 
-class PostPagination(PageNumberPagination):
-    page_size = 25
+class DatingProfilePagination(PageNumberPagination):
+    page_size = 20
     page_size_query_param = 'page_size'
     max_page_size = 100
 

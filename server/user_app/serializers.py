@@ -14,7 +14,7 @@ class UserSerializer(ModelSerializer):
     comments_count = SerializerMethodField('get_comments_count')
 
     def get_group_data(self, obj: User) -> dict:
-        return GroupSerializer(obj.groups.get()).data
+        return GroupSerializer(obj.groups.first()).data
 
     def get_friends_count(self, obj: User) -> int:
         return obj.user_set.count()

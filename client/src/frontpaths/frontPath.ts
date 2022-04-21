@@ -73,3 +73,13 @@ export class ChatFrontPath {
         return `/chats/group/${chatId}/settings/`
     }
 }
+
+export class DatingProfileFrontPath {
+    static datingProfileList = (): string => {
+        return '/dating_profiles/site/'
+    }
+
+    static datingProfileDetail = (profileId: number | string): string => {
+        return `/dating_profiles/site/${profileId}/`
+    }
+}

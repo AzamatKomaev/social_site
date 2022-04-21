@@ -13,7 +13,10 @@ export const generalTabs: Array<TabI> = [
         className: "nav-link active",
         href: CategoryFrontPath.categoryList(),
         value: "Категорий"
-    },
+    }
+]
+
+export const authTabs = [
     {
         className: "nav-link",
         href: CategoryFrontPath.postCreate(),

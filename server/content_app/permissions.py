@@ -5,7 +5,7 @@ from content_app.services import PostService, CommentService
 
 class PostPermission(permissions.IsAuthenticatedOrReadOnly):
     def has_object_permission(self, request, view, obj):
-        service = PostService(obj.id)
+        service = PostService(obj)
 
         if request.method != "GET" and not service.is_user_owner(request.user):
             return False

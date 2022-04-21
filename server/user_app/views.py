@@ -12,10 +12,6 @@ from .serializers import (
     UserSerializer,
     FriendRequestSerializer
 )
-from content_app.serializers import (
-    PostSerializer,
-    CommentSerializer
-)
 
 
 class AuthViewSet(viewsets.ViewSet):
@@ -48,7 +44,9 @@ class AuthViewSet(viewsets.ViewSet):
 
 
 class UserModelView(viewsets.ModelViewSet):
-    queryset = User.objects.all()
+    queryset = User.objects.prefetch_related(
+        'friends', 'post_set', 'comment_set', 'user_set'
+    )
     serializer_class = UserSerializer
     permission_classes = (permissions.IsAuthenticatedOrReadOnly, )
     filterset_class = UserFilter

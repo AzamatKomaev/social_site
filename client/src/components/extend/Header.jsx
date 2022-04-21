@@ -1,12 +1,13 @@
-import React, {useMemo} from 'react';
+import React from 'react';
 import { useSelector } from 'react-redux';
 import {AuthFrontPath, CategoryFrontPath, UserFrontPath} from "../../frontpaths/frontPath";
 import {AuthService} from "../../services/authService";
-import {generalTabs} from "./tabs";
+import {generalTabs, authTabs} from "./tabs";
 
 
 const Header = () => {
     const userData = useSelector(state => state.user)
+
     return (
         <div>
             <nav className="navbar navbar-light bg-light fixed-top">
@@ -32,6 +33,18 @@ const Header = () => {
                                         </a>
                                     </li>
                                 ))}
+                                {userData.isAuth ?
+                                    authTabs.map((tab) => (
+                                         <li className={"nav-item"}>
+                                             <a className={tab.className} aria-current={"page"} href={tab.href}>
+                                                {tab.value}
+                                            </a>
+                                         </li>
+                                    ))
+                                :
+                                    null
+                                }
+
                                 {userData.isAuth ?
                                     <div style={{marginTop: "20px"}}>
                                         {"\n\n"}

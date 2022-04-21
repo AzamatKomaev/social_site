@@ -30,6 +30,7 @@ urlpatterns = [
     path('api/v1/', include('user_app.urls')),
     path('api/v1/', include('group_chat_app.urls')),
     path('api/v1/', include('personal_chat_app.urls')),
+    path('api/v1/', include('dating_app.urls')),
 
     path('api-docs/', schema_view.with_ui('swagger', cache_timeout=0), name='schema-swagger-ui'),
     path('__debug__/', include('debug_toolbar.urls')),

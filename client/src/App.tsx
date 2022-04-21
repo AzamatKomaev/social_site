@@ -34,6 +34,7 @@ import GroupChatListPage from "./components/chat-ui/GroupChatListPage";
 import PersonalChatListPage from "./components/chat-ui/PersonalChatListPage";
 import {AuthFrontPath, CategoryFrontPath, ChatFrontPath, UserFrontPath} from "./frontpaths/frontPath";
 import SendMailPage from "./components/auth-ui/SendMailPage";
+import DatingProfilesPage from "./components/dating-ui/DatingProfilesPage";
 
 
 const App = (props: any) => {
@@ -71,6 +72,7 @@ const App = (props: any) => {
                 <Route exact path={ChatFrontPath.groupChatSettings(':chatId')} component={ChatSettingPage}/>
                 <Route exact path={ChatFrontPath.personalChatMessages(':username')} component={PersonalMessageChatPage}/>
 
+                <Route exact path={DatingProfileFrontPath.datingProfileList(':profileId')} component={DatingProfilesPage}/>
                 <Redirect from='/' to={CategoryFrontPath.categoryList()}/>
             </Switch>
         </div>

@@ -15,42 +15,12 @@ from .serializers import PostSerializer, CommentSerializer
 class PostService:
     post: Post
 
-    def __init__(self, post_id: int):
-        self.post = get_object_or_404(Post, id=post_id)
-
-    @staticmethod
-    def get_paginated_post_list(category_id: int, request: Request, page_size: int) -> Optional[PostSerializer]:
-        posts = Post.objects.filter(category=category_id)
-        page_number = request.query_params.get('page_number', 1)
-        paginator = Paginator(posts, page_size)
-
-        try:
-            serializer = PostSerializer(paginator.page(page_number), many=True)
-            return serializer
-        except EmptyPage:
-            return None
-
-    @staticmethod
-    def create(request: Request) -> Optional[dict[str, Union[PostSerializer, bool]]]:
-        """Method to create post and return PostSerializer or None."""
-        serializer = PostSerializer(data=request.data, context={'request': request})
-
-        if serializer.is_valid():
-            try:
-                serializer.save()
-            except IntegrityError:
-                return None
-
-            return {'serializer': serializer, 'is_valid': True}
-
-        return {'serializer': serializer, 'is_valid': False}
+    def __init__(self, post: Post):
+        self.post = post
 
     def is_user_owner(self, user: User) -> bool:
         """Get bool is user owner of the post."""
         return self.post.user == user
-
-    def delete(self):
-        self.post.delete()
 
 
 class CommentService:

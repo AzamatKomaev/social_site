@@ -15,19 +15,31 @@ from .filters import PostFilter, CommentFilter
 class CategoryListRetrieveView(mixins.ListModelMixin,
                                mixins.RetrieveModelMixin,
                                viewsets.GenericViewSet):
-    queryset = Category.objects.all()
+    queryset = Category.objects.prefetch_related('post_set').all()
     serializer_class = CategorySerializer
 
 
 class PostModelViewSet(viewsets.ModelViewSet):
-    queryset = Post.objects.all()
+    queryset = (
+        Post.objects
+            .select_related('user')
+            .prefetch_related(
+                'user__friends',
+                'comment_set',
+                'comment_set__user',
+                'user__groups',
+                'user__post_set',
+                'user__comment_set',
+                'user__user_set'
+            )
+    )
     serializer_class = PostSerializer
-    permission_classes = (PostPermission, )
+    permission_classes = (PostPermission,)
     pagination_class = PostPagination
     filterset_class = PostFilter
 
     def get_object(self):
-        obj = get_object_or_404(Post, pk=self.kwargs.get('pk'))
+        obj = get_object_or_404(Post.objects.select_related('user'), pk=self.kwargs.get('pk'))
         self.check_object_permissions(self.request, obj)
         return obj
 
@@ -38,7 +50,7 @@ class PostModelViewSet(viewsets.ModelViewSet):
 class CommentModelViewSet(viewsets.ModelViewSet):
     queryset = Comment.objects.all()
     serializer_class = CommentSerializer
-    permission_classes = (CommentPermission, )
+    permission_classes = (CommentPermission,)
     filterset_class = CommentFilter
 
     def get_object(self):

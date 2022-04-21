@@ -1,8 +1,10 @@
-from rest_framework.serializers import ModelSerializer
-from .models import DatingProfile
+from rest_framework import serializers
+from .models import SiteDatingProfile
 
 
-class DatingProfileSerializer(ModelSerializer):
+class SiteDatingProfileSerializer(serializers.ModelSerializer):
+    user = serializers.HiddenField(default=serializers.CurrentUserDefault())
+
     class Meta:
-        model = DatingProfile
+        model = SiteDatingProfile
         fields = '__all__'

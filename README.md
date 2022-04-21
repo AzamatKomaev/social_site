@@ -62,4 +62,3 @@
 <b>python3 manage.py runserver</b>
 <br><br>
 Поздравляю! Теперь вы можете использовать эту соц сеть.
->>>>>>> 1ea3e91be1b284ccda1288a28e5ca1ee6a810404

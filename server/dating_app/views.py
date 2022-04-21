@@ -1,18 +1,15 @@
-from rest_framework import viewsets, status
-from rest_framework.response import Response
+from rest_framework import viewsets, permissions
 
-from .models import DatingProfile
-from .serializers import DatingProfileSerializer
-from .services import is_serializer_valid
+from .models import SiteDatingProfile
+from .serializers import SiteDatingProfileSerializer
+from .paginators import DatingProfilePagination
 
 
-class DatingProfileModelViewSet(viewsets.ModelViewSet):
-    queryset = DatingProfile.objects.all()
-    serializer_class = DatingProfileSerializer
+class SiteDatingProfileModelViewSet(viewsets.ModelViewSet):
+    queryset = SiteDatingProfile.objects.all()
+    serializer_class = SiteDatingProfileSerializer
+    permission_classes = (permissions.IsAuthenticatedOrReadOnly, )
+    pagination_class = DatingProfilePagination
 
-    def create(self, request, *args, **kwargs):
-        serializer = self.get_serializer(data=request.data)
-        serializer.is_valid(raise_exception=True)
-        is_serializer_valid(serializer.data)
-        self.perform_create(serializer)
-        return Response(serializer.data, status=status.HTTP_201_CREATED)
+    def perform_create(self, serializer):
+        serializer.save(user=self.request.user)
