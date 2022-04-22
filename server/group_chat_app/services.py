@@ -1,4 +1,4 @@
-from typing import Optional, Union
+from typing import Optional, Union, List, Dict
 
 from django.db.models import QuerySet
 from django.shortcuts import get_object_or_404
@@ -13,7 +13,7 @@ from personal_chat_app.sql.commands import get_ordered_personal_chats
 
 
 def get_sorted_chat_list(request, chat_model) -> QuerySet:
-    chat_data: dict[str, Union[dict, int]]
+    chat_data: Dict[str, Union[dict, int]]
     chats = chat_model.objects.filter(users=request.user)
     sort_by = request.query_params.get('sort_by')
 
@@ -28,7 +28,7 @@ def get_sorted_chat_list(request, chat_model) -> QuerySet:
     return chats
 
 
-def get_group_chat_serializer_data(request) -> dict[str, str]:
+def get_group_chat_serializer_data(request) -> Dict[str, str]:
     serializer_data = {
         "name": request.data.get('name', None),
         "users": [request.user.id]
@@ -63,7 +63,7 @@ class GroupChatService:
         return members
 
     @staticmethod
-    def create_chat(name: str, avatar: Optional[str], users: list[User], user: User) -> GroupChat:
+    def create_chat(name: str, avatar: Optional[str], users: List[User], user: User) -> GroupChat:
         chat: GroupChat
 
         if not avatar:

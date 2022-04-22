@@ -16,7 +16,7 @@ class FriendRequestPermission(permissions.IsAuthenticatedOrReadOnly):
     def has_object_permission(self, request, view, obj):
         from .services import FriendRequestService
         service = FriendRequestService(request.user)
-        is_existing = service.is_friend_request_exists(obj.id)
+        is_existing = service.is_friend_request_existing(obj.id)
 
         if request.method in ('GET', 'PATCH', 'DELETE') and not is_existing:
             raise Http404({'error': 'Not found'})

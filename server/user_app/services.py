@@ -3,7 +3,6 @@ import string
 from typing import Optional, Union
 
 from django.contrib.auth.models import Group
-from django.core.mail import send_mail
 from django.db.models import QuerySet, Q
 from django.http import Http404
 from django.shortcuts import get_object_or_404
@@ -169,46 +168,16 @@ class FriendRequestService:
         chat_requests = FriendRequest.objects.filter(to_user=self.user, is_accepted=False)
         return chat_requests
 
-    def is_friend_request_exists(self, second_user: int) -> bool:
+    def is_friend_request_existing(self, second_user: int) -> bool:
         """Method to check is friend request exists with the user."""
         friend_request = self.get_common_request(self.user, second_user)
         return friend_request.exists()
 
-    def create_friend_request(self, to_user_id: int) -> dict:
-        """Method to create and send friend request to the user."""
-        data = {
-            "instance": None,
-            "error": None
-        }
-        user = UserService.get_user(user_id=to_user_id)
-
-        if not user:
-            data["error"] = "There is no user with that id."
-            return data
-
-        if self.is_friend_request_exists(user.id):
-            data["error"] = "Friend request already exists"
-            return data
-
-        data["instance"] = FriendRequest.objects.create(
-            from_user=self.user,
-            to_user_id=user.id,
-        )
-        return data
-
     def delete_friend_request(self, second_user: User) -> None:
         """Method for deleting friend request."""
-        # if not self.is_friend_request_exists(second_user.id):
-        #     return False
-
         friend_request = self.get_friend_request(self.user, second_user)
-
-        # if self.user not in (friend_request.from_user, friend_request.to_user):
-        #     return False
-
         self._remove_both_users_from_each_other_friend_list(friend_request)
         friend_request.delete()
-        # return bool(friend_request.delete())
 
     def accept_friend_request(self, second_user: User, is_accepted: bool) -> Optional[FriendRequest]:
         """Method for accepting friend request making is_accepted True or False."""

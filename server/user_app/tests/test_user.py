@@ -1,5 +1,5 @@
 import uuid
-from typing import Optional, Union
+from typing import Optional, Union, List, Dict
 
 from django.contrib.auth.models import Group
 from django.db.models import QuerySet
@@ -22,7 +22,7 @@ class UserAPITestCase(APITestCase):
     def setUp(self) -> None:
         Group.objects.create(name='Пользователь')
 
-    def _set_up_friend_requests(self) -> dict[str, Union[QuerySet[User], User]]:
+    def _set_up_friend_requests(self) -> Dict[str, Union[QuerySet[User], User]]:
         self._create_users(users_data)
         UserAuthAPITestService.create_user({"username": "admin", "email": "mail@mail.ru", "password": "admin12345678"})
 
@@ -34,11 +34,11 @@ class UserAPITestCase(APITestCase):
 
         return {'users': users, 'admin': admin}
 
-    def _create_users(self, json_users: list) -> list[Response]:
+    def _create_users(self, json_users: list) -> List[Response]:
         responses = [UserAuthAPITestService.create_user(user_data) for user_data in json_users]
         return responses
 
-    def _login_many_users(self, users: list[User]):
+    def _login_many_users(self, users: List[User]):
         responses = []
         for user in users:
             response = UserAuthAPITestService.login_user(user.username, self.default_password)
@@ -68,7 +68,7 @@ class UserAPITestCase(APITestCase):
         response = client.get(url, data=None, follow=False, HTTP_AUTHORIZATION=f'Bearer {jwt}')
         return response
 
-    def _accept_several_users(self, users: QuerySet[User]) -> list[Response]:
+    def _accept_several_users(self, users: QuerySet[User]) -> List[Response]:
         responses = []
 
         for user in users:
@@ -137,7 +137,6 @@ class UserAPITestCase(APITestCase):
         self.assertEqual(found_user_by_id.status_code, 200)
         self.assertEqual(found_user_by_username.status_code, 200)
         self.assertEqual(found_user_by_username.json(), found_user_by_id.json())
-
 
         found_user_by_invalid_id = UserAuthAPITestService.find_user(user_id=1000)
         fount_user_by_invalid_username = UserAuthAPITestService.find_user(username="aaaaaaaaa")

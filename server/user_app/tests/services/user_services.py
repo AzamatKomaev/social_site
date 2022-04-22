@@ -1,4 +1,4 @@
-from typing import Union, Optional
+from typing import Union, Optional, List, Tuple
 from requests import Response
 
 from django.db.models import QuerySet
@@ -41,7 +41,7 @@ class UserAuthAPITestService:
         return response
 
     @staticmethod
-    def accept_all_users(users: Union[list[User], QuerySet[User]]) -> None:
+    def accept_all_users(users: Union[List[User], QuerySet[User]]) -> None:
         for user in users:
             user.is_active = True
             user.save()
@@ -82,7 +82,7 @@ class UserAuthAPITestService:
         return response
 
     @staticmethod
-    def send_several_friend_requests(users: QuerySet[User], user_jwt: str) -> list[Response]:
+    def send_several_friend_requests(users: QuerySet[User], user_jwt: str) -> List[Response]:
         sent_friend_requests = [
             UserAuthAPITestService.send_friend_request(user.id, user_jwt)
             for user in users
@@ -90,7 +90,7 @@ class UserAuthAPITestService:
         return sent_friend_requests
 
     @staticmethod
-    def accept_several_friend_requests(users: QuerySet[User], user_id: int, password: str) -> tuple[Response]:
+    def accept_several_friend_requests(users: QuerySet[User], user_id: int, password: str) -> Tuple[Response]:
         responses = tuple((
             UserAuthAPITestService.accept_friend_request(
                 user_id=user_id,

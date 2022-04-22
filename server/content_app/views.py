@@ -20,19 +20,16 @@ class CategoryListRetrieveView(mixins.ListModelMixin,
 
 
 class PostModelViewSet(viewsets.ModelViewSet):
-    queryset = (
-        Post.objects
-            .select_related('user')
-            .prefetch_related(
-                'user__friends',
-                'comment_set',
-                'comment_set__user',
-                'user__groups',
-                'user__post_set',
-                'user__comment_set',
-                'user__user_set'
-            )
+    queryset = Post.objects.select_related('user').prefetch_related(
+        'user__friends',
+        'comment_set',
+        'comment_set__user',
+        'user__groups',
+        'user__post_set',
+        'user__comment_set',
+        'user__user_set'
     )
+
     serializer_class = PostSerializer
     permission_classes = (PostPermission,)
     pagination_class = PostPagination
@@ -48,7 +45,9 @@ class PostModelViewSet(viewsets.ModelViewSet):
 
 
 class CommentModelViewSet(viewsets.ModelViewSet):
-    queryset = Comment.objects.all()
+    queryset = Comment.objects.select_related('user').prefetch_related(
+        'user__post_set', 'user__comment_set', 'user__friends', 'user__user_set'
+    )
     serializer_class = CommentSerializer
     permission_classes = (CommentPermission,)
     filterset_class = CommentFilter

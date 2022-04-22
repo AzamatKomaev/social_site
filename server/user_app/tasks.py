@@ -1,3 +1,5 @@
+from typing import List
+
 from django.core.mail import send_mail
 from django.utils import timezone
 
@@ -10,7 +12,7 @@ except ImportError:
 
 
 @app.task
-def send_mail_with_accepting_token(content: str, receivers: list[str]):
+def send_mail_with_accepting_token(content: str, receivers: List[str]):
     send_mail(
         "Регистрация в InTheGame",
         content,
